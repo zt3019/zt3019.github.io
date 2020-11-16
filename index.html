@@ -152,6 +152,188 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-hadoop installation" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>#Hadoop的安装<br>1.hadoop两大核心组件    </p>
+<blockquote>
+<ul>
+<li>HDFS(Hadoop Distributed File System )     <blockquote>
+<ul>
+<li>NameNode(管理各种元数据并提供服务) ,DataNode  </li>
+<li>冷备份SecondaryNameNode(HDFS1.0)</li>
+</ul>
+</blockquote>
+</li>
+<li>MapReduce    <blockquote>
+<ul>
+<li>JobTracker TaskTracker    </li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</blockquote>
+<p>2.Hadoop集群基准测试</p>
+<blockquote>
+<ul>
+<li>Hadoop自带的一些基准测试程序，被打包在测试程序JAR文件中</li>
+<li>用TestDFSIO基准测试，来测试HDFS的IO性能</li>
+<li>用排序测试MapReduce</li>
+</ul>
+</blockquote>
+<p>3.HDFS系统介绍<br>基本介绍：HDFS开源实现了GFS的基本思想<br>优良特性：</p>
+<blockquote>
+<ul>
+<li>兼容廉价的硬件设备</li>
+<li>流数据读写</li>
+<li>大数据集</li>
+<li>简单的文件模型</li>
+<li>强大的跨平台兼容性   </li>
+</ul>
+</blockquote>
+<p>局限性：</p>
+<blockquote>
+<ul>
+<li>不适合低延迟数据访问</li>
+<li>无法高效存储大量小文件</li>
+<li>不支持多用户写入及任意修改文件 </li>
+</ul>
+</blockquote>
+<p>相关概念：</p>
+<blockquote>
+<ul>
+<li>块（64MB）</li>
+<li>名称节点（NameNode）整个HDFS集群的管家<blockquote>
+<ul>
+<li>FsImage</li>
+<li>EditLog</li>
+</ul>
+</blockquote>
+</li>
+<li>第二名称节点</li>
+<li>数据节点    </li>
+</ul>
+</blockquote>
+<p>HDFS存储原理：</p>
+<blockquote>
+<ul>
+<li>冗余数据保存的问题</li>
+<li>数据保存策略问题</li>
+<li>数据恢复的问题<br>HDFS数据读写：</li>
+<li>读写过程：<br><img src="https://img-blog.csdn.net/20160520174354336?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="数据读写过程" title="过程"></li>
+</ul>
+</blockquote>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/11/11/hadoop%20installation/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-hadoop-introduction" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>#hadoop简介<br>1.定义：<br>hadoop是一个开源分布式计算平台，为用户提供了底层细节透明的分布式基础框架。<br>2.特性：    </p>
+<ul>
+<li>高可靠性    </li>
+<li>高效性</li>
+<li>高可扩展性</li>
+<li>高容错性</li>
+<li>成本低</li>
+<li>运行在linux中</li>
+<li>支持多种编程语言</li>
+</ul>
+<p>3.版本</p>
+<ul>
+<li>1.0</li>
+<li>2.0</li>
+</ul>
+<p>4.hadoop结构</p>
+<ul>
+<li><img src="https://img-blog.csdnimg.cn/20191024090622860.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2ZtMzQ1Njg5,size_16,color_FFFFFF,t_70" alt="图片展示" title="Hadoop项目结构图"></li>
+<li>参考别人博客的<a target="_blank" rel="noopener" href="https://blog.csdn.net/fm345689/article/details/102715230">文字记录</a></li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/10/21/hadoop-introduction/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-hello-world" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -198,6 +380,362 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2020/09/22/hello-world/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-first-blog" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2013/07/13/first-blog/">第一篇博客</a>
+    </h1>
+  
+
+        
+        <a href="/2013/07/13/first-blog/" class="archive-article-date">
+  	<time datetime="2013-07-13T12:46:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2013-07-13</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="markdow语法的简单介绍"><a href="#markdow语法的简单介绍" class="headerlink" title="markdow语法的简单介绍"></a>markdow语法的简单介绍</h1><blockquote>
+<ul>
+<li>第一项：markdown标题  <blockquote>
+<ul>
+<li>用“#”号的个数来表示标题的级数</li>
+</ul>
+<ul>
+<li>使用 = 和 - 标记一级和二级标题</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<ul>
+<li>第二项：段落格式<blockquote>
+<ul>
+<li>Markdown 段落没有特殊的格式<br>直接编写文字，<strong>段落的换行是使用两个以上空格加回车,也可以在段落后面使用一个空行来表示重新开始一个段落</strong>  </li>
+</ul>
+<ul>
+<li><strong><em>字体：</em></strong><br>markdown可以使用斜体文本（一个<em>或_在文字的两边），粗体文本（两个</em>或_在文字的两边），粗斜体文本（三个）    </li>
+</ul>
+</blockquote>
+</li>
+<li>斜体文本*<br><em>斜体文本</em>    </li>
+<li>*粗体文本**<br><strong>粗体文本</strong>    </li>
+<li>*<em>粗斜体文本**</em><br><strong><em>粗斜体文本</em></strong>    <blockquote>
+<ul>
+<li><strong><em>分隔线：</em></strong><br>你可以在一行中用三个以上的星号、减号、底线来建立一个分隔线，行内不能有其他东西。你也可以在星号或是减号中间插入空格。    </li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</blockquote>
+<hr>
+<hr>
+<hr>
+<blockquote>
+<blockquote>
+<ul>
+<li><strong><em>删除线：</em></strong><br>删除线： 如果段落上的文字要添加删除线，只需要在文字的两端加上两个波浪线 <del>~ 即可<br>~</del>删除线~~</li>
+<li><strong>下划线：</strong><br>下划线可以通过 HTML 的 <u> 标签来实现</u><br><u>下划线</u></li>
+<li><strong>脚注：</strong><br>脚注是对文本的补充说明。<br>创建脚注格式类似这样 [^RUNOOB]。<br>[^RUNOOB]: 菜鸟教程 – 学的不仅是技术，更是梦想！！！</li>
+</ul>
+</blockquote>
+<ul>
+<li>第三项：列表<br>无序列表使用星号(*)、加号(+)或是减号(-)作为列表标记，这些标记后面要添加一个空格，然后再填写内容     <blockquote>
+<ul>
+<li><strong>嵌套列表：</strong><br>列表嵌套只需在子列表中的选项前面添加四个空格即可    </li>
+</ul>
+</blockquote>
+</li>
+<li>第四项：<strong>区块</strong><br>Markdown 区块引用是在段落开头使用 &gt; 符号 ，然后后面紧跟一个空格符号<br>另外区块是可以嵌套的，一个 &gt; 符号是最外层，两个 &gt; 符号是第一层嵌套，以此类推<br>区块中可以使用列表，列表中也可以使用区块</li>
+<li>第五项：<strong>markdown代码</strong><br><code>printf()</code>函数<br>如果是段落上的一个函数或片段的代码可以用反引号把它包起来(`)    <blockquote>
+<ul>
+<li>代码区块：<br>四个空格或者制表符（代码区块使用 4 个空格或者一个制表符（Tab 键）。）<br><img src="https://www.runoob.com/wp-content/uploads/2019/03/6DC89E5C-B41A-4938-97D8-D7D06B879F91.jpg" alt="展示" title="结果展示"><br>你也可以用 ``` 包裹一段代码，并指定一种语言（也可以不指定）    </li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">include &lt;bits/stdc++.h&gt;    </span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;    </span><br><span class="line">        <span class="built_in">cout</span>&lt;&lt;<span class="string">&quot;hello world&quot;</span>&lt;&lt;<span class="built_in">endl</span>;    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;    </span><br><span class="line">&#125;    </span><br></pre></td></tr></table></figure>
+<blockquote>
+<ul>
+<li><strong>第六项：Markdown 链接:</strong><br>参考<a target="_blank" rel="noopener" href="https://www.runoob.com/markdown/md-tutorial.html">菜鸟教程</a></li>
+<li><strong>第七项：markdown 表格</strong><br>Markdown 制作表格使用 | 来分隔不同的单元格，使用 - 来分隔表头和其他行。  </li>
+</ul>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>表头</th>
+<th>表头</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>单元格</td>
+<td>单元格</td>
+</tr>
+<tr>
+<td>单元格</td>
+<td>单元格</td>
+</tr>
+<tr>
+<td>我们可以设置表格的对齐方式：</td>
+<td></td>
+</tr>
+</tbody></table>
+<pre><code>-: 设置内容和标题栏居右对齐。
+:- 设置内容和标题栏居左对齐。
+:-: 设置内容和标题栏居中对齐。</code></pre>
+<table>
+<thead>
+<tr>
+<th align="left">左对齐</th>
+<th align="right">右对齐</th>
+<th align="center">居中对齐</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">单元格</td>
+<td align="right">单元格</td>
+<td align="center">单元格</td>
+</tr>
+<tr>
+<td align="left">单元格</td>
+<td align="right">单元格</td>
+<td align="center">单元格</td>
+</tr>
+</tbody></table>
+<blockquote>
+<ul>
+<li><strong>第八项：markdown高级技巧</strong><br>参考连接<a target="_blank" rel="noopener" href="https://www.runoob.com/markdown/md-advance.html">菜鸟教程</a></li>
+</ul>
+</blockquote>
+<hr>
+<hr>
+<p>本文参考菜鸟教程的markdown教学，超链接上文已给出。（<a target="_blank" rel="noopener" href="https://www.runoob.com/markdown/md-tutorial.html%EF%BC%89">https://www.runoob.com/markdown/md-tutorial.html）</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2013/07/13/first-blog/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-markdown-introduction" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2013/07/13/markdown-introduction/">Hello World</a>
+    </h1>
+  
+
+        
+        <a href="/2013/07/13/markdown-introduction/" class="archive-article-date">
+  	<time datetime="2013-07-13T12:46:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2013-07-13</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="markdow语法的简单介绍"><a href="#markdow语法的简单介绍" class="headerlink" title="markdow语法的简单介绍"></a>markdow语法的简单介绍</h1><blockquote>
+<ul>
+<li>第一项：markdown标题  <blockquote>
+<ul>
+<li>用“#”号的个数来表示标题的级数</li>
+</ul>
+<ul>
+<li>使用 = 和 - 标记一级和二级标题</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<ul>
+<li>第二项：段落格式<blockquote>
+<ul>
+<li>Markdown 段落没有特殊的格式<br>直接编写文字，<strong>段落的换行是使用两个以上空格加回车,也可以在段落后面使用一个空行来表示重新开始一个段落</strong>  </li>
+</ul>
+<ul>
+<li><strong><em>字体：</em></strong><br>markdown可以使用斜体文本（一个<em>或_在文字的两边），粗体文本（两个</em>或_在文字的两边），粗斜体文本（三个）    </li>
+</ul>
+</blockquote>
+</li>
+<li>斜体文本*<br><em>斜体文本</em>    </li>
+<li>*粗体文本**<br><strong>粗体文本</strong>    </li>
+<li>*<em>粗斜体文本**</em><br><strong><em>粗斜体文本</em></strong>    <blockquote>
+<ul>
+<li><strong><em>分隔线：</em></strong><br>你可以在一行中用三个以上的星号、减号、底线来建立一个分隔线，行内不能有其他东西。你也可以在星号或是减号中间插入空格。    </li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</blockquote>
+<hr>
+<hr>
+<hr>
+<blockquote>
+<blockquote>
+<ul>
+<li><strong><em>删除线：</em></strong><br>删除线： 如果段落上的文字要添加删除线，只需要在文字的两端加上两个波浪线 <del>~ 即可<br>~</del>删除线~~</li>
+<li><strong>下划线：</strong><br>下划线可以通过 HTML 的 <u> 标签来实现</u><br><u>下划线</u></li>
+<li><strong>脚注：</strong><br>脚注是对文本的补充说明。<br>创建脚注格式类似这样 [^RUNOOB]。<br>[^RUNOOB]: 菜鸟教程 – 学的不仅是技术，更是梦想！！！</li>
+</ul>
+</blockquote>
+<ul>
+<li>第三项：列表<br>无序列表使用星号(*)、加号(+)或是减号(-)作为列表标记，这些标记后面要添加一个空格，然后再填写内容     <blockquote>
+<ul>
+<li><strong>嵌套列表：</strong><br>列表嵌套只需在子列表中的选项前面添加四个空格即可    </li>
+</ul>
+</blockquote>
+</li>
+<li>第四项：<strong>区块</strong><br>Markdown 区块引用是在段落开头使用 &gt; 符号 ，然后后面紧跟一个空格符号<br>另外区块是可以嵌套的，一个 &gt; 符号是最外层，两个 &gt; 符号是第一层嵌套，以此类推<br>区块中可以使用列表，列表中也可以使用区块</li>
+<li>第五项：<strong>markdown代码</strong><br><code>printf()</code>函数<br>如果是段落上的一个函数或片段的代码可以用反引号把它包起来(`)    <blockquote>
+<ul>
+<li>代码区块：<br>四个空格或者制表符（代码区块使用 4 个空格或者一个制表符（Tab 键）。）<br><img src="https://www.runoob.com/wp-content/uploads/2019/03/6DC89E5C-B41A-4938-97D8-D7D06B879F91.jpg" alt="展示" title="结果展示"><br>你也可以用 ``` 包裹一段代码，并指定一种语言（也可以不指定）    </li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">include &lt;bits/stdc++.h&gt;    </span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;    </span><br><span class="line">        <span class="built_in">cout</span>&lt;&lt;<span class="string">&quot;hello world&quot;</span>&lt;&lt;<span class="built_in">endl</span>;    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;    </span><br><span class="line">&#125;    </span><br></pre></td></tr></table></figure>
+<blockquote>
+<ul>
+<li><strong>第六项：Markdown 链接:</strong><br>参考<a target="_blank" rel="noopener" href="https://www.runoob.com/markdown/md-tutorial.html">菜鸟教程</a></li>
+<li><strong>第七项：markdown 表格</strong><br>Markdown 制作表格使用 | 来分隔不同的单元格，使用 - 来分隔表头和其他行。  </li>
+</ul>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>表头</th>
+<th>表头</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>单元格</td>
+<td>单元格</td>
+</tr>
+<tr>
+<td>单元格</td>
+<td>单元格</td>
+</tr>
+<tr>
+<td>我们可以设置表格的对齐方式：</td>
+<td></td>
+</tr>
+</tbody></table>
+<pre><code>-: 设置内容和标题栏居右对齐。
+:- 设置内容和标题栏居左对齐。
+:-: 设置内容和标题栏居中对齐。</code></pre>
+<table>
+<thead>
+<tr>
+<th align="left">左对齐</th>
+<th align="right">右对齐</th>
+<th align="center">居中对齐</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">单元格</td>
+<td align="right">单元格</td>
+<td align="center">单元格</td>
+</tr>
+<tr>
+<td align="left">单元格</td>
+<td align="right">单元格</td>
+<td align="center">单元格</td>
+</tr>
+</tbody></table>
+<blockquote>
+<ul>
+<li><strong>第八项：markdown高级技巧</strong><br>参考连接<a target="_blank" rel="noopener" href="https://www.runoob.com/markdown/md-advance.html">菜鸟教程</a></li>
+</ul>
+</blockquote>
+<hr>
+<hr>
+<p>本文参考菜鸟教程的markdown教学，超链接上文已给出。（<a target="_blank" rel="noopener" href="https://www.runoob.com/markdown/md-tutorial.html%EF%BC%89">https://www.runoob.com/markdown/md-tutorial.html）</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2013/07/13/markdown-introduction/">展开全文 >></a>
         </p>
       
 
