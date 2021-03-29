@@ -6,15 +6,17 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://example.com">
-  <title>Archives: 2020/10 | 大侠邹的blog</title>
+  <title>大侠邹的blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="learning">
-<meta property="og:type" content="website">
+  <meta name="description" content="#MapReduce介绍  1.mapreduce编程思想   适用于数据密集型的应用 mapreduce 采用分而治之的策略  把非常庞大的数据集，切分成非常多独立的小分片 然后为每一个分片单独地启动一个map任务 最终通过多个map任务，并行地在多个机器上去处理    mapreduce计算向数据靠拢的理念  计算向数据靠拢而不是数据向计算靠拢    Master&#x2F;Slave架构   一个Ma">
+<meta property="og:type" content="article">
 <meta property="og:title" content="大侠邹的blog">
-<meta property="og:url" content="http://example.com/archives/2020/10/index.html">
+<meta property="og:url" content="http://example.com/2020/11/23/MapReduce/index.html">
 <meta property="og:site_name" content="大侠邹的blog">
-<meta property="og:description" content="learning">
+<meta property="og:description" content="#MapReduce介绍  1.mapreduce编程思想   适用于数据密集型的应用 mapreduce 采用分而治之的策略  把非常庞大的数据集，切分成非常多独立的小分片 然后为每一个分片单独地启动一个map任务 最终通过多个map任务，并行地在多个机器上去处理    mapreduce计算向数据靠拢的理念  计算向数据靠拢而不是数据向计算靠拢    Master&#x2F;Slave架构   一个Ma">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-11-23T05:48:18.193Z">
+<meta property="article:modified_time" content="2020-12-09T08:07:10.379Z">
 <meta property="article:author" content="daxiazou">
 <meta name="twitter:card" content="summary">
   
@@ -152,97 +154,277 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-MapReduce" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>#MapReduce介绍</p>
+<blockquote>
+<p><strong><em>1.mapreduce编程思想</em></strong></p>
+<blockquote>
+<ul>
+<li>适用于数据密集型的应用</li>
+<li>mapreduce 采用分而治之的策略<blockquote>
+<ul>
+<li>把非常庞大的数据集，切分成非常多独立的小分片</li>
+<li>然后为每一个分片单独地启动一个map任务</li>
+<li>最终通过多个map任务，并行地在多个机器上去处理</li>
+</ul>
+</blockquote>
+</li>
+<li>mapreduce计算向数据靠拢的理念<blockquote>
+<ul>
+<li>计算向数据靠拢而不是数据向计算靠拢</li>
+</ul>
+</blockquote>
+</li>
+<li>Master/Slave架构 <blockquote>
+<ul>
+<li>一个Master服务器–》作业跟踪器JobTracker–》负责整个作业的调度和处理以及失败和恢复</li>
+<li>若干个Slave服务器–》负责具体任务执行的组件TaskTracker–》负责接收JobTracker给它发的作业处理指令，完成具体的任务处理</li>
+</ul>
+</blockquote>
+</li>
+<li>map 函数的作用：将输入的一个键值对进行处理生成一批的键值对</li>
+<li>reduce函数的作用： 输入：&lt;key,list(value)&gt;,就是一个键以及一堆值的列表。输出：&lt;key,value&gt;</li>
+</ul>
+</blockquote>
+</blockquote>
+<blockquote>
+<p><strong><em>2.mapreduce体系结构</em></strong></p>
+<blockquote>
+<ul>
+<li>Client客户端<blockquote>
+<ul>
+<li>通过Client可以提交用户编写的应用程序用户通过它将应用程序交到JobTracker端</li>
+<li>通过这些Client用户也可以通过它提供的一些接口去查看当前提交作业的运行状态</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li>JobTracker（作业跟踪器）<blockquote>
+<ul>
+<li>负责资源的监控和作业的调度</li>
+<li>监控底层的其他TaskTracker以及当前运行的Job的健康状况</li>
+<li>一旦探测到失败的情况就把这个任务转移到其它节点继续执行跟踪任务执行进度和资源使用量</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
+<ul>
+<li>TaskTracker（任务调度器）<blockquote>
+<ul>
+<li>执行具体的相关任务一般接收JobTracker发送过来的命令</li>
+<li>把一些自己的资源使用情况，以及任务的运行进度通过心跳的方式，也就是heartbeat发送给JobTracker（通过slot查看目前的资源使用情况。slot是一种资源调度单位，包括内存,CPU的资源）</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
+<ul>
+<li>Task<blockquote>
+<ul>
+<li>map任务</li>
+<li>reduce任务 </li>
+</ul>
+</blockquote>
+</li>
+<li>*<em>3.mapreduce工程流程**</em></li>
+<li>输入(分片操作)</li>
+<li>Map任务（每个分片启动一个map任务）</li>
+<li>Reduce任务</li>
+<li>输出<br>shuffle 将map任务产生的中间结果（一系列的&lt;key,value&gt;）转换为 &lt;key,value-list&gt;<br>最优的Reduce任务个数取决于集群中可用的reduce任务槽（slot）的数目(一般比该数目稍小，这样可以预留一些系统资源处理可能发生的错误)</li>
+</ul>
+</blockquote>
+</blockquote>
+<blockquote>
+<p><strong><em>4.shuffle过程解析</em></strong></p>
+<blockquote>
+<ul>
+<li>Map端的Shuffle过程<blockquote>
+<p>步骤：</p>
+<ol>
+<li>输入数据和执行Map任务</li>
+<li>写入缓存</li>
+<li>溢写（分区，排序，合并（要自己定义才执行））</li>
+<li>文件归并</li>
+</ol>
+</blockquote>
+</li>
+<li>Reduce端的Shuffle过程 <blockquote>
+<p>步骤：</p>
+<ol>
+<li>取数据</li>
+<li>归并数据</li>
+<li>把数据输入给Reduce任务</li>
+</ol>
+</blockquote>
+</li>
+</ul>
+</blockquote>
+<p><strong>MapReduce应用程序的执行过程：</strong><br>程序部署-》分配Map任务，分配Reduce任务-》读数据-》本地写数据-》远程读数据-》写数据<br>**<em>5. mapreduce具体应用**</em> </p>
+<blockquote>
+<ul>
+<li>关系代数运算 </li>
+<li>分组聚合运算</li>
+<li>矩阵乘法</li>
+<li>矩阵运算</li>
+<li>关系的自然连接</li>
+</ul>
+</blockquote>
+</blockquote>
+<blockquote>
+<p><strong><em>6.mapreduce编程实践</em></strong></p>
+</blockquote>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2020" class="archive-year">2020</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/10/21/hadoop-introduction/" class="archive-article-date">
-  	<time datetime="2020-10-21T11:26:06.637Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-10-21</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://example.com/2020/11/23/MapReduce/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/10/02/first-blog/" class="archive-article-date">
-  	<time datetime="2020-10-02T12:46:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-10-02</time>
-</a>
+<nav id="article-nav">
+  
+    <a href="/2021/03/25/shell_introduction/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          (no title)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/11/17/HBase%20introduction/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title"></div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/10/02/first-blog/">第一篇博客</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/10/01/markdown-introduction/" class="archive-article-date">
-  	<time datetime="2020-10-01T12:46:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-10-01</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/10/01/markdown-introduction/">Hello World</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
   
 
-    
+  
 
 
           </div>
@@ -265,8 +447,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
