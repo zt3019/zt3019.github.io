@@ -18,9 +18,25 @@
   <meta name="author" content="daxiazou">
   <meta name="keywords" content="">
   
-  <title>归档 - Nevermind</title>
+  <title>Hbase简介 - Nevermind</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.6.0/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
 
 
 
@@ -48,7 +64,7 @@
 
 
 <body>
-  <header style="height: 60vh;">
+  <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand"
@@ -147,9 +163,46 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="归档">
+            <span class="h2" id="subtitle" title="Hbase简介">
               
             </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-11-17 14:52" pubdate>
+        2020年11月17日 下午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      353 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      3
+       分钟
+    </span>
+  
+
+  
+  
+</div>
 
             
           </div>
@@ -162,40 +215,140 @@
 
   <main>
     
-      <div class="container nopadding-x-md">
-        <div class="py-5" id="board"
-          >
-          
-          <div class="container">
-            <div class="row">
-              <div class="col-12 col-md-10 m-auto">
-                
-
-<div class="list-group">
-  <p class="h4">共计 8 篇文章</p>
-  <hr>
-  
-  
-    
       
-      <p class="h5">2021</p>
-    
-    <a href="/2021/03/25/shell_introduction/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">shell介绍</span>
-      <time style="float: right;">03-25</time>
-    </a>
-  
-</div>
 
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Hbase简介</h1>
+            
+            <div class="markdown-body">
+              <p>#分布式数据库HBase简介</p>
+<ol>
+<li><p>概述    </p>
+<ul>
+<li>HBase是针对谷歌BigTable的开源实现，是一个高可靠，高性能，面向列，可伸缩的分布式数据库           </li>
+<li>可以用来存储非结构化和半结构化的松散数据</li>
+</ul>
+</li>
+<li><p>数据模型</p>
+<ul>
+<li>索引通过四个元素来定位：行键，列族，列限定符，时间戳</li>
+<li> 面向列的存储</li>
+</ul>
+</li>
+<li><p>实现原理 </p>
+<ul>
+<li>HBase的功能组件<blockquote>
+<p>库函数<br>Master服务器<br>Region服务器    </p>
+</blockquote>
+</li>
+<li>两个核心概念表和Region<blockquote>
+<p>一个HBase表被划分成多个Region<br>一个Region会分裂成多个新的Region</p>
+</blockquote>
+</li>
+<li>怎么实现Region定位<blockquote>
+<p>三层结构索引实现Region的定位<br>Zookeeper文件<br>-ROOT-表<br>.MEAT.表      </p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>运行机制</p>
+<ul>
+<li>HBase的系统架构<blockquote>
+<p><img src="https://img-blog.csdnimg.cn/2020070104123335.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTE1NDU1OQ==,size_16,color_FFFFFF,t_70#pic_center" srcset="/img/loading.gif" lazyload title="系统架构图"><br>Zookeeper服务器（被大量用于分布式系统，提供配置维护，域名服务，分布式同步服务）实现协同管理服务，提供管家功能（维护和管理整个HBase集群）<br>Master服务器作用：1.对表增删改查。2.负责不同Region服务器的负载均衡。3.负责调整分裂合并后Region的分布。4.负责重新分配故障，失效的Region服务器</p>
+</blockquote>
+</li>
+<li>Region服务器（负责用户数据的存储和管理）的工作原理</li>
+<li>Store的工作原理</li>
+<li>HLog的工作原理</li>
+</ul>
+</li>
+<li><p>编程实践<br>HBase安装及实践，参考厦门大学数据库实验室博客<br><a target="_blank" rel="noopener" href="http://dblab.xmu.edu.cn/blog/2442-2/">参考链接</a></p>
+</li>
+</ol>
 
-
-
-
-              </div>
             </div>
-          </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/hadoop/">hadoop</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Hadoop/">Hadoop</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/11/23/MapReduce/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Mapreduce介绍</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/11/11/hadoop%20installation/">
+                        <span class="hidden-mobile">Hadoop的介绍</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
         </div>
       </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
     
 
     
@@ -299,9 +452,15 @@
 
 
 
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.2/dist/tocbot.min.js" ></script>
 
 
 
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
 
 
 

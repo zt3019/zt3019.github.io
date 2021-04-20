@@ -18,9 +18,25 @@
   <meta name="author" content="daxiazou">
   <meta name="keywords" content="">
   
-  <title>归档 - Nevermind</title>
+  <title>Mapreduce介绍 - Nevermind</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.6.0/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
 
 
 
@@ -48,7 +64,7 @@
 
 
 <body>
-  <header style="height: 60vh;">
+  <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand"
@@ -147,9 +163,46 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="归档">
+            <span class="h2" id="subtitle" title="Mapreduce介绍">
               
             </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-11-23 13:48" pubdate>
+        2020年11月23日 下午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      770 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      8
+       分钟
+    </span>
+  
+
+  
+  
+</div>
 
             
           </div>
@@ -162,40 +215,224 @@
 
   <main>
     
-      <div class="container nopadding-x-md">
-        <div class="py-5" id="board"
-          >
-          
-          <div class="container">
-            <div class="row">
-              <div class="col-12 col-md-10 m-auto">
-                
-
-<div class="list-group">
-  <p class="h4">共计 8 篇文章</p>
-  <hr>
-  
-  
-    
       
-      <p class="h5">2021</p>
-    
-    <a href="/2021/03/25/shell_introduction/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">shell介绍</span>
-      <time style="float: right;">03-25</time>
-    </a>
-  
-</div>
 
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Mapreduce介绍</h1>
+            
+            <div class="markdown-body">
+              <p>#MapReduce介绍</p>
+<blockquote>
+<p><em><strong>1.mapreduce编程思想</strong></em></p>
+<blockquote>
+<ul>
+<li>适用于数据密集型的应用</li>
+<li>mapreduce 采用分而治之的策略<blockquote>
+<ul>
+<li>把非常庞大的数据集，切分成非常多独立的小分片</li>
+<li>然后为每一个分片单独地启动一个map任务</li>
+<li>最终通过多个map任务，并行地在多个机器上去处理</li>
+</ul>
+</blockquote>
+</li>
+<li>mapreduce计算向数据靠拢的理念<blockquote>
+<ul>
+<li>计算向数据靠拢而不是数据向计算靠拢</li>
+</ul>
+</blockquote>
+</li>
+<li>Master/Slave架构 <blockquote>
+<ul>
+<li>一个Master服务器–》作业跟踪器JobTracker–》负责整个作业的调度和处理以及失败和恢复</li>
+<li>若干个Slave服务器–》负责具体任务执行的组件TaskTracker–》负责接收JobTracker给它发的作业处理指令，完成具体的任务处理</li>
+</ul>
+</blockquote>
+</li>
+<li>map 函数的作用：将输入的一个键值对进行处理生成一批的键值对</li>
+<li>reduce函数的作用： 输入：&lt;key,list(value)&gt;,就是一个键以及一堆值的列表。输出：&lt;key,value&gt;</li>
+</ul>
+</blockquote>
+</blockquote>
+<blockquote>
+<p><em><strong>2.mapreduce体系结构</strong></em></p>
+<blockquote>
+<ul>
+<li>Client客户端<blockquote>
+<ul>
+<li>通过Client可以提交用户编写的应用程序用户通过它将应用程序交到JobTracker端</li>
+<li>通过这些Client用户也可以通过它提供的一些接口去查看当前提交作业的运行状态</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li>JobTracker（作业跟踪器）<blockquote>
+<ul>
+<li>负责资源的监控和作业的调度</li>
+<li>监控底层的其他TaskTracker以及当前运行的Job的健康状况</li>
+<li>一旦探测到失败的情况就把这个任务转移到其它节点继续执行跟踪任务执行进度和资源使用量</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
+<ul>
+<li>TaskTracker（任务调度器）<blockquote>
+<ul>
+<li>执行具体的相关任务一般接收JobTracker发送过来的命令</li>
+<li>把一些自己的资源使用情况，以及任务的运行进度通过心跳的方式，也就是heartbeat发送给JobTracker（通过slot查看目前的资源使用情况。slot是一种资源调度单位，包括内存,CPU的资源）</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
+<ul>
+<li>Task<blockquote>
+<ul>
+<li>map任务</li>
+<li>reduce任务 </li>
+</ul>
+</blockquote>
+</li>
+<li><strong>3.mapreduce工程流程</strong>*</li>
+<li>输入(分片操作)</li>
+<li>Map任务（每个分片启动一个map任务）</li>
+<li>Reduce任务</li>
+<li>输出<br>shuffle 将map任务产生的中间结果（一系列的&lt;key,value&gt;）转换为 &lt;key,value-list&gt;<br>最优的Reduce任务个数取决于集群中可用的reduce任务槽（slot）的数目(一般比该数目稍小，这样可以预留一些系统资源处理可能发生的错误)</li>
+</ul>
+</blockquote>
+</blockquote>
+<blockquote>
+<p><em><strong>4.shuffle过程解析</strong></em></p>
+<blockquote>
+<ul>
+<li>Map端的Shuffle过程<blockquote>
+<p>步骤：</p>
+<ol>
+<li>输入数据和执行Map任务</li>
+<li>写入缓存</li>
+<li>溢写（分区，排序，合并（要自己定义才执行））</li>
+<li>文件归并</li>
+</ol>
+</blockquote>
+</li>
+<li>Reduce端的Shuffle过程 <blockquote>
+<p>步骤：</p>
+<ol>
+<li>取数据</li>
+<li>归并数据</li>
+<li>把数据输入给Reduce任务</li>
+</ol>
+</blockquote>
+</li>
+</ul>
+</blockquote>
+<p><strong>MapReduce应用程序的执行过程：</strong><br>程序部署-》分配Map任务，分配Reduce任务-》读数据-》本地写数据-》远程读数据-》写数据<br><em><strong>5. mapreduce具体应用</strong></em> </p>
+<blockquote>
+<ul>
+<li>关系代数运算 </li>
+<li>分组聚合运算</li>
+<li>矩阵乘法</li>
+<li>矩阵运算</li>
+<li>关系的自然连接</li>
+</ul>
+</blockquote>
+</blockquote>
+<blockquote>
+<p><em><strong>6.mapreduce编程实践</strong></em></p>
+</blockquote>
 
-
-
-
-              </div>
             </div>
-          </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/hadoop/">hadoop</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Hadoop/">Hadoop</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/03/25/shell_introduction/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">shell介绍</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/11/17/HBase%20introduction/">
+                        <span class="hidden-mobile">Hbase简介</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
         </div>
       </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
     
 
     
@@ -299,9 +536,15 @@
 
 
 
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.2/dist/tocbot.min.js" ></script>
 
 
 
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
 
 
 
