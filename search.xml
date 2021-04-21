@@ -47,55 +47,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Hadoop简介</title>
-    <url>/2020/10/21/hadoop-introduction/</url>
-    <content><![CDATA[<h1 id="hadoop简介"><a href="#hadoop简介" class="headerlink" title="hadoop简介"></a>hadoop简介</h1><p>1.定义：<br>hadoop是一个开源分布式计算平台，为用户提供了底层细节透明的分布式基础框架。<br>2.特性：    </p>
-<ul>
-<li>高可靠性    </li>
-<li>高效性</li>
-<li>高可扩展性</li>
-<li>高容错性</li>
-<li>成本低</li>
-<li>运行在linux中</li>
-<li>支持多种编程语言</li>
-</ul>
-<p>3.版本</p>
-<ul>
-<li>1.0</li>
-<li>2.0</li>
-</ul>
-<p>4.hadoop结构</p>
-<ul>
-<li><img src="https://img-blog.csdnimg.cn/20191024090622860.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2ZtMzQ1Njg5,size_16,color_FFFFFF,t_70" alt="图片展示" title="Hadoop项目结构图"></li>
-<li>参考别人博客的<a href="https://blog.csdn.net/fm345689/article/details/102715230">文字记录</a></li>
-</ul>
-<p>5.Hadoop项目核心模块</p>
-<ul>
-<li>Hadoop Common：为Hadoop其他模块提供支持实用程序。</li>
-<li>HDFS：提供对应用程序数据的高吞吐量访问</li>
-<li>Hadoop YARN：作业调度和集群资源管理的框架</li>
-<li>MapReduce：YARN系统的大型数据集并行处理技术</li>
-</ul>
-<p>6.Hadoop RPC工作原理</p>
-<p>7.MapReduce工作原理</p>
-<blockquote>
-<ul>
-<li>策略：分而治之</li>
-<li>计算向数据靠拢而不是数据向计算靠拢</li>
-</ul>
-</blockquote>
-<p>8.HDFS工作原理</p>
-<p>9.YARN工作原理</p>
-]]></content>
-      <categories>
-        <category>hadoop</category>
-      </categories>
-      <tags>
-        <tag>Hadoop</tag>
-        <tag>大数据</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Hadoop的介绍</title>
     <url>/2020/11/11/hadoop%20installation/</url>
     <content><![CDATA[<h1 id="Hadoop的介绍"><a href="#Hadoop的介绍" class="headerlink" title="Hadoop的介绍"></a>Hadoop的介绍</h1><p>1.hadoop两大核心组件    </p>
@@ -176,6 +127,55 @@
       </tags>
   </entry>
   <entry>
+    <title>Hadoop简介</title>
+    <url>/2020/10/21/hadoop-introduction/</url>
+    <content><![CDATA[<h1 id="hadoop简介"><a href="#hadoop简介" class="headerlink" title="hadoop简介"></a>hadoop简介</h1><p>1.定义：<br>hadoop是一个开源分布式计算平台，为用户提供了底层细节透明的分布式基础框架。<br>2.特性：    </p>
+<ul>
+<li>高可靠性    </li>
+<li>高效性</li>
+<li>高可扩展性</li>
+<li>高容错性</li>
+<li>成本低</li>
+<li>运行在linux中</li>
+<li>支持多种编程语言</li>
+</ul>
+<p>3.版本</p>
+<ul>
+<li>1.0</li>
+<li>2.0</li>
+</ul>
+<p>4.hadoop结构</p>
+<ul>
+<li><img src="https://img-blog.csdnimg.cn/20191024090622860.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2ZtMzQ1Njg5,size_16,color_FFFFFF,t_70" alt="图片展示" title="Hadoop项目结构图"></li>
+<li>参考别人博客的<a href="https://blog.csdn.net/fm345689/article/details/102715230">文字记录</a></li>
+</ul>
+<p>5.Hadoop项目核心模块</p>
+<ul>
+<li>Hadoop Common：为Hadoop其他模块提供支持实用程序。</li>
+<li>HDFS：提供对应用程序数据的高吞吐量访问</li>
+<li>Hadoop YARN：作业调度和集群资源管理的框架</li>
+<li>MapReduce：YARN系统的大型数据集并行处理技术</li>
+</ul>
+<p>6.Hadoop RPC工作原理</p>
+<p>7.MapReduce工作原理</p>
+<blockquote>
+<ul>
+<li>策略：分而治之</li>
+<li>计算向数据靠拢而不是数据向计算靠拢</li>
+</ul>
+</blockquote>
+<p>8.HDFS工作原理</p>
+<p>9.YARN工作原理</p>
+]]></content>
+      <categories>
+        <category>hadoop</category>
+      </categories>
+      <tags>
+        <tag>Hadoop</tag>
+        <tag>大数据</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Hello World</title>
     <url>/2020/09/22/hello-world/</url>
     <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
@@ -192,6 +192,18 @@
 
 <p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
 ]]></content>
+  </entry>
+  <entry>
+    <title>shell介绍</title>
+    <url>/2021/03/25/shell_introduction/</url>
+    <content><![CDATA[]]></content>
+      <categories>
+        <category>大数据</category>
+      </categories>
+      <tags>
+        <tag>大数据</tag>
+        <tag>shell</tag>
+      </tags>
   </entry>
   <entry>
     <title>Java多线程基础</title>
@@ -256,18 +268,6 @@
       <tags>
         <tag>Java</tag>
         <tag>多线程</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>shell介绍</title>
-    <url>/2021/03/25/shell_introduction/</url>
-    <content><![CDATA[]]></content>
-      <categories>
-        <category>大数据</category>
-      </categories>
-      <tags>
-        <tag>大数据</tag>
-        <tag>shell</tag>
       </tags>
   </entry>
   <entry>
