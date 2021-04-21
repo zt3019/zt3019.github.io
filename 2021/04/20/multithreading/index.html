@@ -18,9 +18,25 @@
   <meta name="author" content="daxiazou">
   <meta name="keywords" content="">
   
-  <title>归档 - Nevermind</title>
+  <title>Java多线程基础 - Nevermind</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.6.0/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
 
 
 
@@ -48,7 +64,7 @@
 
 
 <body>
-  <header style="height: 60vh;">
+  <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand"
@@ -142,14 +158,51 @@
 </nav>
 
     <div class="banner" id="banner" parallax=true
-         style="background: url('/img/default.png') no-repeat center center;
+         style="background: url('https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3231005548,635944634&fm=26&gp=0.jpg') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="归档">
+            <span class="h2" id="subtitle" title="Java多线程基础">
               
             </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-04-20 19:22" pubdate>
+        2021年4月20日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      610 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      6
+       分钟
+    </span>
+  
+
+  
+  
+</div>
 
             
           </div>
@@ -162,52 +215,149 @@
 
   <main>
     
-      <div class="container nopadding-x-md">
-        <div class="py-5" id="board"
-          >
-          
-          <div class="container">
-            <div class="row">
-              <div class="col-12 col-md-10 m-auto">
-                
-
-<div class="list-group">
-  <p class="h4">共计 9 篇文章</p>
-  <hr>
-  
-  
-    
       
-      <p class="h5">2021</p>
-    
-    <a href="/2021/04/20/multithreading/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">Java多线程基础</span>
-      <time style="float: right;">04-20</time>
-    </a>
-  
-    
-    <a href="/2021/04/14/Java%E6%9D%82%E8%AE%B0/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">Java杂记</span>
-      <time style="float: right;">04-14</time>
-    </a>
-  
-    
-    <a href="/2021/03/25/shell_introduction/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">shell介绍</span>
-      <time style="float: right;">03-25</time>
-    </a>
-  
-</div>
 
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Java多线程基础</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：2021年4月21日 晚上
+                
+              </p>
+            
+            <div class="markdown-body">
+              <h1 id="Java多线程"><a href="#Java多线程" class="headerlink" title="Java多线程"></a>Java多线程</h1><h2 id="1-程序，进程，线程"><a href="#1-程序，进程，线程" class="headerlink" title="1.程序，进程，线程"></a>1.程序，进程，线程</h2><blockquote>
+<ul>
+<li>程序：（可以执行的静态代码，是保存在硬盘上的一个文件）是为完成特定任务，用某种语言编写的一组指令的集合。即<em><strong>一段静态的代码</strong></em>，静态对象.</li>
+<li>进程：（正在执行中的一个程序，在内存中处于激活状态，有生命周期）是程序的一次执行过程，或是<em><strong>正在运行的一个程序</strong></em>。动态过程：有它自身的产生、存在和消亡的过程</li>
+<li>线程：（进程中的子任务）进程可以进一步细化为线程，是一个程序内部的一条执行路径</li>
+</ul>
+</blockquote>
+<h2 id="2-Java中多线程的创建和使用"><a href="#2-Java中多线程的创建和使用" class="headerlink" title="2.Java中多线程的创建和使用"></a>2.Java中多线程的创建和使用</h2><blockquote>
+<ul>
+<li>实现Runnable接口与继承Thread类</li>
+<li><h3 id="Thread类的主要方法"><a href="#Thread类的主要方法" class="headerlink" title="Thread类的主要方法"></a>Thread类的主要方法</h3><blockquote>
+<ul>
+<li>每个线程都是通过某个特定Thread对象的run()方法来完成操作的，经常把run()方法的主题称为线程体</li>
+<li>通过该Thread对象的start()方法来调用这个线程</li>
+<li>static Thread currentThread(),返回当前方法正在执行此方法所压入的栈的线程对象</li>
+<li>void join()它的作用是调用此方法的另一个线程阻塞，当前线程执行完再执行另一个线程</li>
+<li>static void sleep(long millis)作用是让当前线程（正在执行此方法的栈的线程）进入睡眠状态<blockquote>
+<ul>
+<li>两种方式结束sleep状态：1.时间到了。2.被其他进程打断 interrupt() 方法</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</blockquote>
+</li>
+<li><h3 id="创建并启动线程的方式"><a href="#创建并启动线程的方式" class="headerlink" title="创建并启动线程的方式"></a>创建并启动线程的方式</h3></li>
+<li><h4 id="实现Runnable的方式"><a href="#实现Runnable的方式" class="headerlink" title="实现Runnable的方式"></a>实现Runnable的方式</h4><blockquote>
+<ol>
+<li>写一个具体类，实现Runnable接口，并实现接口中的抽象方法run(),这个run方法就是线程体</li>
+<li>创建这个具体类对象，并把这个对象作为实参，创建Thread线程对象</li>
+<li>调用Thread线程对象的start方法</li>
+</ol>
+</blockquote>
+</li>
+<li><h4 id="继承Thread的方式"><a href="#继承Thread的方式" class="headerlink" title="继承Thread的方式"></a>继承Thread的方式</h4><blockquote>
+<ol>
+<li>写一个类，继承Thread,并重写run方法，此方法就是线程体</li>
+<li>创建这个类的对象，相当于创建了线程对象</li>
+<li>调用这个线程对象的start方法</li>
+</ol>
+</blockquote>
+</li>
+</ul>
+</blockquote>
+<h2 id="3-线程的同步"><a href="#3-线程的同步" class="headerlink" title="3.线程的同步"></a>3.线程的同步</h2><blockquote>
+<ul>
+<li>synchronized (lock){}</li>
+<li>()中是一个锁对象，任意对象都可以做锁，称为互斥锁，作用是只允许一个线程进入执行，其他线程等待</li>
+<li>具有原子性，不可分割</li>
+<li>synchronized()可重入锁（同一个线程可以无限次获取同一个锁）</li>
+<li>避免死锁：不要嵌套synchronized，即使有嵌套，锁对象尽量少</li>
+</ul>
+</blockquote>
 
-
-
-
-              </div>
             </div>
-          </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/Java/">Java</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Java/">Java</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/">多线程</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/04/14/Java%E6%9D%82%E8%AE%B0/">
+                        <span class="hidden-mobile">Java杂记</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
         </div>
       </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
     
 
     
@@ -311,9 +461,15 @@
 
 
 
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.2/dist/tocbot.min.js" ></script>
 
 
 
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
 
 
 
