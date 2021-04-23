@@ -185,7 +185,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      610 字
+      827 字
     </span>
   
 
@@ -195,7 +195,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      6
+      10
        分钟
     </span>
   
@@ -229,7 +229,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2021年4月21日 晚上
+                  本文最后更新于：2021年4月23日 晚上
                 
               </p>
             
@@ -266,18 +266,32 @@
 <li>创建这个具体类对象，并把这个对象作为实参，创建Thread线程对象</li>
 <li>调用Thread线程对象的start方法</li>
 </ol>
+<ul>
+<li>代码示例</li>
+</ul>
 </blockquote>
 </li>
+</ul>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs Java"><span class="hljs-keyword">package</span> multi_thread;<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Counter</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Runnable</span> </span>&#123;<br>	<span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> cnt = <span class="hljs-number">200</span>;<br><br>	<span class="hljs-meta">@Override</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">run</span><span class="hljs-params">()</span> </span>&#123;<br>		System.out.println(cnt);<br>		<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">50</span>; i++) &#123;<br>			<span class="hljs-keyword">synchronized</span> (<span class="hljs-string">&quot;&quot;</span>) &#123;<span class="hljs-comment">// ()中是一个锁对象，任意对象都可以做锁，称为互斥锁，作用是只允许一个线程进入执行，其他线程等待</span><br><br>				cnt -= <span class="hljs-number">2</span>;<br>				<span class="hljs-keyword">try</span> &#123;<br>					Thread.sleep(<span class="hljs-number">10</span>);<br>				&#125; <span class="hljs-keyword">catch</span> (InterruptedException e) &#123;<br>					<span class="hljs-comment">// TODO Auto-generated catch block</span><br>					e.printStackTrace();<br>				&#125;<br>				System.out.println(Thread.currentThread().getName() + <span class="hljs-string">&quot;: &quot;</span> + cnt);<br>			&#125;<br>		&#125;<br>	&#125;<br><br>&#125;<br><br></code></pre></td></tr></table></figure>
+<hr>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs Java"><span class="hljs-keyword">package</span> multi_thread;<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">CounterTest</span> </span>&#123;<br><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;<br>		Runnable counter = <span class="hljs-keyword">new</span> Counter();<br>		Thread thread1 = <span class="hljs-keyword">new</span> Thread(counter);<br>		Thread thread2 = <span class="hljs-keyword">new</span> Thread(counter);<br>		thread1.start();<br>		thread2.start();<br>	&#125;<br><br>&#125;<br><br></code></pre></td></tr></table></figure>
+<blockquote>
+<ul>
 <li><h4 id="继承Thread的方式"><a href="#继承Thread的方式" class="headerlink" title="继承Thread的方式"></a>继承Thread的方式</h4><blockquote>
 <ol>
 <li>写一个类，继承Thread,并重写run方法，此方法就是线程体</li>
 <li>创建这个类的对象，相当于创建了线程对象</li>
 <li>调用这个线程对象的start方法</li>
 </ol>
+<ul>
+<li>代码示例</li>
+</ul>
 </blockquote>
 </li>
 </ul>
 </blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs Java"><span class="hljs-keyword">package</span> multi_thread;<br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyThread</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Thread</span></span>&#123;<br>	<span class="hljs-meta">@Override</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">run</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>;i&lt;<span class="hljs-number">100</span>;i++) &#123;<br>			System.out.println(currentThread().getName()+<span class="hljs-string">&quot; &quot;</span>+i);<br>		&#125;<br>	&#125;<br>&#125;<br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ThreadTest2</span> </span>&#123;<br><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;<br>		Thread myThread1 = <span class="hljs-keyword">new</span> MyThread();<br>		myThread1.start();<br>		<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>;i&lt;<span class="hljs-number">100</span>;i++) &#123;<br>			System.out.println(<span class="hljs-string">&quot;-----main &quot;</span>+i);<br>		&#125;<br>	&#125;<br><br>&#125;<br><br></code></pre></td></tr></table></figure>
 <h2 id="3-线程的同步"><a href="#3-线程的同步" class="headerlink" title="3.线程的同步"></a>3.线程的同步</h2><blockquote>
 <ul>
 <li>synchronized (lock){}</li>
@@ -322,6 +336,12 @@
                 <div class="post-prevnext">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2021/04/22/Java-reflect/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Java反射</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
