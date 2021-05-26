@@ -1,6 +1,158 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>JVM</title>
+    <url>/2021/05/02/JVM/</url>
+    <content><![CDATA[<h1 id="JVM"><a href="#JVM" class="headerlink" title="JVM"></a>JVM</h1><h2 id="JVM定义"><a href="#JVM定义" class="headerlink" title="JVM定义"></a>JVM定义</h2><blockquote>
+<ul>
+<li>JVM是运行在操作系统之上的，它与硬件没有直接的交互</li>
+<li>通过编译器将 Java 程序转换成该虚拟机所能识别的指令序列，也称 Java 字节码。Java虚拟机会将字节码，即class文件加载到JVM中。由JVM进行解释和执行</li>
+</ul>
+</blockquote>
+<h2 id="类加载器"><a href="#类加载器" class="headerlink" title="类加载器"></a>类加载器</h2><blockquote>
+<ul>
+<li>类加载器，即ClassLoader,它负责加载class文件，class文件在文件开头有特定的文件标示，并且ClassLoader只负责class文件的加载，至于它是否可以运行，则由Execution Engine决定</li>
+</ul>
+</blockquote>
+<h3 id="类加载器分类"><a href="#类加载器分类" class="headerlink" title="类加载器分类"></a>类加载器分类</h3><h4 id="虚拟机自带的类加载器"><a href="#虚拟机自带的类加载器" class="headerlink" title="虚拟机自带的类加载器"></a>虚拟机自带的类加载器</h4><ol>
+<li>启动类加载器：主要负责加载jre中的最为基础、最为重要的类。如$JAVA_HOME/jre/lib/rt.jar等，以及由虚拟机参数 -Xbootclasspath 指定的类。由于它由C++代码实现，没有对应的java对象，因此在java中，尝试获取此类时，只能使用null来指代。</li>
+<li>扩展类加载器：由Java代码实现，用于加载相对次要、但又通用的类，比如存放在 JRE 的 lib/ext 目录下 jar 包中的类，以及由系统变量 java.ext.dirs 指定的类。如$JAVA_HOME/jre/lib/ext/*.jar。</li>
+<li>应用程序类加载器：由Java代码实现， 它负责加载应用程序路径下的类。（这里的应用程序路径，便是指虚拟机参数 -cp/-classpath、系统变量 java.class.path 或环境变量 CLASSPATH 所指定的路径。）默认情况下，应用程序中包含的类便是由应用类加载器加载的。</li>
+</ol>
+<h4 id="用户自定义的加载器"><a href="#用户自定义的加载器" class="headerlink" title="用户自定义的加载器"></a>用户自定义的加载器</h4><blockquote>
+<ul>
+<li>Java.lang.ClassLoader的子类，用户可以定制类的加载方式。例如可以对 class 文件进行加密，加载时再利用自定义的类加载器对其解密。</li>
+</ul>
+</blockquote>
+<h3 id="双亲委派机制"><a href="#双亲委派机制" class="headerlink" title="双亲委派机制"></a>双亲委派机制</h3><blockquote>
+<ul>
+<li>双亲委派模型：每当一个类加载器接收到加载请求时，它会先将请求转发给父类加载器。在父类加载器没有找到所请求的类的情况下，该类加载器才会尝试去加载。</li>
+<li>应用程序类加载器的父类是扩展类加载器，扩展类加载器的父类是启动类加载器</li>
+<li>优点：1.避免类的重复加载。2.防止核心API中定义的类型不会被用户恶意替换和篡改</li>
+</ul>
+</blockquote>
+<h2 id="JVM的内存模型"><a href="#JVM的内存模型" class="headerlink" title="JVM的内存模型"></a>JVM的内存模型</h2><p><a href="https://imgtu.com/i/gZ2GDO" title="内存模型图片"><img src="https://z3.ax1x.com/2021/05/02/gZ2GDO.png" alt="gZ2GDO.png"></a></p>
+<blockquote>
+<ul>
+<li>Execution Engine执行引擎负责解释命令，提交操作系统执行</li>
+<li>Native Method Stack:定义了很多调用本地操作系统的方法，也称之为本地方法接口</li>
+<li>每个线程都有一个程序计数器，是线程私有的,就是一个指针</li>
+<li>方法区：所有定义的方法的信息都保存在该区域，此区属于共享区间。<br>  静态变量+常量+类信息(构造方法/接口定义)+运行时常量池存在方法区中。</li>
+<li>JDK1.7之前通过永久代实现方法区，1.7之前字符串常量池放到方法区中</li>
+<li>JDK1.8之后，通过元空间实现方法区，1.7之后字符串常量放到堆中</li>
+</ul>
+</blockquote>
+<h3 id="栈"><a href="#栈" class="headerlink" title="栈"></a>栈</h3><blockquote>
+<ul>
+<li>栈我们也叫内存，是线程私有的，生命周期随线程的生命周期，线程结束栈内存释放</li>
+<li>栈：8种基本类型的变量+对象的引用变量+实例方法都是在栈内存中分配</li>
+<li>在栈区域规定了两种异常状态：如果线程请求的栈深度大于虚拟机所允许的深度，则抛出StackOverflowError异常；如果虚拟机栈可以动态扩展，在扩展时无法申请到足够的内存，就会抛出OutOfMemoryError异常。</li>
+<li>栈帧：一个线程的每个方法在调用时都会在栈上划分一块区域，用于存储方法所需要的变量等信息，这块区域称之为栈帧（stack frame）。栈由多个栈帧构成，好比一部电影由多个帧的画面构成。</li>
+</ul>
+</blockquote>
+<h3 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h3><blockquote>
+<ul>
+<li>逻辑上分为三部分：1.新生区。2.养老区。3.永久区。（1.8后改为元空间）</li>
+<li>新生区进一步分为：<blockquote>
+<ul>
+<li>伊甸园区</li>
+<li>幸存区<blockquote>
+<ul>
+<li>幸存from区</li>
+<li>幸存to区</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</blockquote>
+</li>
+<li>在物理上划分，堆被划分成两个不同的区域：新生代 ( Young )、老年代 ( Old )。新生代 ( Young ) 又被划分为三个区域：Eden、From Survivor、To Survivor</li>
+<li>创建对象的过程<blockquote>
+<ul>
+<li>新new的对象会放在伊甸园区，伊甸园区的对象存活率非常低，当伊甸园区快满时会触发轻量级的垃圾回收机制（MinorGC）MinorGC会回收伊甸园区和幸存from区，会将伊甸园的幸存者标记复制到幸存to区，from区中的幸存者会根据它的年龄判断它的去向：默认情况下，如果年龄小于15则被标记到to区，如果年龄小于15则被标记复制到to区，如果年龄大于15则被标记复制到养老区，然后from区和to区交换角色</li>
+<li>当养老区内存不足时会触发重量级垃圾回收机制（MajorGC/fullGC），如果养老区无法回收内存则会出现OOM异常</li>
+<li></li>
+<li></li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</blockquote>
+<h3 id="JVM常见参数设置"><a href="#JVM常见参数设置" class="headerlink" title="JVM常见参数设置"></a>JVM常见参数设置</h3><blockquote>
+<ul>
+<li>-Xms:堆初始值（默认为物理内存的1/64）</li>
+<li>-Xmx:堆最大可用值（默认为物理内存的1/4）</li>
+<li>-Xss:每个线程的栈大小，默认为1M，此值不能设置过大，否则会减少线程并发数。</li>
+</ul>
+</blockquote>
+<h3 id="常见异常"><a href="#常见异常" class="headerlink" title="常见异常"></a>常见异常</h3><blockquote>
+<ul>
+<li>错误原因: java.lang.OutOfMemoryError: Java heap space 堆内存溢出</li>
+<li>解决办法:调大堆内存大小 </li>
+<li>错误原因: java.lang.StackOverflowError表示为栈溢出，一般产生于递归调用。</li>
+<li>解决办法:设置线程最大调用深度，默认是1m</li>
+</ul>
+</blockquote>
+<h2 id="GC"><a href="#GC" class="headerlink" title="GC"></a>GC</h2><blockquote>
+<ul>
+<li>GC:JVM中的Garbage Collection，简称GC，它会不定时去堆内存中清理不可达对象。</li>
+<li>分类：两种类型，一种是普通GC（minor GC），一种是全局GC（major GC or Full GC）</li>
+<li>　新生代GC（minor GC）：只针对新生代区域的GC。</li>
+<li>老年代GC（major GC or Full GC）：针对老年代的GC，偶尔伴随对新生代的GC以及对永久代的GC。</li>
+<li>Minor GC触发机制：当年轻代满时就会触发Minor GC，这里的年轻代满指的是Eden区满，Survivor满不会引发GC。</li>
+<li>Full GC触发机制：当年老代满时会引发Full GC，Full GC将会同时回收年轻代、年老代，当永久代满时也会引发Full GC，会导致Class、Method元信息的卸载</li>
+<li>工作特点：理论上GC过程中会频繁收集Young区，很少收集Old区，基本不动Perm区（元空间/方法区）</li>
+</ul>
+</blockquote>
+<h3 id="标记不可达对象"><a href="#标记不可达对象" class="headerlink" title="标记不可达对象"></a>标记不可达对象</h3><blockquote>
+<ul>
+<li>引用计数法：引用计数法就是如果一个对象没有被任何引用指向，则可视之为垃圾。这种方法的缺点就是不能检测到循环指向的存在。</li>
+<li>可达性分析（GC ROOTS算法）简单理解，可以理解为堆外指向堆内的引用</li>
+</ul>
+</blockquote>
+<h3 id="垃圾回收的三种方式"><a href="#垃圾回收的三种方式" class="headerlink" title="垃圾回收的三种方式"></a>垃圾回收的三种方式</h3><ol>
+<li>清除：第一种是清除（sweep），即把死亡对象所占据的内存标记为空闲内存，并记录在一个空闲列表（free list）之中</li>
+<li>压缩：第二种是压缩（compact），即把存活的对象聚集到内存区域的起始位置，从而留下一段连续的内存空间</li>
+<li>复制第三种则是复制（copy），即把内存区域分为两等分，分别用两个指针 from 和 to 来维护，并且只是用 from 指针指向的内存区域来分配内<blockquote>
+<ul>
+<li>总结：回收死亡对象的内存共有三种方式，分别为：会造成内存碎片的清除、性能开销较大的压缩、以及堆使用效率较低的复制。</li>
+</ul>
+</blockquote>
+</li>
+</ol>
+<h3 id="垃圾回收算法"><a href="#垃圾回收算法" class="headerlink" title="垃圾回收算法"></a>垃圾回收算法</h3><ol>
+<li>标记复制算法 因此Minor GC使用的则是标记-复制算法，理性情况下：，Eden 区中的对象基本都死亡了，那么需要复制的数据将非常少，因此采用这种标记 - 复制算法的效果极好。<blockquote>
+<ul>
+<li>优点：不会产生内存碎片 </li>
+<li>缺点：需要双倍空间，浪费内存</li>
+</ul>
+</blockquote>
+</li>
+<li>标记清除算法 老年代一般是由标记清除或者是标记清除与标记压缩的混合实现<blockquote>
+<ul>
+<li>优点：不需要双倍空间</li>
+<li>缺点：1.会产生内存碎片 2.需要停止整个应用程序 3.需要维护内存碎片的地址列表</li>
+</ul>
+</blockquote>
+</li>
+<li>标记压缩算法<blockquote>
+<ul>
+<li>优点：1.不需要双倍空间，也不会产生内存碎片 2.补血药维护内存碎片的列表，只需要记录内存的起始地址即可 </li>
+<li>缺点：开销大，学要更新对象的地址</li>
+</ul>
+</blockquote>
+</li>
+<li>标记清楚压缩算法 标记清除压缩(Mark-Sweep-Compact)算法是标记清除算法和标记压缩算法的结合算法。其原理和标记清除算法一致，只不过会在多次GC后，进行一次Compact操作！</li>
+</ol>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Java网络编程基础</title>
     <url>/2021/04/23/Java-network/</url>
     <content><![CDATA[<h1 id="Java网络编程基础"><a href="#Java网络编程基础" class="headerlink" title="Java网络编程基础"></a>Java网络编程基础</h1><h2 id="实例代码"><a href="#实例代码" class="headerlink" title="实例代码"></a>实例代码</h2><figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs Java"><span class="hljs-keyword">package</span> network;<br><br><span class="hljs-keyword">import</span> java.io.BufferedReader;<br><span class="hljs-keyword">import</span> java.io.BufferedWriter;<br><span class="hljs-keyword">import</span> java.io.FileInputStream;<br><span class="hljs-keyword">import</span> java.io.FileOutputStream;<br><span class="hljs-keyword">import</span> java.io.IOException;<br><span class="hljs-keyword">import</span> java.io.InputStream;<br><span class="hljs-keyword">import</span> java.io.InputStreamReader;<br><span class="hljs-keyword">import</span> java.io.OutputStream;<br><span class="hljs-keyword">import</span> java.io.OutputStreamWriter;<br><span class="hljs-keyword">import</span> java.net.ServerSocket;<br><span class="hljs-keyword">import</span> java.net.Socket;<br><span class="hljs-keyword">import</span> java.time.LocalDateTime;<br><br><span class="hljs-keyword">import</span> org.junit.Test;<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">NetTest</span> </span>&#123;<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">server3</span><span class="hljs-params">()</span> </span>&#123;<br>		ServerSocket server = <span class="hljs-keyword">null</span>;<br>		<span class="hljs-keyword">try</span> &#123;<br>			server = <span class="hljs-keyword">new</span> ServerSocket(<span class="hljs-number">8888</span>); <span class="hljs-comment">// 绑定端口</span><br>			<span class="hljs-keyword">while</span> (<span class="hljs-keyword">true</span>) &#123;<br>				System.out.println(<span class="hljs-string">&quot;服务器在8888端口监听中.....&quot;</span>);<br>				<span class="hljs-keyword">final</span> Socket socket1 = server.accept();<br>				;<br>				Runnable runner = <span class="hljs-keyword">new</span> Runnable() &#123;<br>					<span class="hljs-meta">@Override</span><br>					<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">run</span><span class="hljs-params">()</span> </span>&#123;<br>						BufferedWriter bufferedWriter = <span class="hljs-keyword">null</span>;<br>						<span class="hljs-keyword">try</span> &#123;<br>							bufferedWriter = <span class="hljs-keyword">new</span> BufferedWriter(<span class="hljs-keyword">new</span> OutputStreamWriter(socket1.getOutputStream()));<br>							bufferedWriter.write(<span class="hljs-string">&quot;我是服务器, 现在时间 : &quot;</span> + LocalDateTime.now());<br>							bufferedWriter.newLine();<br>							bufferedWriter.flush(); <span class="hljs-comment">// 把数据真的刷入网线中</span><br>						&#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>							e.printStackTrace();<br>						&#125; <span class="hljs-keyword">finally</span> &#123;<br>							<span class="hljs-keyword">if</span> (bufferedWriter != <span class="hljs-keyword">null</span>) &#123;<br>								<span class="hljs-keyword">try</span> &#123;<br>									bufferedWriter.close();<br>								&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>								&#125;<br>							&#125;<br>							<span class="hljs-keyword">if</span> (socket1 != <span class="hljs-keyword">null</span>) &#123;<br>								<span class="hljs-keyword">try</span> &#123;<br>									socket1.close();<br>								&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>								&#125;<br>							&#125;<br>						&#125;<br>						<span class="hljs-keyword">try</span> &#123;<br>							Thread.sleep(<span class="hljs-number">5000</span>);<br>						&#125; <span class="hljs-keyword">catch</span> (InterruptedException e) &#123;<br>							e.printStackTrace();<br>						&#125;<br>					&#125;<br>				&#125;;<br>				<span class="hljs-keyword">new</span> Thread(runner).start();<br>			&#125;<br>		&#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">finally</span> &#123;<br><br>			<span class="hljs-keyword">if</span> (server != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					System.out.println(<span class="hljs-string">&quot;服务器关闭....&quot;</span>);<br>					server.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>		&#125;<br>	&#125;<br><br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">client3</span><span class="hljs-params">()</span> </span>&#123;<br>		Socket socket2 = <span class="hljs-keyword">null</span>;<br>		BufferedReader bufferedReader = <span class="hljs-keyword">null</span>;<br>		<span class="hljs-keyword">try</span> &#123;<br>			socket2 = <span class="hljs-keyword">new</span> Socket(<span class="hljs-string">&quot;localhost&quot;</span>, <span class="hljs-number">8888</span>);<br>			bufferedReader = <span class="hljs-keyword">new</span> BufferedReader(<span class="hljs-keyword">new</span> InputStreamReader(socket2.getInputStream()));<br>			String readLine = bufferedReader.readLine();<br>			System.out.println(readLine);<br>		&#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">finally</span> &#123;<br>			<span class="hljs-keyword">if</span> (bufferedReader != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					bufferedReader.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>			<span class="hljs-keyword">if</span> (socket2 != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					socket2.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>		&#125;<br>	&#125;<br><br>	<span class="hljs-comment">// 从客户端发送文件给服务端，服务端保存到本地。并返回“发送成功”给客户端。并关闭相应的连接。</span><br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">server2</span><span class="hljs-params">()</span> </span>&#123;<br>		ServerSocket server = <span class="hljs-keyword">null</span>;<br>		Socket socket1 = <span class="hljs-keyword">null</span>;<span class="hljs-comment">// 网络套接字</span><br><br>		InputStream nis = <span class="hljs-keyword">null</span>;<br>		FileOutputStream fos = <span class="hljs-keyword">null</span>;<br>		BufferedWriter netWriter = <span class="hljs-keyword">null</span>;<br><br>		<span class="hljs-keyword">try</span> &#123;<br>			server = <span class="hljs-keyword">new</span> ServerSocket(<span class="hljs-number">7777</span>);<span class="hljs-comment">// 指定服务器接口</span><br>			socket1 = server.accept();<br>			nis = socket1.getInputStream();<br>			fos = <span class="hljs-keyword">new</span> FileOutputStream(<span class="hljs-string">&quot;朴树 - 猎户星座2.mp3&quot;</span>);<br>			netWriter = <span class="hljs-keyword">new</span> BufferedWriter(<span class="hljs-keyword">new</span> OutputStreamWriter(socket1.getOutputStream()));<br><br>			<span class="hljs-keyword">byte</span>[] buf = <span class="hljs-keyword">new</span> <span class="hljs-keyword">byte</span>[<span class="hljs-number">8192</span>];<br>			<span class="hljs-keyword">int</span> realCount = nis.read(buf);<br>			<span class="hljs-keyword">while</span> (realCount != -<span class="hljs-number">1</span>) &#123;<br>				fos.write(buf, <span class="hljs-number">0</span>, realCount);<br>				realCount = nis.read(buf);<br>			&#125;<br>			netWriter.write(<span class="hljs-string">&quot;发送成功&quot;</span>);<br>			netWriter.newLine();<br>			netWriter.flush();<br><br>		&#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">finally</span> &#123;<br>			<span class="hljs-keyword">if</span> (netWriter != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					netWriter.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>			<span class="hljs-keyword">if</span> (fos != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					fos.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>			<span class="hljs-keyword">if</span> (nis != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					nis.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>			<span class="hljs-keyword">if</span> (socket1 != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					socket1.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>			<span class="hljs-keyword">if</span> (server != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					server.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>		&#125;<br>	&#125;<br><br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">client2</span><span class="hljs-params">()</span> </span>&#123;<br>		Socket socket2 = <span class="hljs-keyword">null</span>;<span class="hljs-comment">// 网络套接字</span><br><br>		FileInputStream fis = <span class="hljs-keyword">null</span>;<span class="hljs-comment">// 文件输入流</span><br>		OutputStream nos = <span class="hljs-keyword">null</span>;<span class="hljs-comment">// 网络输出流</span><br>		BufferedReader netReader = <span class="hljs-keyword">null</span>;<span class="hljs-comment">// 网络输入流</span><br>		<span class="hljs-keyword">try</span> &#123;<br>			socket2 = <span class="hljs-keyword">new</span> Socket(<span class="hljs-string">&quot;127.0.0.1&quot;</span>, <span class="hljs-number">7777</span>);<br>			fis = <span class="hljs-keyword">new</span> FileInputStream(<span class="hljs-string">&quot;src/朴树 - 猎户星座.mp3&quot;</span>);<span class="hljs-comment">// 要传到服务器端的文件，先读入到客户端</span><br>			nos = socket2.getOutputStream();<span class="hljs-comment">// 传输到服务器端的文件输出流</span><br>			netReader = <span class="hljs-keyword">new</span> BufferedReader(<span class="hljs-keyword">new</span> InputStreamReader(socket2.getInputStream()));<span class="hljs-comment">// 读取服务器端返回的数据</span><br><br>			<span class="hljs-keyword">byte</span>[] buf = <span class="hljs-keyword">new</span> <span class="hljs-keyword">byte</span>[<span class="hljs-number">8192</span>];<br>			<span class="hljs-comment">// 读取数据</span><br>			<span class="hljs-keyword">int</span> realCount = fis.read(buf);<br>			<span class="hljs-keyword">while</span> (realCount != -<span class="hljs-number">1</span>) &#123;<br>				<span class="hljs-comment">// 1) 处理已经读的数据</span><br>				nos.write(buf, <span class="hljs-number">0</span>, realCount);<br>				<span class="hljs-comment">// 2) 继续读</span><br>				realCount = fis.read(buf);<br>			&#125;<br>			nos.flush();<span class="hljs-comment">// 将在缓存中的数据全部输出去</span><br>			socket2.shutdownOutput();<span class="hljs-comment">// 关闭输出流</span><br><br>			String readLine = netReader.readLine();<span class="hljs-comment">// 接受服务器端的数据</span><br>			System.out.println(readLine);<br><br>		&#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">finally</span> &#123;<span class="hljs-comment">// 关闭相应的资源</span><br>			<span class="hljs-keyword">if</span> (netReader != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					netReader.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>			<span class="hljs-keyword">if</span> (nos != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					nos.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>			<span class="hljs-keyword">if</span> (fis != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					fis.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>			<span class="hljs-keyword">if</span> (socket2 != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					socket2.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>		&#125;<br>	&#125;<br><br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">server</span><span class="hljs-params">()</span> </span>&#123;<br>		ServerSocket server = <span class="hljs-keyword">null</span>;<br>		Socket socket1 = <span class="hljs-keyword">null</span>;<br>		BufferedReader bufferedReader = <span class="hljs-keyword">null</span>;<br>		<span class="hljs-keyword">try</span> &#123;<br>			server = <span class="hljs-keyword">new</span> ServerSocket(<span class="hljs-number">9999</span>); <span class="hljs-comment">// 绑定9999端口.</span><br>			socket1 = server.accept(); <span class="hljs-comment">// 接受客户端的连接请求, 此方法会引起阻塞.</span><br>			System.out.println(socket1);<br>			<span class="hljs-comment">// 服务器端的socket1和客户端的socket2就建立了双向的网络通道</span><br>			InputStream inputStream = socket1.getInputStream();<br>			InputStreamReader isr = <span class="hljs-keyword">new</span> InputStreamReader(inputStream);<br><br>			bufferedReader = <span class="hljs-keyword">new</span> BufferedReader(isr);<br>			String readLine = bufferedReader.readLine();<br>			System.out.println(readLine);<br>		&#125; <span class="hljs-keyword">catch</span> (IOException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">finally</span> &#123;<br>			<span class="hljs-keyword">if</span> (bufferedReader != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					bufferedReader.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br><br>			<span class="hljs-keyword">if</span> (socket1 != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					socket1.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br><br>			<span class="hljs-keyword">if</span> (server != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					server.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br><br>			&#125;<br>		&#125;<br>	&#125;<br><br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">client</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-comment">// 连接服务器, 必须知道ip和端口.</span><br>		Socket socket2 = <span class="hljs-keyword">null</span>;<br>		BufferedWriter bufferedWriter = <span class="hljs-keyword">null</span>;<br>		<span class="hljs-keyword">try</span> &#123;<br>			socket2 = <span class="hljs-keyword">new</span> Socket(<span class="hljs-string">&quot;127.0.0.1&quot;</span>, <span class="hljs-number">9999</span>);<br>			System.out.println(socket2);<br>			<span class="hljs-comment">// 客户端的socket2和服务器端的socket1就建立了双向的网络通道</span><br>			OutputStream outputStream = socket2.getOutputStream();<br>			OutputStreamWriter osw = <span class="hljs-keyword">new</span> OutputStreamWriter(outputStream);<br>			bufferedWriter = <span class="hljs-keyword">new</span> BufferedWriter(osw);<br>			bufferedWriter.write(<span class="hljs-string">&quot;你好, 服务器, 俺是客户端.....&quot;</span>);<br>			bufferedWriter.newLine();<span class="hljs-comment">// 必须要有换行</span><br>			bufferedWriter.flush();<br>		&#125; <span class="hljs-keyword">catch</span> (IOException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">finally</span> &#123;<br>			<span class="hljs-keyword">if</span> (bufferedWriter != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					bufferedWriter.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br><br>			<span class="hljs-keyword">if</span> (socket2 != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					socket2.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>		&#125;<br>	&#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
@@ -422,55 +574,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Hadoop简介</title>
-    <url>/2020/10/21/hadoop-introduction/</url>
-    <content><![CDATA[<h1 id="hadoop简介"><a href="#hadoop简介" class="headerlink" title="hadoop简介"></a>hadoop简介</h1><p>1.定义：<br>hadoop是一个开源分布式计算平台，为用户提供了底层细节透明的分布式基础框架。<br>2.特性：    </p>
-<ul>
-<li>高可靠性    </li>
-<li>高效性</li>
-<li>高可扩展性</li>
-<li>高容错性</li>
-<li>成本低</li>
-<li>运行在linux中</li>
-<li>支持多种编程语言</li>
-</ul>
-<p>3.版本</p>
-<ul>
-<li>1.0</li>
-<li>2.0</li>
-</ul>
-<p>4.hadoop结构</p>
-<ul>
-<li><img src="https://img-blog.csdnimg.cn/20191024090622860.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2ZtMzQ1Njg5,size_16,color_FFFFFF,t_70" alt="图片展示" title="Hadoop项目结构图"></li>
-<li>参考别人博客的<a href="https://blog.csdn.net/fm345689/article/details/102715230">文字记录</a></li>
-</ul>
-<p>5.Hadoop项目核心模块</p>
-<ul>
-<li>Hadoop Common：为Hadoop其他模块提供支持实用程序。</li>
-<li>HDFS：提供对应用程序数据的高吞吐量访问</li>
-<li>Hadoop YARN：作业调度和集群资源管理的框架</li>
-<li>MapReduce：YARN系统的大型数据集并行处理技术</li>
-</ul>
-<p>6.Hadoop RPC工作原理</p>
-<p>7.MapReduce工作原理</p>
-<blockquote>
-<ul>
-<li>策略：分而治之</li>
-<li>计算向数据靠拢而不是数据向计算靠拢</li>
-</ul>
-</blockquote>
-<p>8.HDFS工作原理</p>
-<p>9.YARN工作原理</p>
-]]></content>
-      <categories>
-        <category>hadoop</category>
-      </categories>
-      <tags>
-        <tag>Hadoop</tag>
-        <tag>大数据</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Hadoop的介绍</title>
     <url>/2020/11/11/hadoop%20installation/</url>
     <content><![CDATA[<h1 id="Hadoop的介绍"><a href="#Hadoop的介绍" class="headerlink" title="Hadoop的介绍"></a>Hadoop的介绍</h1><p>1.hadoop两大核心组件    </p>
@@ -541,6 +644,55 @@
 <li>读写过程：<br><img src="https://img-blog.csdn.net/20160520174354336?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="数据读写过程" title="过程"></li>
 </ul>
 </blockquote>
+]]></content>
+      <categories>
+        <category>hadoop</category>
+      </categories>
+      <tags>
+        <tag>Hadoop</tag>
+        <tag>大数据</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hadoop简介</title>
+    <url>/2020/10/21/hadoop-introduction/</url>
+    <content><![CDATA[<h1 id="hadoop简介"><a href="#hadoop简介" class="headerlink" title="hadoop简介"></a>hadoop简介</h1><p>1.定义：<br>hadoop是一个开源分布式计算平台，为用户提供了底层细节透明的分布式基础框架。<br>2.特性：    </p>
+<ul>
+<li>高可靠性    </li>
+<li>高效性</li>
+<li>高可扩展性</li>
+<li>高容错性</li>
+<li>成本低</li>
+<li>运行在linux中</li>
+<li>支持多种编程语言</li>
+</ul>
+<p>3.版本</p>
+<ul>
+<li>1.0</li>
+<li>2.0</li>
+</ul>
+<p>4.hadoop结构</p>
+<ul>
+<li><img src="https://img-blog.csdnimg.cn/20191024090622860.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2ZtMzQ1Njg5,size_16,color_FFFFFF,t_70" alt="图片展示" title="Hadoop项目结构图"></li>
+<li>参考别人博客的<a href="https://blog.csdn.net/fm345689/article/details/102715230">文字记录</a></li>
+</ul>
+<p>5.Hadoop项目核心模块</p>
+<ul>
+<li>Hadoop Common：为Hadoop其他模块提供支持实用程序。</li>
+<li>HDFS：提供对应用程序数据的高吞吐量访问</li>
+<li>Hadoop YARN：作业调度和集群资源管理的框架</li>
+<li>MapReduce：YARN系统的大型数据集并行处理技术</li>
+</ul>
+<p>6.Hadoop RPC工作原理</p>
+<p>7.MapReduce工作原理</p>
+<blockquote>
+<ul>
+<li>策略：分而治之</li>
+<li>计算向数据靠拢而不是数据向计算靠拢</li>
+</ul>
+</blockquote>
+<p>8.HDFS工作原理</p>
+<p>9.YARN工作原理</p>
 ]]></content>
       <categories>
         <category>hadoop</category>
@@ -955,8 +1107,7 @@
   <entry>
     <title>Hadoop重要知识点</title>
     <url>/2021/05/26/Hadoop/</url>
-    <content><![CDATA[<hr>
-<h1 id="Hadoop重要知识点理解"><a href="#Hadoop重要知识点理解" class="headerlink" title="Hadoop重要知识点理解"></a>Hadoop重要知识点理解</h1><h2 id="Hadoop核心组件"><a href="#Hadoop核心组件" class="headerlink" title="Hadoop核心组件"></a>Hadoop核心组件</h2><ul>
+    <content><![CDATA[<h1 id="Hadoop重要知识点理解"><a href="#Hadoop重要知识点理解" class="headerlink" title="Hadoop重要知识点理解"></a>Hadoop重要知识点理解</h1><h2 id="Hadoop核心组件"><a href="#Hadoop核心组件" class="headerlink" title="Hadoop核心组件"></a>Hadoop核心组件</h2><ul>
 <li>MapReduce（计算框架）</li>
 <li>yarn （资源调度）</li>
 <li>HDFS（hadoop的分布式文件系统，主要用于数据存储）</li>
@@ -1466,134 +1617,6 @@ copyToLocal#与get完全一样
       </tags>
   </entry>
   <entry>
-    <title>Markdown语法介绍</title>
-    <url>/2020/10/27/markdown-introduction/</url>
-    <content><![CDATA[<h1 id="markdow语法的简单介绍"><a href="#markdow语法的简单介绍" class="headerlink" title="markdow语法的简单介绍"></a>markdow语法的简单介绍</h1><blockquote>
-<ul>
-<li>第一项：markdown标题  <blockquote>
-<ul>
-<li>用“#”号的个数来表示标题的级数</li>
-</ul>
-<ul>
-<li>使用 = 和 - 标记一级和二级标题</li>
-</ul>
-</blockquote>
-</li>
-</ul>
-<ul>
-<li>第二项：段落格式<blockquote>
-<ul>
-<li>Markdown 段落没有特殊的格式<br>直接编写文字，<strong>段落的换行是使用两个以上空格加回车,也可以在段落后面使用一个空行来表示重新开始一个段落</strong>  </li>
-</ul>
-<ul>
-<li><em><strong>字体：</strong></em><br>markdown可以使用斜体文本（一个<em>或_在文字的两边），粗体文本（两个</em>或_在文字的两边），粗斜体文本（三个）    </li>
-</ul>
-</blockquote>
-</li>
-<li>斜体文本*<br><em>斜体文本</em>    </li>
-<li><em>粗体文本</em>*<br><strong>粗体文本</strong>    </li>
-<li><strong>粗斜体文本</strong>*<br><em><strong>粗斜体文本</strong></em>    <blockquote>
-<ul>
-<li><em><strong>分隔线：</strong></em><br>你可以在一行中用三个以上的星号、减号、底线来建立一个分隔线，行内不能有其他东西。你也可以在星号或是减号中间插入空格。    </li>
-</ul>
-</blockquote>
-</li>
-</ul>
-</blockquote>
-<hr>
-<hr>
-<hr>
-<blockquote>
-<blockquote>
-<ul>
-<li><em><strong>删除线：</strong></em><br>删除线： 如果段落上的文字要添加删除线，只需要在文字的两端加上两个波浪线 ~~ 即可<br><del>删除线</del></li>
-<li><strong>下划线：</strong><br>下划线可以通过 HTML 的 <u> 标签来实现</u><br><u>下划线</u></li>
-<li><strong>脚注：</strong><br>脚注是对文本的补充说明。<br>创建脚注格式类似这样 [^RUNOOB]。<br>[^RUNOOB]: 菜鸟教程 – 学的不仅是技术，更是梦想！！！</li>
-</ul>
-</blockquote>
-<ul>
-<li>第三项：列表<br>无序列表使用星号(*)、加号(+)或是减号(-)作为列表标记，这些标记后面要添加一个空格，然后再填写内容     <blockquote>
-<ul>
-<li><strong>嵌套列表：</strong><br>列表嵌套只需在子列表中的选项前面添加四个空格即可    </li>
-</ul>
-</blockquote>
-</li>
-<li>第四项：<strong>区块</strong><br>Markdown 区块引用是在段落开头使用 &gt; 符号 ，然后后面紧跟一个空格符号<br>另外区块是可以嵌套的，一个 &gt; 符号是最外层，两个 &gt; 符号是第一层嵌套，以此类推<br>区块中可以使用列表，列表中也可以使用区块</li>
-<li>第五项：<strong>markdown代码</strong><br><code>printf()</code>函数<br>如果是段落上的一个函数或片段的代码可以用反引号把它包起来(`)    <blockquote>
-<ul>
-<li>代码区块：<br>四个空格或者制表符（代码区块使用 4 个空格或者一个制表符（Tab 键）。）<br><img src="https://www.runoob.com/wp-content/uploads/2019/03/6DC89E5C-B41A-4938-97D8-D7D06B879F91.jpg" alt="展示" title="结果展示"><br>你也可以用 ``` 包裹一段代码，并指定一种语言（也可以不指定）    </li>
-</ul>
-</blockquote>
-</li>
-</ul>
-</blockquote>
-<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs c">include &lt;bits/stdc++.h&gt;    <br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;    <br>        <span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-string">&quot;hello world&quot;</span>&lt;&lt;<span class="hljs-built_in">endl</span>;    <br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;    <br>&#125;    <br></code></pre></td></tr></table></figure>
-<blockquote>
-<ul>
-<li><strong>第六项：Markdown 链接:</strong><br>参考<a href="https://www.runoob.com/markdown/md-tutorial.html">菜鸟教程</a></li>
-<li><strong>第七项：markdown 表格</strong><br>Markdown 制作表格使用 | 来分隔不同的单元格，使用 - 来分隔表头和其他行。  </li>
-</ul>
-</blockquote>
-<table>
-<thead>
-<tr>
-<th>表头</th>
-<th>表头</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>单元格</td>
-<td>单元格</td>
-</tr>
-<tr>
-<td>单元格</td>
-<td>单元格</td>
-</tr>
-<tr>
-<td>我们可以设置表格的对齐方式：</td>
-<td></td>
-</tr>
-</tbody></table>
-<pre><code>-: 设置内容和标题栏居右对齐。
-:- 设置内容和标题栏居左对齐。
-:-: 设置内容和标题栏居中对齐。
-</code></pre>
-<table>
-<thead>
-<tr>
-<th align="left">左对齐</th>
-<th align="right">右对齐</th>
-<th align="center">居中对齐</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">单元格</td>
-<td align="right">单元格</td>
-<td align="center">单元格</td>
-</tr>
-<tr>
-<td align="left">单元格</td>
-<td align="right">单元格</td>
-<td align="center">单元格</td>
-</tr>
-</tbody></table>
-<blockquote>
-<ul>
-<li><strong>第八项：markdown高级技巧</strong><br>参考连接<a href="https://www.runoob.com/markdown/md-advance.html">菜鸟教程</a></li>
-</ul>
-</blockquote>
-<hr>
-<hr>
-<p>本文参考菜鸟教程的markdown教学，超链接上文已给出。（<a href="https://www.runoob.com/markdown/md-tutorial.html%EF%BC%89">https://www.runoob.com/markdown/md-tutorial.html）</a></p>
-]]></content>
-      <categories>
-        <category>Blog</category>
-      </categories>
-      <tags>
-        <tag>Blog</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Mapreduce介绍</title>
     <url>/2020/11/23/MapReduce/</url>
     <content><![CDATA[<p>#MapReduce介绍</p>
@@ -1731,6 +1754,134 @@ copyToLocal#与get完全一样
       <tags>
         <tag>Hadoop</tag>
         <tag>大数据</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Markdown语法介绍</title>
+    <url>/2020/10/27/markdown-introduction/</url>
+    <content><![CDATA[<h1 id="markdow语法的简单介绍"><a href="#markdow语法的简单介绍" class="headerlink" title="markdow语法的简单介绍"></a>markdow语法的简单介绍</h1><blockquote>
+<ul>
+<li>第一项：markdown标题  <blockquote>
+<ul>
+<li>用“#”号的个数来表示标题的级数</li>
+</ul>
+<ul>
+<li>使用 = 和 - 标记一级和二级标题</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<ul>
+<li>第二项：段落格式<blockquote>
+<ul>
+<li>Markdown 段落没有特殊的格式<br>直接编写文字，<strong>段落的换行是使用两个以上空格加回车,也可以在段落后面使用一个空行来表示重新开始一个段落</strong>  </li>
+</ul>
+<ul>
+<li><em><strong>字体：</strong></em><br>markdown可以使用斜体文本（一个<em>或_在文字的两边），粗体文本（两个</em>或_在文字的两边），粗斜体文本（三个）    </li>
+</ul>
+</blockquote>
+</li>
+<li>斜体文本*<br><em>斜体文本</em>    </li>
+<li><em>粗体文本</em>*<br><strong>粗体文本</strong>    </li>
+<li><strong>粗斜体文本</strong>*<br><em><strong>粗斜体文本</strong></em>    <blockquote>
+<ul>
+<li><em><strong>分隔线：</strong></em><br>你可以在一行中用三个以上的星号、减号、底线来建立一个分隔线，行内不能有其他东西。你也可以在星号或是减号中间插入空格。    </li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</blockquote>
+<hr>
+<hr>
+<hr>
+<blockquote>
+<blockquote>
+<ul>
+<li><em><strong>删除线：</strong></em><br>删除线： 如果段落上的文字要添加删除线，只需要在文字的两端加上两个波浪线 ~~ 即可<br><del>删除线</del></li>
+<li><strong>下划线：</strong><br>下划线可以通过 HTML 的 <u> 标签来实现</u><br><u>下划线</u></li>
+<li><strong>脚注：</strong><br>脚注是对文本的补充说明。<br>创建脚注格式类似这样 [^RUNOOB]。<br>[^RUNOOB]: 菜鸟教程 – 学的不仅是技术，更是梦想！！！</li>
+</ul>
+</blockquote>
+<ul>
+<li>第三项：列表<br>无序列表使用星号(*)、加号(+)或是减号(-)作为列表标记，这些标记后面要添加一个空格，然后再填写内容     <blockquote>
+<ul>
+<li><strong>嵌套列表：</strong><br>列表嵌套只需在子列表中的选项前面添加四个空格即可    </li>
+</ul>
+</blockquote>
+</li>
+<li>第四项：<strong>区块</strong><br>Markdown 区块引用是在段落开头使用 &gt; 符号 ，然后后面紧跟一个空格符号<br>另外区块是可以嵌套的，一个 &gt; 符号是最外层，两个 &gt; 符号是第一层嵌套，以此类推<br>区块中可以使用列表，列表中也可以使用区块</li>
+<li>第五项：<strong>markdown代码</strong><br><code>printf()</code>函数<br>如果是段落上的一个函数或片段的代码可以用反引号把它包起来(`)    <blockquote>
+<ul>
+<li>代码区块：<br>四个空格或者制表符（代码区块使用 4 个空格或者一个制表符（Tab 键）。）<br><img src="https://www.runoob.com/wp-content/uploads/2019/03/6DC89E5C-B41A-4938-97D8-D7D06B879F91.jpg" alt="展示" title="结果展示"><br>你也可以用 ``` 包裹一段代码，并指定一种语言（也可以不指定）    </li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs c">include &lt;bits/stdc++.h&gt;    <br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;    <br>        <span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-string">&quot;hello world&quot;</span>&lt;&lt;<span class="hljs-built_in">endl</span>;    <br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;    <br>&#125;    <br></code></pre></td></tr></table></figure>
+<blockquote>
+<ul>
+<li><strong>第六项：Markdown 链接:</strong><br>参考<a href="https://www.runoob.com/markdown/md-tutorial.html">菜鸟教程</a></li>
+<li><strong>第七项：markdown 表格</strong><br>Markdown 制作表格使用 | 来分隔不同的单元格，使用 - 来分隔表头和其他行。  </li>
+</ul>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>表头</th>
+<th>表头</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>单元格</td>
+<td>单元格</td>
+</tr>
+<tr>
+<td>单元格</td>
+<td>单元格</td>
+</tr>
+<tr>
+<td>我们可以设置表格的对齐方式：</td>
+<td></td>
+</tr>
+</tbody></table>
+<pre><code>-: 设置内容和标题栏居右对齐。
+:- 设置内容和标题栏居左对齐。
+:-: 设置内容和标题栏居中对齐。
+</code></pre>
+<table>
+<thead>
+<tr>
+<th align="left">左对齐</th>
+<th align="right">右对齐</th>
+<th align="center">居中对齐</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">单元格</td>
+<td align="right">单元格</td>
+<td align="center">单元格</td>
+</tr>
+<tr>
+<td align="left">单元格</td>
+<td align="right">单元格</td>
+<td align="center">单元格</td>
+</tr>
+</tbody></table>
+<blockquote>
+<ul>
+<li><strong>第八项：markdown高级技巧</strong><br>参考连接<a href="https://www.runoob.com/markdown/md-advance.html">菜鸟教程</a></li>
+</ul>
+</blockquote>
+<hr>
+<hr>
+<p>本文参考菜鸟教程的markdown教学，超链接上文已给出。（<a href="https://www.runoob.com/markdown/md-tutorial.html%EF%BC%89">https://www.runoob.com/markdown/md-tutorial.html）</a></p>
+]]></content>
+      <categories>
+        <category>Blog</category>
+      </categories>
+      <tags>
+        <tag>Blog</tag>
       </tags>
   </entry>
   <entry>

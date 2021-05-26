@@ -18,7 +18,7 @@
   <meta name="author" content="daxiazou">
   <meta name="keywords" content="">
   
-  <title>Linux - Nevermind</title>
+  <title>JVM - Nevermind</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
 
@@ -158,12 +158,12 @@
 </nav>
 
     <div class="banner" id="banner" parallax=true
-         style="background: url('https://tse3-mm.cn.bing.net/th/id/OIP.MRvVM6gs0F-4wBqhEvbhogHaNK?w=115&h=186&c=7&o=5&dpr=1.25&pid=1.7') no-repeat center center;
+         style="background: url('https://tse4-mm.cn.bing.net/th/id/OIP.q9wT3J3sd1ajXEKu9NzpAgDMEy?w=117&h=180&c=7&o=5&dpr=1.25&pid=1.7') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="Linux">
+            <span class="h2" id="subtitle" title="JVM">
               
             </span>
 
@@ -173,8 +173,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2021-05-11 18:43" pubdate>
-        2021年5月11日 晚上
+      <time datetime="2021-05-02 11:33" pubdate>
+        2021年5月2日 中午
       </time>
     </span>
   
@@ -185,7 +185,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      1.5k 字
+      2.3k 字
     </span>
   
 
@@ -195,7 +195,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      16
+      24
        分钟
     </span>
   
@@ -225,412 +225,156 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">Linux</h1>
+            <h1 style="display: none">JVM</h1>
             
               <p class="note note-info">
                 
-                  本文最后更新于：2021年5月11日 晚上
+                  本文最后更新于：2021年5月26日 晚上
                 
               </p>
             
             <div class="markdown-body">
-              <h1 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h1><h2 id="vim的三种模式"><a href="#vim的三种模式" class="headerlink" title="vim的三种模式"></a>vim的三种模式</h2><h3 id="一般模式"><a href="#一般模式" class="headerlink" title="一般模式"></a>一般模式</h3><ul>
-<li>以vi/vim编辑器打开一个文件就进入了一般默认，是默认的默认</li>
-<li>在一般模式中可以对文件进行复制、粘贴、删除、撤销</li>
-<li>常用的命令<ul>
-<li>yy<ul>
-<li>复制一行</li>
-</ul>
-</li>
-<li>y数字y<ul>
-<li>复制多行</li>
-</ul>
-</li>
-<li>dd<ul>
-<li>删除一行</li>
-</ul>
-</li>
-<li>d数字d<ul>
-<li>删除多行</li>
-</ul>
-</li>
-<li>p<ul>
-<li>粘贴</li>
-</ul>
-</li>
-<li>u<ul>
-<li>撤销</li>
-</ul>
-</li>
-<li>^<ul>
-<li>回到行头</li>
-</ul>
-</li>
-<li>$<ul>
-<li>回到行尾</li>
-</ul>
-</li>
-<li>gg或1+G<ul>
-<li>回到页头</li>
-</ul>
-</li>
-<li>G<ul>
-<li>回到页尾</li>
-</ul>
-</li>
-<li>数字+G<ul>
-<li>回到某一行<h3 id="编辑模式"><a href="#编辑模式" class="headerlink" title="编辑模式"></a>编辑模式</h3></li>
-</ul>
-</li>
-</ul>
-</li>
-<li>在一般模式中输入i、o、a或I、O、A时就进入了编辑模式</li>
-<li>在编辑模式中按Esc又回到一般模式</li>
-<li>常用的命令<ul>
-<li>i<ul>
-<li>在光标前插入</li>
-</ul>
-</li>
-<li>o<ul>
-<li>在下一行插入<h3 id="命令模式"><a href="#命令模式" class="headerlink" title="命令模式"></a>命令模式</h3></li>
-</ul>
-</li>
-</ul>
-</li>
-<li>在一般模式中输入:、/或？时就进入了命令模式</li>
-<li>在命令模式中按Esc又回到一般模式</li>
-<li>常用的命令<ul>
-<li>:w<ul>
-<li>保存</li>
-</ul>
-</li>
-<li>:q<ul>
-<li>推出</li>
-</ul>
-</li>
-<li>:!<ul>
-<li>强制执行</li>
-</ul>
-</li>
-<li>:wq！<ul>
-<li>保存并强制退出</li>
-</ul>
-</li>
-<li>ZZ<ul>
-<li>如果没有修改直接退出，修改了保存后退出</li>
-</ul>
-</li>
-<li>:%s/old 字符/new 字符<ul>
-<li>批量替换字符</li>
-</ul>
-</li>
-<li>:nohl<ul>
-<li>取消高亮显示</li>
-</ul>
-</li>
-<li>/要查找的词或?要查找的词<ul>
-<li>通过n或N进行向上或向下的查找</li>
-</ul>
-</li>
-<li>:set nu<ul>
-<li>设置显示行号</li>
-</ul>
-</li>
-<li>:set nonu<ul>
-<li>取消显示行号</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="网络相关命令"><a href="#网络相关命令" class="headerlink" title="网络相关命令"></a>网络相关命令</h2><ul>
-<li>ifconfig<ul>
-<li>查询ip地址</li>
-</ul>
-</li>
-<li>hostname<ul>
-<li>查看主机名</li>
-<li>修改主机名<ul>
-<li>vim /etc/sysconfig/network</li>
-</ul>
-</li>
-<li>配置ip地址与主机名的映射关系<ul>
-<li>vim /etc/hosts</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>service 管理后台服务<ul>
-<li>service 服务名 start<ul>
-<li>开启某个服务</li>
-</ul>
-</li>
-<li>service 服务名 stop<ul>
-<li>关闭某个服务</li>
-</ul>
-</li>
-<li>service 服务名 status<ul>
-<li>查看服务的状态</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>chkconfig 查看开机启动状态<ul>
-<li>chkconfig 服务名 on<ul>
-<li>开启某个服务开机自启</li>
-</ul>
-</li>
-<li>chkconfig 服务名 off<ul>
-<li>关闭某个服务开机自启</li>
-</ul>
-</li>
-<li>chkconfig 服务名 –list<ul>
-<li>查看某个服务的开机自启状态</li>
-<li>一共有7个运行级别（0到6）<ul>
-<li>如果2、3、4、5这四个运行级别是开启的则当前服务就是开机自启的</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="帮助相关命令"><a href="#帮助相关命令" class="headerlink" title="帮助相关命令"></a>帮助相关命令</h2><ul>
-<li>man和help<ul>
-<li>查询命令的帮助信息</li>
-</ul>
-</li>
-<li>常用的快捷键<ul>
-<li>ctrl + l<ul>
-<li>清屏</li>
-</ul>
-</li>
-<li>ctrl + c<ul>
-<li>停止进程</li>
-</ul>
-</li>
-<li>一定要善用Tab键<ul>
-<li>可以帮助我们自动补全路径，防止出错</li>
-</ul>
-</li>
-<li>通过上下键查询最近输入过的命令</li>
-<li>ctrl + alt<ul>
-<li>鼠标在虚拟机之间和主机之间切换</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="文件相关命令"><a href="#文件相关命令" class="headerlink" title="文件相关命令"></a>文件相关命令</h2><ul>
-<li>pwd<ul>
-<li>查看当前所在的工作目录</li>
-</ul>
-</li>
-<li>cd<ul>
-<li>进入某个目录<ul>
-<li>通过绝对路径和相对路径都可以进入某个目录</li>
-</ul>
-</li>
-<li>cd -<ul>
-<li>返回上一次所在的目录</li>
-</ul>
-</li>
-<li>cd或cd ~<ul>
-<li>回到自己的家目录</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>rm -rf <ul>
-<li>强制删除文件或目录，不提示</li>
-</ul>
-</li>
-<li>touch 文件名<ul>
-<li>创建一个空文件</li>
-</ul>
-</li>
-<li>mkdir<ul>
-<li>创建目录</li>
-</ul>
-</li>
-<li>echo “要输出的内容”<ul>
-<li>输出内容到控制台</li>
-</ul>
-</li>
-<li>cat 文件<ul>
-<li>查看小文件</li>
-</ul>
-</li>
-<li>less 文件<ul>
-<li>查看大文件<ul>
-<li>通过pageup和pagedown键翻页</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>cp 源文件 目录<ul>
-<li>将某个文件复制到某个目录下</li>
-</ul>
-</li>
-<li>mv<ul>
-<li>mv 老名字 新名字<ul>
-<li>给文件重命名</li>
-</ul>
-</li>
-<li>mv 源文件 目录<ul>
-<li>剪切文件到某个目录下</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="搜索查找类命令"><a href="#搜索查找类命令" class="headerlink" title="搜索查找类命令"></a>搜索查找类命令</h2><ul>
-<li>find 某个目录 [选项] 内容<ul>
-<li>在某个目录下查找相关内容</li>
-<li>选项<ul>
-<li>-name <ul>
-<li>根据文件名称查找</li>
-</ul>
-</li>
-<li>-user<ul>
-<li>根据文件所属的用户查找</li>
-</ul>
-</li>
-<li>-size<ul>
-<li>根据文件的大小查找</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>grep<ul>
-<li>通常结合管道符 | 进行过滤查找</li>
-<li>ll /root | grep -n atguigu.txt<ul>
-<li>查找/root目录下是否包含atguigu.txt文件，并且会显示出行号</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>which<ul>
-<li>查询某个命令在那个目录下</li>
-</ul>
-</li>
-</ul>
-<h2 id="压缩解压缩类命令"><a href="#压缩解压缩类命令" class="headerlink" title="压缩解压缩类命令"></a>压缩解压缩类命令</h2><ul>
-<li>tar -zcvf  xxx.tar.gz 要压缩的内容<ul>
-<li>压缩文件</li>
-</ul>
-</li>
-<li>tar -zxvf xxx.tar.gz<ul>
-<li>解压缩tar包</li>
-</ul>
-</li>
-</ul>
-<h2 id="进程线程类命令"><a href="#进程线程类命令" class="headerlink" title="进程线程类命令"></a>进程线程类命令</h2><ul>
-<li>ps -aux | grep xxx<ul>
-<li>查看内存和CPU的占用率</li>
-</ul>
-</li>
-<li>ps -ef | grep xxx<ul>
-<li>查看进程和父进程的ID</li>
-</ul>
-</li>
-<li>kill -9 进程ID<ul>
-<li>通过进程ID杀死进程</li>
-</ul>
-</li>
-<li>killall 进程名<ul>
-<li>通过进程名杀死进程</li>
-</ul>
-</li>
-<li>netstat -nlp | grep 端口号<ul>
-<li>查看端口号是否被占用</li>
-</ul>
-</li>
-</ul>
-<h2 id="RPM软件包和YUM仓库"><a href="#RPM软件包和YUM仓库" class="headerlink" title="RPM软件包和YUM仓库"></a>RPM软件包和YUM仓库</h2><ul>
-<li>rpm -qa<ul>
-<li>查询安装的所有的rpm软件包</li>
-</ul>
-</li>
-<li>rpm -qa | grep 软件名<ul>
-<li>查询安装的某个软件的rpm软件包名</li>
-</ul>
-</li>
-<li>rpm -e –nodeps rpm软件包名<ul>
-<li>不检查依赖协助某个rpm软件包</li>
-</ul>
-</li>
-<li>rpm -ivh rpm软件包名<ul>
-<li>安装rpm软件包</li>
-</ul>
-</li>
-<li>yum -y install<ul>
-<li>安装rpm软件包</li>
-</ul>
-</li>
-<li>yum -y update<ul>
-<li>更新rpm软件包</li>
-</ul>
-</li>
-<li>yum -y check-update<ul>
-<li>检查某个rpm软件包是否有更新</li>
-</ul>
-</li>
-<li>yum -y remove<ul>
-<li>卸载rpm软件包</li>
-</ul>
-</li>
-<li>yum list<ul>
-<li>查询所有缓存的rpm软件包</li>
-</ul>
-</li>
-<li>yum clean all<ul>
-<li>清除缓存</li>
-</ul>
-</li>
-<li>yum makecache<ul>
-<li>建立缓存</li>
-</ul>
-</li>
-<li>yum deplist<ul>
-<li>显示yum软件包的所有依赖关系</li>
-</ul>
-</li>
-</ul>
-<h2 id="文件权限管理"><a href="#文件权限管理" class="headerlink" title="文件权限管理"></a>文件权限管理</h2><ul>
-<li>文件属性<ul>
-<li>Linux系统是一种典型的多用户系统，不同的用户处于不同的地位，拥有不同的权限。为了保护系统的安全性，Linux系统对不同的用户访问同一文件（包括目录文件）的权限做了不同的规定。在Linux中我们可以使用ll或者ls -l命令来显示一个文件的属性以及文件所属的用户和组。</li>
-<li><a target="_blank" rel="noopener" href="https://imgtu.com/i/ga5mY6"><img src="https://z3.ax1x.com/2021/05/11/ga5mY6.md.png" srcset="/img/loading.gif" lazyload alt="ga5mY6.md.png"></a></li>
-<li>首位表示类型<ul>
-<li>符号 - 代表文件</li>
-<li>符号 d 代表目录</li>
-<li>符号 l 代表链接文档</li>
-</ul>
-</li>
-<li>第1-3位确定属主（该文件的所有者）拥有该文件的权限。—User </li>
-<li>第4-6位确定属组（所有者的同组用户）拥有该文件的权限，—Group </li>
-<li>第7-9位确定其他用户拥有该文件的权限 —Other </li>
-</ul>
-</li>
-<li>chmod修改权限<ul>
-<li>方式一：<ul>
-<li>chmod  [{ugoa}{+-=}{rwx}] 文件或目录 </li>
-<li>chmod g+x houge.txt</li>
-<li>chmod u-x,o+x houge.txt</li>
-</ul>
-</li>
-<li>方式二：<ul>
-<li>chmod  [mode=421 ]  [文件或目录]</li>
-<li>u:所有者  g:所有组  o:其他人  a:所有人(u、g、o的总和)</li>
-<li>r=4 w=2 x=1        rwx=4+2+1=7 </li>
-<li>chmod 777 houge.txt</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
+              <h1 id="JVM"><a href="#JVM" class="headerlink" title="JVM"></a>JVM</h1><h2 id="JVM定义"><a href="#JVM定义" class="headerlink" title="JVM定义"></a>JVM定义</h2><blockquote>
+<ul>
+<li>JVM是运行在操作系统之上的，它与硬件没有直接的交互</li>
+<li>通过编译器将 Java 程序转换成该虚拟机所能识别的指令序列，也称 Java 字节码。Java虚拟机会将字节码，即class文件加载到JVM中。由JVM进行解释和执行</li>
+</ul>
+</blockquote>
+<h2 id="类加载器"><a href="#类加载器" class="headerlink" title="类加载器"></a>类加载器</h2><blockquote>
+<ul>
+<li>类加载器，即ClassLoader,它负责加载class文件，class文件在文件开头有特定的文件标示，并且ClassLoader只负责class文件的加载，至于它是否可以运行，则由Execution Engine决定</li>
+</ul>
+</blockquote>
+<h3 id="类加载器分类"><a href="#类加载器分类" class="headerlink" title="类加载器分类"></a>类加载器分类</h3><h4 id="虚拟机自带的类加载器"><a href="#虚拟机自带的类加载器" class="headerlink" title="虚拟机自带的类加载器"></a>虚拟机自带的类加载器</h4><ol>
+<li>启动类加载器：主要负责加载jre中的最为基础、最为重要的类。如$JAVA_HOME/jre/lib/rt.jar等，以及由虚拟机参数 -Xbootclasspath 指定的类。由于它由C++代码实现，没有对应的java对象，因此在java中，尝试获取此类时，只能使用null来指代。</li>
+<li>扩展类加载器：由Java代码实现，用于加载相对次要、但又通用的类，比如存放在 JRE 的 lib/ext 目录下 jar 包中的类，以及由系统变量 java.ext.dirs 指定的类。如$JAVA_HOME/jre/lib/ext/*.jar。</li>
+<li>应用程序类加载器：由Java代码实现， 它负责加载应用程序路径下的类。（这里的应用程序路径，便是指虚拟机参数 -cp/-classpath、系统变量 java.class.path 或环境变量 CLASSPATH 所指定的路径。）默认情况下，应用程序中包含的类便是由应用类加载器加载的。</li>
+</ol>
+<h4 id="用户自定义的加载器"><a href="#用户自定义的加载器" class="headerlink" title="用户自定义的加载器"></a>用户自定义的加载器</h4><blockquote>
+<ul>
+<li>Java.lang.ClassLoader的子类，用户可以定制类的加载方式。例如可以对 class 文件进行加密，加载时再利用自定义的类加载器对其解密。</li>
+</ul>
+</blockquote>
+<h3 id="双亲委派机制"><a href="#双亲委派机制" class="headerlink" title="双亲委派机制"></a>双亲委派机制</h3><blockquote>
+<ul>
+<li>双亲委派模型：每当一个类加载器接收到加载请求时，它会先将请求转发给父类加载器。在父类加载器没有找到所请求的类的情况下，该类加载器才会尝试去加载。</li>
+<li>应用程序类加载器的父类是扩展类加载器，扩展类加载器的父类是启动类加载器</li>
+<li>优点：1.避免类的重复加载。2.防止核心API中定义的类型不会被用户恶意替换和篡改</li>
+</ul>
+</blockquote>
+<h2 id="JVM的内存模型"><a href="#JVM的内存模型" class="headerlink" title="JVM的内存模型"></a>JVM的内存模型</h2><p><a target="_blank" rel="noopener" href="https://imgtu.com/i/gZ2GDO" title="内存模型图片"><img src="https://z3.ax1x.com/2021/05/02/gZ2GDO.png" srcset="/img/loading.gif" lazyload alt="gZ2GDO.png"></a></p>
+<blockquote>
+<ul>
+<li>Execution Engine执行引擎负责解释命令，提交操作系统执行</li>
+<li>Native Method Stack:定义了很多调用本地操作系统的方法，也称之为本地方法接口</li>
+<li>每个线程都有一个程序计数器，是线程私有的,就是一个指针</li>
+<li>方法区：所有定义的方法的信息都保存在该区域，此区属于共享区间。<br>  静态变量+常量+类信息(构造方法/接口定义)+运行时常量池存在方法区中。</li>
+<li>JDK1.7之前通过永久代实现方法区，1.7之前字符串常量池放到方法区中</li>
+<li>JDK1.8之后，通过元空间实现方法区，1.7之后字符串常量放到堆中</li>
+</ul>
+</blockquote>
+<h3 id="栈"><a href="#栈" class="headerlink" title="栈"></a>栈</h3><blockquote>
+<ul>
+<li>栈我们也叫内存，是线程私有的，生命周期随线程的生命周期，线程结束栈内存释放</li>
+<li>栈：8种基本类型的变量+对象的引用变量+实例方法都是在栈内存中分配</li>
+<li>在栈区域规定了两种异常状态：如果线程请求的栈深度大于虚拟机所允许的深度，则抛出StackOverflowError异常；如果虚拟机栈可以动态扩展，在扩展时无法申请到足够的内存，就会抛出OutOfMemoryError异常。</li>
+<li>栈帧：一个线程的每个方法在调用时都会在栈上划分一块区域，用于存储方法所需要的变量等信息，这块区域称之为栈帧（stack frame）。栈由多个栈帧构成，好比一部电影由多个帧的画面构成。</li>
+</ul>
+</blockquote>
+<h3 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h3><blockquote>
+<ul>
+<li>逻辑上分为三部分：1.新生区。2.养老区。3.永久区。（1.8后改为元空间）</li>
+<li>新生区进一步分为：<blockquote>
+<ul>
+<li>伊甸园区</li>
+<li>幸存区<blockquote>
+<ul>
+<li>幸存from区</li>
+<li>幸存to区</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</blockquote>
+</li>
+<li>在物理上划分，堆被划分成两个不同的区域：新生代 ( Young )、老年代 ( Old )。新生代 ( Young ) 又被划分为三个区域：Eden、From Survivor、To Survivor</li>
+<li>创建对象的过程<blockquote>
+<ul>
+<li>新new的对象会放在伊甸园区，伊甸园区的对象存活率非常低，当伊甸园区快满时会触发轻量级的垃圾回收机制（MinorGC）MinorGC会回收伊甸园区和幸存from区，会将伊甸园的幸存者标记复制到幸存to区，from区中的幸存者会根据它的年龄判断它的去向：默认情况下，如果年龄小于15则被标记到to区，如果年龄小于15则被标记复制到to区，如果年龄大于15则被标记复制到养老区，然后from区和to区交换角色</li>
+<li>当养老区内存不足时会触发重量级垃圾回收机制（MajorGC/fullGC），如果养老区无法回收内存则会出现OOM异常</li>
+<li></li>
+<li></li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</blockquote>
+<h3 id="JVM常见参数设置"><a href="#JVM常见参数设置" class="headerlink" title="JVM常见参数设置"></a>JVM常见参数设置</h3><blockquote>
+<ul>
+<li>-Xms:堆初始值（默认为物理内存的1/64）</li>
+<li>-Xmx:堆最大可用值（默认为物理内存的1/4）</li>
+<li>-Xss:每个线程的栈大小，默认为1M，此值不能设置过大，否则会减少线程并发数。</li>
+</ul>
+</blockquote>
+<h3 id="常见异常"><a href="#常见异常" class="headerlink" title="常见异常"></a>常见异常</h3><blockquote>
+<ul>
+<li>错误原因: java.lang.OutOfMemoryError: Java heap space 堆内存溢出</li>
+<li>解决办法:调大堆内存大小 </li>
+<li>错误原因: java.lang.StackOverflowError表示为栈溢出，一般产生于递归调用。</li>
+<li>解决办法:设置线程最大调用深度，默认是1m</li>
+</ul>
+</blockquote>
+<h2 id="GC"><a href="#GC" class="headerlink" title="GC"></a>GC</h2><blockquote>
+<ul>
+<li>GC:JVM中的Garbage Collection，简称GC，它会不定时去堆内存中清理不可达对象。</li>
+<li>分类：两种类型，一种是普通GC（minor GC），一种是全局GC（major GC or Full GC）</li>
+<li>　新生代GC（minor GC）：只针对新生代区域的GC。</li>
+<li>老年代GC（major GC or Full GC）：针对老年代的GC，偶尔伴随对新生代的GC以及对永久代的GC。</li>
+<li>Minor GC触发机制：当年轻代满时就会触发Minor GC，这里的年轻代满指的是Eden区满，Survivor满不会引发GC。</li>
+<li>Full GC触发机制：当年老代满时会引发Full GC，Full GC将会同时回收年轻代、年老代，当永久代满时也会引发Full GC，会导致Class、Method元信息的卸载</li>
+<li>工作特点：理论上GC过程中会频繁收集Young区，很少收集Old区，基本不动Perm区（元空间/方法区）</li>
+</ul>
+</blockquote>
+<h3 id="标记不可达对象"><a href="#标记不可达对象" class="headerlink" title="标记不可达对象"></a>标记不可达对象</h3><blockquote>
+<ul>
+<li>引用计数法：引用计数法就是如果一个对象没有被任何引用指向，则可视之为垃圾。这种方法的缺点就是不能检测到循环指向的存在。</li>
+<li>可达性分析（GC ROOTS算法）简单理解，可以理解为堆外指向堆内的引用</li>
+</ul>
+</blockquote>
+<h3 id="垃圾回收的三种方式"><a href="#垃圾回收的三种方式" class="headerlink" title="垃圾回收的三种方式"></a>垃圾回收的三种方式</h3><ol>
+<li>清除：第一种是清除（sweep），即把死亡对象所占据的内存标记为空闲内存，并记录在一个空闲列表（free list）之中</li>
+<li>压缩：第二种是压缩（compact），即把存活的对象聚集到内存区域的起始位置，从而留下一段连续的内存空间</li>
+<li>复制第三种则是复制（copy），即把内存区域分为两等分，分别用两个指针 from 和 to 来维护，并且只是用 from 指针指向的内存区域来分配内<blockquote>
+<ul>
+<li>总结：回收死亡对象的内存共有三种方式，分别为：会造成内存碎片的清除、性能开销较大的压缩、以及堆使用效率较低的复制。</li>
+</ul>
+</blockquote>
+</li>
+</ol>
+<h3 id="垃圾回收算法"><a href="#垃圾回收算法" class="headerlink" title="垃圾回收算法"></a>垃圾回收算法</h3><ol>
+<li>标记复制算法 因此Minor GC使用的则是标记-复制算法，理性情况下：，Eden 区中的对象基本都死亡了，那么需要复制的数据将非常少，因此采用这种标记 - 复制算法的效果极好。<blockquote>
+<ul>
+<li>优点：不会产生内存碎片 </li>
+<li>缺点：需要双倍空间，浪费内存</li>
+</ul>
+</blockquote>
+</li>
+<li>标记清除算法 老年代一般是由标记清除或者是标记清除与标记压缩的混合实现<blockquote>
+<ul>
+<li>优点：不需要双倍空间</li>
+<li>缺点：1.会产生内存碎片 2.需要停止整个应用程序 3.需要维护内存碎片的地址列表</li>
+</ul>
+</blockquote>
+</li>
+<li>标记压缩算法<blockquote>
+<ul>
+<li>优点：1.不需要双倍空间，也不会产生内存碎片 2.补血药维护内存碎片的列表，只需要记录内存的起始地址即可 </li>
+<li>缺点：开销大，学要更新对象的地址</li>
+</ul>
+</blockquote>
+</li>
+<li>标记清楚压缩算法 标记清除压缩(Mark-Sweep-Compact)算法是标记清除算法和标记压缩算法的结合算法。其原理和标记清除算法一致，只不过会在多次GC后，进行一次Compact操作！</li>
+</ol>
 
             </div>
             <hr>
@@ -640,7 +384,7 @@
                   <div class="post-meta mr-3">
                     <i class="iconfont icon-category"></i>
                     
-                      <a class="hover-with-bg" href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a>
+                      <a class="hover-with-bg" href="/categories/Java/">Java</a>
                     
                   </div>
                 
@@ -648,7 +392,7 @@
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
                     
-                      <a class="hover-with-bg" href="/tags/Linux/">Linux</a>
+                      <a class="hover-with-bg" href="/tags/Java/">Java</a>
                     
                   </div>
                 
@@ -665,9 +409,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2021/05/11/shell_introduction/">
+                      <a href="/2021/05/11/Linux/">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">shell介绍</span>
+                        <span class="hidden-mobile">Linux</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -675,8 +419,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2021/05/02/JVM/">
-                        <span class="hidden-mobile">JVM</span>
+                      <a href="/2021/04/25/mysql/">
+                        <span class="hidden-mobile">MySQL</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
