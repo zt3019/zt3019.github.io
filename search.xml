@@ -115,10 +115,18 @@
 <h2 id="HA"><a href="#HA" class="headerlink" title="HA"></a>HA</h2><h3 id="HA概述"><a href="#HA概述" class="headerlink" title="HA概述"></a>HA概述</h3><ul>
 <li>HA（High Availablity）</li>
 <li>实现高可用最重要的是消除单点故障</li>
+<li>防止出现namenode节点挂了，无法正常提供服务</li>
 </ul>
 <h3 id="HA工作机制"><a href="#HA工作机制" class="headerlink" title="HA工作机制"></a>HA工作机制</h3><ul>
 <li><p>故障转移机制 HDFS-HA</p>
 <p><a href="https://imgtu.com/i/2lA1SS"><img src="https://z3.ax1x.com/2021/06/02/2lA1SS.png" alt="2lA1SS.png"></a></p>
+</li>
+<li><p>故障转移机制</p>
+<ul>
+<li>为了保证数据不丢失，一个失效后另一个补上不会丢失数据，日志文件写到第三方平台（相当于2nn）</li>
+<li>新激活的namenode 可以从第三方，读取edits文件将缺少的数据补上，防止数据丢失</li>
+<li>Zkfc检测到假死后是通过zookeeper服务器将信息传到其它的namenode的zkfc</li>
+</ul>
 </li>
 <li><p>YARN-HA</p>
 <p><a href="https://imgtu.com/i/2lAaF0"><img src="https://z3.ax1x.com/2021/06/02/2lAaF0.png" alt="2lAaF0.png"></a></p>
@@ -131,19 +139,6 @@
       <tags>
         <tag>zookeeper</tag>
         <tag>HA</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Java网络编程基础</title>
-    <url>/2021/04/23/Java-network/</url>
-    <content><![CDATA[<h1 id="Java网络编程基础"><a href="#Java网络编程基础" class="headerlink" title="Java网络编程基础"></a>Java网络编程基础</h1><h2 id="实例代码"><a href="#实例代码" class="headerlink" title="实例代码"></a>实例代码</h2><figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs Java"><span class="hljs-keyword">package</span> network;<br><br><span class="hljs-keyword">import</span> java.io.BufferedReader;<br><span class="hljs-keyword">import</span> java.io.BufferedWriter;<br><span class="hljs-keyword">import</span> java.io.FileInputStream;<br><span class="hljs-keyword">import</span> java.io.FileOutputStream;<br><span class="hljs-keyword">import</span> java.io.IOException;<br><span class="hljs-keyword">import</span> java.io.InputStream;<br><span class="hljs-keyword">import</span> java.io.InputStreamReader;<br><span class="hljs-keyword">import</span> java.io.OutputStream;<br><span class="hljs-keyword">import</span> java.io.OutputStreamWriter;<br><span class="hljs-keyword">import</span> java.net.ServerSocket;<br><span class="hljs-keyword">import</span> java.net.Socket;<br><span class="hljs-keyword">import</span> java.time.LocalDateTime;<br><br><span class="hljs-keyword">import</span> org.junit.Test;<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">NetTest</span> </span>&#123;<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">server3</span><span class="hljs-params">()</span> </span>&#123;<br>		ServerSocket server = <span class="hljs-keyword">null</span>;<br>		<span class="hljs-keyword">try</span> &#123;<br>			server = <span class="hljs-keyword">new</span> ServerSocket(<span class="hljs-number">8888</span>); <span class="hljs-comment">// 绑定端口</span><br>			<span class="hljs-keyword">while</span> (<span class="hljs-keyword">true</span>) &#123;<br>				System.out.println(<span class="hljs-string">&quot;服务器在8888端口监听中.....&quot;</span>);<br>				<span class="hljs-keyword">final</span> Socket socket1 = server.accept();<br>				;<br>				Runnable runner = <span class="hljs-keyword">new</span> Runnable() &#123;<br>					<span class="hljs-meta">@Override</span><br>					<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">run</span><span class="hljs-params">()</span> </span>&#123;<br>						BufferedWriter bufferedWriter = <span class="hljs-keyword">null</span>;<br>						<span class="hljs-keyword">try</span> &#123;<br>							bufferedWriter = <span class="hljs-keyword">new</span> BufferedWriter(<span class="hljs-keyword">new</span> OutputStreamWriter(socket1.getOutputStream()));<br>							bufferedWriter.write(<span class="hljs-string">&quot;我是服务器, 现在时间 : &quot;</span> + LocalDateTime.now());<br>							bufferedWriter.newLine();<br>							bufferedWriter.flush(); <span class="hljs-comment">// 把数据真的刷入网线中</span><br>						&#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>							e.printStackTrace();<br>						&#125; <span class="hljs-keyword">finally</span> &#123;<br>							<span class="hljs-keyword">if</span> (bufferedWriter != <span class="hljs-keyword">null</span>) &#123;<br>								<span class="hljs-keyword">try</span> &#123;<br>									bufferedWriter.close();<br>								&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>								&#125;<br>							&#125;<br>							<span class="hljs-keyword">if</span> (socket1 != <span class="hljs-keyword">null</span>) &#123;<br>								<span class="hljs-keyword">try</span> &#123;<br>									socket1.close();<br>								&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>								&#125;<br>							&#125;<br>						&#125;<br>						<span class="hljs-keyword">try</span> &#123;<br>							Thread.sleep(<span class="hljs-number">5000</span>);<br>						&#125; <span class="hljs-keyword">catch</span> (InterruptedException e) &#123;<br>							e.printStackTrace();<br>						&#125;<br>					&#125;<br>				&#125;;<br>				<span class="hljs-keyword">new</span> Thread(runner).start();<br>			&#125;<br>		&#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">finally</span> &#123;<br><br>			<span class="hljs-keyword">if</span> (server != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					System.out.println(<span class="hljs-string">&quot;服务器关闭....&quot;</span>);<br>					server.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>		&#125;<br>	&#125;<br><br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">client3</span><span class="hljs-params">()</span> </span>&#123;<br>		Socket socket2 = <span class="hljs-keyword">null</span>;<br>		BufferedReader bufferedReader = <span class="hljs-keyword">null</span>;<br>		<span class="hljs-keyword">try</span> &#123;<br>			socket2 = <span class="hljs-keyword">new</span> Socket(<span class="hljs-string">&quot;localhost&quot;</span>, <span class="hljs-number">8888</span>);<br>			bufferedReader = <span class="hljs-keyword">new</span> BufferedReader(<span class="hljs-keyword">new</span> InputStreamReader(socket2.getInputStream()));<br>			String readLine = bufferedReader.readLine();<br>			System.out.println(readLine);<br>		&#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">finally</span> &#123;<br>			<span class="hljs-keyword">if</span> (bufferedReader != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					bufferedReader.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>			<span class="hljs-keyword">if</span> (socket2 != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					socket2.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>		&#125;<br>	&#125;<br><br>	<span class="hljs-comment">// 从客户端发送文件给服务端，服务端保存到本地。并返回“发送成功”给客户端。并关闭相应的连接。</span><br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">server2</span><span class="hljs-params">()</span> </span>&#123;<br>		ServerSocket server = <span class="hljs-keyword">null</span>;<br>		Socket socket1 = <span class="hljs-keyword">null</span>;<span class="hljs-comment">// 网络套接字</span><br><br>		InputStream nis = <span class="hljs-keyword">null</span>;<br>		FileOutputStream fos = <span class="hljs-keyword">null</span>;<br>		BufferedWriter netWriter = <span class="hljs-keyword">null</span>;<br><br>		<span class="hljs-keyword">try</span> &#123;<br>			server = <span class="hljs-keyword">new</span> ServerSocket(<span class="hljs-number">7777</span>);<span class="hljs-comment">// 指定服务器接口</span><br>			socket1 = server.accept();<br>			nis = socket1.getInputStream();<br>			fos = <span class="hljs-keyword">new</span> FileOutputStream(<span class="hljs-string">&quot;朴树 - 猎户星座2.mp3&quot;</span>);<br>			netWriter = <span class="hljs-keyword">new</span> BufferedWriter(<span class="hljs-keyword">new</span> OutputStreamWriter(socket1.getOutputStream()));<br><br>			<span class="hljs-keyword">byte</span>[] buf = <span class="hljs-keyword">new</span> <span class="hljs-keyword">byte</span>[<span class="hljs-number">8192</span>];<br>			<span class="hljs-keyword">int</span> realCount = nis.read(buf);<br>			<span class="hljs-keyword">while</span> (realCount != -<span class="hljs-number">1</span>) &#123;<br>				fos.write(buf, <span class="hljs-number">0</span>, realCount);<br>				realCount = nis.read(buf);<br>			&#125;<br>			netWriter.write(<span class="hljs-string">&quot;发送成功&quot;</span>);<br>			netWriter.newLine();<br>			netWriter.flush();<br><br>		&#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">finally</span> &#123;<br>			<span class="hljs-keyword">if</span> (netWriter != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					netWriter.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>			<span class="hljs-keyword">if</span> (fos != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					fos.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>			<span class="hljs-keyword">if</span> (nis != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					nis.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>			<span class="hljs-keyword">if</span> (socket1 != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					socket1.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>			<span class="hljs-keyword">if</span> (server != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					server.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>		&#125;<br>	&#125;<br><br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">client2</span><span class="hljs-params">()</span> </span>&#123;<br>		Socket socket2 = <span class="hljs-keyword">null</span>;<span class="hljs-comment">// 网络套接字</span><br><br>		FileInputStream fis = <span class="hljs-keyword">null</span>;<span class="hljs-comment">// 文件输入流</span><br>		OutputStream nos = <span class="hljs-keyword">null</span>;<span class="hljs-comment">// 网络输出流</span><br>		BufferedReader netReader = <span class="hljs-keyword">null</span>;<span class="hljs-comment">// 网络输入流</span><br>		<span class="hljs-keyword">try</span> &#123;<br>			socket2 = <span class="hljs-keyword">new</span> Socket(<span class="hljs-string">&quot;127.0.0.1&quot;</span>, <span class="hljs-number">7777</span>);<br>			fis = <span class="hljs-keyword">new</span> FileInputStream(<span class="hljs-string">&quot;src/朴树 - 猎户星座.mp3&quot;</span>);<span class="hljs-comment">// 要传到服务器端的文件，先读入到客户端</span><br>			nos = socket2.getOutputStream();<span class="hljs-comment">// 传输到服务器端的文件输出流</span><br>			netReader = <span class="hljs-keyword">new</span> BufferedReader(<span class="hljs-keyword">new</span> InputStreamReader(socket2.getInputStream()));<span class="hljs-comment">// 读取服务器端返回的数据</span><br><br>			<span class="hljs-keyword">byte</span>[] buf = <span class="hljs-keyword">new</span> <span class="hljs-keyword">byte</span>[<span class="hljs-number">8192</span>];<br>			<span class="hljs-comment">// 读取数据</span><br>			<span class="hljs-keyword">int</span> realCount = fis.read(buf);<br>			<span class="hljs-keyword">while</span> (realCount != -<span class="hljs-number">1</span>) &#123;<br>				<span class="hljs-comment">// 1) 处理已经读的数据</span><br>				nos.write(buf, <span class="hljs-number">0</span>, realCount);<br>				<span class="hljs-comment">// 2) 继续读</span><br>				realCount = fis.read(buf);<br>			&#125;<br>			nos.flush();<span class="hljs-comment">// 将在缓存中的数据全部输出去</span><br>			socket2.shutdownOutput();<span class="hljs-comment">// 关闭输出流</span><br><br>			String readLine = netReader.readLine();<span class="hljs-comment">// 接受服务器端的数据</span><br>			System.out.println(readLine);<br><br>		&#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">finally</span> &#123;<span class="hljs-comment">// 关闭相应的资源</span><br>			<span class="hljs-keyword">if</span> (netReader != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					netReader.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>			<span class="hljs-keyword">if</span> (nos != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					nos.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>			<span class="hljs-keyword">if</span> (fis != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					fis.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>			<span class="hljs-keyword">if</span> (socket2 != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					socket2.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>		&#125;<br>	&#125;<br><br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">server</span><span class="hljs-params">()</span> </span>&#123;<br>		ServerSocket server = <span class="hljs-keyword">null</span>;<br>		Socket socket1 = <span class="hljs-keyword">null</span>;<br>		BufferedReader bufferedReader = <span class="hljs-keyword">null</span>;<br>		<span class="hljs-keyword">try</span> &#123;<br>			server = <span class="hljs-keyword">new</span> ServerSocket(<span class="hljs-number">9999</span>); <span class="hljs-comment">// 绑定9999端口.</span><br>			socket1 = server.accept(); <span class="hljs-comment">// 接受客户端的连接请求, 此方法会引起阻塞.</span><br>			System.out.println(socket1);<br>			<span class="hljs-comment">// 服务器端的socket1和客户端的socket2就建立了双向的网络通道</span><br>			InputStream inputStream = socket1.getInputStream();<br>			InputStreamReader isr = <span class="hljs-keyword">new</span> InputStreamReader(inputStream);<br><br>			bufferedReader = <span class="hljs-keyword">new</span> BufferedReader(isr);<br>			String readLine = bufferedReader.readLine();<br>			System.out.println(readLine);<br>		&#125; <span class="hljs-keyword">catch</span> (IOException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">finally</span> &#123;<br>			<span class="hljs-keyword">if</span> (bufferedReader != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					bufferedReader.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br><br>			<span class="hljs-keyword">if</span> (socket1 != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					socket1.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br><br>			<span class="hljs-keyword">if</span> (server != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					server.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br><br>			&#125;<br>		&#125;<br>	&#125;<br><br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">client</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-comment">// 连接服务器, 必须知道ip和端口.</span><br>		Socket socket2 = <span class="hljs-keyword">null</span>;<br>		BufferedWriter bufferedWriter = <span class="hljs-keyword">null</span>;<br>		<span class="hljs-keyword">try</span> &#123;<br>			socket2 = <span class="hljs-keyword">new</span> Socket(<span class="hljs-string">&quot;127.0.0.1&quot;</span>, <span class="hljs-number">9999</span>);<br>			System.out.println(socket2);<br>			<span class="hljs-comment">// 客户端的socket2和服务器端的socket1就建立了双向的网络通道</span><br>			OutputStream outputStream = socket2.getOutputStream();<br>			OutputStreamWriter osw = <span class="hljs-keyword">new</span> OutputStreamWriter(outputStream);<br>			bufferedWriter = <span class="hljs-keyword">new</span> BufferedWriter(osw);<br>			bufferedWriter.write(<span class="hljs-string">&quot;你好, 服务器, 俺是客户端.....&quot;</span>);<br>			bufferedWriter.newLine();<span class="hljs-comment">// 必须要有换行</span><br>			bufferedWriter.flush();<br>		&#125; <span class="hljs-keyword">catch</span> (IOException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">finally</span> &#123;<br>			<span class="hljs-keyword">if</span> (bufferedWriter != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					bufferedWriter.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br><br>			<span class="hljs-keyword">if</span> (socket2 != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					socket2.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>		&#125;<br>	&#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
-<h2 id="杀死本机被占用的端口号"><a href="#杀死本机被占用的端口号" class="headerlink" title="杀死本机被占用的端口号"></a>杀死本机被占用的端口号</h2><figure class="highlight apache"><table><tr><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">netstat</span> -ano   查看操作系统所有占用端口的进程<br><span class="hljs-attribute">netstat</span> -ano | findstr <span class="hljs-string">&quot;9999&quot;</span> 获取占用了<span class="hljs-number">9999</span>端口的进程<br><span class="hljs-attribute">taskkill</span> /F /pid <span class="hljs-number">1234</span> 关闭进程号为<span class="hljs-number">1234</span>的进程<br></code></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>Java</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-        <tag>网络编程</tag>
       </tags>
   </entry>
   <entry>
@@ -297,6 +292,418 @@
       <tags>
         <tag>Java</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>Java网络编程基础</title>
+    <url>/2021/04/23/Java-network/</url>
+    <content><![CDATA[<h1 id="Java网络编程基础"><a href="#Java网络编程基础" class="headerlink" title="Java网络编程基础"></a>Java网络编程基础</h1><h2 id="实例代码"><a href="#实例代码" class="headerlink" title="实例代码"></a>实例代码</h2><figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs Java"><span class="hljs-keyword">package</span> network;<br><br><span class="hljs-keyword">import</span> java.io.BufferedReader;<br><span class="hljs-keyword">import</span> java.io.BufferedWriter;<br><span class="hljs-keyword">import</span> java.io.FileInputStream;<br><span class="hljs-keyword">import</span> java.io.FileOutputStream;<br><span class="hljs-keyword">import</span> java.io.IOException;<br><span class="hljs-keyword">import</span> java.io.InputStream;<br><span class="hljs-keyword">import</span> java.io.InputStreamReader;<br><span class="hljs-keyword">import</span> java.io.OutputStream;<br><span class="hljs-keyword">import</span> java.io.OutputStreamWriter;<br><span class="hljs-keyword">import</span> java.net.ServerSocket;<br><span class="hljs-keyword">import</span> java.net.Socket;<br><span class="hljs-keyword">import</span> java.time.LocalDateTime;<br><br><span class="hljs-keyword">import</span> org.junit.Test;<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">NetTest</span> </span>&#123;<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">server3</span><span class="hljs-params">()</span> </span>&#123;<br>		ServerSocket server = <span class="hljs-keyword">null</span>;<br>		<span class="hljs-keyword">try</span> &#123;<br>			server = <span class="hljs-keyword">new</span> ServerSocket(<span class="hljs-number">8888</span>); <span class="hljs-comment">// 绑定端口</span><br>			<span class="hljs-keyword">while</span> (<span class="hljs-keyword">true</span>) &#123;<br>				System.out.println(<span class="hljs-string">&quot;服务器在8888端口监听中.....&quot;</span>);<br>				<span class="hljs-keyword">final</span> Socket socket1 = server.accept();<br>				;<br>				Runnable runner = <span class="hljs-keyword">new</span> Runnable() &#123;<br>					<span class="hljs-meta">@Override</span><br>					<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">run</span><span class="hljs-params">()</span> </span>&#123;<br>						BufferedWriter bufferedWriter = <span class="hljs-keyword">null</span>;<br>						<span class="hljs-keyword">try</span> &#123;<br>							bufferedWriter = <span class="hljs-keyword">new</span> BufferedWriter(<span class="hljs-keyword">new</span> OutputStreamWriter(socket1.getOutputStream()));<br>							bufferedWriter.write(<span class="hljs-string">&quot;我是服务器, 现在时间 : &quot;</span> + LocalDateTime.now());<br>							bufferedWriter.newLine();<br>							bufferedWriter.flush(); <span class="hljs-comment">// 把数据真的刷入网线中</span><br>						&#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>							e.printStackTrace();<br>						&#125; <span class="hljs-keyword">finally</span> &#123;<br>							<span class="hljs-keyword">if</span> (bufferedWriter != <span class="hljs-keyword">null</span>) &#123;<br>								<span class="hljs-keyword">try</span> &#123;<br>									bufferedWriter.close();<br>								&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>								&#125;<br>							&#125;<br>							<span class="hljs-keyword">if</span> (socket1 != <span class="hljs-keyword">null</span>) &#123;<br>								<span class="hljs-keyword">try</span> &#123;<br>									socket1.close();<br>								&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>								&#125;<br>							&#125;<br>						&#125;<br>						<span class="hljs-keyword">try</span> &#123;<br>							Thread.sleep(<span class="hljs-number">5000</span>);<br>						&#125; <span class="hljs-keyword">catch</span> (InterruptedException e) &#123;<br>							e.printStackTrace();<br>						&#125;<br>					&#125;<br>				&#125;;<br>				<span class="hljs-keyword">new</span> Thread(runner).start();<br>			&#125;<br>		&#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">finally</span> &#123;<br><br>			<span class="hljs-keyword">if</span> (server != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					System.out.println(<span class="hljs-string">&quot;服务器关闭....&quot;</span>);<br>					server.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>		&#125;<br>	&#125;<br><br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">client3</span><span class="hljs-params">()</span> </span>&#123;<br>		Socket socket2 = <span class="hljs-keyword">null</span>;<br>		BufferedReader bufferedReader = <span class="hljs-keyword">null</span>;<br>		<span class="hljs-keyword">try</span> &#123;<br>			socket2 = <span class="hljs-keyword">new</span> Socket(<span class="hljs-string">&quot;localhost&quot;</span>, <span class="hljs-number">8888</span>);<br>			bufferedReader = <span class="hljs-keyword">new</span> BufferedReader(<span class="hljs-keyword">new</span> InputStreamReader(socket2.getInputStream()));<br>			String readLine = bufferedReader.readLine();<br>			System.out.println(readLine);<br>		&#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">finally</span> &#123;<br>			<span class="hljs-keyword">if</span> (bufferedReader != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					bufferedReader.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>			<span class="hljs-keyword">if</span> (socket2 != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					socket2.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>		&#125;<br>	&#125;<br><br>	<span class="hljs-comment">// 从客户端发送文件给服务端，服务端保存到本地。并返回“发送成功”给客户端。并关闭相应的连接。</span><br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">server2</span><span class="hljs-params">()</span> </span>&#123;<br>		ServerSocket server = <span class="hljs-keyword">null</span>;<br>		Socket socket1 = <span class="hljs-keyword">null</span>;<span class="hljs-comment">// 网络套接字</span><br><br>		InputStream nis = <span class="hljs-keyword">null</span>;<br>		FileOutputStream fos = <span class="hljs-keyword">null</span>;<br>		BufferedWriter netWriter = <span class="hljs-keyword">null</span>;<br><br>		<span class="hljs-keyword">try</span> &#123;<br>			server = <span class="hljs-keyword">new</span> ServerSocket(<span class="hljs-number">7777</span>);<span class="hljs-comment">// 指定服务器接口</span><br>			socket1 = server.accept();<br>			nis = socket1.getInputStream();<br>			fos = <span class="hljs-keyword">new</span> FileOutputStream(<span class="hljs-string">&quot;朴树 - 猎户星座2.mp3&quot;</span>);<br>			netWriter = <span class="hljs-keyword">new</span> BufferedWriter(<span class="hljs-keyword">new</span> OutputStreamWriter(socket1.getOutputStream()));<br><br>			<span class="hljs-keyword">byte</span>[] buf = <span class="hljs-keyword">new</span> <span class="hljs-keyword">byte</span>[<span class="hljs-number">8192</span>];<br>			<span class="hljs-keyword">int</span> realCount = nis.read(buf);<br>			<span class="hljs-keyword">while</span> (realCount != -<span class="hljs-number">1</span>) &#123;<br>				fos.write(buf, <span class="hljs-number">0</span>, realCount);<br>				realCount = nis.read(buf);<br>			&#125;<br>			netWriter.write(<span class="hljs-string">&quot;发送成功&quot;</span>);<br>			netWriter.newLine();<br>			netWriter.flush();<br><br>		&#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">finally</span> &#123;<br>			<span class="hljs-keyword">if</span> (netWriter != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					netWriter.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>			<span class="hljs-keyword">if</span> (fos != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					fos.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>			<span class="hljs-keyword">if</span> (nis != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					nis.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>			<span class="hljs-keyword">if</span> (socket1 != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					socket1.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>			<span class="hljs-keyword">if</span> (server != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					server.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>		&#125;<br>	&#125;<br><br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">client2</span><span class="hljs-params">()</span> </span>&#123;<br>		Socket socket2 = <span class="hljs-keyword">null</span>;<span class="hljs-comment">// 网络套接字</span><br><br>		FileInputStream fis = <span class="hljs-keyword">null</span>;<span class="hljs-comment">// 文件输入流</span><br>		OutputStream nos = <span class="hljs-keyword">null</span>;<span class="hljs-comment">// 网络输出流</span><br>		BufferedReader netReader = <span class="hljs-keyword">null</span>;<span class="hljs-comment">// 网络输入流</span><br>		<span class="hljs-keyword">try</span> &#123;<br>			socket2 = <span class="hljs-keyword">new</span> Socket(<span class="hljs-string">&quot;127.0.0.1&quot;</span>, <span class="hljs-number">7777</span>);<br>			fis = <span class="hljs-keyword">new</span> FileInputStream(<span class="hljs-string">&quot;src/朴树 - 猎户星座.mp3&quot;</span>);<span class="hljs-comment">// 要传到服务器端的文件，先读入到客户端</span><br>			nos = socket2.getOutputStream();<span class="hljs-comment">// 传输到服务器端的文件输出流</span><br>			netReader = <span class="hljs-keyword">new</span> BufferedReader(<span class="hljs-keyword">new</span> InputStreamReader(socket2.getInputStream()));<span class="hljs-comment">// 读取服务器端返回的数据</span><br><br>			<span class="hljs-keyword">byte</span>[] buf = <span class="hljs-keyword">new</span> <span class="hljs-keyword">byte</span>[<span class="hljs-number">8192</span>];<br>			<span class="hljs-comment">// 读取数据</span><br>			<span class="hljs-keyword">int</span> realCount = fis.read(buf);<br>			<span class="hljs-keyword">while</span> (realCount != -<span class="hljs-number">1</span>) &#123;<br>				<span class="hljs-comment">// 1) 处理已经读的数据</span><br>				nos.write(buf, <span class="hljs-number">0</span>, realCount);<br>				<span class="hljs-comment">// 2) 继续读</span><br>				realCount = fis.read(buf);<br>			&#125;<br>			nos.flush();<span class="hljs-comment">// 将在缓存中的数据全部输出去</span><br>			socket2.shutdownOutput();<span class="hljs-comment">// 关闭输出流</span><br><br>			String readLine = netReader.readLine();<span class="hljs-comment">// 接受服务器端的数据</span><br>			System.out.println(readLine);<br><br>		&#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">finally</span> &#123;<span class="hljs-comment">// 关闭相应的资源</span><br>			<span class="hljs-keyword">if</span> (netReader != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					netReader.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>			<span class="hljs-keyword">if</span> (nos != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					nos.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>			<span class="hljs-keyword">if</span> (fis != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					fis.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>			<span class="hljs-keyword">if</span> (socket2 != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					socket2.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>		&#125;<br>	&#125;<br><br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">server</span><span class="hljs-params">()</span> </span>&#123;<br>		ServerSocket server = <span class="hljs-keyword">null</span>;<br>		Socket socket1 = <span class="hljs-keyword">null</span>;<br>		BufferedReader bufferedReader = <span class="hljs-keyword">null</span>;<br>		<span class="hljs-keyword">try</span> &#123;<br>			server = <span class="hljs-keyword">new</span> ServerSocket(<span class="hljs-number">9999</span>); <span class="hljs-comment">// 绑定9999端口.</span><br>			socket1 = server.accept(); <span class="hljs-comment">// 接受客户端的连接请求, 此方法会引起阻塞.</span><br>			System.out.println(socket1);<br>			<span class="hljs-comment">// 服务器端的socket1和客户端的socket2就建立了双向的网络通道</span><br>			InputStream inputStream = socket1.getInputStream();<br>			InputStreamReader isr = <span class="hljs-keyword">new</span> InputStreamReader(inputStream);<br><br>			bufferedReader = <span class="hljs-keyword">new</span> BufferedReader(isr);<br>			String readLine = bufferedReader.readLine();<br>			System.out.println(readLine);<br>		&#125; <span class="hljs-keyword">catch</span> (IOException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">finally</span> &#123;<br>			<span class="hljs-keyword">if</span> (bufferedReader != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					bufferedReader.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br><br>			<span class="hljs-keyword">if</span> (socket1 != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					socket1.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br><br>			<span class="hljs-keyword">if</span> (server != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					server.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br><br>			&#125;<br>		&#125;<br>	&#125;<br><br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">client</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-comment">// 连接服务器, 必须知道ip和端口.</span><br>		Socket socket2 = <span class="hljs-keyword">null</span>;<br>		BufferedWriter bufferedWriter = <span class="hljs-keyword">null</span>;<br>		<span class="hljs-keyword">try</span> &#123;<br>			socket2 = <span class="hljs-keyword">new</span> Socket(<span class="hljs-string">&quot;127.0.0.1&quot;</span>, <span class="hljs-number">9999</span>);<br>			System.out.println(socket2);<br>			<span class="hljs-comment">// 客户端的socket2和服务器端的socket1就建立了双向的网络通道</span><br>			OutputStream outputStream = socket2.getOutputStream();<br>			OutputStreamWriter osw = <span class="hljs-keyword">new</span> OutputStreamWriter(outputStream);<br>			bufferedWriter = <span class="hljs-keyword">new</span> BufferedWriter(osw);<br>			bufferedWriter.write(<span class="hljs-string">&quot;你好, 服务器, 俺是客户端.....&quot;</span>);<br>			bufferedWriter.newLine();<span class="hljs-comment">// 必须要有换行</span><br>			bufferedWriter.flush();<br>		&#125; <span class="hljs-keyword">catch</span> (IOException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">finally</span> &#123;<br>			<span class="hljs-keyword">if</span> (bufferedWriter != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					bufferedWriter.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br><br>			<span class="hljs-keyword">if</span> (socket2 != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					socket2.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>		&#125;<br>	&#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+<h2 id="杀死本机被占用的端口号"><a href="#杀死本机被占用的端口号" class="headerlink" title="杀死本机被占用的端口号"></a>杀死本机被占用的端口号</h2><figure class="highlight apache"><table><tr><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">netstat</span> -ano   查看操作系统所有占用端口的进程<br><span class="hljs-attribute">netstat</span> -ano | findstr <span class="hljs-string">&quot;9999&quot;</span> 获取占用了<span class="hljs-number">9999</span>端口的进程<br><span class="hljs-attribute">taskkill</span> /F /pid <span class="hljs-number">1234</span> 关闭进程号为<span class="hljs-number">1234</span>的进程<br></code></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>网络编程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title></title>
+    <url>/2021/05/30/JavaWeb/</url>
+    <content><![CDATA[<h1 id="JavaWeb"><a href="#JavaWeb" class="headerlink" title="JavaWeb"></a>JavaWeb</h1><h2 id="网页的组成"><a href="#网页的组成" class="headerlink" title="网页的组成"></a>网页的组成</h2><ul>
+<li>结构（HTML)<ul>
+<li>超文本标记语言</li>
+<li>网页的主要内容通过html来实现</li>
+<li>用来写网页的语言</li>
+</ul>
+</li>
+<li>表现（CSS)<ul>
+<li>层叠样式表</li>
+<li>网页的字体颜色、背景色、背景图片等通过它来实现</li>
+<li>用来美化网页</li>
+</ul>
+</li>
+<li>行为（JavaScript/jQuery）<ul>
+<li>用来实现网页上的一下动态的效果</li>
+</ul>
+</li>
+<li>一个良好的网页要求结构、表现、行为三者分离</li>
+</ul>
+<h2 id="HTML"><a href="#HTML" class="headerlink" title="HTML"></a>HTML</h2><ul>
+<li><p>常用的标签</p>
+<ul>
+<li><p>标题标签</p>
+<ul>
+<li>一共六个（h1到h6）</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span><br>    一级标题<br><span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">h2</span>&gt;</span><br>    二级标题<br><span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span><br>...<br><span class="hljs-tag">&lt;<span class="hljs-name">h6</span>&gt;</span><br>    六级标题<br><span class="hljs-tag">&lt;/<span class="hljs-name">h6</span>&gt;</span><br></code></pre></td></tr></table></figure></li>
+<li><p>超链接</p>
+<ul>
+<li><p>通过a标签创建一个超链接</p>
+<ul>
+<li>通过a标签中的href属性指定要跳转的页面的地址</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;设置要跳转的页面的地址&quot;</span>&gt;</span>我是超链接<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>表格</p>
+<ul>
+<li>通过table标签创建一个表格<ul>
+<li>表格中的行通过tr标签来表示<ul>
+<li>表格中的表头通过th标签来表示</li>
+<li>表格中的列（单元格）通过td标签来标签<ul>
+<li>通过rowspan属性跨行合并单元格</li>
+<li>通过colspan属性跨列合并单元格</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">table</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span><br>    	<span class="hljs-tag">&lt;<span class="hljs-name">th</span>&gt;</span>姓名<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">th</span>&gt;</span>性别<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">th</span>&gt;</span>年龄<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span><br>    	<span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>盖伦<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>男<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>19<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">table</span>&gt;</span><br></code></pre></td></tr></table></figure></li>
+<li><p>表单</p>
+<ul>
+<li>使用form标签创建一个表单<ul>
+<li>通过action属性指定要提交的服务器的地址</li>
+<li>通过method属性指定提交的请求方式</li>
+<li>通过input标签创建表单项<ul>
+<li>type值是text的是文本框</li>
+<li>type值是password的是密码框</li>
+<li>type值是submit的是提交按钮</li>
+<li>type值不可用任意指定，通过alt+/根据提示选择</li>
+<li>必须给input指定name属性值<ul>
+<li>name属性值可用任意指定</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-comment">&lt;!-- 通过form标签创建一个表单 </span><br><span class="hljs-comment">		action属性：设置要提交的服务器的地址</span><br><span class="hljs-comment">		method属性：设置请求方式</span><br><span class="hljs-comment">			get：将发送一个GET请求，此时用户输入的数据是通过浏览器的地址栏进行传输</span><br><span class="hljs-comment">			post：将发送一个POST请求，此时用户输入的数据通过HTTP协议中请求报文中的请求体进行传输</span><br><span class="hljs-comment">	--&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">action</span>=<span class="hljs-string">&quot;success.html&quot;</span> <span class="hljs-attr">method</span>=<span class="hljs-string">&quot;post&quot;</span>&gt;</span><br>		<span class="hljs-comment">&lt;!-- </span><br><span class="hljs-comment">			表单中的表单项通过input标签来创建，表单项的类型通过type属性来指定；</span><br><span class="hljs-comment">			必须给表单项指定name属性值，用户输入的数据通过name属性值进行携带，并以键值对的形式发送到</span><br><span class="hljs-comment">			服务器，多个键值对之间使用 &amp;符号分隔，例如：username=admin&amp;password=123456</span><br><span class="hljs-comment">		 --&gt;</span><br>		用户名称：<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">br</span>&gt;</span><br>		用户密码：<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;password&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;password&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">br</span>&gt;</span><br>		<span class="hljs-comment">&lt;!-- 提交按钮上显示的文字通过value指定 --&gt;</span><br>		<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;submit&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;登录&quot;</span>&gt;</span><br>	<span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<h2 id="CSS"><a href="#CSS" class="headerlink" title="CSS"></a>CSS</h2><ul>
+<li><p>CSS样式可用书写的位置</p>
+<ul>
+<li><p>1）写在标签的style属性中</p>
+<ul>
+<li>结构与表现相耦合，不建议使用</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;color: red;font-size: &quot;</span>&gt;</span>我是一个段落<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span><br></code></pre></td></tr></table></figure></li>
+<li><p>2）写在style标签中，style标签放在head标签中</p>
+<ul>
+<li>开发测试阶段使用这种方式</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">style</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text/css&quot;</span>&gt;</span><br><span class="css">	<span class="hljs-selector-id">#rd</span>&#123;</span><br><span class="css">		<span class="hljs-selector-tag">color</span>: <span class="hljs-selector-id">#FBA</span></span><br>	&#125;<br><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span><br></code></pre></td></tr></table></figure></li>
+<li><p>3）引入外部的css文件</p>
+<ul>
+<li>项目上线后使用这种方式</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;stylesheet&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text/css&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;style.css&quot;</span> /&gt;</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>CSS种的基本选择器</p>
+<ul>
+<li>标签选择器</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="code"><pre><code class="hljs css"><span class="hljs-selector-tag">h1</span> &#123;<br>	<span class="hljs-attribute">color</span>: red<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>ID选择器<ul>
+<li>格式：#id属性值</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="code"><pre><code class="hljs css"><span class="hljs-selector-id">#p1</span> &#123;<br>	<span class="hljs-attribute">color</span>: green<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>类选择器<ul>
+<li>格式：.class属性值</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="code"><pre><code class="hljs css"><span class="hljs-selector-class">.p2</span> &#123;<br>	<span class="hljs-attribute">color</span>: blue<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>分组选择器</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="code"><pre><code class="hljs css"><span class="hljs-selector-id">#p1</span>, <span class="hljs-selector-class">.p2</span> &#123;<br>	<span class="hljs-attribute">font-size</span>: <span class="hljs-number">20px</span><br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="JavaScript"><a href="#JavaScript" class="headerlink" title="JavaScript"></a>JavaScript</h2><ul>
+<li><p>JavaScript可用书写的位置跟CSS类似，一共三种方式</p>
+</li>
+<li><p>变量</p>
+<ul>
+<li>通过var关键字声明一个变量</li>
+<li>在使用变量的过程种可用给它赋任意值</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">var</span> a; a=<span class="hljs-number">123</span>; a=<span class="hljs-string">&quot;hello&quot;</span>;a=函数；a=对象；<br><span class="hljs-keyword">var</span> a = <span class="hljs-string">&quot;javascript&quot;</span>;<br></code></pre></td></tr></table></figure></li>
+<li><p>函数</p>
+<ul>
+<li>通过function关键字声明一个函数</li>
+<li>在声明函数时不需要指定返回值的类型及形参的类型</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">//方式一：</span><br><span class="hljs-comment">//不带参数的函数</span><br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">fun</span>(<span class="hljs-params"></span>)</span>&#123;<br>    <span class="hljs-comment">//函数体</span><br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sum</span>(<span class="hljs-params">a,b</span>)</span>&#123;<br>    <span class="hljs-keyword">return</span> a + b;<br>&#125;<br><span class="hljs-comment">//方式二：</span><br><span class="hljs-keyword">var</span> sum2 = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">a,b,c</span>)</span>&#123;<br>    <span class="hljs-keyword">return</span> a + b + c;<br>&#125;<br><span class="hljs-comment">//我们通常是通过方式二这种方式将一个函数赋给对象的事件属性</span><br></code></pre></td></tr></table></figure></li>
+<li><p>DOM</p>
+<ul>
+<li>全称：Document Object Model，文档对象模型</li>
+<li>DOM种常用的属性和方法<ul>
+<li>document.getElementById(“id属性值”)<ul>
+<li>根据标签的id属性值获取一个具体的标签对象</li>
+</ul>
+</li>
+<li>对象.innerHTML<ul>
+<li>获取或设置成对出现的标签中的文本内容<ul>
+<li>对象.innerHTML<ul>
+<li>获取文本内容</li>
+</ul>
+</li>
+<li>对象.innerHTML=”new valule”<ul>
+<li>设置文本内容</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>在jQuery中与之对应的是text()/html()方法</li>
+</ul>
+</li>
+<li>对象.onclick<ul>
+<li>给对象绑定单击事件</li>
+<li>在jQuery中与之对应的是click()方法</li>
+</ul>
+</li>
+<li>对象.onfocus<ul>
+<li>给对象绑定获取焦点事件</li>
+<li>在jQuery中与之对应的是focus()方法</li>
+</ul>
+</li>
+<li>对象.onblur<ul>
+<li>给对象绑定失去焦点的事件</li>
+<li>在jQuery中与之对应的是blur()方法</li>
+</ul>
+</li>
+<li>对象.onchange<ul>
+<li>给对象内容改变的事件</li>
+<li>在jQuery中与之对应的是change()方法</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Servlet"><a href="#Servlet" class="headerlink" title="Servlet"></a>Servlet</h2><ul>
+<li>Servlet是服务器端的一个组件，用来处理用户的请求</li>
+<li>直接new一个Sersvlet，然后配置映射的请求地址即可</li>
+<li>doGet和doPost方法中的两个参数request和response的作用<ul>
+<li>request的作用<ul>
+<li>获取请求参数</li>
+<li>转发</li>
+<li>它是一个域对象</li>
+</ul>
+</li>
+<li>response的作用<ul>
+<li>给浏览器响应一个字符串或一个页面</li>
+<li>重定向</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//处理GET请求的方法</span><br>	<span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title">doGet</span><span class="hljs-params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="hljs-keyword">throws</span> ServletException, IOException </span>&#123;<br>		System.out.println(<span class="hljs-string">&quot;doGet方法被调用&quot;</span>);<br>		<span class="hljs-comment">//request的作用</span><br>		<span class="hljs-comment">//1.获取请求参数</span><br>		<span class="hljs-comment">/*</span><br><span class="hljs-comment">		 * GET请求的请求中文乱码问题的解决方案：</span><br><span class="hljs-comment">		 * 在Tomcat的配置文件server.xml中的第一个Connector标签中添加属性URIEncoding=&quot;UTF-8&quot;</span><br><span class="hljs-comment">		 */</span><br>		String username = request.getParameter(<span class="hljs-string">&quot;username&quot;</span>);<br>		String password = request.getParameter(<span class="hljs-string">&quot;password&quot;</span>);<br>		System.out.println(username);<br>		System.out.println(password);<br>		<span class="hljs-comment">//2.转发</span><br>		<span class="hljs-comment">//获取转发器</span><br>		RequestDispatcher requestDispatcher = request.getRequestDispatcher(<span class="hljs-string">&quot;WEB-INF/success.html&quot;</span>);<br>		<span class="hljs-comment">//进行请求的转发</span><br>		requestDispatcher.forward(request, response);<br>		<span class="hljs-comment">//3.request是一个域对象（下回分解）</span><br>	&#125;<br>	<span class="hljs-comment">//处理POST请求的方法</span><br>	<span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title">doPost</span><span class="hljs-params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="hljs-keyword">throws</span> ServletException, IOException </span>&#123;<br>		System.out.println(<span class="hljs-string">&quot;doPost方法被调用&quot;</span>);<br>		<span class="hljs-comment">/*</span><br><span class="hljs-comment">		 * POST请求的请求中文乱码问题的解决方案：</span><br><span class="hljs-comment">		 * 在第一次获取请求参数之前，通过request设置字符集位UTF-8</span><br><span class="hljs-comment">		 */</span><br>		request.setCharacterEncoding(<span class="hljs-string">&quot;UTF-8&quot;</span>);<br>		String username = request.getParameter(<span class="hljs-string">&quot;username&quot;</span>);<br>		String password = request.getParameter(<span class="hljs-string">&quot;password&quot;</span>);<br>		System.out.println(username);<br>		System.out.println(password);<br>		<span class="hljs-comment">//response的作用</span><br>		<span class="hljs-comment">//1.给浏览器响应一个字符串或一个页面</span><br>		<span class="hljs-comment">/*</span><br><span class="hljs-comment">		 * 响应中文乱码的解决方案：</span><br><span class="hljs-comment">		 * 	在获取流之前设置内容的类型，内容的类型中包含UTF-8字符集</span><br><span class="hljs-comment">		 */</span><br>		response.setContentType(<span class="hljs-string">&quot;text/html;charset=UTF-8&quot;</span>);<br>		PrintWriter writer = response.getWriter();<br><span class="hljs-comment">//		writer.write(&quot;Response Success!&quot;);</span><br><span class="hljs-comment">//		writer.write(&quot;响应成功！&quot;);</span><br><span class="hljs-comment">//		writer.write(&quot;&lt;!DOCTYPE html&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;&lt;html&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;&lt;head&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;&lt;meta charset=\&quot;UTF-8\&quot;&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;&lt;title&gt;Insert title here&lt;/title&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;&lt;/head&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;&lt;body&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;	&lt;h1&gt;请求处理成功！&lt;/h1&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;&lt;/body&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;&lt;/html&gt;&quot;);</span><br>		<span class="hljs-comment">//2.重定向</span><br>		response.sendRedirect(<span class="hljs-string">&quot;WEB-INF/success.html&quot;</span>);<br>		<br>		<span class="hljs-comment">/*</span><br><span class="hljs-comment">		 * 转发与重定向的区别：</span><br><span class="hljs-comment">		 * 	1.转发浏览器发送一次请求；重定向浏览器发送两次请求</span><br><span class="hljs-comment">		 * 	2.转发浏览器地址栏地址无变化；重定向浏览器地址栏地址有变化</span><br><span class="hljs-comment">		 * 	3.转发可以访问WEB-INF目录下的资源；重定向不可以访问WEB-INF目录下的资源</span><br><span class="hljs-comment">		 * 	4.转发可以共享request域中的数据；重定向不可以共享request域中的数据</span><br><span class="hljs-comment">		 */</span><br>	&#125;<br><br></code></pre></td></tr></table></figure>
+
+<h2 id="JSP"><a href="#JSP" class="headerlink" title="JSP"></a>JSP</h2><ul>
+<li><p>JSP必须运行服务器上，它本质上是一个Servlet</p>
+</li>
+<li><p>HTML和Servlet能实现的功能JSP都可用实现</p>
+</li>
+<li><p>JSP中的基本语法</p>
+<ul>
+<li>JSP脚本片段<ul>
+<li>格式：&lt;%   %&gt;</li>
+<li>作用：在里面写Java代码</li>
+</ul>
+</li>
+<li>JSP表达式<ul>
+<li>格式：&lt;%=  %&gt;</li>
+<li>作用：用来输出对象</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight jsp"><table><tr><td class="code"><pre><code class="hljs jsp">&lt;%<br>		<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span> ; i &lt; <span class="hljs-number">10</span> ; i++)&#123;<br>			<span class="hljs-comment">//out.print(&quot;伊朗要干美国了！&quot;);</span><br>	%&gt;<br>	&lt;h1&gt;伊朗要干美国了！&lt;/h1&gt;<br>	&lt;%	<br>		&#125;<br>	%&gt;<br><br> &lt;%=<span class="hljs-string">&quot;我是通过JSP表达式输出的&quot;</span> %&gt;<br></code></pre></td></tr></table></figure></li>
+<li><p>四个域</p>
+<ul>
+<li>page域<ul>
+<li>范围：当前页面</li>
+<li>对应的域对象：pageContext</li>
+<li>域对象的类型：PageContext</li>
+</ul>
+</li>
+<li>request域<ul>
+<li>范围：当前请求（一次请求）</li>
+<li>对应的域对象：request</li>
+<li>域对象的类型：HttpServletRequest</li>
+</ul>
+</li>
+<li>session<ul>
+<li>范围：当前会话（一次会话）</li>
+<li>对应的域对象：session</li>
+<li>域对象的类型：HttpSession</li>
+</ul>
+</li>
+<li>application域<ul>
+<li>范围：当前Web应用</li>
+<li>对应的域对象：application</li>
+<li>域对象的类型：ServletContext</li>
+</ul>
+</li>
+<li>四个域对象都有以下三个方法<ul>
+<li>void setAttribute(String key , Object value)</li>
+<li>Object getAttribute(String key)</li>
+<li>void removeAttribute(String key)</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight jsp"><table><tr><td class="code"><pre><code class="hljs jsp">&lt;!-- 在当前页面中分别向四个域中添加四个属性 --&gt;<br>	 &lt;%<br>	 	pageContext.setAttribute(<span class="hljs-string">&quot;pageKey&quot;</span>, <span class="hljs-string">&quot;pageValue&quot;</span>);<br>	 	request.setAttribute(<span class="hljs-string">&quot;reqKey&quot;</span>, <span class="hljs-string">&quot;reqValue&quot;</span>);<br>	 	session.setAttribute(<span class="hljs-string">&quot;sessKey&quot;</span>, <span class="hljs-string">&quot;sessValue&quot;</span>);<br>	 	application.setAttribute(<span class="hljs-string">&quot;appKey&quot;</span>, <span class="hljs-string">&quot;appValue&quot;</span>);<br>	 %&gt;<br>	 &lt;h1&gt;在当前页面中分别获取四个域中的属性值&lt;/h1&gt;<br>	 page域中的属性值是：&lt;%=pageContext.getAttribute(<span class="hljs-string">&quot;pageKey&quot;</span>) %&gt;&lt;br&gt;<br>	 request域中的属性值是：&lt;%=request.getAttribute(<span class="hljs-string">&quot;reqKey&quot;</span>) %&gt;&lt;br&gt;<br>	 session域中的属性值是：&lt;%=session.getAttribute(<span class="hljs-string">&quot;sessKey&quot;</span>) %&gt;&lt;br&gt;<br>	 application域中的属性值是：&lt;%=application.getAttribute(<span class="hljs-string">&quot;appKey&quot;</span>) %&gt;&lt;br&gt;<br></code></pre></td></tr></table></figure></li>
+<li><p>EL</p>
+<ul>
+<li>EL全称是Expression Language，是JSP的内置表达式</li>
+<li>格式：${表达式}</li>
+<li>作用：主要用来获取域对象中的属性值，用来代替JSP的表达式</li>
+<li>EL表达式获取数据时才输出，获取不到数据则什么也不输出</li>
+<li>EL中的四个Scope对象<ul>
+<li>pageScope<ul>
+<li>获取page域中的属性值</li>
+</ul>
+</li>
+<li>requestScope<ul>
+<li>获取request域中的属性值</li>
+</ul>
+</li>
+<li>sessionScope<ul>
+<li>获取session域中的属性值</li>
+</ul>
+</li>
+<li>applicationScope<ul>
+<li>获取application域中的属性值</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight jsp"><table><tr><td class="code"><pre><code class="hljs jsp">&lt;%<br>	 	Date date = <span class="hljs-keyword">new</span> Date();<br>	 	<span class="hljs-comment">//分别向四个域中添加四个属性</span><br>	 	pageContext.setAttribute(<span class="hljs-string">&quot;date&quot;</span>, date+<span class="hljs-string">&quot;-&quot;</span>);<br>	 	request.setAttribute(<span class="hljs-string">&quot;date&quot;</span>, date+<span class="hljs-string">&quot;--&quot;</span>);<br>	 	session.setAttribute(<span class="hljs-string">&quot;date&quot;</span>, date+<span class="hljs-string">&quot;---&quot;</span>);<br>	 	application.setAttribute(<span class="hljs-string">&quot;date&quot;</span>, date+<span class="hljs-string">&quot;----&quot;</span>);<br>	 %&gt;<br>	 通过JSP表达式获取域对象中的属性值：&lt;%=pageContext.getAttribute(<span class="hljs-string">&quot;date&quot;</span>) %&gt;&lt;br&gt;<br>	 通过EL表达式获取域对象中的属性值：$&#123;date &#125;&lt;br&gt;<br>	 通过EL表达式获取request域中的属性值：$&#123;requestScope.date &#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="Ajax"><a href="#Ajax" class="headerlink" title="Ajax"></a>Ajax</h2><ul>
+<li><p>全称：Asynchronous JavaScript And XML，通过JavaScript发送请求，使用XML作为响应数据，后来XML已经被另外一种数据格式JSON所替代</p>
+</li>
+<li><p>同步请求和异步请求的区别</p>
+<ul>
+<li>同步请求<ul>
+<li>发送请求之后必须等待服务器的响应成功之后才能发送其他请求，有一个等待的过程</li>
+<li>响应成功之后会刷新整个页面</li>
+</ul>
+</li>
+<li>异步请求<ul>
+<li>发送请求之后无需等待服务器的响应即可发送其他请求</li>
+<li>响应成功之后不会刷新整个页面，可用局部更新页面中的内容</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>如果通过jQuery发送ajax请求</p>
+<ul>
+<li><p>使用$.ajax()方法发送Ajax请求</p>
+<ul>
+<li>ajax()方法中的常用选项<ul>
+<li>url<ul>
+<li>必须的。用来设置请求地址，值是一个字符串</li>
+</ul>
+</li>
+<li>type<ul>
+<li>可选的。用来设置请求方式。GET或POST，默认是GET，值是一个字符串</li>
+</ul>
+</li>
+<li>data<ul>
+<li>可选的。用来设置请求参数，值是一个字符串</li>
+</ul>
+</li>
+<li>success<ul>
+<li>可选的。用来设置一个回调函数，当响应成功之后系统会自动调用该函数，响应数据会以参数的形式传入到该函数中</li>
+</ul>
+</li>
+<li>dataType<ul>
+<li>可选的。用来设置响应数据的类型，如 text、json等</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript">$.ajax(&#123;<br>				url:<span class="hljs-string">&quot;AjaxServlet&quot;</span>,<br>				type:<span class="hljs-string">&quot;get&quot;</span>,<br>				data:<span class="hljs-string">&quot;username=admin&amp;password=123456&quot;</span>,<br>				success:<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">res</span>)</span>&#123;<br>					<span class="hljs-comment">//将响应数据设置到span标签中</span><br>					$(<span class="hljs-string">&quot;#msg&quot;</span>).text(res);<br>				&#125;,<br>				dataType:<span class="hljs-string">&quot;text&quot;</span><br>			&#125;);<br></code></pre></td></tr></table></figure></li>
+<li><p>JSON</p>
+<ul>
+<li>JOSN格式<ul>
+<li>JSON对象</li>
+<li>JSON数组</li>
+</ul>
+</li>
+<li>JSON中接受的数据类型<ul>
+<li>字符串</li>
+<li>数字</li>
+<li>null</li>
+<li>布尔类型</li>
+<li>数组</li>
+<li>对象</li>
+</ul>
+</li>
+<li>在JS中JSON对象和JSON字符串之间的转换<ul>
+<li>JSON对象转JSON字符串<ul>
+<li>JSON.stringify(JSON对象)</li>
+</ul>
+</li>
+<li>JSON字符串转JSON对象<ul>
+<li>JSON.parse(JSON字符串)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">//JSON的格式：</span><br>	<span class="hljs-comment">//1.JSON对象</span><br>	<span class="hljs-comment">//属性名必须使用双引号括起来；属性名和属性值之间使用冒号分隔；多个属性之间使用逗号分隔</span><br>	<span class="hljs-keyword">var</span> jsonObj = &#123;<span class="hljs-string">&quot;name&quot;</span>:<span class="hljs-string">&quot;孙悟空&quot;</span>,<span class="hljs-string">&quot;age&quot;</span>:<span class="hljs-number">520</span>&#125;;<br><span class="hljs-comment">// 	alert(jsonObj);</span><br>	<span class="hljs-comment">//2.JSON数组</span><br>	<span class="hljs-keyword">var</span> jsonArry = [<span class="hljs-string">&quot;猪八戒&quot;</span>,<span class="hljs-number">1500</span>,<span class="hljs-literal">true</span>,<span class="hljs-literal">null</span>,jsonObj];<br>	<span class="hljs-comment">//获取jsonArry中的jsonObj中的age属性值</span><br><span class="hljs-comment">// 	alert(jsonArry[4].age);</span><br>	<br>	<span class="hljs-comment">//在JS中将JSON对象转换为JSON字符串</span><br>	<span class="hljs-keyword">var</span> objToStr = <span class="hljs-built_in">JSON</span>.stringify(jsonObj);<br><span class="hljs-comment">// 	alert(objToStr);</span><br>	<span class="hljs-comment">//声明一个JSON字符串</span><br>	<span class="hljs-keyword">var</span> jsonStr = <span class="hljs-string">&#x27;&#123;&quot;name&quot;:&quot;唐僧&quot;,&quot;age&quot;:18&#125;&#x27;</span>;<br><span class="hljs-comment">// 	alert(jsonStr);</span><br>	<span class="hljs-comment">//在JS中将JSON字符串转换为JSON对象</span><br>	<span class="hljs-keyword">var</span> strToObj = <span class="hljs-built_in">JSON</span>.parse(jsonStr);<br><span class="hljs-comment">// 	alert(strToObj.name);</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p>在Java中对象与JSON字符串之间的转换</p>
+<ul>
+<li><p>借助于第三方工具json-lib、jackson、gson等可用将Java对象转换为JSON字符串，也可用将JSON字符串转换回Java对象</p>
+</li>
+<li><p>通常是前端发送一个Ajax请求，在后台查询到对象之后将对象转换为JOSN字符串响应到前端</p>
+</li>
+<li><p>通过发送Ajax请求接收JSON格式的响应数据</p>
+<ul>
+<li>前端代码</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">//发送Ajax请求接收JSON格式的响应数据</span><br>			$.ajax(&#123;<br>				url:<span class="hljs-string">&quot;JSONServlet&quot;</span>,<br>				success:<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">res</span>)</span>&#123;<br>					alert(res.id);<br>				&#125;,<br>				dataType:<span class="hljs-string">&quot;json&quot;</span><br>			&#125;);<br></code></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>后端代码</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title">doGet</span><span class="hljs-params">(HttpServletRequest request, HttpServletResponse response)</span></span><br><span class="hljs-function">			<span class="hljs-keyword">throws</span> ServletException, IOException </span>&#123;<br>		response.setContentType(<span class="hljs-string">&quot;text/html;charset=UTF-8&quot;</span>);<br>		<span class="hljs-comment">//假设从数据库中查询到员工的信息</span><br>		Employee employee = <span class="hljs-keyword">new</span> Employee(<span class="hljs-number">1</span>, <span class="hljs-string">&quot;张三&quot;</span>, <span class="hljs-string">&quot;zhangsan@atguigu.com&quot;</span>);<br>		<span class="hljs-comment">//创建Gson对象</span><br>		Gson gson = <span class="hljs-keyword">new</span> Gson();<br>		<span class="hljs-comment">//将Employee对象转换为JSON字符串</span><br>		String json = gson.toJson(employee);<br>		System.out.println(json);<br>		<span class="hljs-comment">//给浏览器响应一个JSON格式的字符串</span><br>		response.getWriter().write(json);<br>	&#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+]]></content>
   </entry>
   <entry>
     <title>Linux</title>
@@ -787,423 +1194,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Hello World</title>
-    <url>/2020/09/22/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo new <span class="hljs-string">&quot;My New Post&quot;</span><br></code></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo server<br></code></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo generate<br></code></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo deploy<br></code></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-]]></content>
-  </entry>
-  <entry>
-    <title></title>
-    <url>/2021/05/30/JavaWeb/</url>
-    <content><![CDATA[<h1 id="JavaWeb"><a href="#JavaWeb" class="headerlink" title="JavaWeb"></a>JavaWeb</h1><h2 id="网页的组成"><a href="#网页的组成" class="headerlink" title="网页的组成"></a>网页的组成</h2><ul>
-<li>结构（HTML)<ul>
-<li>超文本标记语言</li>
-<li>网页的主要内容通过html来实现</li>
-<li>用来写网页的语言</li>
-</ul>
-</li>
-<li>表现（CSS)<ul>
-<li>层叠样式表</li>
-<li>网页的字体颜色、背景色、背景图片等通过它来实现</li>
-<li>用来美化网页</li>
-</ul>
-</li>
-<li>行为（JavaScript/jQuery）<ul>
-<li>用来实现网页上的一下动态的效果</li>
-</ul>
-</li>
-<li>一个良好的网页要求结构、表现、行为三者分离</li>
-</ul>
-<h2 id="HTML"><a href="#HTML" class="headerlink" title="HTML"></a>HTML</h2><ul>
-<li><p>常用的标签</p>
-<ul>
-<li><p>标题标签</p>
-<ul>
-<li>一共六个（h1到h6）</li>
-</ul>
-<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span><br>    一级标题<br><span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">h2</span>&gt;</span><br>    二级标题<br><span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span><br>...<br><span class="hljs-tag">&lt;<span class="hljs-name">h6</span>&gt;</span><br>    六级标题<br><span class="hljs-tag">&lt;/<span class="hljs-name">h6</span>&gt;</span><br></code></pre></td></tr></table></figure></li>
-<li><p>超链接</p>
-<ul>
-<li><p>通过a标签创建一个超链接</p>
-<ul>
-<li>通过a标签中的href属性指定要跳转的页面的地址</li>
-</ul>
-<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;设置要跳转的页面的地址&quot;</span>&gt;</span>我是超链接<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span><br></code></pre></td></tr></table></figure></li>
-</ul>
-</li>
-<li><p>表格</p>
-<ul>
-<li>通过table标签创建一个表格<ul>
-<li>表格中的行通过tr标签来表示<ul>
-<li>表格中的表头通过th标签来表示</li>
-<li>表格中的列（单元格）通过td标签来标签<ul>
-<li>通过rowspan属性跨行合并单元格</li>
-<li>通过colspan属性跨列合并单元格</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">table</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span><br>    	<span class="hljs-tag">&lt;<span class="hljs-name">th</span>&gt;</span>姓名<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">th</span>&gt;</span>性别<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">th</span>&gt;</span>年龄<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span><br>    	<span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>盖伦<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>男<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>19<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">table</span>&gt;</span><br></code></pre></td></tr></table></figure></li>
-<li><p>表单</p>
-<ul>
-<li>使用form标签创建一个表单<ul>
-<li>通过action属性指定要提交的服务器的地址</li>
-<li>通过method属性指定提交的请求方式</li>
-<li>通过input标签创建表单项<ul>
-<li>type值是text的是文本框</li>
-<li>type值是password的是密码框</li>
-<li>type值是submit的是提交按钮</li>
-<li>type值不可用任意指定，通过alt+/根据提示选择</li>
-<li>必须给input指定name属性值<ul>
-<li>name属性值可用任意指定</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-comment">&lt;!-- 通过form标签创建一个表单 </span><br><span class="hljs-comment">		action属性：设置要提交的服务器的地址</span><br><span class="hljs-comment">		method属性：设置请求方式</span><br><span class="hljs-comment">			get：将发送一个GET请求，此时用户输入的数据是通过浏览器的地址栏进行传输</span><br><span class="hljs-comment">			post：将发送一个POST请求，此时用户输入的数据通过HTTP协议中请求报文中的请求体进行传输</span><br><span class="hljs-comment">	--&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">action</span>=<span class="hljs-string">&quot;success.html&quot;</span> <span class="hljs-attr">method</span>=<span class="hljs-string">&quot;post&quot;</span>&gt;</span><br>		<span class="hljs-comment">&lt;!-- </span><br><span class="hljs-comment">			表单中的表单项通过input标签来创建，表单项的类型通过type属性来指定；</span><br><span class="hljs-comment">			必须给表单项指定name属性值，用户输入的数据通过name属性值进行携带，并以键值对的形式发送到</span><br><span class="hljs-comment">			服务器，多个键值对之间使用 &amp;符号分隔，例如：username=admin&amp;password=123456</span><br><span class="hljs-comment">		 --&gt;</span><br>		用户名称：<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">br</span>&gt;</span><br>		用户密码：<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;password&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;password&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">br</span>&gt;</span><br>		<span class="hljs-comment">&lt;!-- 提交按钮上显示的文字通过value指定 --&gt;</span><br>		<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;submit&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;登录&quot;</span>&gt;</span><br>	<span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span><br></code></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ul>
-<h2 id="CSS"><a href="#CSS" class="headerlink" title="CSS"></a>CSS</h2><ul>
-<li><p>CSS样式可用书写的位置</p>
-<ul>
-<li><p>1）写在标签的style属性中</p>
-<ul>
-<li>结构与表现相耦合，不建议使用</li>
-</ul>
-<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;color: red;font-size: &quot;</span>&gt;</span>我是一个段落<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span><br></code></pre></td></tr></table></figure></li>
-<li><p>2）写在style标签中，style标签放在head标签中</p>
-<ul>
-<li>开发测试阶段使用这种方式</li>
-</ul>
-<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">style</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text/css&quot;</span>&gt;</span><br><span class="css">	<span class="hljs-selector-id">#rd</span>&#123;</span><br><span class="css">		<span class="hljs-selector-tag">color</span>: <span class="hljs-selector-id">#FBA</span></span><br>	&#125;<br><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span><br></code></pre></td></tr></table></figure></li>
-<li><p>3）引入外部的css文件</p>
-<ul>
-<li>项目上线后使用这种方式</li>
-</ul>
-<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;stylesheet&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text/css&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;style.css&quot;</span> /&gt;</span><br></code></pre></td></tr></table></figure></li>
-</ul>
-</li>
-<li><p>CSS种的基本选择器</p>
-<ul>
-<li>标签选择器</li>
-</ul>
-<figure class="highlight css"><table><tr><td class="code"><pre><code class="hljs css"><span class="hljs-selector-tag">h1</span> &#123;<br>	<span class="hljs-attribute">color</span>: red<br>&#125;<br></code></pre></td></tr></table></figure>
-
-
-
-<ul>
-<li>ID选择器<ul>
-<li>格式：#id属性值</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight css"><table><tr><td class="code"><pre><code class="hljs css"><span class="hljs-selector-id">#p1</span> &#123;<br>	<span class="hljs-attribute">color</span>: green<br>&#125;<br></code></pre></td></tr></table></figure>
-
-
-
-<ul>
-<li>类选择器<ul>
-<li>格式：.class属性值</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight css"><table><tr><td class="code"><pre><code class="hljs css"><span class="hljs-selector-class">.p2</span> &#123;<br>	<span class="hljs-attribute">color</span>: blue<br>&#125;<br></code></pre></td></tr></table></figure>
-
-
-
-<ul>
-<li>分组选择器</li>
-</ul>
-<figure class="highlight css"><table><tr><td class="code"><pre><code class="hljs css"><span class="hljs-selector-id">#p1</span>, <span class="hljs-selector-class">.p2</span> &#123;<br>	<span class="hljs-attribute">font-size</span>: <span class="hljs-number">20px</span><br>&#125;<br></code></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="JavaScript"><a href="#JavaScript" class="headerlink" title="JavaScript"></a>JavaScript</h2><ul>
-<li><p>JavaScript可用书写的位置跟CSS类似，一共三种方式</p>
-</li>
-<li><p>变量</p>
-<ul>
-<li>通过var关键字声明一个变量</li>
-<li>在使用变量的过程种可用给它赋任意值</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">var</span> a; a=<span class="hljs-number">123</span>; a=<span class="hljs-string">&quot;hello&quot;</span>;a=函数；a=对象；<br><span class="hljs-keyword">var</span> a = <span class="hljs-string">&quot;javascript&quot;</span>;<br></code></pre></td></tr></table></figure></li>
-<li><p>函数</p>
-<ul>
-<li>通过function关键字声明一个函数</li>
-<li>在声明函数时不需要指定返回值的类型及形参的类型</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">//方式一：</span><br><span class="hljs-comment">//不带参数的函数</span><br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">fun</span>(<span class="hljs-params"></span>)</span>&#123;<br>    <span class="hljs-comment">//函数体</span><br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sum</span>(<span class="hljs-params">a,b</span>)</span>&#123;<br>    <span class="hljs-keyword">return</span> a + b;<br>&#125;<br><span class="hljs-comment">//方式二：</span><br><span class="hljs-keyword">var</span> sum2 = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">a,b,c</span>)</span>&#123;<br>    <span class="hljs-keyword">return</span> a + b + c;<br>&#125;<br><span class="hljs-comment">//我们通常是通过方式二这种方式将一个函数赋给对象的事件属性</span><br></code></pre></td></tr></table></figure></li>
-<li><p>DOM</p>
-<ul>
-<li>全称：Document Object Model，文档对象模型</li>
-<li>DOM种常用的属性和方法<ul>
-<li>document.getElementById(“id属性值”)<ul>
-<li>根据标签的id属性值获取一个具体的标签对象</li>
-</ul>
-</li>
-<li>对象.innerHTML<ul>
-<li>获取或设置成对出现的标签中的文本内容<ul>
-<li>对象.innerHTML<ul>
-<li>获取文本内容</li>
-</ul>
-</li>
-<li>对象.innerHTML=”new valule”<ul>
-<li>设置文本内容</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>在jQuery中与之对应的是text()/html()方法</li>
-</ul>
-</li>
-<li>对象.onclick<ul>
-<li>给对象绑定单击事件</li>
-<li>在jQuery中与之对应的是click()方法</li>
-</ul>
-</li>
-<li>对象.onfocus<ul>
-<li>给对象绑定获取焦点事件</li>
-<li>在jQuery中与之对应的是focus()方法</li>
-</ul>
-</li>
-<li>对象.onblur<ul>
-<li>给对象绑定失去焦点的事件</li>
-<li>在jQuery中与之对应的是blur()方法</li>
-</ul>
-</li>
-<li>对象.onchange<ul>
-<li>给对象内容改变的事件</li>
-<li>在jQuery中与之对应的是change()方法</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="Servlet"><a href="#Servlet" class="headerlink" title="Servlet"></a>Servlet</h2><ul>
-<li>Servlet是服务器端的一个组件，用来处理用户的请求</li>
-<li>直接new一个Sersvlet，然后配置映射的请求地址即可</li>
-<li>doGet和doPost方法中的两个参数request和response的作用<ul>
-<li>request的作用<ul>
-<li>获取请求参数</li>
-<li>转发</li>
-<li>它是一个域对象</li>
-</ul>
-</li>
-<li>response的作用<ul>
-<li>给浏览器响应一个字符串或一个页面</li>
-<li>重定向</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//处理GET请求的方法</span><br>	<span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title">doGet</span><span class="hljs-params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="hljs-keyword">throws</span> ServletException, IOException </span>&#123;<br>		System.out.println(<span class="hljs-string">&quot;doGet方法被调用&quot;</span>);<br>		<span class="hljs-comment">//request的作用</span><br>		<span class="hljs-comment">//1.获取请求参数</span><br>		<span class="hljs-comment">/*</span><br><span class="hljs-comment">		 * GET请求的请求中文乱码问题的解决方案：</span><br><span class="hljs-comment">		 * 在Tomcat的配置文件server.xml中的第一个Connector标签中添加属性URIEncoding=&quot;UTF-8&quot;</span><br><span class="hljs-comment">		 */</span><br>		String username = request.getParameter(<span class="hljs-string">&quot;username&quot;</span>);<br>		String password = request.getParameter(<span class="hljs-string">&quot;password&quot;</span>);<br>		System.out.println(username);<br>		System.out.println(password);<br>		<span class="hljs-comment">//2.转发</span><br>		<span class="hljs-comment">//获取转发器</span><br>		RequestDispatcher requestDispatcher = request.getRequestDispatcher(<span class="hljs-string">&quot;WEB-INF/success.html&quot;</span>);<br>		<span class="hljs-comment">//进行请求的转发</span><br>		requestDispatcher.forward(request, response);<br>		<span class="hljs-comment">//3.request是一个域对象（下回分解）</span><br>	&#125;<br>	<span class="hljs-comment">//处理POST请求的方法</span><br>	<span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title">doPost</span><span class="hljs-params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="hljs-keyword">throws</span> ServletException, IOException </span>&#123;<br>		System.out.println(<span class="hljs-string">&quot;doPost方法被调用&quot;</span>);<br>		<span class="hljs-comment">/*</span><br><span class="hljs-comment">		 * POST请求的请求中文乱码问题的解决方案：</span><br><span class="hljs-comment">		 * 在第一次获取请求参数之前，通过request设置字符集位UTF-8</span><br><span class="hljs-comment">		 */</span><br>		request.setCharacterEncoding(<span class="hljs-string">&quot;UTF-8&quot;</span>);<br>		String username = request.getParameter(<span class="hljs-string">&quot;username&quot;</span>);<br>		String password = request.getParameter(<span class="hljs-string">&quot;password&quot;</span>);<br>		System.out.println(username);<br>		System.out.println(password);<br>		<span class="hljs-comment">//response的作用</span><br>		<span class="hljs-comment">//1.给浏览器响应一个字符串或一个页面</span><br>		<span class="hljs-comment">/*</span><br><span class="hljs-comment">		 * 响应中文乱码的解决方案：</span><br><span class="hljs-comment">		 * 	在获取流之前设置内容的类型，内容的类型中包含UTF-8字符集</span><br><span class="hljs-comment">		 */</span><br>		response.setContentType(<span class="hljs-string">&quot;text/html;charset=UTF-8&quot;</span>);<br>		PrintWriter writer = response.getWriter();<br><span class="hljs-comment">//		writer.write(&quot;Response Success!&quot;);</span><br><span class="hljs-comment">//		writer.write(&quot;响应成功！&quot;);</span><br><span class="hljs-comment">//		writer.write(&quot;&lt;!DOCTYPE html&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;&lt;html&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;&lt;head&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;&lt;meta charset=\&quot;UTF-8\&quot;&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;&lt;title&gt;Insert title here&lt;/title&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;&lt;/head&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;&lt;body&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;	&lt;h1&gt;请求处理成功！&lt;/h1&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;&lt;/body&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;&lt;/html&gt;&quot;);</span><br>		<span class="hljs-comment">//2.重定向</span><br>		response.sendRedirect(<span class="hljs-string">&quot;WEB-INF/success.html&quot;</span>);<br>		<br>		<span class="hljs-comment">/*</span><br><span class="hljs-comment">		 * 转发与重定向的区别：</span><br><span class="hljs-comment">		 * 	1.转发浏览器发送一次请求；重定向浏览器发送两次请求</span><br><span class="hljs-comment">		 * 	2.转发浏览器地址栏地址无变化；重定向浏览器地址栏地址有变化</span><br><span class="hljs-comment">		 * 	3.转发可以访问WEB-INF目录下的资源；重定向不可以访问WEB-INF目录下的资源</span><br><span class="hljs-comment">		 * 	4.转发可以共享request域中的数据；重定向不可以共享request域中的数据</span><br><span class="hljs-comment">		 */</span><br>	&#125;<br><br></code></pre></td></tr></table></figure>
-
-<h2 id="JSP"><a href="#JSP" class="headerlink" title="JSP"></a>JSP</h2><ul>
-<li><p>JSP必须运行服务器上，它本质上是一个Servlet</p>
-</li>
-<li><p>HTML和Servlet能实现的功能JSP都可用实现</p>
-</li>
-<li><p>JSP中的基本语法</p>
-<ul>
-<li>JSP脚本片段<ul>
-<li>格式：&lt;%   %&gt;</li>
-<li>作用：在里面写Java代码</li>
-</ul>
-</li>
-<li>JSP表达式<ul>
-<li>格式：&lt;%=  %&gt;</li>
-<li>作用：用来输出对象</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight jsp"><table><tr><td class="code"><pre><code class="hljs jsp">&lt;%<br>		<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span> ; i &lt; <span class="hljs-number">10</span> ; i++)&#123;<br>			<span class="hljs-comment">//out.print(&quot;伊朗要干美国了！&quot;);</span><br>	%&gt;<br>	&lt;h1&gt;伊朗要干美国了！&lt;/h1&gt;<br>	&lt;%	<br>		&#125;<br>	%&gt;<br><br> &lt;%=<span class="hljs-string">&quot;我是通过JSP表达式输出的&quot;</span> %&gt;<br></code></pre></td></tr></table></figure></li>
-<li><p>四个域</p>
-<ul>
-<li>page域<ul>
-<li>范围：当前页面</li>
-<li>对应的域对象：pageContext</li>
-<li>域对象的类型：PageContext</li>
-</ul>
-</li>
-<li>request域<ul>
-<li>范围：当前请求（一次请求）</li>
-<li>对应的域对象：request</li>
-<li>域对象的类型：HttpServletRequest</li>
-</ul>
-</li>
-<li>session<ul>
-<li>范围：当前会话（一次会话）</li>
-<li>对应的域对象：session</li>
-<li>域对象的类型：HttpSession</li>
-</ul>
-</li>
-<li>application域<ul>
-<li>范围：当前Web应用</li>
-<li>对应的域对象：application</li>
-<li>域对象的类型：ServletContext</li>
-</ul>
-</li>
-<li>四个域对象都有以下三个方法<ul>
-<li>void setAttribute(String key , Object value)</li>
-<li>Object getAttribute(String key)</li>
-<li>void removeAttribute(String key)</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight jsp"><table><tr><td class="code"><pre><code class="hljs jsp">&lt;!-- 在当前页面中分别向四个域中添加四个属性 --&gt;<br>	 &lt;%<br>	 	pageContext.setAttribute(<span class="hljs-string">&quot;pageKey&quot;</span>, <span class="hljs-string">&quot;pageValue&quot;</span>);<br>	 	request.setAttribute(<span class="hljs-string">&quot;reqKey&quot;</span>, <span class="hljs-string">&quot;reqValue&quot;</span>);<br>	 	session.setAttribute(<span class="hljs-string">&quot;sessKey&quot;</span>, <span class="hljs-string">&quot;sessValue&quot;</span>);<br>	 	application.setAttribute(<span class="hljs-string">&quot;appKey&quot;</span>, <span class="hljs-string">&quot;appValue&quot;</span>);<br>	 %&gt;<br>	 &lt;h1&gt;在当前页面中分别获取四个域中的属性值&lt;/h1&gt;<br>	 page域中的属性值是：&lt;%=pageContext.getAttribute(<span class="hljs-string">&quot;pageKey&quot;</span>) %&gt;&lt;br&gt;<br>	 request域中的属性值是：&lt;%=request.getAttribute(<span class="hljs-string">&quot;reqKey&quot;</span>) %&gt;&lt;br&gt;<br>	 session域中的属性值是：&lt;%=session.getAttribute(<span class="hljs-string">&quot;sessKey&quot;</span>) %&gt;&lt;br&gt;<br>	 application域中的属性值是：&lt;%=application.getAttribute(<span class="hljs-string">&quot;appKey&quot;</span>) %&gt;&lt;br&gt;<br></code></pre></td></tr></table></figure></li>
-<li><p>EL</p>
-<ul>
-<li>EL全称是Expression Language，是JSP的内置表达式</li>
-<li>格式：${表达式}</li>
-<li>作用：主要用来获取域对象中的属性值，用来代替JSP的表达式</li>
-<li>EL表达式获取数据时才输出，获取不到数据则什么也不输出</li>
-<li>EL中的四个Scope对象<ul>
-<li>pageScope<ul>
-<li>获取page域中的属性值</li>
-</ul>
-</li>
-<li>requestScope<ul>
-<li>获取request域中的属性值</li>
-</ul>
-</li>
-<li>sessionScope<ul>
-<li>获取session域中的属性值</li>
-</ul>
-</li>
-<li>applicationScope<ul>
-<li>获取application域中的属性值</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight jsp"><table><tr><td class="code"><pre><code class="hljs jsp">&lt;%<br>	 	Date date = <span class="hljs-keyword">new</span> Date();<br>	 	<span class="hljs-comment">//分别向四个域中添加四个属性</span><br>	 	pageContext.setAttribute(<span class="hljs-string">&quot;date&quot;</span>, date+<span class="hljs-string">&quot;-&quot;</span>);<br>	 	request.setAttribute(<span class="hljs-string">&quot;date&quot;</span>, date+<span class="hljs-string">&quot;--&quot;</span>);<br>	 	session.setAttribute(<span class="hljs-string">&quot;date&quot;</span>, date+<span class="hljs-string">&quot;---&quot;</span>);<br>	 	application.setAttribute(<span class="hljs-string">&quot;date&quot;</span>, date+<span class="hljs-string">&quot;----&quot;</span>);<br>	 %&gt;<br>	 通过JSP表达式获取域对象中的属性值：&lt;%=pageContext.getAttribute(<span class="hljs-string">&quot;date&quot;</span>) %&gt;&lt;br&gt;<br>	 通过EL表达式获取域对象中的属性值：$&#123;date &#125;&lt;br&gt;<br>	 通过EL表达式获取request域中的属性值：$&#123;requestScope.date &#125;<br></code></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="Ajax"><a href="#Ajax" class="headerlink" title="Ajax"></a>Ajax</h2><ul>
-<li><p>全称：Asynchronous JavaScript And XML，通过JavaScript发送请求，使用XML作为响应数据，后来XML已经被另外一种数据格式JSON所替代</p>
-</li>
-<li><p>同步请求和异步请求的区别</p>
-<ul>
-<li>同步请求<ul>
-<li>发送请求之后必须等待服务器的响应成功之后才能发送其他请求，有一个等待的过程</li>
-<li>响应成功之后会刷新整个页面</li>
-</ul>
-</li>
-<li>异步请求<ul>
-<li>发送请求之后无需等待服务器的响应即可发送其他请求</li>
-<li>响应成功之后不会刷新整个页面，可用局部更新页面中的内容</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>如果通过jQuery发送ajax请求</p>
-<ul>
-<li><p>使用$.ajax()方法发送Ajax请求</p>
-<ul>
-<li>ajax()方法中的常用选项<ul>
-<li>url<ul>
-<li>必须的。用来设置请求地址，值是一个字符串</li>
-</ul>
-</li>
-<li>type<ul>
-<li>可选的。用来设置请求方式。GET或POST，默认是GET，值是一个字符串</li>
-</ul>
-</li>
-<li>data<ul>
-<li>可选的。用来设置请求参数，值是一个字符串</li>
-</ul>
-</li>
-<li>success<ul>
-<li>可选的。用来设置一个回调函数，当响应成功之后系统会自动调用该函数，响应数据会以参数的形式传入到该函数中</li>
-</ul>
-</li>
-<li>dataType<ul>
-<li>可选的。用来设置响应数据的类型，如 text、json等</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript">$.ajax(&#123;<br>				url:<span class="hljs-string">&quot;AjaxServlet&quot;</span>,<br>				type:<span class="hljs-string">&quot;get&quot;</span>,<br>				data:<span class="hljs-string">&quot;username=admin&amp;password=123456&quot;</span>,<br>				success:<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">res</span>)</span>&#123;<br>					<span class="hljs-comment">//将响应数据设置到span标签中</span><br>					$(<span class="hljs-string">&quot;#msg&quot;</span>).text(res);<br>				&#125;,<br>				dataType:<span class="hljs-string">&quot;text&quot;</span><br>			&#125;);<br></code></pre></td></tr></table></figure></li>
-<li><p>JSON</p>
-<ul>
-<li>JOSN格式<ul>
-<li>JSON对象</li>
-<li>JSON数组</li>
-</ul>
-</li>
-<li>JSON中接受的数据类型<ul>
-<li>字符串</li>
-<li>数字</li>
-<li>null</li>
-<li>布尔类型</li>
-<li>数组</li>
-<li>对象</li>
-</ul>
-</li>
-<li>在JS中JSON对象和JSON字符串之间的转换<ul>
-<li>JSON对象转JSON字符串<ul>
-<li>JSON.stringify(JSON对象)</li>
-</ul>
-</li>
-<li>JSON字符串转JSON对象<ul>
-<li>JSON.parse(JSON字符串)</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">//JSON的格式：</span><br>	<span class="hljs-comment">//1.JSON对象</span><br>	<span class="hljs-comment">//属性名必须使用双引号括起来；属性名和属性值之间使用冒号分隔；多个属性之间使用逗号分隔</span><br>	<span class="hljs-keyword">var</span> jsonObj = &#123;<span class="hljs-string">&quot;name&quot;</span>:<span class="hljs-string">&quot;孙悟空&quot;</span>,<span class="hljs-string">&quot;age&quot;</span>:<span class="hljs-number">520</span>&#125;;<br><span class="hljs-comment">// 	alert(jsonObj);</span><br>	<span class="hljs-comment">//2.JSON数组</span><br>	<span class="hljs-keyword">var</span> jsonArry = [<span class="hljs-string">&quot;猪八戒&quot;</span>,<span class="hljs-number">1500</span>,<span class="hljs-literal">true</span>,<span class="hljs-literal">null</span>,jsonObj];<br>	<span class="hljs-comment">//获取jsonArry中的jsonObj中的age属性值</span><br><span class="hljs-comment">// 	alert(jsonArry[4].age);</span><br>	<br>	<span class="hljs-comment">//在JS中将JSON对象转换为JSON字符串</span><br>	<span class="hljs-keyword">var</span> objToStr = <span class="hljs-built_in">JSON</span>.stringify(jsonObj);<br><span class="hljs-comment">// 	alert(objToStr);</span><br>	<span class="hljs-comment">//声明一个JSON字符串</span><br>	<span class="hljs-keyword">var</span> jsonStr = <span class="hljs-string">&#x27;&#123;&quot;name&quot;:&quot;唐僧&quot;,&quot;age&quot;:18&#125;&#x27;</span>;<br><span class="hljs-comment">// 	alert(jsonStr);</span><br>	<span class="hljs-comment">//在JS中将JSON字符串转换为JSON对象</span><br>	<span class="hljs-keyword">var</span> strToObj = <span class="hljs-built_in">JSON</span>.parse(jsonStr);<br><span class="hljs-comment">// 	alert(strToObj.name);</span><br></code></pre></td></tr></table></figure>
-
-<ul>
-<li><p>在Java中对象与JSON字符串之间的转换</p>
-<ul>
-<li><p>借助于第三方工具json-lib、jackson、gson等可用将Java对象转换为JSON字符串，也可用将JSON字符串转换回Java对象</p>
-</li>
-<li><p>通常是前端发送一个Ajax请求，在后台查询到对象之后将对象转换为JOSN字符串响应到前端</p>
-</li>
-<li><p>通过发送Ajax请求接收JSON格式的响应数据</p>
-<ul>
-<li>前端代码</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">//发送Ajax请求接收JSON格式的响应数据</span><br>			$.ajax(&#123;<br>				url:<span class="hljs-string">&quot;JSONServlet&quot;</span>,<br>				success:<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">res</span>)</span>&#123;<br>					alert(res.id);<br>				&#125;,<br>				dataType:<span class="hljs-string">&quot;json&quot;</span><br>			&#125;);<br></code></pre></td></tr></table></figure>
-
-
-
-<ul>
-<li>后端代码</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title">doGet</span><span class="hljs-params">(HttpServletRequest request, HttpServletResponse response)</span></span><br><span class="hljs-function">			<span class="hljs-keyword">throws</span> ServletException, IOException </span>&#123;<br>		response.setContentType(<span class="hljs-string">&quot;text/html;charset=UTF-8&quot;</span>);<br>		<span class="hljs-comment">//假设从数据库中查询到员工的信息</span><br>		Employee employee = <span class="hljs-keyword">new</span> Employee(<span class="hljs-number">1</span>, <span class="hljs-string">&quot;张三&quot;</span>, <span class="hljs-string">&quot;zhangsan@atguigu.com&quot;</span>);<br>		<span class="hljs-comment">//创建Gson对象</span><br>		Gson gson = <span class="hljs-keyword">new</span> Gson();<br>		<span class="hljs-comment">//将Employee对象转换为JSON字符串</span><br>		String json = gson.toJson(employee);<br>		System.out.println(json);<br>		<span class="hljs-comment">//给浏览器响应一个JSON格式的字符串</span><br>		response.getWriter().write(json);<br>	&#125;<br></code></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-]]></content>
-  </entry>
-  <entry>
     <title>Hadoop简介</title>
     <url>/2020/10/21/hadoop-introduction/</url>
     <content><![CDATA[<h1 id="hadoop简介"><a href="#hadoop简介" class="headerlink" title="hadoop简介"></a>hadoop简介</h1><p>1.定义：<br>hadoop是一个开源分布式计算平台，为用户提供了底层细节透明的分布式基础框架。<br>2.特性：    </p>
@@ -1251,6 +1241,24 @@
         <tag>Hadoop</tag>
         <tag>大数据</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2020/09/22/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo new <span class="hljs-string">&quot;My New Post&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo server<br></code></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo generate<br></code></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo deploy<br></code></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
   </entry>
   <entry>
     <title>Java多线程基础</title>
@@ -2306,6 +2314,134 @@ copyToLocal#与get完全一样
       </tags>
   </entry>
   <entry>
+    <title>Markdown语法介绍</title>
+    <url>/2020/10/27/markdown-introduction/</url>
+    <content><![CDATA[<h1 id="markdow语法的简单介绍"><a href="#markdow语法的简单介绍" class="headerlink" title="markdow语法的简单介绍"></a>markdow语法的简单介绍</h1><blockquote>
+<ul>
+<li>第一项：markdown标题  <blockquote>
+<ul>
+<li>用“#”号的个数来表示标题的级数</li>
+</ul>
+<ul>
+<li>使用 = 和 - 标记一级和二级标题</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<ul>
+<li>第二项：段落格式<blockquote>
+<ul>
+<li>Markdown 段落没有特殊的格式<br>直接编写文字，<strong>段落的换行是使用两个以上空格加回车,也可以在段落后面使用一个空行来表示重新开始一个段落</strong>  </li>
+</ul>
+<ul>
+<li><em><strong>字体：</strong></em><br>markdown可以使用斜体文本（一个<em>或_在文字的两边），粗体文本（两个</em>或_在文字的两边），粗斜体文本（三个）    </li>
+</ul>
+</blockquote>
+</li>
+<li>斜体文本*<br><em>斜体文本</em>    </li>
+<li><em>粗体文本</em>*<br><strong>粗体文本</strong>    </li>
+<li><strong>粗斜体文本</strong>*<br><em><strong>粗斜体文本</strong></em>    <blockquote>
+<ul>
+<li><em><strong>分隔线：</strong></em><br>你可以在一行中用三个以上的星号、减号、底线来建立一个分隔线，行内不能有其他东西。你也可以在星号或是减号中间插入空格。    </li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</blockquote>
+<hr>
+<hr>
+<hr>
+<blockquote>
+<blockquote>
+<ul>
+<li><em><strong>删除线：</strong></em><br>删除线： 如果段落上的文字要添加删除线，只需要在文字的两端加上两个波浪线 ~~ 即可<br><del>删除线</del></li>
+<li><strong>下划线：</strong><br>下划线可以通过 HTML 的 <u> 标签来实现</u><br><u>下划线</u></li>
+<li><strong>脚注：</strong><br>脚注是对文本的补充说明。<br>创建脚注格式类似这样 [^RUNOOB]。<br>[^RUNOOB]: 菜鸟教程 – 学的不仅是技术，更是梦想！！！</li>
+</ul>
+</blockquote>
+<ul>
+<li>第三项：列表<br>无序列表使用星号(*)、加号(+)或是减号(-)作为列表标记，这些标记后面要添加一个空格，然后再填写内容     <blockquote>
+<ul>
+<li><strong>嵌套列表：</strong><br>列表嵌套只需在子列表中的选项前面添加四个空格即可    </li>
+</ul>
+</blockquote>
+</li>
+<li>第四项：<strong>区块</strong><br>Markdown 区块引用是在段落开头使用 &gt; 符号 ，然后后面紧跟一个空格符号<br>另外区块是可以嵌套的，一个 &gt; 符号是最外层，两个 &gt; 符号是第一层嵌套，以此类推<br>区块中可以使用列表，列表中也可以使用区块</li>
+<li>第五项：<strong>markdown代码</strong><br><code>printf()</code>函数<br>如果是段落上的一个函数或片段的代码可以用反引号把它包起来(`)    <blockquote>
+<ul>
+<li>代码区块：<br>四个空格或者制表符（代码区块使用 4 个空格或者一个制表符（Tab 键）。）<br><img src="https://www.runoob.com/wp-content/uploads/2019/03/6DC89E5C-B41A-4938-97D8-D7D06B879F91.jpg" alt="展示" title="结果展示"><br>你也可以用 ``` 包裹一段代码，并指定一种语言（也可以不指定）    </li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs c">include &lt;bits/stdc++.h&gt;    <br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;    <br>        <span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-string">&quot;hello world&quot;</span>&lt;&lt;<span class="hljs-built_in">endl</span>;    <br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;    <br>&#125;    <br></code></pre></td></tr></table></figure>
+<blockquote>
+<ul>
+<li><strong>第六项：Markdown 链接:</strong><br>参考<a href="https://www.runoob.com/markdown/md-tutorial.html">菜鸟教程</a></li>
+<li><strong>第七项：markdown 表格</strong><br>Markdown 制作表格使用 | 来分隔不同的单元格，使用 - 来分隔表头和其他行。  </li>
+</ul>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>表头</th>
+<th>表头</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>单元格</td>
+<td>单元格</td>
+</tr>
+<tr>
+<td>单元格</td>
+<td>单元格</td>
+</tr>
+<tr>
+<td>我们可以设置表格的对齐方式：</td>
+<td></td>
+</tr>
+</tbody></table>
+<pre><code>-: 设置内容和标题栏居右对齐。
+:- 设置内容和标题栏居左对齐。
+:-: 设置内容和标题栏居中对齐。
+</code></pre>
+<table>
+<thead>
+<tr>
+<th align="left">左对齐</th>
+<th align="right">右对齐</th>
+<th align="center">居中对齐</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">单元格</td>
+<td align="right">单元格</td>
+<td align="center">单元格</td>
+</tr>
+<tr>
+<td align="left">单元格</td>
+<td align="right">单元格</td>
+<td align="center">单元格</td>
+</tr>
+</tbody></table>
+<blockquote>
+<ul>
+<li><strong>第八项：markdown高级技巧</strong><br>参考连接<a href="https://www.runoob.com/markdown/md-advance.html">菜鸟教程</a></li>
+</ul>
+</blockquote>
+<hr>
+<hr>
+<p>本文参考菜鸟教程的markdown教学，超链接上文已给出。（<a href="https://www.runoob.com/markdown/md-tutorial.html%EF%BC%89">https://www.runoob.com/markdown/md-tutorial.html）</a></p>
+]]></content>
+      <categories>
+        <category>Blog</category>
+      </categories>
+      <tags>
+        <tag>Blog</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Mapreduce介绍</title>
     <url>/2020/11/23/MapReduce/</url>
     <content><![CDATA[<p>#MapReduce介绍</p>
@@ -2443,134 +2579,6 @@ copyToLocal#与get完全一样
       <tags>
         <tag>Hadoop</tag>
         <tag>大数据</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Markdown语法介绍</title>
-    <url>/2020/10/27/markdown-introduction/</url>
-    <content><![CDATA[<h1 id="markdow语法的简单介绍"><a href="#markdow语法的简单介绍" class="headerlink" title="markdow语法的简单介绍"></a>markdow语法的简单介绍</h1><blockquote>
-<ul>
-<li>第一项：markdown标题  <blockquote>
-<ul>
-<li>用“#”号的个数来表示标题的级数</li>
-</ul>
-<ul>
-<li>使用 = 和 - 标记一级和二级标题</li>
-</ul>
-</blockquote>
-</li>
-</ul>
-<ul>
-<li>第二项：段落格式<blockquote>
-<ul>
-<li>Markdown 段落没有特殊的格式<br>直接编写文字，<strong>段落的换行是使用两个以上空格加回车,也可以在段落后面使用一个空行来表示重新开始一个段落</strong>  </li>
-</ul>
-<ul>
-<li><em><strong>字体：</strong></em><br>markdown可以使用斜体文本（一个<em>或_在文字的两边），粗体文本（两个</em>或_在文字的两边），粗斜体文本（三个）    </li>
-</ul>
-</blockquote>
-</li>
-<li>斜体文本*<br><em>斜体文本</em>    </li>
-<li><em>粗体文本</em>*<br><strong>粗体文本</strong>    </li>
-<li><strong>粗斜体文本</strong>*<br><em><strong>粗斜体文本</strong></em>    <blockquote>
-<ul>
-<li><em><strong>分隔线：</strong></em><br>你可以在一行中用三个以上的星号、减号、底线来建立一个分隔线，行内不能有其他东西。你也可以在星号或是减号中间插入空格。    </li>
-</ul>
-</blockquote>
-</li>
-</ul>
-</blockquote>
-<hr>
-<hr>
-<hr>
-<blockquote>
-<blockquote>
-<ul>
-<li><em><strong>删除线：</strong></em><br>删除线： 如果段落上的文字要添加删除线，只需要在文字的两端加上两个波浪线 ~~ 即可<br><del>删除线</del></li>
-<li><strong>下划线：</strong><br>下划线可以通过 HTML 的 <u> 标签来实现</u><br><u>下划线</u></li>
-<li><strong>脚注：</strong><br>脚注是对文本的补充说明。<br>创建脚注格式类似这样 [^RUNOOB]。<br>[^RUNOOB]: 菜鸟教程 – 学的不仅是技术，更是梦想！！！</li>
-</ul>
-</blockquote>
-<ul>
-<li>第三项：列表<br>无序列表使用星号(*)、加号(+)或是减号(-)作为列表标记，这些标记后面要添加一个空格，然后再填写内容     <blockquote>
-<ul>
-<li><strong>嵌套列表：</strong><br>列表嵌套只需在子列表中的选项前面添加四个空格即可    </li>
-</ul>
-</blockquote>
-</li>
-<li>第四项：<strong>区块</strong><br>Markdown 区块引用是在段落开头使用 &gt; 符号 ，然后后面紧跟一个空格符号<br>另外区块是可以嵌套的，一个 &gt; 符号是最外层，两个 &gt; 符号是第一层嵌套，以此类推<br>区块中可以使用列表，列表中也可以使用区块</li>
-<li>第五项：<strong>markdown代码</strong><br><code>printf()</code>函数<br>如果是段落上的一个函数或片段的代码可以用反引号把它包起来(`)    <blockquote>
-<ul>
-<li>代码区块：<br>四个空格或者制表符（代码区块使用 4 个空格或者一个制表符（Tab 键）。）<br><img src="https://www.runoob.com/wp-content/uploads/2019/03/6DC89E5C-B41A-4938-97D8-D7D06B879F91.jpg" alt="展示" title="结果展示"><br>你也可以用 ``` 包裹一段代码，并指定一种语言（也可以不指定）    </li>
-</ul>
-</blockquote>
-</li>
-</ul>
-</blockquote>
-<figure class="highlight c"><table><tr><td class="code"><pre><code class="hljs c">include &lt;bits/stdc++.h&gt;    <br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span>&#123;    <br>        <span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-string">&quot;hello world&quot;</span>&lt;&lt;<span class="hljs-built_in">endl</span>;    <br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;    <br>&#125;    <br></code></pre></td></tr></table></figure>
-<blockquote>
-<ul>
-<li><strong>第六项：Markdown 链接:</strong><br>参考<a href="https://www.runoob.com/markdown/md-tutorial.html">菜鸟教程</a></li>
-<li><strong>第七项：markdown 表格</strong><br>Markdown 制作表格使用 | 来分隔不同的单元格，使用 - 来分隔表头和其他行。  </li>
-</ul>
-</blockquote>
-<table>
-<thead>
-<tr>
-<th>表头</th>
-<th>表头</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>单元格</td>
-<td>单元格</td>
-</tr>
-<tr>
-<td>单元格</td>
-<td>单元格</td>
-</tr>
-<tr>
-<td>我们可以设置表格的对齐方式：</td>
-<td></td>
-</tr>
-</tbody></table>
-<pre><code>-: 设置内容和标题栏居右对齐。
-:- 设置内容和标题栏居左对齐。
-:-: 设置内容和标题栏居中对齐。
-</code></pre>
-<table>
-<thead>
-<tr>
-<th align="left">左对齐</th>
-<th align="right">右对齐</th>
-<th align="center">居中对齐</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">单元格</td>
-<td align="right">单元格</td>
-<td align="center">单元格</td>
-</tr>
-<tr>
-<td align="left">单元格</td>
-<td align="right">单元格</td>
-<td align="center">单元格</td>
-</tr>
-</tbody></table>
-<blockquote>
-<ul>
-<li><strong>第八项：markdown高级技巧</strong><br>参考连接<a href="https://www.runoob.com/markdown/md-advance.html">菜鸟教程</a></li>
-</ul>
-</blockquote>
-<hr>
-<hr>
-<p>本文参考菜鸟教程的markdown教学，超链接上文已给出。（<a href="https://www.runoob.com/markdown/md-tutorial.html%EF%BC%89">https://www.runoob.com/markdown/md-tutorial.html）</a></p>
-]]></content>
-      <categories>
-        <category>Blog</category>
-      </categories>
-      <tags>
-        <tag>Blog</tag>
       </tags>
   </entry>
   <entry>

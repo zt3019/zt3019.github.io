@@ -185,7 +185,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      815 字
+      930 字
     </span>
   
 
@@ -195,7 +195,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      9
+      10
        分钟
     </span>
   
@@ -229,7 +229,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2021年6月2日 晚上
+                  本文最后更新于：2021年6月3日 晚上
                 
               </p>
             
@@ -346,10 +346,18 @@
 <h2 id="HA"><a href="#HA" class="headerlink" title="HA"></a>HA</h2><h3 id="HA概述"><a href="#HA概述" class="headerlink" title="HA概述"></a>HA概述</h3><ul>
 <li>HA（High Availablity）</li>
 <li>实现高可用最重要的是消除单点故障</li>
+<li>防止出现namenode节点挂了，无法正常提供服务</li>
 </ul>
 <h3 id="HA工作机制"><a href="#HA工作机制" class="headerlink" title="HA工作机制"></a>HA工作机制</h3><ul>
 <li><p>故障转移机制 HDFS-HA</p>
 <p><a target="_blank" rel="noopener" href="https://imgtu.com/i/2lA1SS"><img src="https://z3.ax1x.com/2021/06/02/2lA1SS.png" srcset="/img/loading.gif" lazyload alt="2lA1SS.png"></a></p>
+</li>
+<li><p>故障转移机制</p>
+<ul>
+<li>为了保证数据不丢失，一个失效后另一个补上不会丢失数据，日志文件写到第三方平台（相当于2nn）</li>
+<li>新激活的namenode 可以从第三方，读取edits文件将缺少的数据补上，防止数据丢失</li>
+<li>Zkfc检测到假死后是通过zookeeper服务器将信息传到其它的namenode的zkfc</li>
+</ul>
 </li>
 <li><p>YARN-HA</p>
 <p><a target="_blank" rel="noopener" href="https://imgtu.com/i/2lAaF0"><img src="https://z3.ax1x.com/2021/06/02/2lAaF0.png" srcset="/img/loading.gif" lazyload alt="2lAaF0.png"></a></p>
