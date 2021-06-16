@@ -1,0 +1,982 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="Just Do it!">
+  <meta name="author" content="daxiazou">
+  <meta name="keywords" content="">
+  
+  <title>Hive - Nevermind</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.6.0/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.10","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>小丑的Blog</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('https://tse4-mm.cn.bing.net/th/id/OIP.0YDh0T1VxxssqKBcgGX7AgHaEK?w=267&h=180&c=7&o=5&pid=1.7') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Hive">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-06-04 19:39" pubdate>
+        2021年6月4日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      5.9k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      77
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Hive</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：2021年6月15日 晚上
+                
+              </p>
+            
+            <div class="markdown-body">
+              <h1 id="Hive"><a href="#Hive" class="headerlink" title="Hive"></a>Hive</h1><h2 id="Hive基础知识"><a href="#Hive基础知识" class="headerlink" title="Hive基础知识"></a>Hive基础知识</h2><ul>
+<li><p>Hive：由Facebook开源用于解决海量结构化日志的数据统计工具。</p>
+<p>Hive是基于Hadoop的一个<em><strong>数据仓库工具</strong></em>，可以<em><strong>将结构化的数据文件映射为一张表</strong></em>，并<em><strong>提供类SQL查询功能</strong></em>。</p>
+<p>本质是：将HQL转化成MapReduce程序</p>
+</li>
+<li><p>优点：1. 操作采用类SQL语法，提供快速开发的能力。</p>
+</li>
+<li><p>缺点： 1. 效率低</p>
+</li>
+<li><p>架构原理：<a target="_blank" rel="noopener" href="https://imgtu.com/i/2YmPaT"><img src="https://z3.ax1x.com/2021/06/04/2YmPaT.png" srcset="/img/loading.gif" lazyload alt="2YmPaT.png"></a></p>
+</li>
+<li><p>大致流程：Hive通过给用户提供的一系列交互接口，接收到用户的指令(SQL)，使用自己的Driver，结合元数据(MetaStore)，将这些指令翻译成MapReduce，提交到Hadoop中执行，最后，将执行返回的结果输出到用户交互接口。</p>
+</li>
+<li><p>架构解析：</p>
+<ol>
+<li><p>用户接口：Client.CLI（command-line interface）、JDBC/ODBC(jdbc访问hive)、WEBUI（浏览器访问hive）</p>
+</li>
+<li><p>元数据：Meta store .元数据包括：表名、表所属的数据库（默认是default）、表的拥有者、列/分区字段、表的类型（是否是外部表）、表的数据所在目录等；</p>
+<p>默认存储在自带的derby数据库中，推荐使用MySQL存储Metastore</p>
+</li>
+<li><p>Hadooop.使用HDFS进行存储，使用MapReduce进行计算。</p>
+</li>
+<li><p>驱动器：Driver.</p>
+<ol>
+<li>包括解析器（SQL Parser）:将SQL字符串转换成抽象语法树AST</li>
+<li>编译器（Physical Plan）：将AST编译生成逻辑执行计划。</li>
+<li>优化器（Query Optimizer）：对逻辑执行计划进行优化。</li>
+<li>执行器（Execution）：把逻辑执行计划转换成可以运行的物理计划。对于Hive来说，就是MR/Spark。</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><p>Tez引擎</p>
+<ul>
+<li>可以理解为一个加强版的MapReduce。比MapReduce更快，但是消耗更多的内存</li>
+</ul>
+</li>
+<li><p>hive的数据类型</p>
+<table>
+<thead>
+<tr>
+<th>Hive数据类型</th>
+<th>Java数据类型</th>
+<th>长度</th>
+<th>例子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>TINYINT</td>
+<td>byte</td>
+<td>1byte有符号整数</td>
+<td>20</td>
+</tr>
+<tr>
+<td>SMALINT</td>
+<td>short</td>
+<td>2byte有符号整数</td>
+<td>20</td>
+</tr>
+<tr>
+<td>INT</td>
+<td>int</td>
+<td>4byte有符号整数</td>
+<td>20</td>
+</tr>
+<tr>
+<td>BIGINT</td>
+<td>long</td>
+<td>8byte有符号整数</td>
+<td>20</td>
+</tr>
+<tr>
+<td>BOOLEAN</td>
+<td>boolean</td>
+<td>布尔类型，true或者false</td>
+<td>TRUE  FALSE</td>
+</tr>
+<tr>
+<td>FLOAT</td>
+<td>float</td>
+<td>单精度浮点数</td>
+<td>3.14159</td>
+</tr>
+<tr>
+<td>DOUBLE</td>
+<td>double</td>
+<td>双精度浮点数</td>
+<td>3.14159</td>
+</tr>
+<tr>
+<td>STRING</td>
+<td>string</td>
+<td>字符系列。可以指定字符集。可以使用单引号或者双引号。</td>
+<td>‘now is the time’ “for all good men”</td>
+</tr>
+<tr>
+<td>TIMESTAMP</td>
+<td></td>
+<td>时间类型</td>
+<td></td>
+</tr>
+<tr>
+<td>BINARY</td>
+<td></td>
+<td>字节数组</td>
+<td></td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<p>集合数据类型：</p>
+<table>
+<thead>
+<tr>
+<th>数据类型</th>
+<th>描述</th>
+<th>语法示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>STRUCT</td>
+<td>和c语言中的struct类似，都可以通过“点”符号访问元素内容。例如，如果某个列的数据类型是STRUCT{first STRING, last STRING},那么第1个元素可以通过字段.first来引用。</td>
+<td>struct()例如struct&lt;street:string, city:string&gt;</td>
+</tr>
+<tr>
+<td>MAP</td>
+<td>MAP是一组键-值对元组集合，使用数组表示法可以访问数据。例如，如果某个列的数据类型是MAP，其中键-&gt;值对是’first’-&gt;’John’和’last’-&gt;’Doe’，那么可以通过字段名[‘last’]获取最后一个元素</td>
+<td>map()例如map&lt;string, int&gt;</td>
+</tr>
+<tr>
+<td>ARRAY</td>
+<td>数组是一组具有相同类型和名称的变量的集合。这些变量称为数组的元素，每个数组元素都有一个编号，编号从零开始。例如，数组值为[‘John’, ‘Doe’]，那么第2个元素可以通过数组名[1]进行引用。</td>
+<td>Array()例如array<string></td>
+</tr>
+</tbody></table>
+<ul>
+<li>数据类型转化<ul>
+<li>隐式转化   与java类似。1.所有整数类型、FLOAT和STRING类型都可以隐式地转换成DOUBLE</li>
+<li>强制转化 CAST(‘1’ AS INT)将把字符串’1’ 转换成整数1；如果强制类型转换失败，如执行CAST(‘X’ AS INT)，表达式返回空值 NULL。</li>
+</ul>
+</li>
+</ul>
+<h2 id="SQL语言的分类"><a href="#SQL语言的分类" class="headerlink" title="SQL语言的分类"></a>SQL语言的分类</h2><p><strong>SQL语言的分类</strong></p>
+<p>SQL语言共分为四大类：数据查询语言DQL，数据操纵语言DML，数据定义语言DDL，数据控制语言DCL。</p>
+<p><strong>1. 数据查询语言DQL</strong><br>数据查询语言DQL基本结构是由SELECT子句，FROM子句，WHERE<br>子句组成的查询块：<br>SELECT &lt;字段名表&gt;<br>FROM &lt;表或视图名&gt;<br>WHERE &lt;查询条件&gt;</p>
+<p><strong>2 .数据操纵语言DML</strong><br>数据操纵语言DML主要有三种形式：</p>
+<ol>
+<li>插入：INSERT</li>
+<li>更新：UPDATE</li>
+<li>删除：DELETE</li>
+</ol>
+<p><strong>3. 数据定义语言DDL</strong><br>数据定义语言DDL用来创建数据库中的各种对象—–表、视图、<br>索引、同义词、聚簇等如：<br>CREATE TABLE/VIEW/INDEX/SYN/CLUSTER<br>| | | | |<br>表 视图 索引 同义词 簇</p>
+<p>DDL操作是隐性提交的！不能rollback </p>
+<p><strong>4. 数据控制语言DCL</strong><br>数据控制语言DCL用来授予或回收访问数据库的某种特权，并控制<br>数据库操纵事务发生的时间及效果，对数据库实行监视等。如：</p>
+<ol>
+<li>GRANT：授权。</li>
+</ol>
+<ol start="2">
+<li>ROLLBACK [WORK] TO [SAVEPOINT]：回退到某一点。<br>回滚—ROLLBACK<br>回滚命令使数据库状态回到上次最后提交的状态。其格式为：<br>SQL&gt;ROLLBACK;</li>
+</ol>
+<ol start="3">
+<li>COMMIT [WORK]：提交。</li>
+</ol>
+<p>  在数据库的插入、删除和修改操作时，只有当事务在提交到数据<br>库时才算完成。在事务提交前，只有操作数据库的这个人才能有权看<br>到所做的事情，别人只有在最后提交完成后才可以看到。<br>提交数据有三种类型：显式提交、隐式提交及自动提交。下面分<br>别说明这三种类型。</p>
+<p>(1) 显式提交<br>用COMMIT命令直接完成的提交为显式提交。其格式为：<br>SQL&gt;COMMIT；</p>
+<p>(2) 隐式提交<br>用SQL命令间接完成的提交为隐式提交。这些命令是：<br>ALTER，AUDIT，COMMENT，CONNECT，CREATE，DISCONNECT，DROP，<br>EXIT，GRANT，NOAUDIT，QUIT，REVOKE，RENAME。</p>
+<p>(3) 自动提交<br>若把AUTOCOMMIT设置为ON，则在插入、修改、删除语句执行后，<br>系统将自动进行提交，这就是自动提交。其格式为：<br>SQL&gt;SET AUTOCOMMIT ON；</p>
+<h2 id="DDL语句"><a href="#DDL语句" class="headerlink" title="DDL语句"></a>DDL语句</h2><ul>
+<li><p>库的DDL</p>
+</li>
+<li><p>创建语句，location就相当于数据库，他们之间是有映射关系的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs mysql">CREATE DATABASE [IF NOT EXISTS] database_name<br>[COMMENT database_comment]<br>[LOCATION hdfs_path]<br>[WITH DBPROPERTIES (property_name&#x3D;property_value, ...)];<br><br>--显示数据库<br>show databases;<br>hive&gt; show databases like &#39;db_hive*&#39;;<br>OK<br>db_hive<br>db_hive_1<br><br>--显示数据库详细信息<br>desc database extended db_hive;<br><br>--删除数据库<br>drop database db_hive2;<br><br>--如果数据库不为空，可以采用cascade命令，强制删除<br>drop database db_hive cascade;<br></code></pre></td></tr></table></figure></li>
+<li><p>表的DDL</p>
+</li>
+<li><p>创建表</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs mysql">CREATE [EXTERNAL] TABLE [IF NOT EXISTS] table_name <br>[(col_name data_type [COMMENT col_comment], ...)] <br>[COMMENT table_comment] <br>[PARTITIONED BY (col_name data_type [COMMENT col_comment], ...)] <br>[CLUSTERED BY (col_name, col_name, ...) <br>[SORTED BY (col_name [ASC|DESC], ...)] INTO num_buckets BUCKETS] <br>[ROW FORMAT row_format] <br>[STORED AS file_format] <br>[LOCATION hdfs_path]<br>[TBLPROPERTIES (property_name&#x3D;property_value, ...)]<br>[AS select_statement]<br><br>--（7）ROW FORMAT <br>DELIMITED [FIELDS TERMINATED BY char] [COLLECTION ITEMS TERMINATED BY char]<br>        [MAP KEYS TERMINATED BY char] [LINES TERMINATED BY char] <br>   | SERDE serde_name [WITH SERDEPROPERTIES (property_name&#x3D;property_value, property_name&#x3D;property_value, ...)]<br>用户在建表的时候可以自定义SerDe或者使用自带的SerDe。如果没有指定ROW FORMAT 或者ROW FORMAT DELIMITED，将会使用自带的SerDe。在建表的时候，用户还需要为表指定列，用户在指定表的列的同时也会指定自定义的SerDe，Hive通过SerDe确定表的具体的列的数据。<br><br></code></pre></td></tr></table></figure></li>
+<li><p>内部表</p>
+<ul>
+<li>默认创建的是内部表，也叫管理表。当我们删除一个管理表时，Hive也会删除这个表中数据。管理表不适合和其他工具共享数据。</li>
+</ul>
+</li>
+<li><p>外部表</p>
+<ul>
+<li>创建时加上 external</li>
+<li>以Hive并非认为其完全拥有这份数据。删除该表并不会删除掉这份数据，不过描述表的元数据信息会被删除掉。</li>
+</ul>
+</li>
+<li><p>内部表外部表转化</p>
+<ul>
+<li><p>修改内部表student2为外部表</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs mysql">修改内部表student2为外部表<br>alter table student2 set tblproperties(&#39;EXTERNAL&#39;&#x3D;&#39;TRUE&#39;);<br><br>--查询表的类型<br>desc formatted student2;<br>--转换为内部表<br>alter table student2 set tblproperties(&#39;EXTERNAL&#39;&#x3D;&#39;FALSE&#39;);<br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>分区表</p>
+</li>
+<li><p>Hive中的分区就是分目录，把一个大的数据集根据业务需要分割成小的数据集。</p>
+<ul>
+<li>````mysql<br>create table dept_partition(<br>deptno int, dname string, loc string<br>)<br>partitioned by (month string)<br>row format delimited fields terminated by ‘\t’;<br>–分区字段不能是表中已经存在的数据，可以将分区字段看作表的伪列。<br>– 查询分区表的分区<br>show partitions dept_partition<br>–如果提前准备数据，但是没有元数据<br>–把数据直接上传到分区目录上，让分区表和数据产生关联的三种方式<br>–1.添加分区<br>alter table dept_partition add partition(class=”03”)<br>–2.直接修复<br>msck repair table stu_par;<br>–3.上传带分区–同时创建分区<br>alter table dept_partition add partition(month=’201705’) partition(month=’201704’);<br>–删除多个分区<br> alter table dept_partition drop partition (month=’201705’), partition (month=’201706’);<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs sql"><br>- 分区表不能转换，只能在建表时就建好<br><br>- 支持二级分区<br><br>  ````mysql<br>  <span class="hljs-keyword">create</span> <span class="hljs-keyword">table</span> dept_partition2(<br>                 deptno <span class="hljs-built_in">int</span>, dname <span class="hljs-keyword">string</span>, loc <span class="hljs-keyword">string</span><br>                 )<br>                 partitioned <span class="hljs-keyword">by</span> (<span class="hljs-keyword">month</span> <span class="hljs-keyword">string</span>, <span class="hljs-keyword">day</span> <span class="hljs-keyword">string</span>)<br>                 <span class="hljs-keyword">row</span> <span class="hljs-keyword">format</span> <span class="hljs-keyword">delimited</span> <span class="hljs-keyword">fields</span> <span class="hljs-keyword">terminated</span> <span class="hljs-keyword">by</span> <span class="hljs-string">&#x27;\t&#x27;</span>;<br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>修改表</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs mysql">ALTER TABLE table_name RENAME TO new_table_name<br>--更新列<br>ALTER TABLE table_name CHANGE [COLUMN] col_old_name col_new_name column_type [COMMENT col_comment] [FIRST|AFTER column_name]<br>--增加和替换列<br>ALTER TABLE table_name ADD|REPLACE COLUMNS (col_name data_type [COMMENT col_comment], ...) <br>--删除表<br>drop table dept_partition;<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="DML"><a href="#DML" class="headerlink" title="DML"></a>DML</h2><ul>
+<li><p>数据导入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs mysql">--创建语句<br>create table student(id string, name string) row format delimited fields terminated by &#39;\t&#39;;<br>--1.load导入数据<br>load data [local] inpath &#39;&#x2F;opt&#x2F;module&#x2F;datas&#x2F;student.txt&#39; [overwrite] into table student [partition (partcol1&#x3D;val1,…)];<br>--本地数据导入<br>load data local inpath &#39;&#x2F;opt&#x2F;module&#x2F;datas&#x2F;student.txt&#39; into table default.student;<br>--hdfs数据导入<br>load data inpath &#39;&#x2F;user&#x2F;atguigu&#x2F;hive&#x2F;student.txt&#39; into table default.student;<br>--加载数据覆盖表中已有的数据<br>load data inpath &#39;&#x2F;user&#x2F;atguigu&#x2F;hive&#x2F;student.txt&#39; overwrite into table default.student;<br>--hdfs的导入是移动，本地导入是复制<br></code></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs mysql">--2.通过查询语句向表中插入数据（Insert）<br> create table student_par(id int, name string) partitioned by (month string) row format delimited fields terminated by &#39;\t&#39;;<br> <br> insert overwrite table student partition(month&#x3D;&#39;201708&#39;)<br>             select id, name from student where month&#x3D;&#39;201709&#39;;<br>             <br>--insert into：以追加数据的方式插入到表或分区，原有数据不会删除<br>--insert overwrite：会覆盖表或分区中已存在的数据<br><br>--3.建表时用as select<br>create table if not exists student3<br>as select id, name from student;<br><br>--4.创建表时通过Location指定加载数据路径<br>create external table if not exists student5(<br>              id int, name string<br>              )<br>              row format delimited fields terminated by &#39;\t&#39;<br>              location &#39;&#x2F;student;<br><br><br>--5.Import数据到指定Hive表中<br>import table student2 partition(month&#x3D;&#39;201709&#39;) from<br> &#39;&#x2F;user&#x2F;hive&#x2F;warehouse&#x2F;export&#x2F;student&#39;;<br></code></pre></td></tr></table></figure></li>
+<li><p>数据导出(不重要)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs mysql">--1. Insert导出<br>--将查询结果导出到本地<br>insert overwrite local directory &#39;&#x2F;opt&#x2F;module&#x2F;datas&#x2F;export&#x2F;student&#39;<br>            select * from student;<br>            <br>--将查询的结果格式化导出到本地<br>insert overwrite local directory &#39;&#x2F;opt&#x2F;module&#x2F;datas&#x2F;export&#x2F;student1&#39;<br>           ROW FORMAT DELIMITED FIELDS TERMINATED BY &#39;\t&#39;             select * from student;<br>           <br>--将查询的结果导出到HDFS上(没有local)<br>insert overwrite directory &#39;&#x2F;user&#x2F;zt&#x2F;student2&#39;<br>ROW FORMAT DELIMITED FIELDS TERMINATED BY &#39;\t&#39; <br>select * from student;<br>--整张表export 到处到HDFS<br>export table default.student to<br> &#39;&#x2F;user&#x2F;hive&#x2F;warehouse&#x2F;export&#x2F;student&#39;;<br></code></pre></td></tr></table></figure></li>
+<li><p>清除数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs mysql">--Truncate只能删除管理表（内部表），不能删除外部表中数据<br>--只删除数据，不删除本身<br>truncate table student;<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="DQL"><a href="#DQL" class="headerlink" title="DQL"></a>DQL</h2><h3 id="数据查询语言"><a href="#数据查询语言" class="headerlink" title="数据查询语言"></a>数据查询语言</h3><h4 id="1-基本查询（select…-from…-）"><a href="#1-基本查询（select…-from…-）" class="headerlink" title="1. 基本查询（select…..from…..）"></a>1. 基本查询（select…..from…..）</h4><p>（1）SQL 语言大小写不敏感。 </p>
+<p>（2）SQL 可以写在一行或者多行</p>
+<p>（3）关键字不能被缩写也不能分行</p>
+<p>（4）各子句一般要分行写。</p>
+<p>（5）使用缩进提高语句的可读性。</p>
+<ul>
+<li><p>别名</p>
+<ul>
+<li><p>紧跟列名，也可以在列名和别名之间加入关键字‘AS’</p>
+</li>
+<li><p>select ename AS name, deptno dn from emp;</p>
+</li>
+</ul>
+</li>
+<li><p>算数运算符</p>
+<ul>
+<li>select sal +1 from emp;</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A+B</td>
+<td>A和B 相加</td>
+</tr>
+<tr>
+<td>A-B</td>
+<td>A减去B</td>
+</tr>
+<tr>
+<td>A*B</td>
+<td>A和B 相乘</td>
+</tr>
+<tr>
+<td>A/B</td>
+<td>A除以B</td>
+</tr>
+<tr>
+<td>A%B</td>
+<td>A对B取余</td>
+</tr>
+<tr>
+<td>A&amp;B</td>
+<td>A和B按位取与</td>
+</tr>
+<tr>
+<td>A|B</td>
+<td>A和B按位取或</td>
+</tr>
+<tr>
+<td>A^B</td>
+<td>A和B按位取异或</td>
+</tr>
+<tr>
+<td>~A</td>
+<td>A按位取反</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>常用函数</p>
+<ul>
+<li>UDF函数：一个输入一个输出 select substring(ename,1,1) from emp;（从　ｅname的1开始，取一个字符）用户定义（普通）函数，只对单行数值产生作用</li>
+<li>UDAF函数：多个输入，一个输出 select count(*) cnt from emp;用户定义聚合函数，可对多行数据产生作用；等同与SQL中常用的SUM()，AVG()，也是聚合函数；</li>
+<li>UDTF函数：一个输入，多个输出。用户定义表生成函数。用来解决输入一行输出多行；</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs mysql">--1．求总行数（count）<br>select count(*) cnt from emp;<br>--2．求工资的最大值（max）<br>select max(sal) max_sal from emp;<br>--3．求工资的最小值（min）<br>select min(sal) min_sal from emp;<br>--4．求工资的总和（sum）<br>select sum(sal) sum_sal from emp; <br>--5．求工资的平均值（avg）<br>select avg(sal) avg_sal from emp;<br></code></pre></td></tr></table></figure></li>
+<li><p>LIMIT子句用于限制返回的行数</p>
+<ul>
+<li>select * from emp limit 5;</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-条件过滤"><a href="#2-条件过滤" class="headerlink" title="2.条件过滤"></a>2.条件过滤</h4><ol>
+<li><p>使用where子句，将不满足条件的行过滤掉</p>
+<p>select * from emp where sal =5000;</p>
+</li>
+<li><p>比较运算符：下面表中描述了谓词操作符，这些操作符同样可以用于JOIN…ON和HAVING语句中</p>
+<table>
+<thead>
+<tr>
+<th>操作符</th>
+<th>支持的数据类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A=B</td>
+<td>基本数据类型</td>
+<td>如果A等于B则返回TRUE，反之返回FALSE</td>
+</tr>
+<tr>
+<td>A&lt;=&gt;B</td>
+<td>基本数据类型</td>
+<td>如果A和B都为NULL，则返回TRUE，其他的和等号（=）操作符的结果一致，如果任一为NULL则结果为NULL</td>
+</tr>
+<tr>
+<td>A&lt;&gt;B, A!=B</td>
+<td>基本数据类型</td>
+<td>A或者B为NULL则返回NULL；如果A不等于B，则返回TRUE，反之返回FALSE</td>
+</tr>
+<tr>
+<td>A&lt;B</td>
+<td>基本数据类型</td>
+<td>A或者B为NULL，则返回NULL；如果A小于B，则返回TRUE，反之返回FALSE</td>
+</tr>
+<tr>
+<td>A&lt;=B</td>
+<td>基本数据类型</td>
+<td>A或者B为NULL，则返回NULL；如果A小于等于B，则返回TRUE，反之返回FALSE</td>
+</tr>
+<tr>
+<td>A&gt;B</td>
+<td>基本数据类型</td>
+<td>A或者B为NULL，则返回NULL；如果A大于B，则返回TRUE，反之返回FALSE</td>
+</tr>
+<tr>
+<td>A&gt;=B</td>
+<td>基本数据类型</td>
+<td>A或者B为NULL，则返回NULL；如果A大于等于B，则返回TRUE，反之返回FALSE</td>
+</tr>
+<tr>
+<td>A [NOT] BETWEEN B AND C</td>
+<td>基本数据类型</td>
+<td>如果A，B或者C任一为NULL，则结果为NULL。如果A的值大于等于B而且小于或等于C，则结果为TRUE，反之为FALSE。如果使用NOT关键字则可达到相反的效果。</td>
+</tr>
+<tr>
+<td>A IS NULL</td>
+<td>所有数据类型</td>
+<td>如果A等于NULL，则返回TRUE，反之返回FALSE</td>
+</tr>
+<tr>
+<td>A IS NOT NULL</td>
+<td>所有数据类型</td>
+<td>如果A不等于NULL，则返回TRUE，反之返回FALSE</td>
+</tr>
+<tr>
+<td>IN(数值1, 数值2)</td>
+<td>所有数据类型</td>
+<td>使用 IN运算显示列表中的值</td>
+</tr>
+<tr>
+<td>A [NOT] LIKE B</td>
+<td>STRING 类型</td>
+<td>B是一个SQL下的简单正则表达式，也叫通配符模式，如果A与其匹配的话，则返回TRUE；反之返回FALSE。B的表达式说明如下：‘x%’表示A必须以字母‘x’开头，‘%x’表示A必须以字母’x’结尾，而‘%x%’表示A包含有字母’x’,可以位于开头，结尾或者字符串中间。如果使用NOT关键字则可达到相反的效果。</td>
+</tr>
+<tr>
+<td>A RLIKE B, A REGEXP B</td>
+<td>STRING 类型</td>
+<td>B是基于java的正则表达式，如果A与其匹配，则返回TRUE；反之返回FALSE。匹配使用的是JDK中的正则表达式接口实现的，因为正则也依据其中的规则。例如，正则表达式必须和整个字符串A相匹配，而不是只需与其字符串匹配。</td>
+</tr>
+</tbody></table>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs mysql">--通配符字符串匹配　% _<br>--%匹配任意串，_匹配任意字符<br>--查询以A开头的员工<br>select * from emp where ename like &quot;A%&quot;;<br><br>--正则匹配<br>--查询以A开头的员工<br>select * from emp where ename rlike &quot;^A&quot;; <br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p>rlike匹配正则表达式</p>
+</li>
+<li><p>正则表达式</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs powershell">一般字符匹配自己<br>^ 匹配一行开头 ^R 以<span class="hljs-built_in">R</span>开头<br><span class="hljs-variable">$</span> 匹配一行结束 <span class="hljs-built_in">R</span><span class="hljs-variable">$</span> 以<span class="hljs-built_in">R</span>结尾<br>. 匹配任意字符 ^.<span class="hljs-variable">$</span> 一行只有一个字符<br>* 前一个子式匹配零次或多次<br>.*匹配任意字符<br>[] 匹配一个范围内的任意字符<br>\ 转义<br></code></pre></td></tr></table></figure></li>
+</ul>
+<ol start="3">
+<li><p>逻辑运算符（AND，OR，NOT）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs mysql">select * from emp where sal&gt;1000 and deptno&#x3D;30;<br>select * from emp where sal&gt;1000 or deptno&#x3D;30;<br>select * from emp where deptno not IN(30, 20);<br></code></pre></td></tr></table></figure></li>
+</ol>
+<h4 id="3-分组"><a href="#3-分组" class="headerlink" title="3. 分组"></a>3. 分组</h4><ul>
+<li><p>GROUP BY语句通常会和聚合函数一起使用，按照一个或者多个列队结果进行分组，然后对每个组执行聚合操作。</p>
+</li>
+<li><p>（1）where后面不能写分组函数，而having后面可以使用分组函数。</p>
+<p>（2）having只用于group by分组统计语句。</p>
+</li>
+<li><p>````mysql<br>–计算emp表每个部门的平均工资<br>select t.deptno, avg(t.sal) avg_sal from emp t group by t.deptno<br>–求每个部门的平均薪水大于2000的部门<br>select deptno, avg(sal) avg_sal from emp group by deptno having<br> avg_sal &gt; 2000;</p>
+<figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs n1ql"><br>#### 4.连接<br><br>* Hive支持通常的SQL JOIN语句，但是只支持等值连接，不支持非等值连接。<br><br>  - 内连接<br>  - 左外连接<br>  - 右外连接<br>  - 满外连接<br><br>  ````mysql<br>  <span class="hljs-keyword">select</span><br>      <span class="hljs-built_in">e</span>.empno,<br>      <span class="hljs-built_in">e</span>.ename,<br>      d.deptno, <br>      d.dname <br>  <span class="hljs-keyword">from</span> <br>      emp <span class="hljs-built_in">e</span> <br>  <span class="hljs-keyword">join</span><br>      dept d <br>  <span class="hljs-keyword">on</span><br>      <span class="hljs-built_in">e</span>.deptno = d.deptno;<br>      <br></code></pre></td></tr></table></figure></li>
+<li><p>表的别名：好处：1.简化查询，使用表名前缀可以提高执行效率</p>
+</li>
+<li><p>多表连接</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT <br>    e.ename,<br>    d.dname, <br>    l.loc_name<br>FROM<br>	emp e <br>JOIN<br>	dept d<br>ON<br>	d.deptno &#x3D; e.deptno <br>JOIN<br>	location l<br>ON<br>	d.loc &#x3D; l.loc;<br></code></pre></td></tr></table></figure></li>
+</ul>
+<ul>
+<li><p>hive join目前不支持在on子句中使用谓词or(hive1 不支持)</p>
+<p>select e.empno, e.ename, d.deptno from emp e join dept d on e.deptno</p>
+<p>= d.deptno or e.ename=d.deptno;  在hive1错误的,hive3支持</p>
+</li>
+</ul>
+<h4 id="5-排序"><a href="#5-排序" class="headerlink" title="5.排序"></a>5.排序</h4><ul>
+<li>order by:全局排序，只有一个Reducer</li>
+<li>ASC（ascend）: 升序（默认）</li>
+<li>DESC（descend）: 降序</li>
+<li>sort by:局部排序</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs mysql">--一般需求不会要求给所有的数据排序，而要求知道前几<br>--求工资前10的人，Map会先求局部前10<br>select *<br>from emp<br>order by sal desc<br>limit 10;<br><br>--还有一种可能，我们只需要看大概的数据趋势，不需要全排序<br>--Hive的局部排序 sort by<br>select *<br>from emp<br>sort by empno desc;<br><br>--多条件排序，先按部门排序，再按工资排序<br>select *<br>from emp<br>order by<br>deptno asc,<br>sal desc;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p>分区排序 （Distribute By）</p>
+</li>
+<li><p><em><strong>distribute by</strong></em>类似MR中partition（自定义分区），进行分区，结合sort by使用。 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs mysql">--指定局部排序的分区字段<br>select * from emp<br>distribute by empno<br>sort by sal desc;<br><br>--如果分区和排序的字段一样，我们可以用cluster by代替<br>select * from emp distribute by empno sort by empno;<br>select * from emp cluster by empno;<br></code></pre></td></tr></table></figure></li>
+<li><p>当distribute by和sorts by字段相同时，可以使用cluster by方式。</p>
+</li>
+</ul>
+<h4 id="6-分桶"><a href="#6-分桶" class="headerlink" title="6.分桶"></a>6.分桶</h4><ul>
+<li><p>分区提供一个隔离数据和优化查询的便利方式。不过，并非所有的数据集都可形成合理的分区。对于一张表或者分区，Hive 可以进一步组织成桶，也就是更为细粒度的数据范围划分。</p>
+</li>
+<li><p>分区针对的是数据的存储路径；分桶针对的是数据文件。</p>
+</li>
+<li><p>分桶：针对某一个区的数据，把它的数据进一步组织成多个文件</p>
+</li>
+<li><p>分区：把多个数据，分成文件夹管理</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs mysql">create table stu_buck(id int, name string)<br>clustered by(id) <br>into 4 buckets<br>row format delimited fields terminated by &#39;\t&#39;;<br><br><br></code></pre></td></tr></table></figure></li>
+<li><p>分桶抽样查询</p>
+</li>
+<li><p>对于非常大的数据集，有时用户需要使用的是一个具有代表性的查询结果而不是全部结果。Hive可以通过对表进行抽样来满足这个需求。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs mysql">select * from stu_buck tablesample(bucket 1 out of 4 on id);<br>--tablesample是抽样语句，语法：TABLESAMPLE(BUCKET x OUT OF y) <br>--y必须是table总bucket数的倍数或者因子。hive根据y的大小，决定抽样的比例<br>把数据按照bucket分成y份，取其中的第x份<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="常用查询函数"><a href="#常用查询函数" class="headerlink" title="常用查询函数"></a>常用查询函数</h3><h4 id="常用函数"><a href="#常用函数" class="headerlink" title="常用函数"></a>常用函数</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs mysql">hive中查询函数<br>show functions<br>show functions like &quot;collect*&quot;<br>查看函数的描述<br>desc function 函数名<br>--nvl空字段赋值<br>select comm, nvl(comm, -1) from emp;<br></code></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs mysql">--case when<br>--统计不同部门男女各有多少人<br>select<br>    dept_id,<br>    count(*) total,<br>    sum(case sex when &#39;男&#39; then 1 else 0 end) male,<br>    sum(case sex when &#39;女&#39; then 1 else 0 end) female<br>from<br>    emp_sex<br>group by<br>    dept_id;<br></code></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs mysql">在 Group by 子句中，Select 查询的列，要么需要是 Group by 中的列，要么得是用聚合函数（比如 sum、count 等）加工过的列。不支持直接引用非 Group by 的列。这一点和 MySQL 有所区别。Hive 错误 Expression not in GROUP BY key的原因。<br>--行转列<br>collect_list(x),聚合成一个数组，聚合函数<br>concat_ws(&quot;分隔符&quot;，数组)，把数组按分割符拼成一个字符串<br>contact(str1,str2......,strn)拼接几列在一起<br><br>select<br>    concat(constellation,&quot;,&quot;,blood_type) xzxx,<br>    concat_ws(&quot;|&quot;, collect_list(name)) rentou<br>from<br>    person_info<br>group by<br>    constellation,blood_type;<br></code></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs mysql">--列转行<br>--explode(a)函数<br>--如果传入的是一个数组，则将其分成多行<br>--如果传入一个map,按照key,value分成两列<br>--split(str,regrex)函数<br>--将一个字符串按照正则表达式规则划分成一个数组<br>lateral view 后面接一个表名，起一个列名，列名取决于explode()炸开后的效果。<br>select<br>    m.movie,<br>    tbl.cate<br>from<br>    movie_info m<br>lateral view<br>    explode(split(category, &quot;,&quot;)) tbl as cate;<br></code></pre></td></tr></table></figure>
+
+<h4 id="窗口函数"><a href="#窗口函数" class="headerlink" title="窗口函数"></a>窗口函数</h4><ul>
+<li><p>相关函数说明</p>
+<p>OVER()：指定分析函数工作的数据窗口大小，这个数据窗口大小可能会随着行的变而变化。</p>
+<p>CURRENT ROW：当前行</p>
+<p>n PRECEDING：往前n行数据</p>
+<p>n FOLLOWING：往后n行数据</p>
+<p>UNBOUNDED：起点，UNBOUNDED PRECEDING 表示从前面的起点， UNBOUNDED FOLLOWING表示到后面的终点</p>
+<p>LAG(col,n,default_val)：往前第n行数据</p>
+<p>LEAD(col,n, default_val)：往后第n行数据</p>
+<p>NTILE(n)：把有序窗口的行分发到指定数据的组中，各个组有编号，编号从1开始，对于每一行，NTILE返回此行所属的组的编号。注意：n必须为int类型。</p>
+<p>percent_rank()将数据按百分比分</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs mysql">--聚合<br>select name,count(*) over () <br>from business <br>where substring(orderdate,1,7) &#x3D; &#39;2017-04&#39; <br>group by name;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs mysql">--各种聚合<br>select name,orderdate,cost, <br>sum(cost) over() as sample1,--所有行相加 <br>sum(cost) over(partition by name) as sample2,--按name分组，组内数据相加 <br>sum(cost) over(partition by name order by orderdate) as sample3,--按name分组，组内数据累加 <br>sum(cost) over(partition by name order by orderdate rows between UNBOUNDED PRECEDING and current row ) as sample4 ,--和sample3一样,由起点到当前行的聚合 <br>sum(cost) over(partition by name order by orderdate rows between 1 PRECEDING and current row) as sample5, --当前行和前面一行做聚合 <br>sum(cost) over(partition by name order by orderdate rows between 1 PRECEDING AND 1 FOLLOWING ) as sample6,--当前行和前边一行及后面一行 <br>sum(cost) over(partition by name order by orderdate rows between current row and UNBOUNDED FOLLOWING ) as sample7 --当前行及后面所有行 <br>from business;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs mysql">--结合其他函数使用<br>select<br>    name, orderdate, cost, <br>    lag(orderdate, 1) <br>    over(partition by name order by orderdate) last_order,<br>    lead(orderdate, 1) <br>    over(partition by name order by orderdate) next_order<br>from<br>    business;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs mysql">--ntile<br>SELECT<br>	*<br>FROM<br>	(<br>		select name,<br>		orderdate,<br>		cost,<br>		ntile(5) over(<br>		order by orderdate) n<br>	from<br>		business) t1<br>WHERE<br>	n &#x3D; 1;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs mysql">--percent_rank<br>select<br>	name,<br>	orderdate,<br>	cost,<br>	PERCENT_RANK() over(<br>	order by orderdate) pr<br>from<br>	business;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs mysql">--rank<br>rank()排序，相同的一样排名，数字按照实际的来，类似于高考排名<br>dense_rank() 相同的一样排名，数字按照排名的数字来<br>row_number() 直接排名，相同的排名也不一样<br>SELECT<br>	*,<br>	rank() OVER(partition by subject<br>order by<br>	score desc) r,<br>	DENSE_RANK() OVER(partition by subject<br>order by<br>	score desc) dr,<br>	ROW_NUMBER() OVER(partition by subject<br>order by<br>	score desc) rn<br>from<br>	score;<br></code></pre></td></tr></table></figure>
+
+<h4 id="日期函数"><a href="#日期函数" class="headerlink" title="日期函数"></a>日期函数</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mysql">--current_date 返回当前日期<br>select current_date();<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs mysql">--日期的加减<br>--今天开始90天以后的日期<br>select date_add(current_date(), 90);<br>--今天开始90天以前的日期<br>select date_sub(current_date(), 90);<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mysql">--日期差<br>SELECT datediff(CURRENT_DATE(), &quot;1990-06-04&quot;);<br></code></pre></td></tr></table></figure>
+
+<p>习题：有哪些顾客连续两天来过我的店，数据是business表</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs mysql">--习题<br>selec<br><br>--time1下一次购买商品的时间<br>select<br>name,cost,orderdate,<br>lead(orderdate,1,&quot;2021-09-01&quot;) over(partition by name order by orderdate) time1<br>from<br>business<br><br>--时间差<br>select<br>name,cost,orderdate,time1,<br>datediff(time1,orderdate) difftime<br>from<br>    (select<br>name,cost,orderdate,<br>lead(orderdate,1,&quot;2021-09-01&quot;) over(partition by name order by orderdate) time1<br>from<br>business) tab;<br><br>--找到时间差为1的人<br>select<br>name,corderdate,time1,difftime<br>from<br>(select<br>name,cost,orderdate,time1,<br>datediff(time1,orderdate) difftime<br>from<br>    (select<br>name,cost,orderdate,<br>lead(orderdate,1,&quot;2021-09-01&quot;) over(partition by name order by orderdate) time1<br>from<br>business) tab) tab1<br>where<br>difftime&#x3D;1;<br><br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h3 id="SQL一般执行顺序"><a href="#SQL一般执行顺序" class="headerlink" title="SQL一般执行顺序"></a>SQL一般执行顺序</h3><ol>
+<li>from 确定基表</li>
+<li>join 如果一张基表不够, 再联接其他表</li>
+<li>on 如果有联接表 必须要有on</li>
+<li>where 过滤总基表中的行</li>
+<li>group by 分组, 分组依据的列.</li>
+<li>select 把分组依据的列放在select后, 再考虑要选择哪些列, 及进行哪些函数调用….</li>
+<li>having 进一步把分组后的虚表行过滤</li>
+<li><em><strong>窗口函数</strong></em></li>
+<li>order by 最终表的一个排序显示.</li>
+<li>limit</li>
+</ol>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/Hive/">Hive</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/06/02/HAHA-zk/">
+                        <span class="hidden-mobile">HA&ZooKeeper</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.2/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js" ></script>
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      $('#local-search-input').on('click', function() {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      });
+      $('#modalSearch').on('shown.bs.modal', function() {
+        $('#local-search-input').focus();
+      });
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
