@@ -18,7 +18,7 @@
   <meta name="author" content="daxiazou">
   <meta name="keywords" content="">
   
-  <title>Hadoop简介 - Nevermind</title>
+  <title>flume - Nevermind</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
 
@@ -158,12 +158,12 @@
 </nav>
 
     <div class="banner" id="banner" parallax=true
-         style="background: url('https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2474992498,2867548152&fm=26&gp=0.jpg') no-repeat center center;
+         style="background: url('https://img.stackshare.io/service/4337/Flume.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="Hadoop简介">
+            <span class="h2" id="subtitle" title="flume">
               
             </span>
 
@@ -173,8 +173,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2020-10-21 19:26" pubdate>
-        2020年10月21日 晚上
+      <time datetime="2021-06-21 17:20" pubdate>
+        2021年6月21日 下午
       </time>
     </span>
   
@@ -185,7 +185,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      216 字
+      595 字
     </span>
   
 
@@ -195,7 +195,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      2
+      8
        分钟
     </span>
   
@@ -225,52 +225,36 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">Hadoop简介</h1>
+            <h1 style="display: none">flume</h1>
             
               <p class="note note-info">
                 
-                  本文最后更新于：2021年6月14日 晚上
+                  本文最后更新于：2021年6月21日 晚上
                 
               </p>
             
             <div class="markdown-body">
-              <h1 id="hadoop简介"><a href="#hadoop简介" class="headerlink" title="hadoop简介"></a>hadoop简介</h1><p>1.定义：<br>hadoop是一个开源分布式计算平台，为用户提供了底层细节透明的分布式基础框架。<br>2.特性：    </p>
+              <h1 id="Flume"><a href="#Flume" class="headerlink" title="Flume"></a>Flume</h1><h2 id="Flume概述"><a href="#Flume概述" class="headerlink" title="Flume概述"></a>Flume概述</h2><ul>
+<li><p>配置就来看官方文档：<a target="_blank" rel="noopener" href="http://flume.apache.org/releases/content/1.9.0/FlumeUserGuide.html#spooling-directory-source">官方文档</a></p>
+</li>
+<li><p>flume是一个高可用的，可靠的，分布式的<em><strong>海量日志采集，聚合，和传输的系统</strong></em>基于流式框架，灵活简单。</p>
+</li>
+<li><p>基础架构：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/REvBm8"><img src="https://z3.ax1x.com/2021/06/21/REvBm8.png" srcset="/img/loading.gif" lazyload alt="REvBm8.png"></a></p>
 <ul>
-<li>高可靠性    </li>
-<li>高效性</li>
-<li>高可扩展性</li>
-<li>高容错性</li>
-<li>成本低</li>
-<li>运行在linux中</li>
-<li>支持多种编程语言</li>
+<li>Agent:是一个JVM进程，它以事件的形式将数据从源头送至目的</li>
+<li>source负责接收数据到Flume agent 的组件。可以处理各种类型，格式的日志数据。例如：spooling directory，netcat,avro,exec</li>
+<li>sink不断轮询channel中的事件并且批量的移除他们，将这些事件批量写入到存储或索引系统，或者被发送到另一个flume agent。sink组件发送目的地包括：hdfs,logger,avro,file,HBase</li>
+<li>Channel是位于source和sink之间缓冲区。Flume自带两种Channel：Memory Channel和File Channel。</li>
 </ul>
-<p>3.版本</p>
-<ul>
-<li>1.0</li>
-<li>2.0</li>
+</li>
+<li><p>event:flume传输数据的基本单元。由Header和Body组成。Header用来存放该event的一些属性，为K-V结构，Body用来存放该条数据，形式为字节数组。</p>
+</li>
 </ul>
-<p>4.hadoop结构</p>
-<ul>
-<li><img src="https://img-blog.csdnimg.cn/20191024090622860.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2ZtMzQ1Njg5,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="图片展示" title="Hadoop项目结构图"></li>
-<li>参考别人博客的<a target="_blank" rel="noopener" href="https://blog.csdn.net/fm345689/article/details/102715230">文字记录</a></li>
+<h2 id="flume入门案例"><a href="#flume入门案例" class="headerlink" title="flume入门案例"></a>flume入门案例</h2><ul>
+<li><p>实时监控Hive日志，并上传到HDFS中</p>
+<figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><code class="hljs nix"><span class="hljs-number">1</span>.第一种方式<br>flume-ng agent --name agent的名字 --conf 配置文件的目录 --conf-file agent的配置文件（自己手动写）-Dflume.root.<span class="hljs-attr">logger=INFO,console</span><br><br>需要写配置文件<br>基本步骤：<br><span class="hljs-comment">#1.agent的source,channel,sink组件</span><br><span class="hljs-comment">#2.source配置</span><br><span class="hljs-comment">#3.channel配置</span><br><span class="hljs-comment">#4.sink配置</span><br><span class="hljs-comment">#5.source,channel,sink之间的关系</span><br><span class="hljs-comment"># Name the components on this agent</span><br>a2.<span class="hljs-attr">sources</span> = r2<br>a2.<span class="hljs-attr">sinks</span> = k2<br>a2.<span class="hljs-attr">channels</span> = c2<br><br><span class="hljs-comment"># Describe/configure the source</span><br>a2.sources.r2.<span class="hljs-attr">type</span> = exec<br>a2.sources.r2.<span class="hljs-attr">command</span> = tail -F /opt/module/hive/logs/hive.log<br>a2.sources.r2.<span class="hljs-attr">shell</span> = /bin/bash -c<br><br><span class="hljs-comment"># Describe the sink</span><br>a2.sinks.k2.<span class="hljs-attr">type</span> = hdfs<br>a2.sinks.k2.hdfs.<span class="hljs-attr">path</span> = hdfs://hadoop102:<span class="hljs-number">8020</span>/flume/%Y%m%d/%H<br><span class="hljs-comment">#上传文件的前缀</span><br>a2.sinks.k2.hdfs.<span class="hljs-attr">filePrefix</span> = logs-<br><span class="hljs-comment">#是否按照时间滚动文件夹</span><br>a2.sinks.k2.hdfs.<span class="hljs-attr">round</span> = <span class="hljs-literal">true</span><br><span class="hljs-comment">#多少时间单位创建一个新的文件夹</span><br>a2.sinks.k2.hdfs.<span class="hljs-attr">roundValue</span> = <span class="hljs-number">1</span><br><span class="hljs-comment">#重新定义时间单位</span><br>a2.sinks.k2.hdfs.<span class="hljs-attr">roundUnit</span> = hour<br><span class="hljs-comment">#是否使用本地时间戳</span><br>a2.sinks.k2.hdfs.<span class="hljs-attr">useLocalTimeStamp</span> = <span class="hljs-literal">true</span><br><span class="hljs-comment">#积攒多少个Event才flush到HDFS一次</span><br>a2.sinks.k2.hdfs.<span class="hljs-attr">batchSize</span> = <span class="hljs-number">100</span><br><span class="hljs-comment">#设置文件类型，可支持压缩</span><br>a2.sinks.k2.hdfs.<span class="hljs-attr">fileType</span> = DataStream<br><span class="hljs-comment">#多久生成一个新的文件</span><br>a2.sinks.k2.hdfs.<span class="hljs-attr">rollInterval</span> = <span class="hljs-number">60</span><br><span class="hljs-comment">#设置每个文件的滚动大小</span><br>a2.sinks.k2.hdfs.<span class="hljs-attr">rollSize</span> = <span class="hljs-number">134217700</span><br><span class="hljs-comment">#文件的滚动与Event数量无关</span><br>a2.sinks.k2.hdfs.<span class="hljs-attr">rollCount</span> = <span class="hljs-number">0</span><br><br><span class="hljs-comment"># Use a channel which buffers events in memory</span><br>a2.channels.c2.<span class="hljs-attr">type</span> = memory<br>a2.channels.c2.<span class="hljs-attr">capacity</span> = <span class="hljs-number">1000</span><br>a2.channels.c2.<span class="hljs-attr">transactionCapacity</span> = <span class="hljs-number">100</span><br><br><span class="hljs-comment"># Bind the source and sink to the channel</span><br>a2.sources.r2.<span class="hljs-attr">channels</span> = c2<br>a2.sinks.k2.<span class="hljs-attr">channel</span> = c2<br></code></pre></td></tr></table></figure></li>
 </ul>
-<p>5.Hadoop项目核心模块</p>
-<ul>
-<li>Hadoop Common：为Hadoop其他模块提供支持实用程序。</li>
-<li>HDFS：提供对应用程序数据的高吞吐量访问</li>
-<li>Hadoop YARN：作业调度和集群资源管理的框架</li>
-<li>MapReduce：YARN系统的大型数据集并行处理技术</li>
-</ul>
-<p>6.Hadoop RPC工作原理</p>
-<p>7.MapReduce工作原理</p>
-<blockquote>
-<ul>
-<li>策略：分而治之</li>
-<li>计算向数据靠拢而不是数据向计算靠拢</li>
-</ul>
-</blockquote>
-<p>8.HDFS工作原理</p>
-<p>9.YARN工作原理</p>
 
             </div>
             <hr>
@@ -282,7 +266,7 @@
                     
                       <a class="hover-with-bg" href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a>
                     
-                      <a class="hover-with-bg" href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/%E8%80%81hadoop/">老hadoop</a>
+                      <a class="hover-with-bg" href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/flume/">flume</a>
                     
                   </div>
                 
@@ -292,7 +276,7 @@
                     
                       <a class="hover-with-bg" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a>
                     
-                      <a class="hover-with-bg" href="/tags/Hadoop/">Hadoop</a>
+                      <a class="hover-with-bg" href="/tags/flume/">flume</a>
                     
                   </div>
                 
@@ -309,18 +293,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2020/10/27/markdown-introduction/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Markdown语法介绍</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2020/09/22/hello-world/">
-                        <span class="hidden-mobile">Hello World</span>
+                      <a href="/2021/06/04/hive/">
+                        <span class="hidden-mobile">Hive</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
