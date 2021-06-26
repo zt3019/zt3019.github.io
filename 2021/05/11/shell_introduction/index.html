@@ -185,7 +185,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      2.4k 字
+      2.6k 字
     </span>
   
 
@@ -195,7 +195,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      30
+      34
        分钟
     </span>
   
@@ -229,7 +229,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2021年5月11日 晚上
+                  本文最后更新于：2021年6月23日 晚上
                 
               </p>
             
@@ -276,7 +276,7 @@
 
 
 
-<h2 id="条件判断"><a href="#条件判断" class="headerlink" title="条件判断"></a>条件判断</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta">#</span><span class="bash">[ condition ]（注意condition前后要有空格）</span><br><span class="hljs-meta">#</span><span class="bash">注意：条件非空即为<span class="hljs-literal">true</span>，[ atguigu ]返回<span class="hljs-literal">true</span>，[] 返回<span class="hljs-literal">false</span>。</span><br><span class="hljs-meta">#</span><span class="bash">两个整数之间比较</span><br><span class="hljs-meta">#</span><span class="bash">2. 常用判断条件</span><br><span class="hljs-meta">#</span><span class="bash">（1）两个整数之间比较</span><br><span class="hljs-meta">#</span><span class="bash">= 字符串比较</span><br><span class="hljs-meta">#</span><span class="bash">-lt 小于（less than）			-le 小于等于（less equal）</span><br><span class="hljs-meta">#</span><span class="bash">-eq 等于（equal）				-gt 大于（greater than）</span><br><span class="hljs-meta">#</span><span class="bash">-ge 大于等于（greater equal）	-ne 不等于（Not equal）</span><br><span class="hljs-meta">#</span><span class="bash">（2）按照文件权限进行判断</span><br><span class="hljs-meta">#</span><span class="bash">-r 有读的权限（<span class="hljs-built_in">read</span>）			-w 有写的权限（write）</span><br><span class="hljs-meta">#</span><span class="bash">-x 有执行的权限（execute）</span><br><span class="hljs-meta">#</span><span class="bash">（3）按照文件类型进行判断</span><br><span class="hljs-meta">#</span><span class="bash">-f 文件存在并且是一个常规的文件（file）</span><br><span class="hljs-meta">#</span><span class="bash">-e 文件存在（existence）		-d 文件存在并是一个目录（directory）</span><br></code></pre></td></tr></table></figure>
+<h2 id="条件判断"><a href="#条件判断" class="headerlink" title="条件判断"></a>条件判断</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta">#</span><span class="bash">[ condition ]（注意condition前后要有空格）</span><br><span class="hljs-meta">#</span><span class="bash">注意：条件非空即为<span class="hljs-literal">true</span>，[ atguigu ]返回<span class="hljs-literal">true</span>，[] 返回<span class="hljs-literal">false</span>。</span><br><span class="hljs-meta">#</span><span class="bash">两个整数之间比较</span><br><span class="hljs-meta">#</span><span class="bash">2. 常用判断条件</span><br>字符串比较<br><br>字符串比较：<br>    =       等于,如:if [ &quot;$a&quot; = &quot;$b&quot; ]<br>    ==     等于,如:if [ &quot;$a&quot; == &quot;$b&quot; ], 与=等价<br>               注意:==的功能在[[]]和[]中的行为是不同的,如下:<br>               1 [[ $a == z* ]]    # 如果$a以&quot;z&quot;开头(模式匹配)那么将为true<br>               2 [[ $a == &quot;z*&quot; ]] # 如果$a等于z*(字符匹配),那么结果为true<br>               3<br>               4 [ $a == z* ]      # File globbing 和word splitting将会发生<br>               5 [ &quot;$a&quot; == &quot;z*&quot; ] # 如果$a等于z*(字符匹配),那么结果为true<br><br>    !=      不等于,如:if [ &quot;$a&quot; != &quot;$b&quot; ]， 这个操作符将在[[]]结构中使用模式匹配.<br>    &lt;       小于,在ASCII字母顺序下.如:<br>               if [[ &quot;$a&quot; &lt; &quot;$b&quot; ]]<br>               if [ &quot;$a&quot; \&lt; &quot;$b&quot; ]     在[]结构中&quot;&lt;&quot;需要被转义.<br>    &gt;       大于,在ASCII字母顺序下.如:<br>           if [[ &quot;$a&quot; &gt; &quot;$b&quot; ]]<br>           if [ &quot;$a&quot; \&gt; &quot;$b&quot; ]  在[]结构中&quot;&gt;&quot;需要被转义.<br>    -z       字符串为&quot;null&quot;.就是长度为0.<br>    -n       字符串不为&quot;null&quot;<br><span class="hljs-meta">#</span><span class="bash">（1）两个整数之间比较</span><br><span class="hljs-meta">#</span><span class="bash">-lt 小于（less than）			-le 小于等于（less equal）</span><br><span class="hljs-meta">#</span><span class="bash">-eq 等于（equal）				-gt 大于（greater than）</span><br><span class="hljs-meta">#</span><span class="bash">-ge 大于等于（greater equal）	-ne 不等于（Not equal）</span><br><span class="hljs-meta">#</span><span class="bash">（2）按照文件权限进行判断</span><br><span class="hljs-meta">#</span><span class="bash">-r 有读的权限（<span class="hljs-built_in">read</span>）			-w 有写的权限（write）</span><br><span class="hljs-meta">#</span><span class="bash">-x 有执行的权限（execute）</span><br><span class="hljs-meta">#</span><span class="bash">（3）按照文件类型进行判断</span><br><span class="hljs-meta">#</span><span class="bash">-f 文件存在并且是一个常规的文件（file）</span><br><span class="hljs-meta">#</span><span class="bash">-e 文件存在（existence）		-d 文件存在并是一个目录（directory）</span><br></code></pre></td></tr></table></figure>
 
 <h2 id="流程控制"><a href="#流程控制" class="headerlink" title="流程控制"></a>流程控制</h2><ul>
 <li>if语句</li>
