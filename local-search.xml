@@ -4,6 +4,27 @@
   
   
   <entry>
+    <title>hbase</title>
+    <link href="/2021/06/27/hbase/"/>
+    <url>/2021/06/27/hbase/</url>
+    
+    <content type="html"><![CDATA[<h1 id="HBase"><a href="#HBase" class="headerlink" title="HBase"></a>HBase</h1><h2 id="HBbse概述"><a href="#HBbse概述" class="headerlink" title="HBbse概述"></a>HBbse概述</h2><ul><li><p>HBase是一种分布式，可扩展，，支持海量数据存储的NoSQL数据库。</p></li><li><p>逻辑结构</p></li><li><p><a href="https://imgtu.com/i/RJBhlV"><img src="https://z3.ax1x.com/2021/06/27/RJBhlV.png" alt="RJBhlV.png"></a></p></li><li><p>row key类似于主键</p></li><li><p>region在行上的一个切分，几行分一个region</p></li><li><p>列族：Column Qualifier。</p></li><li><p>store：按照region和列族可以分为一个个store</p></li><li><p>物理结构</p><p><a href="https://imgtu.com/i/RJBomF"><img src="https://z3.ax1x.com/2021/06/27/RJBomF.png" alt="RJBomF.png"></a></p></li><li><p>数据模型</p><p><strong>1.</strong> <em><strong>Name Space</strong></em></p><p>命名空间，类似于关系型数据库的DatabBase概念，每个命名空间下有多个表。HBase有两个自带的命名空间，分别是hbase和default，hbase中存放的是HBase内置的表，default表是用户默认使用的命名空间。</p><p><strong>2.</strong> <em><strong>Region</strong></em></p><p>类似于关系型数据库的表概念。不同的是，HBase定义表时只需要声明列族即可，不需要声明具体的列。这意味着，往HBase写入数据时，字段可以动态、按需指定。因此，和关系型数据库相比，HBase能够轻松应对字段变更的场景。</p><p><strong>3.</strong> <em><strong>Row</strong></em></p><p>HBase表中的每行数据都由一个****RowKey*<em><strong>和多个</strong></em>*Column****（列）组成，数据是按照RowKey的字典顺序存储的，并且查询数据时只能根据RowKey进行检索，所以RowKey的设计十分重要。</p><p><strong>4.</strong> <em><strong>Column</strong></em></p><p>HBase中的每个列都由Column Family(列族)和Column Qualifier（列限定符）进行限定，例如info：name，info：age。建表时，只需指明列族，而列限定符无需预先定义。</p><p><strong>5.</strong> <em><strong>Time</strong></em> <em><strong>Stamp</strong></em></p><p>用于标识数据的不同版本（version），每条数据写入时，如果不指定时间戳，系统会自动为其加上该字段，其值为写入HBase的时间。</p><p><strong>6.</strong> <em><strong>Cell</strong></em></p><p>由{rowkey, column Family：column Qualifier, time Stamp} 唯一确定的单元。cell中的数据是没有类型的，全部是字节数组形式存贮。</p></li><li><p>架构</p><p><a href="https://imgtu.com/i/RJDyjK"><img src="https://z3.ax1x.com/2021/06/27/RJDyjK.png" alt="RJDyjK.png"></a></p></li><li><p>Region Server：region的管理者</p></li><li><p>Master：所有Region Server的管理者</p></li><li><p>Zookeeper：HBase通过Zookeeper来做Master的高可用、RegionServer的监控、元数据的入口以及集群配置的维护等工作。</p></li><li><p>HDFS:HDFS为HBase提供最终的底层数据存储服务，同时为HBase提供高可用的支持。</p></li></ul>]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>大数据</tag>
+      
+      <tag>flume</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>kafka</title>
     <link href="/2021/06/24/kafka/"/>
     <url>/2021/06/24/kafka/</url>
@@ -409,38 +430,11 @@
   
   
   <entry>
-    <title>Mapreduce介绍</title>
-    <link href="/2020/11/23/MapReduce/"/>
-    <url>/2020/11/23/MapReduce/</url>
-    
-    <content type="html"><![CDATA[<p>#MapReduce介绍</p><blockquote><p><em><strong>1.mapreduce编程思想</strong></em></p><blockquote><ul><li>适用于数据密集型的应用</li><li>mapreduce 采用分而治之的策略<blockquote><ul><li>把非常庞大的数据集，切分成非常多独立的小分片</li><li>然后为每一个分片单独地启动一个map任务</li><li>最终通过多个map任务，并行地在多个机器上去处理</li></ul></blockquote></li><li>mapreduce计算向数据靠拢的理念<blockquote><ul><li>计算向数据靠拢而不是数据向计算靠拢</li></ul></blockquote></li><li>Master/Slave架构 <blockquote><ul><li>一个Master服务器–》作业跟踪器JobTracker–》负责整个作业的调度和处理以及失败和恢复</li><li>若干个Slave服务器–》负责具体任务执行的组件TaskTracker–》负责接收JobTracker给它发的作业处理指令，完成具体的任务处理</li></ul></blockquote></li><li>map 函数的作用：将输入的一个键值对进行处理生成一批的键值对</li><li>reduce函数的作用： 输入：&lt;key,list(value)&gt;,就是一个键以及一堆值的列表。输出：&lt;key,value&gt;</li></ul></blockquote></blockquote><blockquote><p><em><strong>2.mapreduce体系结构</strong></em></p><blockquote><ul><li>Client客户端<blockquote><ul><li>通过Client可以提交用户编写的应用程序用户通过它将应用程序交到JobTracker端</li><li>通过这些Client用户也可以通过它提供的一些接口去查看当前提交作业的运行状态</li></ul></blockquote></li></ul></blockquote><blockquote><ul><li>JobTracker（作业跟踪器）<blockquote><ul><li>负责资源的监控和作业的调度</li><li>监控底层的其他TaskTracker以及当前运行的Job的健康状况</li><li>一旦探测到失败的情况就把这个任务转移到其它节点继续执行跟踪任务执行进度和资源使用量</li></ul></blockquote></li></ul></blockquote></blockquote><blockquote><blockquote><ul><li>TaskTracker（任务调度器）<blockquote><ul><li>执行具体的相关任务一般接收JobTracker发送过来的命令</li><li>把一些自己的资源使用情况，以及任务的运行进度通过心跳的方式，也就是heartbeat发送给JobTracker（通过slot查看目前的资源使用情况。slot是一种资源调度单位，包括内存,CPU的资源）</li></ul></blockquote></li></ul></blockquote></blockquote><blockquote><blockquote><ul><li>Task<blockquote><ul><li>map任务</li><li>reduce任务 </li></ul></blockquote></li><li><strong>3.mapreduce工程流程</strong>*</li><li>输入(分片操作)</li><li>Map任务（每个分片启动一个map任务）</li><li>Reduce任务</li><li>输出<br>shuffle 将map任务产生的中间结果（一系列的&lt;key,value&gt;）转换为 &lt;key,value-list&gt;<br>最优的Reduce任务个数取决于集群中可用的reduce任务槽（slot）的数目(一般比该数目稍小，这样可以预留一些系统资源处理可能发生的错误)</li></ul></blockquote></blockquote><blockquote><p><em><strong>4.shuffle过程解析</strong></em></p><blockquote><ul><li>Map端的Shuffle过程<blockquote><p>步骤：</p><ol><li>输入数据和执行Map任务</li><li>写入缓存</li><li>溢写（分区，排序，合并（要自己定义才执行））</li><li>文件归并</li></ol></blockquote></li><li>Reduce端的Shuffle过程 <blockquote><p>步骤：</p><ol><li>取数据</li><li>归并数据</li><li>把数据输入给Reduce任务</li></ol></blockquote></li></ul></blockquote><p><strong>MapReduce应用程序的执行过程：</strong><br>程序部署-》分配Map任务，分配Reduce任务-》读数据-》本地写数据-》远程读数据-》写数据<br><em><strong>5. mapreduce具体应用</strong></em> </p><blockquote><ul><li>关系代数运算 </li><li>分组聚合运算</li><li>矩阵乘法</li><li>矩阵运算</li><li>关系的自然连接</li></ul></blockquote></blockquote><blockquote><p><em><strong>6.mapreduce编程实践</strong></em></p></blockquote>]]></content>
-    
-    
-    <categories>
-      
-      <category>hadoop</category>
-      
-    </categories>
-    
-    
-    <tags>
-      
-      <tag>大数据</tag>
-      
-      <tag>Hadoop</tag>
-      
-    </tags>
-    
-  </entry>
-  
-  
-  
-  <entry>
     <title>Hbase简介</title>
     <link href="/2020/11/17/HBase%20introduction/"/>
     <url>/2020/11/17/HBase%20introduction/</url>
     
-    <content type="html"><![CDATA[<p>#分布式数据库HBase简介</p><ol><li><p>概述    </p><ul><li>HBase是针对谷歌BigTable的开源实现，是一个高可靠，高性能，面向列，可伸缩的分布式数据库           </li><li>可以用来存储非结构化和半结构化的松散数据</li></ul></li><li><p>数据模型</p><ul><li>索引通过四个元素来定位：行键，列族，列限定符，时间戳</li><li> 面向列的存储</li></ul></li><li><p>实现原理 </p><ul><li>HBase的功能组件<blockquote><p>库函数<br>Master服务器<br>Region服务器    </p></blockquote></li><li>两个核心概念表和Region<blockquote><p>一个HBase表被划分成多个Region<br>一个Region会分裂成多个新的Region</p></blockquote></li><li>怎么实现Region定位<blockquote><p>三层结构索引实现Region的定位<br>Zookeeper文件<br>-ROOT-表<br>.MEAT.表      </p></blockquote></li></ul></li><li><p>运行机制</p><ul><li>HBase的系统架构<blockquote><p><img src="https://img-blog.csdnimg.cn/2020070104123335.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTE1NDU1OQ==,size_16,color_FFFFFF,t_70#pic_center" title="系统架构图"><br>Zookeeper服务器（被大量用于分布式系统，提供配置维护，域名服务，分布式同步服务）实现协同管理服务，提供管家功能（维护和管理整个HBase集群）<br>Master服务器作用：1.对表增删改查。2.负责不同Region服务器的负载均衡。3.负责调整分裂合并后Region的分布。4.负责重新分配故障，失效的Region服务器</p></blockquote></li><li>Region服务器（负责用户数据的存储和管理）的工作原理</li><li>Store的工作原理</li><li>HLog的工作原理</li></ul></li><li><p>编程实践<br>HBase安装及实践，参考厦门大学数据库实验室博客<br><a href="http://dblab.xmu.edu.cn/blog/2442-2/">参考链接</a></p></li></ol>]]></content>
+    <content type="html"><![CDATA[<h1 id="分布式数据库HBase简介"><a href="#分布式数据库HBase简介" class="headerlink" title="分布式数据库HBase简介"></a>分布式数据库HBase简介</h1><ol><li><p>概述    </p><ul><li>HBase是针对谷歌BigTable的开源实现，是一个高可靠，高性能，面向列，可伸缩的分布式数据库           </li><li>可以用来存储非结构化和半结构化的松散数据</li></ul></li><li><p>数据模型</p><ul><li>索引通过四个元素来定位：行键，列族，列限定符，时间戳</li><li> 面向列的存储</li></ul></li><li><p>实现原理 </p><ul><li>HBase的功能组件<blockquote><p>库函数<br>Master服务器<br>Region服务器    </p></blockquote></li><li>两个核心概念表和Region<blockquote><p>一个HBase表被划分成多个Region<br>一个Region会分裂成多个新的Region</p></blockquote></li><li>怎么实现Region定位<blockquote><p>三层结构索引实现Region的定位<br>Zookeeper文件<br>-ROOT-表<br>.MEAT.表      </p></blockquote></li></ul></li><li><p>运行机制</p><ul><li>HBase的系统架构<blockquote><p><img src="https://img-blog.csdnimg.cn/2020070104123335.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTE1NDU1OQ==,size_16,color_FFFFFF,t_70#pic_center" title="系统架构图"><br>Zookeeper服务器（被大量用于分布式系统，提供配置维护，域名服务，分布式同步服务）实现协同管理服务，提供管家功能（维护和管理整个HBase集群）<br>Master服务器作用：1.对表增删改查。2.负责不同Region服务器的负载均衡。3.负责调整分裂合并后Region的分布。4.负责重新分配故障，失效的Region服务器</p></blockquote></li><li>Region服务器（负责用户数据的存储和管理）的工作原理</li><li>Store的工作原理</li><li>HLog的工作原理</li></ul></li><li><p>编程实践<br>HBase安装及实践，参考厦门大学数据库实验室博客<br><a href="http://dblab.xmu.edu.cn/blog/2442-2/">参考链接</a></p></li></ol>]]></content>
     
     
     <categories>
@@ -454,9 +448,9 @@
     
     <tags>
       
-      <tag>大数据</tag>
-      
       <tag>Hadoop</tag>
+      
+      <tag>大数据</tag>
       
     </tags>
     
@@ -508,9 +502,9 @@
     
     <tags>
       
-      <tag>大数据</tag>
-      
       <tag>Hadoop</tag>
+      
+      <tag>大数据</tag>
       
     </tags>
     

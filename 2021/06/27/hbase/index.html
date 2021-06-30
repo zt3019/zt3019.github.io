@@ -18,9 +18,25 @@
   <meta name="author" content="daxiazou">
   <meta name="keywords" content="">
   
-  <title>分类 - hadoop - Nevermind</title>
+  <title>hbase - Nevermind</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.6.0/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
 
 
 
@@ -48,7 +64,7 @@
 
 
 <body>
-  <header style="height: 60vh;">
+  <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand"
@@ -142,14 +158,51 @@
 </nav>
 
     <div class="banner" id="banner" parallax=true
-         style="background: url('/img/default.png') no-repeat center center;
+         style="background: url('https://th.bing.com/th/id/R1ca597009e76b715bba612ba67909be7?rik=B64UMrUhcqEeag&riu=http%3a%2f%2fintellitech.pro%2fwp-content%2fuploads%2f2017%2f05%2fapache-hbase-image.png&ehk=70DnQXgetKij7C%2fCw%2bDtBFv6J1jPnGZV%2bFObTefSr24%3d&risl=&pid=ImgRaw') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="分类 - hadoop">
+            <span class="h2" id="subtitle" title="hbase">
               
             </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-06-27 11:39" pubdate>
+        2021年6月27日 中午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      517 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      5
+       分钟
+    </span>
+  
+
+  
+  
+</div>
 
             
           </div>
@@ -162,40 +215,133 @@
 
   <main>
     
-      <div class="container nopadding-x-md">
-        <div class="py-5" id="board"
-          >
-          
-          <div class="container">
-            <div class="row">
-              <div class="col-12 col-md-10 m-auto">
-                
-
-<div class="list-group">
-  <p class="h4">共计 1 篇文章</p>
-  <hr>
-  
-  
-    
       
-      <p class="h5">2020</p>
-    
-    <a href="/2020/11/23/MapReduce/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">Mapreduce介绍</span>
-      <time style="float: right;">11-23</time>
-    </a>
-  
-</div>
 
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">hbase</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：2021年6月27日 中午
+                
+              </p>
+            
+            <div class="markdown-body">
+              <h1 id="HBase"><a href="#HBase" class="headerlink" title="HBase"></a>HBase</h1><h2 id="HBbse概述"><a href="#HBbse概述" class="headerlink" title="HBbse概述"></a>HBbse概述</h2><ul>
+<li><p>HBase是一种分布式，可扩展，，支持海量数据存储的NoSQL数据库。</p>
+</li>
+<li><p>逻辑结构</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://imgtu.com/i/RJBhlV"><img src="https://z3.ax1x.com/2021/06/27/RJBhlV.png" srcset="/img/loading.gif" lazyload alt="RJBhlV.png"></a></p>
+</li>
+<li><p>row key类似于主键</p>
+</li>
+<li><p>region在行上的一个切分，几行分一个region</p>
+</li>
+<li><p>列族：Column Qualifier。</p>
+</li>
+<li><p>store：按照region和列族可以分为一个个store</p>
+</li>
+<li><p>物理结构</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/RJBomF"><img src="https://z3.ax1x.com/2021/06/27/RJBomF.png" srcset="/img/loading.gif" lazyload alt="RJBomF.png"></a></p>
+</li>
+<li><p>数据模型</p>
+<p><strong>1.</strong> <em><strong>Name Space</strong></em></p>
+<p>命名空间，类似于关系型数据库的DatabBase概念，每个命名空间下有多个表。HBase有两个自带的命名空间，分别是hbase和default，hbase中存放的是HBase内置的表，default表是用户默认使用的命名空间。</p>
+<p><strong>2.</strong> <em><strong>Region</strong></em></p>
+<p>类似于关系型数据库的表概念。不同的是，HBase定义表时只需要声明列族即可，不需要声明具体的列。这意味着，往HBase写入数据时，字段可以动态、按需指定。因此，和关系型数据库相比，HBase能够轻松应对字段变更的场景。</p>
+<p><strong>3.</strong> <em><strong>Row</strong></em></p>
+<p>HBase表中的每行数据都由一个****RowKey*<em><strong>和多个</strong></em>*Column****（列）组成，数据是按照RowKey的字典顺序存储的，并且查询数据时只能根据RowKey进行检索，所以RowKey的设计十分重要。</p>
+<p><strong>4.</strong> <em><strong>Column</strong></em></p>
+<p>HBase中的每个列都由Column Family(列族)和Column Qualifier（列限定符）进行限定，例如info：name，info：age。建表时，只需指明列族，而列限定符无需预先定义。</p>
+<p><strong>5.</strong> <em><strong>Time</strong></em> <em><strong>Stamp</strong></em></p>
+<p>用于标识数据的不同版本（version），每条数据写入时，如果不指定时间戳，系统会自动为其加上该字段，其值为写入HBase的时间。</p>
+<p><strong>6.</strong> <em><strong>Cell</strong></em></p>
+<p>由{rowkey, column Family：column Qualifier, time Stamp} 唯一确定的单元。cell中的数据是没有类型的，全部是字节数组形式存贮。</p>
+</li>
+<li><p>架构</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/RJDyjK"><img src="https://z3.ax1x.com/2021/06/27/RJDyjK.png" srcset="/img/loading.gif" lazyload alt="RJDyjK.png"></a></p>
+</li>
+<li><p>Region Server：region的管理者</p>
+</li>
+<li><p>Master：所有Region Server的管理者</p>
+</li>
+<li><p>Zookeeper：HBase通过Zookeeper来做Master的高可用、RegionServer的监控、元数据的入口以及集群配置的维护等工作。</p>
+</li>
+<li><p>HDFS:HDFS为HBase提供最终的底层数据存储服务，同时为HBase提供高可用的支持。</p>
+</li>
+</ul>
 
-
-
-
-              </div>
             </div>
-          </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a>
+                    
+                      <a class="hover-with-bg" href="/tags/flume/">flume</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/06/24/kafka/">
+                        <span class="hidden-mobile">kafka</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
         </div>
       </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
     
 
     
@@ -299,9 +445,15 @@
 
 
 
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.2/dist/tocbot.min.js" ></script>
 
 
 
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
 
 
 
