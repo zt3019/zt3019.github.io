@@ -68,7 +68,7 @@
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand"
-       href="/">&nbsp;<strong>小丑的Blog</strong>&nbsp;</a>
+       href="/">&nbsp;<strong>Nevermind</strong>&nbsp;</a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
             data-target="#navbarSupportedContent"
@@ -185,7 +185,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      1.7k 字
+      1.8k 字
     </span>
   
 
@@ -195,7 +195,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      20
+      21
        分钟
     </span>
   
@@ -229,7 +229,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2021年6月23日 下午
+                  本文最后更新于：2021年7月5日 上午
                 
               </p>
             
@@ -276,7 +276,7 @@
 <li><p>再返回到ChannelProcessor，根据选择器的选择，event进入不同的channel</p>
 </li>
 <li><p>SinkProcessor再决定channel中的enevt的走向。</p>
-<p>SinkProcessor共有三种类型，分别是DefaultSinkProcessor、LoadBalancingSinkProcessor和FailoverSinkProcessor</p>
+<p>SinkProcessor共有三种类型，分别是DefaultSinkProcessor、LoadBalancingSinkProcessor和FailoverSinkProcessor。</p>
 <p>DefaultSinkProcessor对应的是单个的Sink，LoadBalancingSinkProcessor和FailoverSinkProcessor对应的是Sink Group，LoadBalancingSinkProcessor可以实现负载均衡的功能，FailoverSinkProcessor可以错误恢复的功能(故障转移）。</p>
 </li>
 </ol>
@@ -289,6 +289,10 @@
 <li>聚合。将多台服务器部署一个flume日志采集，再将所有日志聚合到一个集中收集日志的flume，由此上传到HDFS,HBase，进行数据分析。</li>
 </ul>
 </li>
+</ul>
+<h3 id="API编程"><a href="#API编程" class="headerlink" title="API编程"></a>API编程</h3><ul>
+<li>可以查看官网的开发者文档。</li>
+<li>自定义Interceptor。定义类实现Interceptor接口，重写四个方法（初始化，单event修改，多event修改，关闭资源）还需要一个Builder静态内部类。</li>
 </ul>
 <h2 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h2><h3 id="flume的source-sink-Channel的作用？"><a href="#flume的source-sink-Channel的作用？" class="headerlink" title="flume的source,sink,Channel的作用？"></a>flume的source,sink,Channel的作用？</h3><ul>
 <li><p>作用：</p>

@@ -68,7 +68,7 @@
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand"
-       href="/">&nbsp;<strong>小丑的Blog</strong>&nbsp;</a>
+       href="/">&nbsp;<strong>Nevermind</strong>&nbsp;</a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
             data-target="#navbarSupportedContent"
@@ -185,7 +185,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      7.4k 字
+      7.5k 字
     </span>
   
 
@@ -195,7 +195,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      86
+      87
        分钟
     </span>
   
@@ -229,7 +229,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2021年6月20日 中午
+                  本文最后更新于：2021年7月8日 晚上
                 
               </p>
             
@@ -342,6 +342,8 @@ copyToLocal#与get完全一样
 </li>
 </ul>
 <h2 id="NameNode和SecondaryNameNode"><a href="#NameNode和SecondaryNameNode" class="headerlink" title="NameNode和SecondaryNameNode"></a>NameNode和SecondaryNameNode</h2><ul>
+<li><p>namenode中一个元数据占150个字节的空间。</p>
+</li>
 <li><p>思考：NameNode中的元数据是存储在哪里的？</p>
 <p>首先，我们做个假设，如果存储在NameNode节点的磁盘中，因为经常需要进行随机访问，还有响应客户请求，必然是效率过低。因此，元数据需要存放在内存中。但如果只存在内存中，一旦断电，元数据丢失，整个集群就无法工作了。因此产生在磁盘中备份元数据的FsImage。</p>
 <p>这样又会带来新的问题，当在内存中的元数据更新时，如果同时更新FsImage，就会导致效率过低，但如果不更新，就会发生一致性问题，一旦NameNode节点断电，就会产生数据丢失。因此，引入Edits文件(只进行追加操作，效率很高)。每当元数据有更新或者添加元数据时，修改内存中的元数据并追加到Edits中。这样，一旦NameNode节点断电，可以通过FsImage和Edits的合并，合成元数据。</p>
@@ -463,7 +465,7 @@ copyToLocal#与get完全一样
 <li><a target="_blank" rel="noopener" href="https://imgtu.com/i/gLfma6"><img src="https://z3.ax1x.com/2021/05/22/gLfma6.md.png" srcset="/img/loading.gif" lazyload alt="gLfma6.md.png"></a><ol>
 <li>MapTask收集map()方法输出的KV对，放到环形内存缓冲区中</li>
 <li>在内存缓冲区中会进行快速排序，不断溢写到本地磁盘文件</li>
-<li>多个溢出的文件会被合成大的溢出文件</li>
+<li>多个溢出的文件会被合成大的溢出文件(溢写到磁盘耗时间，耗资源)</li>
 <li>在溢出过程和合并过程中，都调用Partitiner进行分区和针对Key 进行排序，在环形缓冲区中溢出时进行快速排序，在合并时进行归并排序。</li>
 <li>ReduceTask根据自己的分区号，去各个MapTask机器上取相应的结果分区数据</li>
 <li>ReduceTask 会取到同一个分区的来自不同MapTask 的结果文件，ReduceTask会将这些文件再进行合并（归并排序）</li>
@@ -563,6 +565,13 @@ copyToLocal#与get完全一样
 </li>
 </ul>
 <h3 id="MapReduce工作机制"><a href="#MapReduce工作机制" class="headerlink" title="MapReduce工作机制"></a>MapReduce工作机制</h3><ul>
+<li><p>MapReduce哪些阶段可以进行压缩</p>
+<ul>
+<li>map的输入端（主要看数据大小和切片，lzo,bzip2）</li>
+<li>map的输出端(主要考虑速度，snappy，Lzo)</li>
+<li>reduce的输出端(看需求，是要继续做mapreduce的输出，还是直接做分析的数据等)</li>
+</ul>
+</li>
 <li><p>MapTask工作机制</p>
 <ul>
 <li><p><a target="_blank" rel="noopener" href="https://imgtu.com/i/gzWpHH"><img src="https://z3.ax1x.com/2021/05/25/gzWpHH.md.png" srcset="/img/loading.gif" lazyload alt="gzWpHH.md.png"></a></p>

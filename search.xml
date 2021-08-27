@@ -1,62 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Hbase简介</title>
-    <url>/2020/11/17/HBase%20introduction/</url>
-    <content><![CDATA[<h1 id="分布式数据库HBase简介"><a href="#分布式数据库HBase简介" class="headerlink" title="分布式数据库HBase简介"></a>分布式数据库HBase简介</h1><ol>
-<li><p>概述    </p>
-<ul>
-<li>HBase是针对谷歌BigTable的开源实现，是一个高可靠，高性能，面向列，可伸缩的分布式数据库           </li>
-<li>可以用来存储非结构化和半结构化的松散数据</li>
-</ul>
-</li>
-<li><p>数据模型</p>
-<ul>
-<li>索引通过四个元素来定位：行键，列族，列限定符，时间戳</li>
-<li> 面向列的存储</li>
-</ul>
-</li>
-<li><p>实现原理 </p>
-<ul>
-<li>HBase的功能组件<blockquote>
-<p>库函数<br>Master服务器<br>Region服务器    </p>
-</blockquote>
-</li>
-<li>两个核心概念表和Region<blockquote>
-<p>一个HBase表被划分成多个Region<br>一个Region会分裂成多个新的Region</p>
-</blockquote>
-</li>
-<li>怎么实现Region定位<blockquote>
-<p>三层结构索引实现Region的定位<br>Zookeeper文件<br>-ROOT-表<br>.MEAT.表      </p>
-</blockquote>
-</li>
-</ul>
-</li>
-<li><p>运行机制</p>
-<ul>
-<li>HBase的系统架构<blockquote>
-<p><img src="https://img-blog.csdnimg.cn/2020070104123335.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTE1NDU1OQ==,size_16,color_FFFFFF,t_70#pic_center" title="系统架构图"><br>Zookeeper服务器（被大量用于分布式系统，提供配置维护，域名服务，分布式同步服务）实现协同管理服务，提供管家功能（维护和管理整个HBase集群）<br>Master服务器作用：1.对表增删改查。2.负责不同Region服务器的负载均衡。3.负责调整分裂合并后Region的分布。4.负责重新分配故障，失效的Region服务器</p>
-</blockquote>
-</li>
-<li>Region服务器（负责用户数据的存储和管理）的工作原理</li>
-<li>Store的工作原理</li>
-<li>HLog的工作原理</li>
-</ul>
-</li>
-<li><p>编程实践<br>HBase安装及实践，参考厦门大学数据库实验室博客<br><a href="http://dblab.xmu.edu.cn/blog/2442-2/">参考链接</a></p>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>大数据</category>
-        <category>老hadoop</category>
-      </categories>
-      <tags>
-        <tag>Hadoop</tag>
-        <tag>大数据</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>HA&amp;ZooKeeper</title>
     <url>/2021/06/02/HAHA-zk/</url>
     <content><![CDATA[<h1 id="HA-amp-ZooKeeper"><a href="#HA-amp-ZooKeeper" class="headerlink" title="HA&amp;ZooKeeper"></a>HA&amp;ZooKeeper</h1><h2 id="zookeeper"><a href="#zookeeper" class="headerlink" title="zookeeper"></a>zookeeper</h2><h3 id="zk概述"><a href="#zk概述" class="headerlink" title="zk概述"></a>zk概述</h3><ul>
@@ -199,6 +143,75 @@
       </tags>
   </entry>
   <entry>
+    <title>Hbase简介</title>
+    <url>/2020/11/17/HBase%20introduction/</url>
+    <content><![CDATA[<h1 id="分布式数据库HBase简介"><a href="#分布式数据库HBase简介" class="headerlink" title="分布式数据库HBase简介"></a>分布式数据库HBase简介</h1><ol>
+<li><p>概述    </p>
+<ul>
+<li>HBase是针对谷歌BigTable的开源实现，是一个高可靠，高性能，面向列，可伸缩的分布式数据库           </li>
+<li>可以用来存储非结构化和半结构化的松散数据</li>
+</ul>
+</li>
+<li><p>数据模型</p>
+<ul>
+<li>索引通过四个元素来定位：行键，列族，列限定符，时间戳</li>
+<li> 面向列的存储</li>
+</ul>
+</li>
+<li><p>实现原理 </p>
+<ul>
+<li>HBase的功能组件<blockquote>
+<p>库函数<br>Master服务器<br>Region服务器    </p>
+</blockquote>
+</li>
+<li>两个核心概念表和Region<blockquote>
+<p>一个HBase表被划分成多个Region<br>一个Region会分裂成多个新的Region</p>
+</blockquote>
+</li>
+<li>怎么实现Region定位<blockquote>
+<p>三层结构索引实现Region的定位<br>Zookeeper文件<br>-ROOT-表<br>.MEAT.表      </p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>运行机制</p>
+<ul>
+<li>HBase的系统架构<blockquote>
+<p><img src="https://img-blog.csdnimg.cn/2020070104123335.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTE1NDU1OQ==,size_16,color_FFFFFF,t_70#pic_center" title="系统架构图"><br>Zookeeper服务器（被大量用于分布式系统，提供配置维护，域名服务，分布式同步服务）实现协同管理服务，提供管家功能（维护和管理整个HBase集群）<br>Master服务器作用：1.对表增删改查。2.负责不同Region服务器的负载均衡。3.负责调整分裂合并后Region的分布。4.负责重新分配故障，失效的Region服务器</p>
+</blockquote>
+</li>
+<li>Region服务器（负责用户数据的存储和管理）的工作原理</li>
+<li>Store的工作原理</li>
+<li>HLog的工作原理</li>
+</ul>
+</li>
+<li><p>编程实践<br>HBase安装及实践，参考厦门大学数据库实验室博客<br><a href="http://dblab.xmu.edu.cn/blog/2442-2/">参考链接</a></p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>大数据</category>
+        <category>老hadoop</category>
+      </categories>
+      <tags>
+        <tag>Hadoop</tag>
+        <tag>大数据</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Java网络编程基础</title>
+    <url>/2021/04/23/Java-network/</url>
+    <content><![CDATA[<h1 id="Java网络编程基础"><a href="#Java网络编程基础" class="headerlink" title="Java网络编程基础"></a>Java网络编程基础</h1><h2 id="实例代码"><a href="#实例代码" class="headerlink" title="实例代码"></a>实例代码</h2><figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs Java"><span class="hljs-keyword">package</span> network;<br><br><span class="hljs-keyword">import</span> java.io.BufferedReader;<br><span class="hljs-keyword">import</span> java.io.BufferedWriter;<br><span class="hljs-keyword">import</span> java.io.FileInputStream;<br><span class="hljs-keyword">import</span> java.io.FileOutputStream;<br><span class="hljs-keyword">import</span> java.io.IOException;<br><span class="hljs-keyword">import</span> java.io.InputStream;<br><span class="hljs-keyword">import</span> java.io.InputStreamReader;<br><span class="hljs-keyword">import</span> java.io.OutputStream;<br><span class="hljs-keyword">import</span> java.io.OutputStreamWriter;<br><span class="hljs-keyword">import</span> java.net.ServerSocket;<br><span class="hljs-keyword">import</span> java.net.Socket;<br><span class="hljs-keyword">import</span> java.time.LocalDateTime;<br><br><span class="hljs-keyword">import</span> org.junit.Test;<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">NetTest</span> </span>&#123;<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">server3</span><span class="hljs-params">()</span> </span>&#123;<br>		ServerSocket server = <span class="hljs-keyword">null</span>;<br>		<span class="hljs-keyword">try</span> &#123;<br>			server = <span class="hljs-keyword">new</span> ServerSocket(<span class="hljs-number">8888</span>); <span class="hljs-comment">// 绑定端口</span><br>			<span class="hljs-keyword">while</span> (<span class="hljs-keyword">true</span>) &#123;<br>				System.out.println(<span class="hljs-string">&quot;服务器在8888端口监听中.....&quot;</span>);<br>				<span class="hljs-keyword">final</span> Socket socket1 = server.accept();<br>				;<br>				Runnable runner = <span class="hljs-keyword">new</span> Runnable() &#123;<br>					<span class="hljs-meta">@Override</span><br>					<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">run</span><span class="hljs-params">()</span> </span>&#123;<br>						BufferedWriter bufferedWriter = <span class="hljs-keyword">null</span>;<br>						<span class="hljs-keyword">try</span> &#123;<br>							bufferedWriter = <span class="hljs-keyword">new</span> BufferedWriter(<span class="hljs-keyword">new</span> OutputStreamWriter(socket1.getOutputStream()));<br>							bufferedWriter.write(<span class="hljs-string">&quot;我是服务器, 现在时间 : &quot;</span> + LocalDateTime.now());<br>							bufferedWriter.newLine();<br>							bufferedWriter.flush(); <span class="hljs-comment">// 把数据真的刷入网线中</span><br>						&#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>							e.printStackTrace();<br>						&#125; <span class="hljs-keyword">finally</span> &#123;<br>							<span class="hljs-keyword">if</span> (bufferedWriter != <span class="hljs-keyword">null</span>) &#123;<br>								<span class="hljs-keyword">try</span> &#123;<br>									bufferedWriter.close();<br>								&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>								&#125;<br>							&#125;<br>							<span class="hljs-keyword">if</span> (socket1 != <span class="hljs-keyword">null</span>) &#123;<br>								<span class="hljs-keyword">try</span> &#123;<br>									socket1.close();<br>								&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>								&#125;<br>							&#125;<br>						&#125;<br>						<span class="hljs-keyword">try</span> &#123;<br>							Thread.sleep(<span class="hljs-number">5000</span>);<br>						&#125; <span class="hljs-keyword">catch</span> (InterruptedException e) &#123;<br>							e.printStackTrace();<br>						&#125;<br>					&#125;<br>				&#125;;<br>				<span class="hljs-keyword">new</span> Thread(runner).start();<br>			&#125;<br>		&#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">finally</span> &#123;<br><br>			<span class="hljs-keyword">if</span> (server != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					System.out.println(<span class="hljs-string">&quot;服务器关闭....&quot;</span>);<br>					server.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>		&#125;<br>	&#125;<br><br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">client3</span><span class="hljs-params">()</span> </span>&#123;<br>		Socket socket2 = <span class="hljs-keyword">null</span>;<br>		BufferedReader bufferedReader = <span class="hljs-keyword">null</span>;<br>		<span class="hljs-keyword">try</span> &#123;<br>			socket2 = <span class="hljs-keyword">new</span> Socket(<span class="hljs-string">&quot;localhost&quot;</span>, <span class="hljs-number">8888</span>);<br>			bufferedReader = <span class="hljs-keyword">new</span> BufferedReader(<span class="hljs-keyword">new</span> InputStreamReader(socket2.getInputStream()));<br>			String readLine = bufferedReader.readLine();<br>			System.out.println(readLine);<br>		&#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">finally</span> &#123;<br>			<span class="hljs-keyword">if</span> (bufferedReader != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					bufferedReader.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>			<span class="hljs-keyword">if</span> (socket2 != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					socket2.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>		&#125;<br>	&#125;<br><br>	<span class="hljs-comment">// 从客户端发送文件给服务端，服务端保存到本地。并返回“发送成功”给客户端。并关闭相应的连接。</span><br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">server2</span><span class="hljs-params">()</span> </span>&#123;<br>		ServerSocket server = <span class="hljs-keyword">null</span>;<br>		Socket socket1 = <span class="hljs-keyword">null</span>;<span class="hljs-comment">// 网络套接字</span><br><br>		InputStream nis = <span class="hljs-keyword">null</span>;<br>		FileOutputStream fos = <span class="hljs-keyword">null</span>;<br>		BufferedWriter netWriter = <span class="hljs-keyword">null</span>;<br><br>		<span class="hljs-keyword">try</span> &#123;<br>			server = <span class="hljs-keyword">new</span> ServerSocket(<span class="hljs-number">7777</span>);<span class="hljs-comment">// 指定服务器接口</span><br>			socket1 = server.accept();<br>			nis = socket1.getInputStream();<br>			fos = <span class="hljs-keyword">new</span> FileOutputStream(<span class="hljs-string">&quot;朴树 - 猎户星座2.mp3&quot;</span>);<br>			netWriter = <span class="hljs-keyword">new</span> BufferedWriter(<span class="hljs-keyword">new</span> OutputStreamWriter(socket1.getOutputStream()));<br><br>			<span class="hljs-keyword">byte</span>[] buf = <span class="hljs-keyword">new</span> <span class="hljs-keyword">byte</span>[<span class="hljs-number">8192</span>];<br>			<span class="hljs-keyword">int</span> realCount = nis.read(buf);<br>			<span class="hljs-keyword">while</span> (realCount != -<span class="hljs-number">1</span>) &#123;<br>				fos.write(buf, <span class="hljs-number">0</span>, realCount);<br>				realCount = nis.read(buf);<br>			&#125;<br>			netWriter.write(<span class="hljs-string">&quot;发送成功&quot;</span>);<br>			netWriter.newLine();<br>			netWriter.flush();<br><br>		&#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">finally</span> &#123;<br>			<span class="hljs-keyword">if</span> (netWriter != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					netWriter.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>			<span class="hljs-keyword">if</span> (fos != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					fos.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>			<span class="hljs-keyword">if</span> (nis != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					nis.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>			<span class="hljs-keyword">if</span> (socket1 != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					socket1.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>			<span class="hljs-keyword">if</span> (server != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					server.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>		&#125;<br>	&#125;<br><br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">client2</span><span class="hljs-params">()</span> </span>&#123;<br>		Socket socket2 = <span class="hljs-keyword">null</span>;<span class="hljs-comment">// 网络套接字</span><br><br>		FileInputStream fis = <span class="hljs-keyword">null</span>;<span class="hljs-comment">// 文件输入流</span><br>		OutputStream nos = <span class="hljs-keyword">null</span>;<span class="hljs-comment">// 网络输出流</span><br>		BufferedReader netReader = <span class="hljs-keyword">null</span>;<span class="hljs-comment">// 网络输入流</span><br>		<span class="hljs-keyword">try</span> &#123;<br>			socket2 = <span class="hljs-keyword">new</span> Socket(<span class="hljs-string">&quot;127.0.0.1&quot;</span>, <span class="hljs-number">7777</span>);<br>			fis = <span class="hljs-keyword">new</span> FileInputStream(<span class="hljs-string">&quot;src/朴树 - 猎户星座.mp3&quot;</span>);<span class="hljs-comment">// 要传到服务器端的文件，先读入到客户端</span><br>			nos = socket2.getOutputStream();<span class="hljs-comment">// 传输到服务器端的文件输出流</span><br>			netReader = <span class="hljs-keyword">new</span> BufferedReader(<span class="hljs-keyword">new</span> InputStreamReader(socket2.getInputStream()));<span class="hljs-comment">// 读取服务器端返回的数据</span><br><br>			<span class="hljs-keyword">byte</span>[] buf = <span class="hljs-keyword">new</span> <span class="hljs-keyword">byte</span>[<span class="hljs-number">8192</span>];<br>			<span class="hljs-comment">// 读取数据</span><br>			<span class="hljs-keyword">int</span> realCount = fis.read(buf);<br>			<span class="hljs-keyword">while</span> (realCount != -<span class="hljs-number">1</span>) &#123;<br>				<span class="hljs-comment">// 1) 处理已经读的数据</span><br>				nos.write(buf, <span class="hljs-number">0</span>, realCount);<br>				<span class="hljs-comment">// 2) 继续读</span><br>				realCount = fis.read(buf);<br>			&#125;<br>			nos.flush();<span class="hljs-comment">// 将在缓存中的数据全部输出去</span><br>			socket2.shutdownOutput();<span class="hljs-comment">// 关闭输出流</span><br><br>			String readLine = netReader.readLine();<span class="hljs-comment">// 接受服务器端的数据</span><br>			System.out.println(readLine);<br><br>		&#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">finally</span> &#123;<span class="hljs-comment">// 关闭相应的资源</span><br>			<span class="hljs-keyword">if</span> (netReader != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					netReader.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>			<span class="hljs-keyword">if</span> (nos != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					nos.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>			<span class="hljs-keyword">if</span> (fis != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					fis.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>			<span class="hljs-keyword">if</span> (socket2 != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					socket2.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>		&#125;<br>	&#125;<br><br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">server</span><span class="hljs-params">()</span> </span>&#123;<br>		ServerSocket server = <span class="hljs-keyword">null</span>;<br>		Socket socket1 = <span class="hljs-keyword">null</span>;<br>		BufferedReader bufferedReader = <span class="hljs-keyword">null</span>;<br>		<span class="hljs-keyword">try</span> &#123;<br>			server = <span class="hljs-keyword">new</span> ServerSocket(<span class="hljs-number">9999</span>); <span class="hljs-comment">// 绑定9999端口.</span><br>			socket1 = server.accept(); <span class="hljs-comment">// 接受客户端的连接请求, 此方法会引起阻塞.</span><br>			System.out.println(socket1);<br>			<span class="hljs-comment">// 服务器端的socket1和客户端的socket2就建立了双向的网络通道</span><br>			InputStream inputStream = socket1.getInputStream();<br>			InputStreamReader isr = <span class="hljs-keyword">new</span> InputStreamReader(inputStream);<br><br>			bufferedReader = <span class="hljs-keyword">new</span> BufferedReader(isr);<br>			String readLine = bufferedReader.readLine();<br>			System.out.println(readLine);<br>		&#125; <span class="hljs-keyword">catch</span> (IOException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">finally</span> &#123;<br>			<span class="hljs-keyword">if</span> (bufferedReader != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					bufferedReader.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br><br>			<span class="hljs-keyword">if</span> (socket1 != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					socket1.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br><br>			<span class="hljs-keyword">if</span> (server != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					server.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br><br>			&#125;<br>		&#125;<br>	&#125;<br><br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">client</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-comment">// 连接服务器, 必须知道ip和端口.</span><br>		Socket socket2 = <span class="hljs-keyword">null</span>;<br>		BufferedWriter bufferedWriter = <span class="hljs-keyword">null</span>;<br>		<span class="hljs-keyword">try</span> &#123;<br>			socket2 = <span class="hljs-keyword">new</span> Socket(<span class="hljs-string">&quot;127.0.0.1&quot;</span>, <span class="hljs-number">9999</span>);<br>			System.out.println(socket2);<br>			<span class="hljs-comment">// 客户端的socket2和服务器端的socket1就建立了双向的网络通道</span><br>			OutputStream outputStream = socket2.getOutputStream();<br>			OutputStreamWriter osw = <span class="hljs-keyword">new</span> OutputStreamWriter(outputStream);<br>			bufferedWriter = <span class="hljs-keyword">new</span> BufferedWriter(osw);<br>			bufferedWriter.write(<span class="hljs-string">&quot;你好, 服务器, 俺是客户端.....&quot;</span>);<br>			bufferedWriter.newLine();<span class="hljs-comment">// 必须要有换行</span><br>			bufferedWriter.flush();<br>		&#125; <span class="hljs-keyword">catch</span> (IOException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">finally</span> &#123;<br>			<span class="hljs-keyword">if</span> (bufferedWriter != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					bufferedWriter.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br><br>			<span class="hljs-keyword">if</span> (socket2 != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					socket2.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>		&#125;<br>	&#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+<h2 id="杀死本机被占用的端口号"><a href="#杀死本机被占用的端口号" class="headerlink" title="杀死本机被占用的端口号"></a>杀死本机被占用的端口号</h2><figure class="highlight apache"><table><tr><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">netstat</span> -ano   查看操作系统所有占用端口的进程<br><span class="hljs-attribute">netstat</span> -ano | findstr <span class="hljs-string">&quot;9999&quot;</span> 获取占用了<span class="hljs-number">9999</span>端口的进程<br><span class="hljs-attribute">taskkill</span> /F /pid <span class="hljs-number">1234</span> 关闭进程号为<span class="hljs-number">1234</span>的进程<br></code></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>网络编程</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>JVM</title>
     <url>/2021/05/02/JVM/</url>
     <content><![CDATA[<h1 id="JVM"><a href="#JVM" class="headerlink" title="JVM"></a>JVM</h1><h2 id="JVM定义"><a href="#JVM定义" class="headerlink" title="JVM定义"></a>JVM定义</h2><blockquote>
@@ -248,7 +261,10 @@
 <li>栈帧：一个线程的每个方法在调用时都会在栈上划分一块区域，用于存储方法所需要的变量等信息，这块区域称之为栈帧（stack frame）。栈由多个栈帧构成，好比一部电影由多个帧的画面构成。</li>
 </ul>
 </blockquote>
-<h3 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h3><blockquote>
+<h3 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h3><ul>
+<li>堆内存:存储的是数组和对象（其实数组就是对象），凡是new建立的都是在堆中，堆中存放的都是实体（对象），实体用于封装数据，而且是封装多个（实体的多个属性），如果一个数据消失，这个实体也没有消失，还可以用，所以堆是不会随时释放的，但是栈不一样，栈里存放的都是单个变量，变量被释放了，那就没有了。堆里的实体虽然不会被释放，但是会被当成垃圾，Java有垃圾回收机制不定时的收取。</li>
+</ul>
+<blockquote>
 <ul>
 <li>逻辑上分为三部分：1.新生区。2.养老区。3.永久区。（1.8后改为元空间）</li>
 <li>新生区进一步分为：<blockquote>
@@ -269,8 +285,6 @@
 <ul>
 <li>新new的对象会放在伊甸园区，伊甸园区的对象存活率非常低，当伊甸园区快满时会触发轻量级的垃圾回收机制（MinorGC）MinorGC会回收伊甸园区和幸存from区，会将伊甸园的幸存者标记复制到幸存to区，from区中的幸存者会根据它的年龄判断它的去向：默认情况下，如果年龄小于15则被标记到to区，如果年龄小于15则被标记复制到to区，如果年龄大于15则被标记复制到养老区，然后from区和to区交换角色</li>
 <li>当养老区内存不足时会触发重量级垃圾回收机制（MajorGC/fullGC），如果养老区无法回收内存则会出现OOM异常</li>
-<li></li>
-<li></li>
 </ul>
 </blockquote>
 </li>
@@ -348,19 +362,6 @@
       </categories>
       <tags>
         <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Java网络编程基础</title>
-    <url>/2021/04/23/Java-network/</url>
-    <content><![CDATA[<h1 id="Java网络编程基础"><a href="#Java网络编程基础" class="headerlink" title="Java网络编程基础"></a>Java网络编程基础</h1><h2 id="实例代码"><a href="#实例代码" class="headerlink" title="实例代码"></a>实例代码</h2><figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs Java"><span class="hljs-keyword">package</span> network;<br><br><span class="hljs-keyword">import</span> java.io.BufferedReader;<br><span class="hljs-keyword">import</span> java.io.BufferedWriter;<br><span class="hljs-keyword">import</span> java.io.FileInputStream;<br><span class="hljs-keyword">import</span> java.io.FileOutputStream;<br><span class="hljs-keyword">import</span> java.io.IOException;<br><span class="hljs-keyword">import</span> java.io.InputStream;<br><span class="hljs-keyword">import</span> java.io.InputStreamReader;<br><span class="hljs-keyword">import</span> java.io.OutputStream;<br><span class="hljs-keyword">import</span> java.io.OutputStreamWriter;<br><span class="hljs-keyword">import</span> java.net.ServerSocket;<br><span class="hljs-keyword">import</span> java.net.Socket;<br><span class="hljs-keyword">import</span> java.time.LocalDateTime;<br><br><span class="hljs-keyword">import</span> org.junit.Test;<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">NetTest</span> </span>&#123;<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">server3</span><span class="hljs-params">()</span> </span>&#123;<br>		ServerSocket server = <span class="hljs-keyword">null</span>;<br>		<span class="hljs-keyword">try</span> &#123;<br>			server = <span class="hljs-keyword">new</span> ServerSocket(<span class="hljs-number">8888</span>); <span class="hljs-comment">// 绑定端口</span><br>			<span class="hljs-keyword">while</span> (<span class="hljs-keyword">true</span>) &#123;<br>				System.out.println(<span class="hljs-string">&quot;服务器在8888端口监听中.....&quot;</span>);<br>				<span class="hljs-keyword">final</span> Socket socket1 = server.accept();<br>				;<br>				Runnable runner = <span class="hljs-keyword">new</span> Runnable() &#123;<br>					<span class="hljs-meta">@Override</span><br>					<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">run</span><span class="hljs-params">()</span> </span>&#123;<br>						BufferedWriter bufferedWriter = <span class="hljs-keyword">null</span>;<br>						<span class="hljs-keyword">try</span> &#123;<br>							bufferedWriter = <span class="hljs-keyword">new</span> BufferedWriter(<span class="hljs-keyword">new</span> OutputStreamWriter(socket1.getOutputStream()));<br>							bufferedWriter.write(<span class="hljs-string">&quot;我是服务器, 现在时间 : &quot;</span> + LocalDateTime.now());<br>							bufferedWriter.newLine();<br>							bufferedWriter.flush(); <span class="hljs-comment">// 把数据真的刷入网线中</span><br>						&#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>							e.printStackTrace();<br>						&#125; <span class="hljs-keyword">finally</span> &#123;<br>							<span class="hljs-keyword">if</span> (bufferedWriter != <span class="hljs-keyword">null</span>) &#123;<br>								<span class="hljs-keyword">try</span> &#123;<br>									bufferedWriter.close();<br>								&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>								&#125;<br>							&#125;<br>							<span class="hljs-keyword">if</span> (socket1 != <span class="hljs-keyword">null</span>) &#123;<br>								<span class="hljs-keyword">try</span> &#123;<br>									socket1.close();<br>								&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>								&#125;<br>							&#125;<br>						&#125;<br>						<span class="hljs-keyword">try</span> &#123;<br>							Thread.sleep(<span class="hljs-number">5000</span>);<br>						&#125; <span class="hljs-keyword">catch</span> (InterruptedException e) &#123;<br>							e.printStackTrace();<br>						&#125;<br>					&#125;<br>				&#125;;<br>				<span class="hljs-keyword">new</span> Thread(runner).start();<br>			&#125;<br>		&#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">finally</span> &#123;<br><br>			<span class="hljs-keyword">if</span> (server != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					System.out.println(<span class="hljs-string">&quot;服务器关闭....&quot;</span>);<br>					server.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>		&#125;<br>	&#125;<br><br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">client3</span><span class="hljs-params">()</span> </span>&#123;<br>		Socket socket2 = <span class="hljs-keyword">null</span>;<br>		BufferedReader bufferedReader = <span class="hljs-keyword">null</span>;<br>		<span class="hljs-keyword">try</span> &#123;<br>			socket2 = <span class="hljs-keyword">new</span> Socket(<span class="hljs-string">&quot;localhost&quot;</span>, <span class="hljs-number">8888</span>);<br>			bufferedReader = <span class="hljs-keyword">new</span> BufferedReader(<span class="hljs-keyword">new</span> InputStreamReader(socket2.getInputStream()));<br>			String readLine = bufferedReader.readLine();<br>			System.out.println(readLine);<br>		&#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">finally</span> &#123;<br>			<span class="hljs-keyword">if</span> (bufferedReader != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					bufferedReader.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>			<span class="hljs-keyword">if</span> (socket2 != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					socket2.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>		&#125;<br>	&#125;<br><br>	<span class="hljs-comment">// 从客户端发送文件给服务端，服务端保存到本地。并返回“发送成功”给客户端。并关闭相应的连接。</span><br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">server2</span><span class="hljs-params">()</span> </span>&#123;<br>		ServerSocket server = <span class="hljs-keyword">null</span>;<br>		Socket socket1 = <span class="hljs-keyword">null</span>;<span class="hljs-comment">// 网络套接字</span><br><br>		InputStream nis = <span class="hljs-keyword">null</span>;<br>		FileOutputStream fos = <span class="hljs-keyword">null</span>;<br>		BufferedWriter netWriter = <span class="hljs-keyword">null</span>;<br><br>		<span class="hljs-keyword">try</span> &#123;<br>			server = <span class="hljs-keyword">new</span> ServerSocket(<span class="hljs-number">7777</span>);<span class="hljs-comment">// 指定服务器接口</span><br>			socket1 = server.accept();<br>			nis = socket1.getInputStream();<br>			fos = <span class="hljs-keyword">new</span> FileOutputStream(<span class="hljs-string">&quot;朴树 - 猎户星座2.mp3&quot;</span>);<br>			netWriter = <span class="hljs-keyword">new</span> BufferedWriter(<span class="hljs-keyword">new</span> OutputStreamWriter(socket1.getOutputStream()));<br><br>			<span class="hljs-keyword">byte</span>[] buf = <span class="hljs-keyword">new</span> <span class="hljs-keyword">byte</span>[<span class="hljs-number">8192</span>];<br>			<span class="hljs-keyword">int</span> realCount = nis.read(buf);<br>			<span class="hljs-keyword">while</span> (realCount != -<span class="hljs-number">1</span>) &#123;<br>				fos.write(buf, <span class="hljs-number">0</span>, realCount);<br>				realCount = nis.read(buf);<br>			&#125;<br>			netWriter.write(<span class="hljs-string">&quot;发送成功&quot;</span>);<br>			netWriter.newLine();<br>			netWriter.flush();<br><br>		&#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">finally</span> &#123;<br>			<span class="hljs-keyword">if</span> (netWriter != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					netWriter.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>			<span class="hljs-keyword">if</span> (fos != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					fos.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>			<span class="hljs-keyword">if</span> (nis != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					nis.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>			<span class="hljs-keyword">if</span> (socket1 != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					socket1.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>			<span class="hljs-keyword">if</span> (server != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					server.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>		&#125;<br>	&#125;<br><br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">client2</span><span class="hljs-params">()</span> </span>&#123;<br>		Socket socket2 = <span class="hljs-keyword">null</span>;<span class="hljs-comment">// 网络套接字</span><br><br>		FileInputStream fis = <span class="hljs-keyword">null</span>;<span class="hljs-comment">// 文件输入流</span><br>		OutputStream nos = <span class="hljs-keyword">null</span>;<span class="hljs-comment">// 网络输出流</span><br>		BufferedReader netReader = <span class="hljs-keyword">null</span>;<span class="hljs-comment">// 网络输入流</span><br>		<span class="hljs-keyword">try</span> &#123;<br>			socket2 = <span class="hljs-keyword">new</span> Socket(<span class="hljs-string">&quot;127.0.0.1&quot;</span>, <span class="hljs-number">7777</span>);<br>			fis = <span class="hljs-keyword">new</span> FileInputStream(<span class="hljs-string">&quot;src/朴树 - 猎户星座.mp3&quot;</span>);<span class="hljs-comment">// 要传到服务器端的文件，先读入到客户端</span><br>			nos = socket2.getOutputStream();<span class="hljs-comment">// 传输到服务器端的文件输出流</span><br>			netReader = <span class="hljs-keyword">new</span> BufferedReader(<span class="hljs-keyword">new</span> InputStreamReader(socket2.getInputStream()));<span class="hljs-comment">// 读取服务器端返回的数据</span><br><br>			<span class="hljs-keyword">byte</span>[] buf = <span class="hljs-keyword">new</span> <span class="hljs-keyword">byte</span>[<span class="hljs-number">8192</span>];<br>			<span class="hljs-comment">// 读取数据</span><br>			<span class="hljs-keyword">int</span> realCount = fis.read(buf);<br>			<span class="hljs-keyword">while</span> (realCount != -<span class="hljs-number">1</span>) &#123;<br>				<span class="hljs-comment">// 1) 处理已经读的数据</span><br>				nos.write(buf, <span class="hljs-number">0</span>, realCount);<br>				<span class="hljs-comment">// 2) 继续读</span><br>				realCount = fis.read(buf);<br>			&#125;<br>			nos.flush();<span class="hljs-comment">// 将在缓存中的数据全部输出去</span><br>			socket2.shutdownOutput();<span class="hljs-comment">// 关闭输出流</span><br><br>			String readLine = netReader.readLine();<span class="hljs-comment">// 接受服务器端的数据</span><br>			System.out.println(readLine);<br><br>		&#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">finally</span> &#123;<span class="hljs-comment">// 关闭相应的资源</span><br>			<span class="hljs-keyword">if</span> (netReader != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					netReader.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>			<span class="hljs-keyword">if</span> (nos != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					nos.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>			<span class="hljs-keyword">if</span> (fis != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					fis.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>			<span class="hljs-keyword">if</span> (socket2 != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					socket2.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>		&#125;<br>	&#125;<br><br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">server</span><span class="hljs-params">()</span> </span>&#123;<br>		ServerSocket server = <span class="hljs-keyword">null</span>;<br>		Socket socket1 = <span class="hljs-keyword">null</span>;<br>		BufferedReader bufferedReader = <span class="hljs-keyword">null</span>;<br>		<span class="hljs-keyword">try</span> &#123;<br>			server = <span class="hljs-keyword">new</span> ServerSocket(<span class="hljs-number">9999</span>); <span class="hljs-comment">// 绑定9999端口.</span><br>			socket1 = server.accept(); <span class="hljs-comment">// 接受客户端的连接请求, 此方法会引起阻塞.</span><br>			System.out.println(socket1);<br>			<span class="hljs-comment">// 服务器端的socket1和客户端的socket2就建立了双向的网络通道</span><br>			InputStream inputStream = socket1.getInputStream();<br>			InputStreamReader isr = <span class="hljs-keyword">new</span> InputStreamReader(inputStream);<br><br>			bufferedReader = <span class="hljs-keyword">new</span> BufferedReader(isr);<br>			String readLine = bufferedReader.readLine();<br>			System.out.println(readLine);<br>		&#125; <span class="hljs-keyword">catch</span> (IOException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">finally</span> &#123;<br>			<span class="hljs-keyword">if</span> (bufferedReader != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					bufferedReader.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br><br>			<span class="hljs-keyword">if</span> (socket1 != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					socket1.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br><br>			<span class="hljs-keyword">if</span> (server != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					server.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br><br>			&#125;<br>		&#125;<br>	&#125;<br><br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">client</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-comment">// 连接服务器, 必须知道ip和端口.</span><br>		Socket socket2 = <span class="hljs-keyword">null</span>;<br>		BufferedWriter bufferedWriter = <span class="hljs-keyword">null</span>;<br>		<span class="hljs-keyword">try</span> &#123;<br>			socket2 = <span class="hljs-keyword">new</span> Socket(<span class="hljs-string">&quot;127.0.0.1&quot;</span>, <span class="hljs-number">9999</span>);<br>			System.out.println(socket2);<br>			<span class="hljs-comment">// 客户端的socket2和服务器端的socket1就建立了双向的网络通道</span><br>			OutputStream outputStream = socket2.getOutputStream();<br>			OutputStreamWriter osw = <span class="hljs-keyword">new</span> OutputStreamWriter(outputStream);<br>			bufferedWriter = <span class="hljs-keyword">new</span> BufferedWriter(osw);<br>			bufferedWriter.write(<span class="hljs-string">&quot;你好, 服务器, 俺是客户端.....&quot;</span>);<br>			bufferedWriter.newLine();<span class="hljs-comment">// 必须要有换行</span><br>			bufferedWriter.flush();<br>		&#125; <span class="hljs-keyword">catch</span> (IOException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">finally</span> &#123;<br>			<span class="hljs-keyword">if</span> (bufferedWriter != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					bufferedWriter.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br><br>			<span class="hljs-keyword">if</span> (socket2 != <span class="hljs-keyword">null</span>) &#123;<br>				<span class="hljs-keyword">try</span> &#123;<br>					socket2.close();<br>				&#125; <span class="hljs-keyword">catch</span> (Exception e2) &#123;<br>				&#125;<br>			&#125;<br>		&#125;<br>	&#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
-<h2 id="杀死本机被占用的端口号"><a href="#杀死本机被占用的端口号" class="headerlink" title="杀死本机被占用的端口号"></a>杀死本机被占用的端口号</h2><figure class="highlight apache"><table><tr><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">netstat</span> -ano   查看操作系统所有占用端口的进程<br><span class="hljs-attribute">netstat</span> -ano | findstr <span class="hljs-string">&quot;9999&quot;</span> 获取占用了<span class="hljs-number">9999</span>端口的进程<br><span class="hljs-attribute">taskkill</span> /F /pid <span class="hljs-number">1234</span> 关闭进程号为<span class="hljs-number">1234</span>的进程<br></code></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>Java</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-        <tag>网络编程</tag>
       </tags>
   </entry>
   <entry>
@@ -816,7 +817,7 @@
 <li><p>再返回到ChannelProcessor，根据选择器的选择，event进入不同的channel</p>
 </li>
 <li><p>SinkProcessor再决定channel中的enevt的走向。</p>
-<p>SinkProcessor共有三种类型，分别是DefaultSinkProcessor、LoadBalancingSinkProcessor和FailoverSinkProcessor</p>
+<p>SinkProcessor共有三种类型，分别是DefaultSinkProcessor、LoadBalancingSinkProcessor和FailoverSinkProcessor。</p>
 <p>DefaultSinkProcessor对应的是单个的Sink，LoadBalancingSinkProcessor和FailoverSinkProcessor对应的是Sink Group，LoadBalancingSinkProcessor可以实现负载均衡的功能，FailoverSinkProcessor可以错误恢复的功能(故障转移）。</p>
 </li>
 </ol>
@@ -829,6 +830,10 @@
 <li>聚合。将多台服务器部署一个flume日志采集，再将所有日志聚合到一个集中收集日志的flume，由此上传到HDFS,HBase，进行数据分析。</li>
 </ul>
 </li>
+</ul>
+<h3 id="API编程"><a href="#API编程" class="headerlink" title="API编程"></a>API编程</h3><ul>
+<li>可以查看官网的开发者文档。</li>
+<li>自定义Interceptor。定义类实现Interceptor接口，重写四个方法（初始化，单event修改，多event修改，关闭资源）还需要一个Builder静态内部类。</li>
 </ul>
 <h2 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h2><h3 id="flume的source-sink-Channel的作用？"><a href="#flume的source-sink-Channel的作用？" class="headerlink" title="flume的source,sink,Channel的作用？"></a>flume的source,sink,Channel的作用？</h3><ul>
 <li><p>作用：</p>
@@ -1064,7 +1069,7 @@
 </ol>
 </li>
 <li><p>基础架构</p>
-<p><a href="https://imgtu.com/i/RM0Fz9"><img src="https://z3.ax1x.com/2021/06/24/RM0Fz9.png" alt="RM0Fz9.png"></a></p>
+<p><a href="https://imgtu.com/i/RgX9C4"><img src="https://z3.ax1x.com/2021/07/03/RgX9C4.png" alt="RgX9C4.png"></a></p>
 <ul>
 <li>prodecer:消息生产者，向Kafka broker发消息的客户端</li>
 <li>consumer：消息消费者，向Kafka broker取消息的客户端</li>
@@ -1083,7 +1088,7 @@
 </li>
 <li><p>topic是逻辑的一个概念，partition是物理上的一个概念，每一个partition对应一个log文件，log文件中存放生产者生产的数据。每条数据也有自己的offset，消费者组中的每一个消费者，都会实时记录自己消费到了哪个offset，以便于出错时恢复，从上次的位置继续消费。</p>
 </li>
-<li><p><img src="C:\Users\Hasee\AppData\Roaming\Typora\typora-user-images\image-20210626170310541.png" alt="image-20210626170310541"></p>
+<li><p><a href="https://imgtu.com/i/RgXeUO"><img src="https://z3.ax1x.com/2021/07/03/RgXeUO.png" alt="RgXeUO.png"></a></p>
 </li>
 <li><p>当log文件过大时就会分成多个segment,主要是为了加快索引速度，而且一个log文件分成多个segment都是在磁盘上连续存储的，Kafka这样的设计可以大幅度提高数据读写速度。</p>
 </li>
@@ -1092,7 +1097,7 @@
 <li><p>“.index”文件存储大量的索引信息，“.log”文件存储大量的数据，索引文件中的元数据指向对应数据文件中message的物理偏移地址。</p>
 </li>
 <li><p>index和log文件以当前segment的第一条消息的offset命名</p>
-<p><a href="https://imgtu.com/i/RG9yGQ"><img src="https://z3.ax1x.com/2021/06/26/RG9yGQ.png" alt="RG9yGQ.png"></a></p>
+<p><a href="https://imgtu.com/i/RgXQxA"><img src="https://z3.ax1x.com/2021/07/03/RgXQxA.png" alt="RgXQxA.png"></a></p>
 </li>
 </ul>
 <h3 id="Kafka生产者"><a href="#Kafka生产者" class="headerlink" title="Kafka生产者"></a>Kafka生产者</h3><ul>
@@ -1113,7 +1118,7 @@
 <li><p>在第三种情况中，会出现一种意外情况：leader收到数据，所有follower都开始同步数据，但有一个follower，因为某种故障，迟迟不能与leader进行同步，那leader就要一直等下去，直到它完成同步，才能发送ack。这个问题怎么解决呢？</p>
 </li>
 <li><p>Kafka引入一个Leader维护了一个动态的in-sync replica set (ISR)，解决上述问题。和leader保持同步的follower在ISR中，如果Follower长时间未向leader同步数据，该follower会被踢出ISR，实践阈值由<em><strong>replica.lag.time.max.ms</strong></em>参数设定。leader故障则会重新选举leader。</p>
-<p><a href="https://imgtu.com/i/RGe9W6"><img src="https://z3.ax1x.com/2021/06/26/RGe9W6.png" alt="RGe9W6.png"></a></p>
+<p><a href="https://imgtu.com/i/RgXWRJ"><img src="https://z3.ax1x.com/2021/07/03/RgXWRJ.png" alt="RgXWRJ.png"></a></p>
 <ul>
 <li>当follower故障时会被临时踢出ISR，待待该follower恢复后，follower会读取本地磁盘记录的上次的HW，并将log文件高于HW的部分截取掉，从HW开始向leader进行同步。等该<em><strong>follower的LEO大于等于该Partition的HW</strong></em>，即follower追上leader之后，就可以重新加入ISR了。</li>
 <li>leader发生故障之后，会从ISR中选出一个新的leader，之后，为保证多个副本之间的数据一致性，其余的follower会先将各自的log文件高于HW的部分截掉，然后从新的leader同步数据。</li>
@@ -1148,12 +1153,13 @@
 <li>将offset放在Kafka内置的一个topic中，__consumer_offsets。由50个分区。</li>
 </ul>
 <h4 id="Zookeeper在Kafka中作用"><a href="#Zookeeper在Kafka中作用" class="headerlink" title="Zookeeper在Kafka中作用"></a>Zookeeper在Kafka中作用</h4><ul>
-<li>Kafka集群中有一个broker会被选举为Controller，负责管理集群broker的上下线，所有topic的分区副本分配和leader选举等工作。Controller的选举就是比谁快。</li>
-<li>Controller的管理工作都是依赖于Zookeeper的。</li>
-</ul>
-<p><a href="https://imgtu.com/i/RGnWLD"><img src="https://z3.ax1x.com/2021/06/26/RGnWLD.png" alt="RGnWLD.png"></a></p>
-<ul>
-<li>leader挂掉之后，Controller会选举新的leader，更新永久节点state中的信息。state存放某个topic,某个分区的以些必要信息。</li>
+<li><p>Kafka集群中有一个broker会被选举为Controller，负责管理集群broker的上下线，所有topic的分区副本分配和leader选举等工作。Controller的选举就是比谁快。</p>
+</li>
+<li><p>Controller的管理工作都是依赖于Zookeeper的。</p>
+<p><a href="https://imgtu.com/i/RgXXzd"><img src="https://z3.ax1x.com/2021/07/03/RgXXzd.png" alt="RgXXzd.png"></a></p>
+</li>
+<li><p>leader挂掉之后，Controller会选举新的leader，更新永久节点state中的信息。state存放某个topic,某个分区的以些必要信息。</p>
+</li>
 </ul>
 <h4 id="Kafka事务"><a href="#Kafka事务" class="headerlink" title="Kafka事务"></a>Kafka事务</h4><ul>
 <li>为了实现跨分区跨会话的事务，需要引入一个全局唯一的Transaction ID，并将Producer获得的PID和Transaction ID绑定。这样当Producer重启后就可以通过正在进行的Transaction ID获得原来的PID。</li>
@@ -1317,6 +1323,373 @@
       <tags>
         <tag>Java</tag>
         <tag>多线程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>project_logcollect</title>
+    <url>/2021/07/04/project-logcollect/</url>
+    <content><![CDATA[<h1 id="电商采集项目搭建流程"><a href="#电商采集项目搭建流程" class="headerlink" title="电商采集项目搭建流程"></a>电商采集项目搭建流程</h1><h2 id="自动生成数据脚本"><a href="#自动生成数据脚本" class="headerlink" title="自动生成数据脚本"></a>自动生成数据脚本</h2><ul>
+<li>生成用于测试的数据</li>
+</ul>
+<h2 id="数据采集模块"><a href="#数据采集模块" class="headerlink" title="数据采集模块"></a>数据采集模块</h2><h3 id="Hadoop安装"><a href="#Hadoop安装" class="headerlink" title="Hadoop安装"></a>Hadoop安装</h3><ul>
+<li><p>在这里只说以下大致步骤以及容易出错的地方</p>
+</li>
+<li><p>配置集群之间分发数据的脚本，以及集群之间ssh免密登录</p>
+</li>
+<li><p>hadoop安装，解压就行，注意解压的目录。</p>
+</li>
+<li><p>核心文件配置：</p>
+<ul>
+<li><font color=red>core-site.xml</font>文件配置</li>
+<li><font color=red>hdfs-site.xml</font>文件配置，因为是测试，在这里设置HDFS副本数量为1，防止存储不够，浪费存储。</li>
+<li><font color=red>yran-site.xml</font>文件配置</li>
+<li><font color=red>mapred-site.xml</font>文件</li>
+<li>workers文件配置，注意不用多打空格等输入错误，里面配置hadoop的datanode节点的主机名。</li>
+</ul>
+</li>
+<li><p>第一次启动注意要先格式化namenode。bin/hdfs namenode -format</p>
+</li>
+<li><p>常见web客户端：</p>
+<ul>
+<li>hadoop100:9870。HDFS的Web界面</li>
+<li>yarn的web界面：hadoop101:8088</li>
+<li>历史服务器hadoop102:19888</li>
+</ul>
+</li>
+<li><p>单点启动关闭命令</p>
+<figure class="highlight crmsh"><table><tr><td class="code"><pre><code class="hljs crmsh"><span class="hljs-comment">#HDFS组件</span><br>hdfs --daemon <span class="hljs-literal">start</span>/<span class="hljs-literal">stop</span> namenode/datanode/secondarynamenode<br><span class="hljs-comment">#Yarn</span><br>yarn --daemon <span class="hljs-literal">start</span>/<span class="hljs-literal">stop</span>  resourcemanager/nodemanager<br><span class="hljs-comment">#历史服务器</span><br>mapred --daemon <span class="hljs-literal">start</span> historyserver<br></code></pre></td></tr></table></figure></li>
+<li><p>配置历史服务器</p>
+</li>
+<li><p>配置日志的聚集</p>
+</li>
+<li><p>集群时间同步</p>
+</li>
+<li><p>配置一下压缩</p>
+</li>
+<li><p>可以测试一下集群基础性能</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><code class="hljs awk"><br>读写性能测试<br><span class="hljs-comment">#读取HDFS集群的10个128M文件</span><br>hadoop jar <span class="hljs-regexp">/opt/m</span>odule<span class="hljs-regexp">/hadoop-3.1.3/</span>share<span class="hljs-regexp">/hadoop/m</span>apreduce/hadoop-mapreduce-client-jobclient-<span class="hljs-number">3.1</span>.<span class="hljs-number">3</span>-tests.jar TestDFSIO -read -nrFiles <span class="hljs-number">10</span> -fileSize <span class="hljs-number">128</span>MB<br><span class="hljs-comment">#删除测试数据</span><br>hadoop jar <span class="hljs-regexp">/opt/m</span>odule<span class="hljs-regexp">/hadoop-3.1.3/</span>share<span class="hljs-regexp">/hadoop/m</span>apreduce/hadoop-mapreduce-client-jobclient-<span class="hljs-number">3.1</span>.<span class="hljs-number">3</span>-tests.jar TestDFSIO -clean<br><br>运算速度测试<br><span class="hljs-comment">#使用RandomWriter来产生随机数，每个节点运行10个Map任务，每个Map产生大约1G大小的二进制随机数</span><br>hadoop jar <span class="hljs-regexp">/opt/m</span>odule<span class="hljs-regexp">/hadoop-3.1.3/</span>share<span class="hljs-regexp">/hadoop/m</span>apreduce/hadoop-mapreduce-examples-<span class="hljs-number">3.1</span>.<span class="hljs-number">3</span>.jar randomwriter random-data<br><span class="hljs-comment">#执行排序程序</span><br>hadoop jar <span class="hljs-regexp">/opt/m</span>odule<span class="hljs-regexp">/hadoop-3.1.3/</span>share<span class="hljs-regexp">/hadoop/m</span>apreduce/hadoop-mapreduce-examples-<span class="hljs-number">3.1</span>.<span class="hljs-number">3</span>.jar sort random-data sorted-data<br><span class="hljs-comment">#验证数据是否排序成功</span><br>hadoop jar <span class="hljs-regexp">/opt/m</span>odule<span class="hljs-regexp">/hadoop-3.1.3/</span>share<span class="hljs-regexp">/hadoop/m</span>apreduce/hadoop-mapreduce-client-jobclient-<span class="hljs-number">3.1</span>.<span class="hljs-number">3</span>-tests.jar testmapredsort -sortInput random-data -sortOutput sorted-data<br></code></pre></td></tr></table></figure></li>
+</ul>
+<p><a href="https://imgtu.com/i/RWzQ8f"><img src="https://z3.ax1x.com/2021/07/04/RWzQ8f.png" alt="RWzQ8f.png"></a></p>
+<h3 id="ZooKeeper安装"><a href="#ZooKeeper安装" class="headerlink" title="ZooKeeper安装"></a>ZooKeeper安装</h3><ul>
+<li><p>在/zookeeper-3.5.7/这个目录下创建zkData</p>
+</li>
+<li><p>在/zookeeper-3.5.7/zkData目录下创建一个myid的文件，myid唯一。</p>
+</li>
+<li><p>重命名/zookeeper-3.5.7/conf这个目录下的zoo_sample.cfg为zoo.cfg</p>
+</li>
+<li><p>修改数据存储路径：dataDir=/opt/module/zookeeper-3.5.7/zkData</p>
+</li>
+<li><p>cluster下增加集群配置</p>
+</li>
+</ul>
+<h3 id="Kafka"><a href="#Kafka" class="headerlink" title="Kafka"></a>Kafka</h3><ul>
+<li><p>Kafka遇到的坑：– Error while fetching metadata with correlation id : {LEADER_NOT_AVAILABLE}</p>
+<ul>
+<li><p>原因：无法识别Kafka hostname</p>
+</li>
+<li><p>解决：修改kafka/config/server.properties配置</p>
+</li>
+<li><p>配置llisteners=PLAINTEXT://hadoop100:9092</p>
+</li>
+<li><p> 配置advertised.listeners=PLAINTEXT://hadoop100:9092</p>
+</li>
+</ul>
+</li>
+<li><p>Kafka压力测试</p>
+</li>
+</ul>
+<h3 id="项目基础架构"><a href="#项目基础架构" class="headerlink" title="项目基础架构"></a>项目基础架构</h3><ul>
+<li><a href="https://imgtu.com/i/W5gHcF"><img src="https://z3.ax1x.com/2021/07/27/W5gHcF.png" alt="W5gHcF.png"></a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>项目</category>
+        <category>电商数据采集项目</category>
+      </categories>
+      <tags>
+        <tag>大数据</tag>
+        <tag>电商采集项目</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>warehouse-project</title>
+    <url>/2021/07/29/warehouse-project/</url>
+    <content><![CDATA[<h1 id="离线数仓项目"><a href="#离线数仓项目" class="headerlink" title="离线数仓项目"></a>离线数仓项目</h1><h2 id="数仓分层"><a href="#数仓分层" class="headerlink" title="数仓分层"></a>数仓分层</h2><ul>
+<li><p>为什么要分层</p>
+<p><a href="https://imgtu.com/i/WHSDoQ"><img src="https://z3.ax1x.com/2021/07/29/WHSDoQ.png" alt="WHSDoQ.png"></a></p>
+<ul>
+<li>ODS层（Operation Data Store）原始数据层，将前端日志数据，后端业务数据直接导入，不做处理</li>
+<li>DWD层 (Data Warehouse Detail) 明细数据层，对ODS层数据进行数据清洗，维度退化，脱敏等。</li>
+<li>DWS层 （Data Warehouse Service）服务数据层，以DWD层为基础，按天进行轻度汇总。</li>
+<li>DWT层 （Data Warehouse Topic）主题数据层，以DWS层为基础，按主题进行汇总。</li>
+<li>ADS层 （Application Data Store）应用数据层，为各种统计报表提供数据。</li>
+</ul>
+</li>
+</ul>
+<h2 id="数仓理论"><a href="#数仓理论" class="headerlink" title="数仓理论"></a>数仓理论</h2><h3 id="范式概念"><a href="#范式概念" class="headerlink" title="范式概念"></a>范式概念</h3><ul>
+<li>范式可以理解为设计一张数据表的表结构应符合的标准级别。</li>
+<li>按照范式理论建表目的在于<font color=red>降低数据的冗余性</font></li>
+<li>范式的缺点是查询数据时需要进行大量的join操作。</li>
+</ul>
+<h4 id="函数依赖"><a href="#函数依赖" class="headerlink" title="函数依赖"></a>函数依赖</h4><ul>
+<li>完全函数依赖：简单来说：就是AB能推出C，但是AB单独时不能推出C，那么说C完全依赖于AB。</li>
+<li>部分函数依赖：AB能推出C,AB单独也能推出C，即C部分依赖于AB。</li>
+<li>传递函数依赖：通过A推出B，通过B推出C，但是C推不出A，那么C传递函数依赖于A。</li>
+</ul>
+<h4 id="范式区别"><a href="#范式区别" class="headerlink" title="范式区别"></a>范式区别</h4><ul>
+<li>第一范式：属性不可切割</li>
+<li>第二范式：不能存在部分函数依赖</li>
+<li>第三范式：不能存在传递函数依赖</li>
+</ul>
+<h3 id="关系建模和维度建模"><a href="#关系建模和维度建模" class="headerlink" title="关系建模和维度建模"></a>关系建模和维度建模</h3><ul>
+<li><p>当今的数据处理大致可以分成两大类：联机事务处理OLTP（on-line transaction processing）、联机分析处理OLAP（On-Line Analytical Processing）。OLTP是传统的关系型数据库的主要应用，主要是基本的、日常的事务处理，例如银行交易。OLAP是数据仓库系统的主要应用，支持复杂的分析操作，侧重决策支持，并且提供直观易懂的查询结果。</p>
+</li>
+<li><table>
+<thead>
+<tr>
+<th><em><strong>对比属性</strong></em></th>
+<th><em><strong>OLTP</strong></em></th>
+<th><em><strong>OLAP</strong></em></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><em><strong>读特性</strong></em></td>
+<td>每次查询只返回少量记录</td>
+<td>对大量记录进行汇总</td>
+</tr>
+<tr>
+<td><em><strong>写特性</strong></em></td>
+<td>随机、低延时写入用户的输入</td>
+<td>批量导入</td>
+</tr>
+<tr>
+<td><em><strong>使用场景</strong></em></td>
+<td>用户，Java EE项目</td>
+<td>内部分析师，为决策提供支持</td>
+</tr>
+<tr>
+<td><em><strong>数据表征</strong></em></td>
+<td>最新数据状态</td>
+<td>随时间变化的历史状态</td>
+</tr>
+<tr>
+<td><em><strong>数据规模</strong></em></td>
+<td>GB</td>
+<td>TB到PB</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<h4 id="关系建模"><a href="#关系建模" class="headerlink" title="关系建模"></a>关系建模</h4><ul>
+<li>关系建模，严格遵循第三范式。表较为松散，零碎，物理表数量多，而数据冗余程度低。由于数据分布于众多的表中，这些数据可以更为灵活地被应用，功能性较强。</li>
+</ul>
+<h4 id="维度建模"><a href="#维度建模" class="headerlink" title="维度建模"></a>维度建模</h4><ul>
+<li><p>维度模型主要应用在OLAP系统中，通常以某一个事实表为中心进行表的组织，主要面向业务。特征可能是存在数据的冗余，但是能方便得到数据。</p>
+</li>
+<li><p>关系模型虽然冗余少，但是在大规模数据，跨表分析统计查询过程中，会造成多表关联，这会大大降低执行效率。所以通常我们采用维度模型建模，把相关各种表整理成两种：事实表和维度表两种。</p>
+</li>
+<li><p>维度建模分成三种模型：</p>
+<ul>
+<li>星型模型</li>
+<li>雪花模型</li>
+<li><a href="https://imgtu.com/i/WzGEEd"><img src="https://z3.ax1x.com/2021/08/01/WzGEEd.png" alt="WzGEEd.png"></a></li>
+<li>星座模型</li>
+<li><img src="C:\Users\Hasee\AppData\Roaming\Typora\typora-user-images\image-20210801175519654.png" alt="image-20210801175519654"></li>
+</ul>
+</li>
+</ul>
+<h3 id="维度表与事实表（重点）"><a href="#维度表与事实表（重点）" class="headerlink" title="维度表与事实表（重点）"></a>维度表与事实表（重点）</h3><h4 id="维度表"><a href="#维度表" class="headerlink" title="维度表"></a>维度表</h4><ul>
+<li>维度表：一般是对事实的<font color=red>描述信息</font>。每一张维度表对应现实世界中的一个对象或者概念。例如：用户，商品，时间，地区等。就像是对事物描述的一个角度。</li>
+<li>维度表的特征：<ul>
+<li>维度表范围很宽（具有多个属性，列比较多）</li>
+<li>与事实表相比，行数相对较小。</li>
+<li>内容相对固定：编码表，地区表</li>
+</ul>
+</li>
+</ul>
+<h4 id="事实表"><a href="#事实表" class="headerlink" title="事实表"></a>事实表</h4><ul>
+<li><p>事实表中的每行数据代表一个业务事件（下单，支付，退款等），事实这个术语表示的是业务事件的<font color=red>度量值（可以统计次数，个数，金额等）</font></p>
+</li>
+<li><p>事实表的行包括：</p>
+<ul>
+<li>具有可加性的数值型的度量值</li>
+<li>与维度表相连接的外键（通常具有两个和两个以上的外键，外键之间表示维度表之间多对多的关系）</li>
+</ul>
+</li>
+<li><p>事实表的特征：</p>
+<ul>
+<li>非常大</li>
+<li>列数较少</li>
+<li>经常变化，每天会新增很多</li>
+</ul>
+</li>
+<li><p>事实表分类：</p>
+<ul>
+<li>事务型事实表：以每个<font color=red>事务或事件为单位</font>，例如一个销售订单记录，一比支付数据，作为事实表里一行数据。<font color=red>一旦事务被提交，事实表数据被插入，数据就不再进行更改，其更新方式为增量更新</font></li>
+<li>周期型快照事实表：周期型快照事实表中<font color=red>不会保留所有数据，只保留固定时间间隔的数据</font>，例如月销售额等。</li>
+<li>累积型快照事实表：<font color=red>累积快照事实表用于跟踪业务事实的变化</font>。例如，数据仓库中可能需要累积或存储订单从下订单开始，到订单商品被打包、运输、和签收的各个业务阶段的时间点数据来跟踪订单声明周期的进展情况。当这个业务过程进行时，事实表的记录也要不断更新。</li>
+</ul>
+</li>
+</ul>
+<h3 id="数据仓库建模"><a href="#数据仓库建模" class="headerlink" title="数据仓库建模"></a>数据仓库建模</h3><h4 id="ODS层"><a href="#ODS层" class="headerlink" title="ODS层"></a>ODS层</h4><ul>
+<li>保持数据原貌不做任何修改，起到数据备份的作用</li>
+<li>数据进行压缩，减少磁盘存储空间</li>
+<li>创建分区表，避免全表扫描</li>
+</ul>
+<h4 id="DWD层"><a href="#DWD层" class="headerlink" title="DWD层"></a>DWD层</h4><ul>
+<li><p>DWD层采用维度建模，采用星型模型</p>
+</li>
+<li><p>维度建模步骤：<font color=red>选择业务过程–&gt;声明粒度–&gt;确认维度–&gt;确认事实</font></p>
+<ul>
+<li><p>选择业务过程：一条业务线对应一张事实表</p>
+</li>
+<li><p>声明粒度：声明粒度指数据仓库中保存数据的细化程度或综合程度的级别。声明粒度意味着精确定义事实表中的一行数据表示什么，应该尽可能选择最小粒度，以此来应对各种各样的需求。</p>
+</li>
+<li><p>确定维度：维度的主要作用是描述业务是事实。</p>
+</li>
+<li><p>确定事实：此处事实指业务中的度量值。在DWD层中，以业务过程为建模驱动，基于每个具体以业务过程的特点，构建最细粒度的明细层事实表。</p>
+</li>
+</ul>
+</li>
+<li><p><a href="https://imgtu.com/i/fpvuSf"><img src="https://z3.ax1x.com/2021/08/02/fpvuSf.png" alt="fpvuSf.png"></a></p>
+</li>
+</ul>
+<ul>
+<li><table>
+<thead>
+<tr>
+<th></th>
+<th><em><strong>时间</strong></em></th>
+<th><em><strong>用户</strong></em></th>
+<th><em><strong>地区</strong></em></th>
+<th><em><strong>商品</strong></em></th>
+<th><em><strong>优惠券</strong></em></th>
+<th><em><strong>活动</strong></em></th>
+<th><em><strong>编码</strong></em></th>
+<th><em><strong>度量值</strong></em></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><em><strong>订单</strong></em></td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td></td>
+<td></td>
+<td>√</td>
+<td></td>
+<td>件数/金额</td>
+</tr>
+<tr>
+<td><em><strong>订单详情</strong></em></td>
+<td>√</td>
+<td></td>
+<td>√</td>
+<td>√</td>
+<td></td>
+<td></td>
+<td></td>
+<td>件数/金额</td>
+</tr>
+<tr>
+<td><em><strong>支付</strong></em></td>
+<td>√</td>
+<td></td>
+<td>√</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>金额</td>
+</tr>
+<tr>
+<td><em><strong>加购</strong></em></td>
+<td>√</td>
+<td>√</td>
+<td></td>
+<td>√</td>
+<td></td>
+<td></td>
+<td></td>
+<td>件数/金额</td>
+</tr>
+<tr>
+<td><em><strong>收藏</strong></em></td>
+<td>√</td>
+<td>√</td>
+<td></td>
+<td>√</td>
+<td></td>
+<td></td>
+<td></td>
+<td>个数</td>
+</tr>
+<tr>
+<td><em><strong>评价</strong></em></td>
+<td>√</td>
+<td>√</td>
+<td></td>
+<td>√</td>
+<td></td>
+<td></td>
+<td></td>
+<td>个数</td>
+</tr>
+<tr>
+<td><em><strong>退款</strong></em></td>
+<td>√</td>
+<td>√</td>
+<td></td>
+<td>√</td>
+<td></td>
+<td></td>
+<td></td>
+<td>件数/金额</td>
+</tr>
+<tr>
+<td><em><strong>优惠券领用</strong></em></td>
+<td>√</td>
+<td>√</td>
+<td></td>
+<td></td>
+<td>√</td>
+<td></td>
+<td></td>
+<td>个数</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>至此，数仓的维度建模完成。DWS，DWT和ADS层和维度建模已经没有关系了。DWS和DWT都是建宽表，宽表(通常是指业务主题相关的指标、维度、属性关联在一起的一张数据库表。由于把不同的内容都放在同一张表存储，宽表已经不符合三范式的模型设计规范，随之带来的主要坏处就是数据的大量冗余，与之相对应的好处就是查询性能的提高与便捷。)都是按照主题去建。主题相当于观察问题得到角度。对应着维度表。</p>
+</li>
+</ul>
+<h4 id="DWS层，DWT层"><a href="#DWS层，DWT层" class="headerlink" title="DWS层，DWT层"></a>DWS层，DWT层</h4><ul>
+<li>DWS层统计各个主题对象的当天行为，服务于DWT层的主题宽表。<ul>
+<li>每日设备行为</li>
+<li>每日会员行为</li>
+<li>每日商品行为</li>
+<li>每日地区统计</li>
+<li>每日活动统计</li>
+</ul>
+</li>
+<li>DWT层：以分析的主题对象为建模驱动，基于上层的应用和产品的指标需求，构建主题对象的全量宽表。<ul>
+<li>设备主题</li>
+<li>用户主题</li>
+<li>商品主题</li>
+<li>地区主题</li>
+<li>营销活动主题</li>
+</ul>
+</li>
+</ul>
+<h4 id="ADS"><a href="#ADS" class="headerlink" title="ADS"></a>ADS</h4><ul>
+<li>对电商系统各大主题指标分别进行分析。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>项目</category>
+        <category>离线数仓搭建</category>
+      </categories>
+      <tags>
+        <tag>数据仓库</tag>
       </tags>
   </entry>
   <entry>
@@ -2031,6 +2404,12 @@
 </li>
 <li><p>元数据：Meta store .元数据包括：表名、表所属的数据库（默认是default）、表的拥有者、列/分区字段、表的类型（是否是外部表）、表的数据所在目录等；</p>
 <p>默认存储在自带的derby数据库中，推荐使用MySQL存储Metastore</p>
+<p>Metastore的作用是：客户端连接metastore服务，metastore再去连接MySQL数据库来存取元数据。有了metastore服务，就可以有多个客户端同时连接，而且这些客户端不需要知道MySQL数据库的用户名和密码，只需要连接metastore 服务即可。</p>
+<ul>
+<li>内嵌模式使用的是内嵌的Derby数据库来存储元数据，也不需要额外起Metastore服务。这个是默认的，配置简单，但是一次只能一个客户端连接，适用于用来实验，不适用于生产环境。</li>
+<li>本地元存储和远程元存储都采用外部数据库来存储元数据，目前支持的数据库有：MySQL、Postgres、Oracle、MS SQL Server.在这里我们使用MySQL。</li>
+<li>本地元存储和远程元存储的区别是：本地元存储不需要单独起metastore服务，用的是跟hive在同一个进程里的metastore服务。远程元存储需要单独起metastore服务，然后每个客户端都在配置文件里配置连接到该metastore服务。远程元存储的metastore服务和hive运行在不同的进程里。</li>
+</ul>
 </li>
 <li><p>Hadooop.使用HDFS进行存储，使用MapReduce进行计算。</p>
 </li>
@@ -2209,7 +2588,7 @@
 </li>
 <li><p>Hive中的分区就是分目录，把一个大的数据集根据业务需要分割成小的数据集。</p>
 <ul>
-<li>````mysql<br>create table dept_partition(<br>deptno int, dname string, loc string<br>)<br>partitioned by (month string)<br>row format delimited fields terminated by ‘\t’;<br>–分区字段不能是表中已经存在的数据，可以将分区字段看作表的伪列。<br>– 查询分区表的分区<br>show partitions dept_partition<br>–如果提前准备数据，但是没有元数据<br>–把数据直接上传到分区目录上，让分区表和数据产生关联的三种方式<br>–1.添加分区<br>alter table dept_partition add partition(class=”03”)<br>–2.直接修复<br>msck repair table stu_par;<br>–3.上传带分区–同时创建分区<br>alter table dept_partition add partition(month=’201705’) partition(month=’201704’);<br>–删除多个分区<br> alter table dept_partition drop partition (month=’201705’), partition (month=’201706’);<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><br>- 分区表不能转换，只能在建表时就建好<br><br>- 支持二级分区<br><br>  ````mysql<br>  <span class="hljs-keyword">create</span> <span class="hljs-keyword">table</span> dept_partition2(<br>                 deptno <span class="hljs-built_in">int</span>, dname <span class="hljs-keyword">string</span>, loc <span class="hljs-keyword">string</span><br>                 )<br>                 partitioned <span class="hljs-keyword">by</span> (<span class="hljs-keyword">month</span> <span class="hljs-keyword">string</span>, <span class="hljs-keyword">day</span> <span class="hljs-keyword">string</span>)<br>                 <span class="hljs-keyword">row</span> <span class="hljs-keyword">format</span> <span class="hljs-keyword">delimited</span> <span class="hljs-keyword">fields</span> <span class="hljs-keyword">terminated</span> <span class="hljs-keyword">by</span> <span class="hljs-string">&#x27;\t&#x27;</span>;<br></code></pre></td></tr></table></figure></li>
+<li>````mysql<br>create table dept_partition(deptno int, dname string, loc string<br>)<br>partitioned by (month string)<br>row format delimited fields terminated by ‘\t’;<br>–分区字段不能是表中已经存在的数据，可以将分区字段看作表的伪列。<br>– 查询分区表的分区<br>show partitions dept_partition<br>–如果提前准备数据，但是没有元数据<br>–把数据直接上传到分区目录上，让分区表和数据产生关联的三种方式<br>–1.添加分区<br>alter table dept_partition add partition(class=”03”)<br>–2.直接修复<br>msck repair table stu_par;<br>–3.上传带分区–同时创建分区<br>alter table dept_partition add partition(month=’201705’) partition(month=’201704’);<br>–删除多个分区<br> alter table dept_partition drop partition (month=’201705’), partition (month=’201706’);<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">  <br>- 分区表不能转换，只能在建表时就建好<br><br>- 支持二级分区<br><br>  ````mysql<br>  <span class="hljs-keyword">create</span> <span class="hljs-keyword">table</span> dept_partition2(<br>                 deptno <span class="hljs-built_in">int</span>, dname <span class="hljs-keyword">string</span>, loc <span class="hljs-keyword">string</span><br>                 )<br>                 partitioned <span class="hljs-keyword">by</span> (<span class="hljs-keyword">month</span> <span class="hljs-keyword">string</span>, <span class="hljs-keyword">day</span> <span class="hljs-keyword">string</span>)<br>                 <span class="hljs-keyword">row</span> <span class="hljs-keyword">format</span> <span class="hljs-keyword">delimited</span> <span class="hljs-keyword">fields</span> <span class="hljs-keyword">terminated</span> <span class="hljs-keyword">by</span> <span class="hljs-string">&#x27;\t&#x27;</span>;<br></code></pre></td></tr></table></figure></li>
 </ul>
 </li>
 <li><p>修改表</p>
@@ -2292,9 +2671,9 @@
 </li>
 <li><p>常用函数</p>
 <ul>
-<li>UDF函数：一个输入一个输出 select substring(ename,1,1) from emp;（从　ｅname的1开始，取一个字符）用户定义（普通）函数，只对单行数值产生作用</li>
+<li>UDF函数：一个输入一个输出 select substring(ename,1,1) from emp;（从　ｅname的1开始，取一个字符）用户定义（普通）函数，只对单行数值产生作用。实现：继承UDF，实现evaluate()方法</li>
 <li>UDAF函数：多个输入，一个输出 select count(*) cnt from emp;用户定义聚合函数，可对多行数据产生作用；等同与SQL中常用的SUM()，AVG()，也是聚合函数；</li>
-<li>UDTF函数：一个输入，多个输出。用户定义表生成函数。用来解决输入一行输出多行；</li>
+<li>UDTF函数：一个输入，多个输出。用户定义表生成函数。用来解决输入一行输出多行；实现：继承GenericUDTF，实现close(),initialize(),process()方法</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="code"><pre><code class="hljs mysql">--1．求总行数（count）<br>select count(*) cnt from emp;<br>--2．求工资的最大值（max）<br>select max(sal) max_sal from emp;<br>--3．求工资的最小值（min）<br>select min(sal) min_sal from emp;<br>--4．求工资的总和（sum）<br>select sum(sal) sum_sal from emp; <br>--5．求工资的平均值（avg）<br>select avg(sal) avg_sal from emp;<br></code></pre></td></tr></table></figure></li>
 <li><p>LIMIT子句用于限制返回的行数</p>
@@ -2628,6 +3007,8 @@ copyToLocal#与get完全一样
 </li>
 </ul>
 <h2 id="NameNode和SecondaryNameNode"><a href="#NameNode和SecondaryNameNode" class="headerlink" title="NameNode和SecondaryNameNode"></a>NameNode和SecondaryNameNode</h2><ul>
+<li><p>namenode中一个元数据占150个字节的空间。</p>
+</li>
 <li><p>思考：NameNode中的元数据是存储在哪里的？</p>
 <p>首先，我们做个假设，如果存储在NameNode节点的磁盘中，因为经常需要进行随机访问，还有响应客户请求，必然是效率过低。因此，元数据需要存放在内存中。但如果只存在内存中，一旦断电，元数据丢失，整个集群就无法工作了。因此产生在磁盘中备份元数据的FsImage。</p>
 <p>这样又会带来新的问题，当在内存中的元数据更新时，如果同时更新FsImage，就会导致效率过低，但如果不更新，就会发生一致性问题，一旦NameNode节点断电，就会产生数据丢失。因此，引入Edits文件(只进行追加操作，效率很高)。每当元数据有更新或者添加元数据时，修改内存中的元数据并追加到Edits中。这样，一旦NameNode节点断电，可以通过FsImage和Edits的合并，合成元数据。</p>
@@ -2749,7 +3130,7 @@ copyToLocal#与get完全一样
 <li><a href="https://imgtu.com/i/gLfma6"><img src="https://z3.ax1x.com/2021/05/22/gLfma6.md.png" alt="gLfma6.md.png"></a><ol>
 <li>MapTask收集map()方法输出的KV对，放到环形内存缓冲区中</li>
 <li>在内存缓冲区中会进行快速排序，不断溢写到本地磁盘文件</li>
-<li>多个溢出的文件会被合成大的溢出文件</li>
+<li>多个溢出的文件会被合成大的溢出文件(溢写到磁盘耗时间，耗资源)</li>
 <li>在溢出过程和合并过程中，都调用Partitiner进行分区和针对Key 进行排序，在环形缓冲区中溢出时进行快速排序，在合并时进行归并排序。</li>
 <li>ReduceTask根据自己的分区号，去各个MapTask机器上取相应的结果分区数据</li>
 <li>ReduceTask 会取到同一个分区的来自不同MapTask 的结果文件，ReduceTask会将这些文件再进行合并（归并排序）</li>
@@ -2849,6 +3230,13 @@ copyToLocal#与get完全一样
 </li>
 </ul>
 <h3 id="MapReduce工作机制"><a href="#MapReduce工作机制" class="headerlink" title="MapReduce工作机制"></a>MapReduce工作机制</h3><ul>
+<li><p>MapReduce哪些阶段可以进行压缩</p>
+<ul>
+<li>map的输入端（主要看数据大小和切片，lzo,bzip2）</li>
+<li>map的输出端(主要考虑速度，snappy，Lzo)</li>
+<li>reduce的输出端(看需求，是要继续做mapreduce的输出，还是直接做分析的数据等)</li>
+</ul>
+</li>
 <li><p>MapTask工作机制</p>
 <ul>
 <li><p><a href="https://imgtu.com/i/gzWpHH"><img src="https://z3.ax1x.com/2021/05/25/gzWpHH.md.png" alt="gzWpHH.md.png"></a></p>

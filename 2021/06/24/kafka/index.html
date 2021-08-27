@@ -68,7 +68,7 @@
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand"
-       href="/">&nbsp;<strong>小丑的Blog</strong>&nbsp;</a>
+       href="/">&nbsp;<strong>Nevermind</strong>&nbsp;</a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
             data-target="#navbarSupportedContent"
@@ -229,7 +229,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2021年6月26日 晚上
+                  本文最后更新于：2021年7月3日 中午
                 
               </p>
             
@@ -244,7 +244,7 @@
 </ol>
 </li>
 <li><p>基础架构</p>
-<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/RM0Fz9"><img src="https://z3.ax1x.com/2021/06/24/RM0Fz9.png" srcset="/img/loading.gif" lazyload alt="RM0Fz9.png"></a></p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/RgX9C4"><img src="https://z3.ax1x.com/2021/07/03/RgX9C4.png" srcset="/img/loading.gif" lazyload alt="RgX9C4.png"></a></p>
 <ul>
 <li>prodecer:消息生产者，向Kafka broker发消息的客户端</li>
 <li>consumer：消息消费者，向Kafka broker取消息的客户端</li>
@@ -263,7 +263,7 @@
 </li>
 <li><p>topic是逻辑的一个概念，partition是物理上的一个概念，每一个partition对应一个log文件，log文件中存放生产者生产的数据。每条数据也有自己的offset，消费者组中的每一个消费者，都会实时记录自己消费到了哪个offset，以便于出错时恢复，从上次的位置继续消费。</p>
 </li>
-<li><p><img src="C:\Users\Hasee\AppData\Roaming\Typora\typora-user-images\image-20210626170310541.png" srcset="/img/loading.gif" lazyload alt="image-20210626170310541"></p>
+<li><p><a target="_blank" rel="noopener" href="https://imgtu.com/i/RgXeUO"><img src="https://z3.ax1x.com/2021/07/03/RgXeUO.png" srcset="/img/loading.gif" lazyload alt="RgXeUO.png"></a></p>
 </li>
 <li><p>当log文件过大时就会分成多个segment,主要是为了加快索引速度，而且一个log文件分成多个segment都是在磁盘上连续存储的，Kafka这样的设计可以大幅度提高数据读写速度。</p>
 </li>
@@ -272,7 +272,7 @@
 <li><p>“.index”文件存储大量的索引信息，“.log”文件存储大量的数据，索引文件中的元数据指向对应数据文件中message的物理偏移地址。</p>
 </li>
 <li><p>index和log文件以当前segment的第一条消息的offset命名</p>
-<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/RG9yGQ"><img src="https://z3.ax1x.com/2021/06/26/RG9yGQ.png" srcset="/img/loading.gif" lazyload alt="RG9yGQ.png"></a></p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/RgXQxA"><img src="https://z3.ax1x.com/2021/07/03/RgXQxA.png" srcset="/img/loading.gif" lazyload alt="RgXQxA.png"></a></p>
 </li>
 </ul>
 <h3 id="Kafka生产者"><a href="#Kafka生产者" class="headerlink" title="Kafka生产者"></a>Kafka生产者</h3><ul>
@@ -293,7 +293,7 @@
 <li><p>在第三种情况中，会出现一种意外情况：leader收到数据，所有follower都开始同步数据，但有一个follower，因为某种故障，迟迟不能与leader进行同步，那leader就要一直等下去，直到它完成同步，才能发送ack。这个问题怎么解决呢？</p>
 </li>
 <li><p>Kafka引入一个Leader维护了一个动态的in-sync replica set (ISR)，解决上述问题。和leader保持同步的follower在ISR中，如果Follower长时间未向leader同步数据，该follower会被踢出ISR，实践阈值由<em><strong>replica.lag.time.max.ms</strong></em>参数设定。leader故障则会重新选举leader。</p>
-<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/RGe9W6"><img src="https://z3.ax1x.com/2021/06/26/RGe9W6.png" srcset="/img/loading.gif" lazyload alt="RGe9W6.png"></a></p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/RgXWRJ"><img src="https://z3.ax1x.com/2021/07/03/RgXWRJ.png" srcset="/img/loading.gif" lazyload alt="RgXWRJ.png"></a></p>
 <ul>
 <li>当follower故障时会被临时踢出ISR，待待该follower恢复后，follower会读取本地磁盘记录的上次的HW，并将log文件高于HW的部分截取掉，从HW开始向leader进行同步。等该<em><strong>follower的LEO大于等于该Partition的HW</strong></em>，即follower追上leader之后，就可以重新加入ISR了。</li>
 <li>leader发生故障之后，会从ISR中选出一个新的leader，之后，为保证多个副本之间的数据一致性，其余的follower会先将各自的log文件高于HW的部分截掉，然后从新的leader同步数据。</li>
@@ -328,12 +328,13 @@
 <li>将offset放在Kafka内置的一个topic中，__consumer_offsets。由50个分区。</li>
 </ul>
 <h4 id="Zookeeper在Kafka中作用"><a href="#Zookeeper在Kafka中作用" class="headerlink" title="Zookeeper在Kafka中作用"></a>Zookeeper在Kafka中作用</h4><ul>
-<li>Kafka集群中有一个broker会被选举为Controller，负责管理集群broker的上下线，所有topic的分区副本分配和leader选举等工作。Controller的选举就是比谁快。</li>
-<li>Controller的管理工作都是依赖于Zookeeper的。</li>
-</ul>
-<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/RGnWLD"><img src="https://z3.ax1x.com/2021/06/26/RGnWLD.png" srcset="/img/loading.gif" lazyload alt="RGnWLD.png"></a></p>
-<ul>
-<li>leader挂掉之后，Controller会选举新的leader，更新永久节点state中的信息。state存放某个topic,某个分区的以些必要信息。</li>
+<li><p>Kafka集群中有一个broker会被选举为Controller，负责管理集群broker的上下线，所有topic的分区副本分配和leader选举等工作。Controller的选举就是比谁快。</p>
+</li>
+<li><p>Controller的管理工作都是依赖于Zookeeper的。</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/RgXXzd"><img src="https://z3.ax1x.com/2021/07/03/RgXXzd.png" srcset="/img/loading.gif" lazyload alt="RgXXzd.png"></a></p>
+</li>
+<li><p>leader挂掉之后，Controller会选举新的leader，更新永久节点state中的信息。state存放某个topic,某个分区的以些必要信息。</p>
+</li>
 </ul>
 <h4 id="Kafka事务"><a href="#Kafka事务" class="headerlink" title="Kafka事务"></a>Kafka事务</h4><ul>
 <li>为了实现跨分区跨会话的事务，需要引入一个全局唯一的Transaction ID，并将Producer获得的PID和Transaction ID绑定。这样当Producer重启后就可以通过正在进行的Transaction ID获得原来的PID。</li>
