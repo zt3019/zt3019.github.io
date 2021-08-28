@@ -18,9 +18,25 @@
   <meta name="author" content="daxiazou">
   <meta name="keywords" content="">
   
-  <title>标签 - Nevermind</title>
+  <title>Spark - Nevermind</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.6.0/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
 
 
 
@@ -48,7 +64,7 @@
 
 
 <body>
-  <header style="height: 80vh;">
+  <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand"
@@ -142,22 +158,55 @@
 </nav>
 
     <div class="banner" id="banner" parallax=true
-         style="background: url('/img/default.png') no-repeat center center;
+         style="background: url('https://storage.googleapis.com/icemdweb-wp-uploads/2018/10/9b7e1b03-spark_0.png') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="标签">
+            <span class="h2" id="subtitle" title="Spark">
               
             </span>
 
             
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-08-27 16:52" pubdate>
+        2021年8月27日 下午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      468 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      5
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
           </div>
 
-          
-            <div class="scroll-down-bar">
-              <i class="iconfont icon-arrowdown"></i>
-            </div>
           
         </div>
       </div>
@@ -166,24 +215,126 @@
 
   <main>
     
-      <div class="container nopadding-x-md">
-        <div class="py-5" id="board"
-          >
-          
-          <div class="container">
-            <div class="row">
-              <div class="col-12 col-md-10 m-auto">
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Spark</h1>
+            
+              <p class="note note-info">
                 
+                  本文最后更新于：2021年8月28日 晚上
+                
+              </p>
+            
+            <div class="markdown-body">
+              <h1 id="Spark"><a href="#Spark" class="headerlink" title="Spark"></a>Spark</h1><h2 id="Spark入门"><a href="#Spark入门" class="headerlink" title="Spark入门"></a>Spark入门</h2><ul>
+<li><p>spark是一种基于内存的快速，通用，可扩展的大数据分析计算引擎。</p>
+</li>
+<li><p>spark内置模块</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/h16ZB4"><img src="https://z3.ax1x.com/2021/08/28/h16ZB4.png" srcset="/img/loading.gif" lazyload alt="h16ZB4.png"></a></p>
+<ul>
+<li>spark core：实现了Spark的基本功能，包含任务调度、内存管理、错误恢复、与存储系统交互等模块。Spark Core中还包含了对弹性分布式数据集(Resilient Distributed DataSet，简称RDD)的API定义。 </li>
+<li>Spark SQL：是Spark用来操作结构化数据的程序包。通过Spark SQL，我们可以使用 SQL或者Apache Hive版本的HQL来查询数据。Spark SQL支持多种数据源，比如Hive表、Parquet以及JSON等。</li>
+<li>Spark Streaming：是Spark提供的对实时数据进行流式计算的组件。提供了用来操作数据流的API，并且与Spark Core中的 RDD API高度对应。 </li>
+<li>Spark MLlib：提供常见的机器学习功能的程序库。包括分类、回归、聚类、协同过滤等，还提供了模型评估、数据 导入等额外的支持功能。 </li>
+<li>Spark GraphX：主要用于图形并行计算和图挖掘系统的组件。</li>
+<li>集群管理器：Spark设计为可以高效地在一个计算节点到数千个计算节点之间伸缩计算。为了实现这样的要求，同时获得最大灵活性，Spark支持在各种集群管理器(Cluster Manager)上运行，包括Hadoop YARN、Apache Mesos，以及Spark自带的一个简易调度器，叫作独立调度器。</li>
+</ul>
+</li>
+</ul>
+<h3 id="Spark运行模式"><a href="#Spark运行模式" class="headerlink" title="Spark运行模式"></a>Spark运行模式</h3><ul>
+<li><p>运行模式:单机模式，集群模式</p>
+<ul>
+<li>Local模式：本地部署单个spark模式</li>
+<li>Standalone：spark自带的任务调度模式</li>
+<li>YARN模式：spark使用Hadoop的YARN组件进行资源与任务调度。（重点）</li>
+<li>Mesos模式：saprk使用Mesos平台进行资源与任务的调度。</li>
+</ul>
+</li>
+<li><p>运行流程</p>
+<ul>
+<li>Spark有yarn-client和yarn-cluster两种模式，主要区别在于：Driver程序的运行节点。</li>
+</ul>
+</li>
+</ul>
 
-<div class="text-center tagcloud">
-  <a href="/tags/Blog/" style="font-size: 15px; color: #bbe">Blog</a> <a href="/tags/HA/" style="font-size: 15px; color: #bbe">HA</a> <a href="/tags/Hadoop/" style="font-size: 22.5px; color: #779bd3">Hadoop</a> <a href="/tags/Java/" style="font-size: 26.25px; color: #558ac5">Java</a> <a href="/tags/Java%E5%85%B3%E9%94%AE%E5%AD%97/" style="font-size: 15px; color: #bbe">Java关键字</a> <a href="/tags/Linux/" style="font-size: 15px; color: #bbe">Linux</a> <a href="/tags/Scala/" style="font-size: 15px; color: #bbe">Scala</a> <a href="/tags/flume/" style="font-size: 18.75px; color: #99abe0">flume</a> <a href="/tags/java/" style="font-size: 15px; color: #bbe">java</a> <a href="/tags/kafka/" style="font-size: 15px; color: #bbe">kafka</a> <a href="/tags/shell/" style="font-size: 15px; color: #bbe">shell</a> <a href="/tags/spark/" style="font-size: 15px; color: #bbe">spark</a> <a href="/tags/zookeeper/" style="font-size: 15px; color: #bbe">zookeeper</a> <a href="/tags/%E5%8F%8D%E5%B0%84/" style="font-size: 15px; color: #bbe">反射</a> <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 15px; color: #bbe">多线程</a> <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" style="font-size: 30px; color: #337ab7">大数据</a> <a href="/tags/%E5%BC%82%E5%B8%B8/" style="font-size: 15px; color: #bbe">异常</a> <a href="/tags/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/" style="font-size: 15px; color: #bbe">排序算法</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E4%BB%93%E5%BA%93/" style="font-size: 15px; color: #bbe">数据仓库</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" style="font-size: 15px; color: #bbe">数据库</a> <a href="/tags/%E7%94%B5%E5%95%86%E9%87%87%E9%9B%86%E9%A1%B9%E7%9B%AE/" style="font-size: 15px; color: #bbe">电商采集项目</a> <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" style="font-size: 15px; color: #bbe">网络编程</a>
-</div>
-
-              </div>
             </div>
-          </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a>
+                    
+                      <a class="hover-with-bg" href="/tags/spark/">spark</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/08/10/Scala/">
+                        <span class="hidden-mobile">Scala</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
         </div>
       </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
     
 
     
@@ -287,9 +438,15 @@
 
 
 
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.2/dist/tocbot.min.js" ></script>
 
 
 
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
 
 
 
