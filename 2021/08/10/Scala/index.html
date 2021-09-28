@@ -185,7 +185,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      4.5k 字
+      5.4k 字
     </span>
   
 
@@ -195,7 +195,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      54
+      66
        分钟
     </span>
   
@@ -229,7 +229,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2021年8月28日 下午
+                  本文最后更新于：2021年9月2日 晚上
                 
               </p>
             
@@ -330,34 +330,46 @@
 <p>（9）如果不关心名称，只关心逻辑处理，那么函数名（def）可以省略</p>
 </li>
 </ul>
-</li>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><code class="hljs scala"><span class="hljs-keyword">package</span> com.zt.spark.day01<br><br><span class="hljs-class"><span class="hljs-keyword">object</span> <span class="hljs-title">FunctionTest</span> </span>&#123;<br>  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">main</span></span>(args: <span class="hljs-type">Array</span>[<span class="hljs-type">String</span>]): <span class="hljs-type">Unit</span> = &#123;<br>    <span class="hljs-comment">//(0)函数标准写法</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">f</span></span>(s:<span class="hljs-type">String</span>): <span class="hljs-type">String</span>=&#123;<br>      <span class="hljs-keyword">return</span> s+<span class="hljs-string">&quot;hello world&quot;</span><br>    &#125;<br>    println(f(<span class="hljs-string">&quot;hi,&quot;</span>))<br>    <span class="hljs-comment">//至简原则</span><br>    <span class="hljs-comment">//(1)return可以省略，Scala会使用函数体的最后一行代码作为返回值</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">f1</span></span>(s:<span class="hljs-type">String</span>):<span class="hljs-type">String</span>=&#123;<br>      s+<span class="hljs-string">&quot;hello&quot;</span><br>    &#125;<br>    println(f1(<span class="hljs-string">&quot;world &quot;</span>))<br>    <span class="hljs-comment">//(2)如果函数只有一行代码，可以省略花括号</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">f2</span></span>(s:<span class="hljs-type">String</span>):<span class="hljs-type">String</span>=s+<span class="hljs-string">&quot; hello&quot;</span><br>    println(f2(<span class="hljs-string">&quot;world&quot;</span>))<br>    <span class="hljs-comment">//(3)返回值类型如果能推断出来，那么可以省略（：和返回值类型一起省略）</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">f3</span></span>(s:<span class="hljs-type">String</span>)=s+<span class="hljs-string">&quot; wocao&quot;</span><br>    println(f3(<span class="hljs-string">&quot;aaaa&quot;</span>))<br>    <span class="hljs-comment">//(4)如果return,则不能省略返回值类型，必须指定。</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">f4</span></span>():<span class="hljs-type">String</span>=<span class="hljs-keyword">return</span> <span class="hljs-string">&quot;hello&quot;</span><br>    println(f4)<br>    <span class="hljs-comment">//(5)如果函数明确声明unit，那么即使函数体中使用return关键字也不起作用</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">f5</span></span>():<span class="hljs-type">Unit</span>=<span class="hljs-keyword">return</span> <span class="hljs-string">&quot;xxxx&quot;</span><br>    println(f5)<br>    <span class="hljs-comment">//(6)Scala如果期望是无返回值类型，可以省略等号</span><br>    <span class="hljs-comment">//将无返回值的函数称为&quot;过程&quot;</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">f6</span></span>() &#123;<br>      <span class="hljs-string">&quot;dadadada&quot;</span><br>    &#125;<br>    println(f6())<br>    <span class="hljs-comment">//(7)如果函数无参，但是声明了参数列表，那么调用时，小括号可加可不加</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">f7</span></span>()=<span class="hljs-string">&quot;xxx&quot;</span><br>    println(f7())<br>    println(f7)<br>    <span class="hljs-comment">//(8)如果函数没有参数列表，那么小括号可以省略，调用时小括号必须省略</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">f8</span> </span>=<span class="hljs-string">&quot;xxx&quot;</span><br>    println(f8)<br>    <span class="hljs-comment">//(9)如果不关心名称，只关心逻辑处理，那么函数名(def)可以省略</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">f9=</span></span>(x:<span class="hljs-type">String</span>)=&gt;&#123;println(<span class="hljs-string">&quot;wode&quot;</span>)&#125;<br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">f10</span></span>(f:<span class="hljs-type">String</span>=&gt;<span class="hljs-type">Unit</span>): <span class="hljs-type">Unit</span> =&#123;<br>      f(<span class="hljs-string">&quot;&quot;</span>)<br>    &#125;<br>    f10(f9)<br>    println(f10((x:<span class="hljs-type">String</span>)=&gt;&#123;println(<span class="hljs-string">&quot;dadada&quot;</span>)&#125;))<br>  &#125;<br><br>&#125;<br><br></code></pre></td></tr></table></figure></li>
 </ul>
 <h4 id="高阶函数"><a href="#高阶函数" class="headerlink" title="高阶函数"></a>高阶函数</h4><ul>
-<li>函数可以作为值进行传递<ul>
+<li><p>函数可以作为值进行传递</p>
+<ul>
 <li>var f = 函数名 _</li>
 <li>如果明确了变量的数据类型，那么下划线可以省略</li>
 </ul>
 </li>
-<li>函数可以作为参数进行传递<ul>
+<li><p>函数可以作为参数进行传递</p>
+<ul>
 <li>通过匿名函数</li>
 <li>扩展函数的功能</li>
 <li>提高函数的灵活度</li>
 </ul>
 </li>
-<li>函数可以作为返回值进行传递<ul>
+<li><p>函数可以作为返回值进行传递</p>
+<ul>
 <li>函数的嵌套</li>
 <li>函数链式调用，通过参数传递数据，在执行过程中，函数始终占据栈内存，容易导致内存溢出</li>
 <li>闭包：内层函数访问外层函数的局部变量，会自动延长外层函数局部变量的生命周期，与内层函数形成一个闭合的效果，我们称之为闭包</li>
 <li>柯里化：将一个参数列表中的多个参数，拆分为多个参数列表</li>
 </ul>
 </li>
-<li>匿名函数：<ul>
-<li>参数的类型可以省略，会根据形参进行自动的推导</li>
-<li>类型省略之后，发现只有一个参数，则圆括号可以省略；其他情况：没有参数和参数超过1的永远不能省略圆括号。</li>
-<li>匿名函数如果只有一行，则大括号也可以省略</li>
-<li>如果参数只出现一次，则参数省略且后面参数可以用_代替</li>
-</ul>
+<li><p>匿名函数：</p>
+<ul>
+<li><p>(x:Int)=&gt;{函数体}</p>
 </li>
+<li><p>x：表示输入参数类型；Int：表示输入参数类型；函数体：表示具体代码逻辑</p>
+</li>
+<li><p>参数的类型可以省略，会根据形参进行自动的推导</p>
+</li>
+<li><p>类型省略之后，发现只有一个参数，则圆括号可以省略；其他情况：没有参数和参数超过1的永远不能省略圆括号。</p>
+</li>
+<li><p>匿名函数如果只有一行，则大括号也可以省略</p>
+</li>
+<li><p>如果参数只出现一次，则参数省略且后面参数可以用_代替</p>
+</li>
+</ul>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs scala">    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">main</span></span>(args: <span class="hljs-type">Array</span>[<span class="hljs-type">String</span>]): <span class="hljs-type">Unit</span> = &#123;<br><br>        <span class="hljs-comment">// （1）定义一个函数：参数包含数据和逻辑函数</span><br>        <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">operation</span></span>(arr: <span class="hljs-type">Array</span>[<span class="hljs-type">Int</span>], op: <span class="hljs-type">Int</span> =&gt; <span class="hljs-type">Int</span>) = &#123;<br>            <span class="hljs-keyword">for</span> (elem &lt;- arr) <span class="hljs-keyword">yield</span> op(elem)<br>        &#125;<br><br>        <span class="hljs-comment">// （2）定义逻辑函数</span><br>        <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">op</span></span>(ele: <span class="hljs-type">Int</span>): <span class="hljs-type">Int</span> = &#123;<br>            ele + <span class="hljs-number">1</span><br>        &#125;<br><br>        <span class="hljs-comment">// （3）标准函数调用</span><br>        <span class="hljs-keyword">val</span> arr = operation(<span class="hljs-type">Array</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>), op)<br>        println(arr.mkString(<span class="hljs-string">&quot;,&quot;</span>))<br><br>        <span class="hljs-comment">// （4）采用匿名函数</span><br>        <span class="hljs-keyword">val</span> arr1 = operation(<span class="hljs-type">Array</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>), (ele: <span class="hljs-type">Int</span>) =&gt; &#123;<br>            ele + <span class="hljs-number">1</span><br>        &#125;)<br>        println(arr1.mkString(<span class="hljs-string">&quot;,&quot;</span>))<br><br>        <span class="hljs-comment">// （4.1）参数的类型可以省略，会根据形参进行自动的推导;</span><br>        <span class="hljs-keyword">val</span> arr2 = operation(<span class="hljs-type">Array</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>), (ele) =&gt; &#123;<br>            ele + <span class="hljs-number">1</span><br>        &#125;)<br>        println(arr2.mkString(<span class="hljs-string">&quot;,&quot;</span>))<br><br>        <span class="hljs-comment">// （4.2）类型省略之后，发现只有一个参数，则圆括号可以省略；其他情况：没有参数和参数超过1的永远不能省略圆括号。</span><br>        <span class="hljs-keyword">val</span> arr3 = operation(<span class="hljs-type">Array</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>), ele =&gt; &#123;<br>            ele + <span class="hljs-number">1</span><br>        &#125;)<br>        println(arr3.mkString(<span class="hljs-string">&quot;,&quot;</span>))<br><br>        <span class="hljs-comment">// (4.3) 匿名函数如果只有一行，则大括号也可以省略</span><br>        <span class="hljs-keyword">val</span> arr4 = operation(<span class="hljs-type">Array</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>), ele =&gt; ele + <span class="hljs-number">1</span>)<br>        println(arr4.mkString(<span class="hljs-string">&quot;,&quot;</span>))<br><br>        <span class="hljs-comment">//（4.4）如果参数只出现一次，则参数省略且后面参数可以用_代替</span><br>        <span class="hljs-keyword">val</span> arr5 = operation(<span class="hljs-type">Array</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>), _ + <span class="hljs-number">1</span>)<br>        println(arr5.mkString(<span class="hljs-string">&quot;,&quot;</span>))<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
 </ul>
 <h2 id="面向对象"><a href="#面向对象" class="headerlink" title="面向对象"></a>面向对象</h2><h3 id="对象和类"><a href="#对象和类" class="headerlink" title="对象和类"></a>对象和类</h3><ul>
 <li><p>在自然界中，只要是客观存在的都是对象（万物皆对象）</p>
@@ -575,6 +587,24 @@
 <figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs angelscript">（<span class="hljs-number">1</span>）获取集合的头<br>	head<br>（<span class="hljs-number">2</span>）获取集合的尾（不是头的就是尾）<br>	tail<br>（<span class="hljs-number">3</span>）集合最后一个数据<br>	last<br>（<span class="hljs-number">4</span>）集合初始数据（不包含最后一个）<br>	init<br>（<span class="hljs-number">5</span>）反转<br>	reverse<br>（<span class="hljs-number">6</span>）取前（后）n个元素<br>	take|takeRight<br>（<span class="hljs-number">7</span>）去掉前（后）n个元素<br>	drop|dropRight<br>（<span class="hljs-number">8</span>）并集<br>	union<br>（<span class="hljs-number">9</span>）交集<br>	<span class="hljs-built_in">int</span>ersect<br>（<span class="hljs-number">10</span>）差集<br>	diff<br>（<span class="hljs-number">11</span>）拉链<br>	zip<br>（<span class="hljs-number">12</span>）滑窗<br>	sliding<br></code></pre></td></tr></table></figure></li>
 <li><p>集合计算初级，高级函数</p>
 <figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs angelscript">		（<span class="hljs-number">1</span>）求和<br>			sum<br>		（<span class="hljs-number">2</span>）求乘积<br>			product<br>		（<span class="hljs-number">3</span>）最大值<br>			max<br>		（<span class="hljs-number">4</span>）最小值<br>			min<br>		（<span class="hljs-number">5</span>）排序<br>			sorded|sortBy|sortWith<br>			<br>集合计算高级函数：<br>		（<span class="hljs-number">1</span>）过滤 filter(函数：指定过滤条件) <br>			 遍历一个集合并从中获取满足指定条件的元素组成一个新的集合<br><br>		（<span class="hljs-number">2</span>）转换/映射  map<br>				 	<br>		（<span class="hljs-number">3</span>）扁平化 flatten   :::<br>			将集合中元素由整体转换为个体的过程<br><br>		（<span class="hljs-number">4</span>）扁平映射  flatMap  <br>			先映射再进行扁平化处理<br><br>		（<span class="hljs-number">5</span>）分组	gruopBy<br>			按照一定的分组规则，将集合中的元素放到不同的组中<br><br>		（<span class="hljs-number">6</span>）简化|规约<br>			&gt;对集合内部元素之间进行聚合 <br>			&gt;reduce   聚合的数据类型一致<br>			&gt;reduceLeft|reduceRight 	聚合的数据类型可以不一致<br><br>		（<span class="hljs-number">7</span>）折叠<br>			&gt;对外部元素和集合内部元素之间进行聚合<br>			&gt;fold 	聚合的数据类型一致<br>			&gt;foldLeft|foldRight		聚合的数据类型可以不一致<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="下划线的用法"><a href="#下划线的用法" class="headerlink" title="下划线的用法"></a>下划线的用法</h2><ul>
+<li>标识符命名</li>
+<li>导包<ul>
+<li>导入某一个类下的”静态成员” ：import scala.util.control.Breaks._</li>
+<li>导入某一包下的所有类：import java.util._</li>
+<li>屏蔽类：import java.sql.{Date=&gt;<em>,Array=&gt;</em>,_}</li>
+</ul>
+</li>
+<li>匿名函数<ul>
+<li>如果在匿名函数中，参数只出现了一次，那么参数可以省略，在函数体使用参数的时候，用下划线代替</li>
+</ul>
+</li>
+<li>在类中声明属性，如果要给属性赋默认值</li>
+<li>在模式匹配中<ul>
+<li>case_  表示上面所有case都没有匹配成功的情况，相当于default</li>
+</ul>
+</li>
 </ul>
 
             </div>

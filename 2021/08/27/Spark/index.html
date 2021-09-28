@@ -185,7 +185,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      468 字
+      5.2k 字
     </span>
   
 
@@ -195,7 +195,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      5
+      61
        分钟
     </span>
   
@@ -229,7 +229,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2021年8月28日 晚上
+                  本文最后更新于：2021年9月24日 晚上
                 
               </p>
             
@@ -261,6 +261,497 @@
 <li><p>运行流程</p>
 <ul>
 <li>Spark有yarn-client和yarn-cluster两种模式，主要区别在于：Driver程序的运行节点。</li>
+</ul>
+</li>
+<li><p>端口号总结</p>
+<ul>
+<li>spark历史服务器端口号：18080                         hadoop历史服务器端口号：19888</li>
+<li>spark Master web服务器端口号：8080             Hadoop的namenode web端口号：9870</li>
+<li>spark Master内部通信服务端口号：7077           Hadoop的namenode内部通信服务端口号：8020</li>
+<li>Spark查看当前Spark-shell运行任务情况端口号：4040</li>
+<li>hadoop yarn任务运行情况查看端口号：8088</li>
+</ul>
+</li>
+</ul>
+<h2 id="SparkCore"><a href="#SparkCore" class="headerlink" title="SparkCore"></a>SparkCore</h2><h3 id="RDD概述"><a href="#RDD概述" class="headerlink" title="RDD概述"></a>RDD概述</h3><ul>
+<li><p>RDD（Resilient Distributed Dataset）弹性分布式数据集，是Spark中最基本的数据抽象。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://imgtu.com/i/hdgUNq"><img src="https://z3.ax1x.com/2021/08/31/hdgUNq.png" srcset="/img/loading.gif" lazyload alt="hdgUNq.png"></a></li>
+</ul>
+</li>
+<li><p>RDD特性</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/hwcbRK"><img src="https://z3.ax1x.com/2021/09/01/hwcbRK.png" srcset="/img/loading.gif" lazyload alt="hwcbRK.png"></a></p>
+</li>
+<li><p>yarn模式下的sparkWordCount实现案例：大致流程</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://imgtu.com/i/hdg2U1"><img src="https://z3.ax1x.com/2021/08/31/hdg2U1.png" srcset="/img/loading.gif" lazyload alt="hdg2U1.png"></a></li>
+<li><a target="_blank" rel="noopener" href="https://imgtu.com/i/hwccGV"><img src="https://z3.ax1x.com/2021/09/01/hwccGV.png" srcset="/img/loading.gif" lazyload alt="hwccGV.png"></a></li>
+<li>任务从客户端发送到ReourceManager，RM指定一个NM创建一个AppMster进程，创建spark的一个Driver线程，Driver线程将任务分配到其它的NM，其它的NodeManager申请container，container会创建spark的一个excutor线程，RDD根据会根据分区进行一系列transformations转换定义，也会在一些情况下有shuffer过程，程序不会立刻执行，而是直到调用action触发调用RDD的计算。</li>
+</ul>
+</li>
+</ul>
+<h3 id="RDD编程"><a href="#RDD编程" class="headerlink" title="RDD编程"></a>RDD编程</h3><ul>
+<li>在spark中只有遇到action（如rdd.collect）才会执行RDD的计算（即延迟计算）</li>
+</ul>
+<h4 id="RDD的创建"><a href="#RDD的创建" class="headerlink" title="RDD的创建"></a>RDD的创建</h4><ul>
+<li>从集合中创建</li>
+<li>从外部存储（HDFS，Hbase）创建</li>
+<li>通过RDD的转换算子转换</li>
+</ul>
+<h4 id="分区规则"><a href="#分区规则" class="headerlink" title="分区规则"></a>分区规则</h4><ul>
+<li><p>分区数：</p>
+<ul>
+<li><p>创建RDD的方法都可以指定分区数</p>
+</li>
+<li><p>如果SparkConf.setMaster(local[*])，从集合创建默认是cpu核数，从外部存储创建默认是math.min(分配给应用的CPU核数,2)</p>
+</li>
+</ul>
+</li>
+<li><p>数据分区规则：</p>
+<ul>
+<li>通过集合创建RDD的情况：</li>
+</ul>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs scala">    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">positions</span></span>(length: <span class="hljs-type">Long</span>, numSlices: <span class="hljs-type">Int</span>): <span class="hljs-type">Iterator</span>[(<span class="hljs-type">Int</span>, <span class="hljs-type">Int</span>)] = &#123;<br>      (<span class="hljs-number">0</span> until numSlices).iterator.map &#123; i =&gt;<br>        <span class="hljs-keyword">val</span> start = ((i * length) / numSlices).toInt<br>        <span class="hljs-keyword">val</span> end = (((i + <span class="hljs-number">1</span>) * length) / numSlices).toInt<br>        (start, end)<br>      &#125;<br>    &#125;<br><span class="hljs-comment">//通过返回这样一个左闭右开的迭代元组对象，元组里面是以一组组下标，根据下标划分集合元素</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p>通过外部存储创建RDD的情况：</p>
+<ul>
+<li>默认分区规则math.min(分配给应用的CPU核数,2)</li>
+<li>指定分区：在TextFile方法中，第二个参数minPartitions，表示最小分区数（是最小，不代表实际的分区数）</li>
+<li>在实际计算分区个数时，会根据文件的总大小和最小分区数进行相除运算，如果余数为0，那最小分区数就是实际分区数，否则需要进一步计算得到分区数。</li>
+<li>切片规划：调用FileInputFormat中的getSplits方法</li>
+<li>注意：getSplits文件返回的是切片规划，真正读取是在compute方法中创建LineRecordReader读取的，有两个关键变量start=split.getStart()      end = start + split.getLength</li>
+</ul>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><code class="hljs scala">public <span class="hljs-type">InputSplit</span>[] getSplits(<span class="hljs-type">JobConf</span> job, int numSplits)<br>  <span class="hljs-keyword">throws</span> <span class="hljs-type">IOException</span> &#123;<br>  <span class="hljs-type">FileStatus</span>[] files = listStatus(job);<br>  <br>  <span class="hljs-comment">// Save the number of input files for metrics/loadgen</span><br>  job.setLong(<span class="hljs-type">NUM_INPUT_FILES</span>, files.length);<br>  long totalSize = <span class="hljs-number">0</span>;                           <span class="hljs-comment">// compute total size</span><br>  <span class="hljs-keyword">for</span> (<span class="hljs-type">FileStatus</span> file: files) &#123;                <span class="hljs-comment">// check we have valid files</span><br>    <span class="hljs-keyword">if</span> (file.isDirectory()) &#123;<br>      <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-type">IOException</span>(<span class="hljs-string">&quot;Not a file: &quot;</span>+ file.getPath());<br>    &#125;<br>    totalSize += file.getLen();<br>  &#125;<br>    <br>  long goalSize = totalSize / (numSplits == <span class="hljs-number">0</span> ? <span class="hljs-number">1</span> : numSplits);<br>  long minSize = <span class="hljs-type">Math</span>.max(job.getLong(org.apache.hadoop.mapreduce.lib.input.<br>    <span class="hljs-type">FileInputFormat</span>.<span class="hljs-type">SPLIT_MINSIZE</span>, <span class="hljs-number">1</span>), minSplitSize);<br>    <br>  <span class="hljs-comment">// generate splits</span><br>  <span class="hljs-type">ArrayList</span>&lt;<span class="hljs-type">FileSplit</span>&gt; splits = <span class="hljs-keyword">new</span> <span class="hljs-type">ArrayList</span>&lt;<span class="hljs-type">FileSplit</span>&gt;(numSplits);<br>  <span class="hljs-type">NetworkTopology</span> clusterMap = <span class="hljs-keyword">new</span> <span class="hljs-type">NetworkTopology</span>();<br>  <span class="hljs-keyword">for</span> (<span class="hljs-type">FileStatus</span> file: files) &#123;<br>    <span class="hljs-type">Path</span> path = file.getPath();<br>    long length = file.getLen();<br>    <span class="hljs-keyword">if</span> (length != <span class="hljs-number">0</span>) &#123;<br>      <span class="hljs-type">FileSystem</span> fs = path.getFileSystem(job);<br>      <span class="hljs-type">BlockLocation</span>[] blkLocations;<br>      <span class="hljs-keyword">if</span> (file instanceof <span class="hljs-type">LocatedFileStatus</span>) &#123;<br>        blkLocations = ((<span class="hljs-type">LocatedFileStatus</span>) file).getBlockLocations();<br>      &#125; <span class="hljs-keyword">else</span> &#123;<br>        blkLocations = fs.getFileBlockLocations(file, <span class="hljs-number">0</span>, length);<br>      &#125;<br>      <span class="hljs-keyword">if</span> (isSplitable(fs, path)) &#123;<br>        long blockSize = file.getBlockSize();<br>        long splitSize = computeSplitSize(goalSize, minSize, blockSize);<br>    <br>        long bytesRemaining = length;<br>        <span class="hljs-keyword">while</span> (((double) bytesRemaining)/splitSize &gt; <span class="hljs-type">SPLIT_SLOP</span>) &#123;<br>          <span class="hljs-type">String</span>[] splitHosts = getSplitHosts(blkLocations,<br>              length-bytesRemaining, splitSize, clusterMap);<br>          splits.add(makeSplit(path, length-bytesRemaining, splitSize,<br>              splitHosts));<br>          bytesRemaining -= splitSize;<br>        &#125;<br>    <br>        <span class="hljs-keyword">if</span> (bytesRemaining != <span class="hljs-number">0</span>) &#123;<br>          <span class="hljs-type">String</span>[] splitHosts = getSplitHosts(blkLocations, length<br>              - bytesRemaining, bytesRemaining, clusterMap);<br>          splits.add(makeSplit(path, length - bytesRemaining, bytesRemaining,<br>              splitHosts));<br>        &#125;<br>      &#125; <span class="hljs-keyword">else</span> &#123;<br>        <span class="hljs-type">String</span>[] splitHosts = getSplitHosts(blkLocations,<span class="hljs-number">0</span>,length,clusterMap);<br>        splits.add(makeSplit(path, <span class="hljs-number">0</span>, length, splitHosts));<br>      &#125;<br>    &#125; <span class="hljs-keyword">else</span> &#123; <br>      <span class="hljs-comment">//Create empty hosts array for zero length files</span><br>      splits.add(makeSplit(path, <span class="hljs-number">0</span>, length, <span class="hljs-keyword">new</span> <span class="hljs-type">String</span>[<span class="hljs-number">0</span>]));<br>    &#125;<br>  &#125;<br>  <span class="hljs-type">LOG</span>.debug(<span class="hljs-string">&quot;Total # of splits: &quot;</span> + splits.size());<br>  <span class="hljs-keyword">return</span> splits.toArray(<span class="hljs-keyword">new</span> <span class="hljs-type">FileSplit</span>[splits.size()]);<br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<h3 id="Transformation转换算子（重点）"><a href="#Transformation转换算子（重点）" class="headerlink" title="Transformation转换算子（重点）"></a>Transformation转换算子（重点）</h3><ul>
+<li>算子：从认知心理学角度来讲，解决问题其实是将问题的初始状态，通过一系列的转换操作（operator），变成解决状态。</li>
+<li>转换算子（Transformation）执行完毕之后，会创建新的RDD，并不会马上执行计算。</li>
+<li>行动算子（Action）执行后，才会触发计算。</li>
+</ul>
+<h4 id="Value类型"><a href="#Value类型" class="headerlink" title="Value类型"></a>Value类型</h4><ul>
+<li><p>map</p>
+<ul>
+<li>对RDD中的元素进行一个个映射</li>
+</ul>
+</li>
+<li><p>mapPartitions</p>
+<ul>
+<li>以分区为单位，对RDD中的元素进行映射</li>
+</ul>
+</li>
+<li><p>mapPartitionsWithIndex</p>
+<ul>
+<li>以分区为单位，对RDD中的元素进行映射，并且带分区编号</li>
+</ul>
+</li>
+<li><p>flatMap</p>
+<ul>
+<li>对RDD中的元素进行扁平化处理</li>
+</ul>
+</li>
+<li><p>glom</p>
+<ul>
+<li>将RDD中每一个分区中的单个元素，转换为数组</li>
+</ul>
+</li>
+<li><p>groupBy</p>
+<ul>
+<li>按照一定的规则，对RDD中的元素进行分组</li>
+</ul>
+</li>
+<li><p>filter</p>
+<ul>
+<li>按照一定的规则，对RDD中的元素进行过滤</li>
+</ul>
+</li>
+<li><p>sample</p>
+<ul>
+<li><p>对RDD中的元素进行抽样</p>
+</li>
+<li><p>参数一：是否抽象放回   true放回，false不放回</p>
+</li>
+<li><p>参数二 ：参数一以为true时，放回抽样，参数二代表期望元素出现的次数   参数大于0</p>
+</li>
+<li><p>参数二：参数一为false时，不放回抽样，参数二代表每一个元素出现的概率[0,1]</p>
+</li>
+<li><p>参数三：随机算法的初始种子</p>
+</li>
+<li><p>takeSample（行动算子）</p>
+</li>
+</ul>
+</li>
+<li><p>distinct</p>
+<ul>
+<li>去重</li>
+<li>底层是通过map+reduceByKey完成去重操作</li>
+</ul>
+</li>
+<li><p>改变分区</p>
+<ul>
+<li><p>def coalesce(numPartitions: Int, shuffle: Boolean = false,</p>
+<pre><code>           partitionCoalescer: Option[PartitionCoalescer] = Option.empty)
+          (implicit ord: Ordering[T] = null) : RDD[T]
+</code></pre>
+</li>
+<li><p>coalesce   一般用于缩减分区，默认不执行shuffle</p>
+</li>
+<li><p>reparation  一般用于扩大分区，默认执行shuffle，底层调用的就是coalesce</p>
+</li>
+</ul>
+</li>
+<li><p>sortBy</p>
+<ul>
+<li>按照指定规则，对RDD中的元素进行排序，默认升序</li>
+</ul>
+</li>
+<li><p>pipe()</p>
+<ul>
+<li>对于RDD中的每一个分区，都会执行pipe 算子中指定的脚本</li>
+</ul>
+</li>
+</ul>
+<h4 id="双Value类型"><a href="#双Value类型" class="headerlink" title="双Value类型"></a>双Value类型</h4><ul>
+<li>两个RDD之间进行操作：对源RDD和参数RDD进行操作，返回一个新的RDD</li>
+<li>union()<ul>
+<li>合集</li>
+</ul>
+</li>
+<li>intersection<ul>
+<li>交集</li>
+</ul>
+</li>
+<li>subtract<ul>
+<li>差集</li>
+</ul>
+</li>
+<li>zip<ul>
+<li>拉链，该操作可以将两个RDD中的元素，以键值对的形式进行合并。其中，键值对中的key为第一个RDD中的元素，value为第二个RDD中的元素。</li>
+<li>注意必须要保证分区数以及每一个分区中元素的个数一致</li>
+</ul>
+</li>
+</ul>
+<h4 id="Key-Value类型"><a href="#Key-Value类型" class="headerlink" title="Key-Value类型"></a>Key-Value类型</h4><ul>
+<li><p>PartitionBy</p>
+<ul>
+<li>按照指定的分区其，通过key对RDD中的元素进行分区</li>
+<li>默认分区器  HashPartitioner</li>
+</ul>
+</li>
+<li><p>reduceByKey</p>
+<ul>
+<li>将相同的key放在一起，对value进行聚合操作</li>
+</ul>
+</li>
+<li><p>groupByKey</p>
+<ul>
+<li>按照key对RDD中的元素进行分组。对每个key进行操作，但只生成一个seq ,并不进行聚合。</li>
+</ul>
+</li>
+<li><p>reduceByKey和groupByKey的区别</p>
+<ul>
+<li>reduceByKey：按照key进行聚合，在shuffle之前有combine（预聚合）操作，返回结果是RDD[k,v]</li>
+<li>groupByKey: 按照key进行分组，直接进行shuffle</li>
+<li>在不影响业务逻辑的前提下，优先选用reduceByKey。求和操作不影响业务逻辑，求平均值影响业务逻辑。</li>
+</ul>
+</li>
+<li><p>aggregateByKey[(zeroValue)(分区内计算规则，分区间计算规则)]</p>
+<ul>
+<li>（1）zeroValue（初始值）：给每一个分区中的每一种key一个初始值；<br>（2）seqOp（分区内）：函数用于在每一个分区中用初始值逐步迭代value；<br>（3）combOp（分区间）：函数用于合并每个分区中的结果。</li>
+</ul>
+</li>
+<li><p>foldByKey(zeroValue)（分区间计算规则）</p>
+<ul>
+<li>是aggregateBykey的简化，分区内和分区间计算规则相同</li>
+</ul>
+</li>
+<li><p>combineByKey (对当前key的value进行转换,分区内计算规则,分区间计算规则)</p>
+</li>
+<li><p>几种聚合算子对比</p>
+<ul>
+<li><p>上面四个聚合算子底层都是调用</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs scala">&gt;reduceByKey(_+_)<br>	combineByKeyWithClassTag[<span class="hljs-type">V</span>]((v: <span class="hljs-type">V</span>) =&gt; v, func, func)<br>    <br>&gt;aggregateByKey(zeroValue)(cleanedSeqOp,combOp)<br>	combineByKeyWithClassTag[<span class="hljs-type">U</span>]((v: <span class="hljs-type">V</span>) =&gt; cleanedSeqOp(createZero(), v),cleanedSeqOp, combOp)<br>    <br>&gt;foldByKey<br>	combineByKeyWithClassTag[<span class="hljs-type">V</span>]((v: <span class="hljs-type">V</span>) =&gt; cleanedFunc(createZero(), v),cleanedFunc, cleanedFunc)<br>    <br>&gt;combineByKey<br>	combineByKeyWithClassTag(createCombiner, mergeValue, mergeCombiners)	<br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>sortByKey</p>
+<ul>
+<li>按照RD的中的key对元素进行排序</li>
+</ul>
+</li>
+<li><p>mapValues</p>
+<ul>
+<li>只对RDD中的value进行操作</li>
+</ul>
+</li>
+<li><p>join&amp;cogroup</p>
+<ul>
+<li>连接操作</li>
+</ul>
+</li>
+</ul>
+<h3 id="行动算子（Action）"><a href="#行动算子（Action）" class="headerlink" title="行动算子（Action）"></a>行动算子（Action）</h3><ul>
+<li><p>行动算子执行后，才会触发计算</p>
+</li>
+<li><p>reduce</p>
+<ul>
+<li>对RDD中的元素进行聚合</li>
+</ul>
+</li>
+<li><p>collect.foreach和foreach</p>
+<ul>
+<li><p>collect.foreach：将每一个Excutor中的数据收集到Driver，形成一个新的数组<br>.foreach不是一个算子，是集合的方法，是对数组中的元素进行遍历</p>
+</li>
+<li><p>foreach：对RDD中的元素进行遍历</p>
+</li>
+</ul>
+</li>
+<li><p>count</p>
+<ul>
+<li>获取RDD中元素的个数</li>
+</ul>
+</li>
+<li><p>countByKey</p>
+<ul>
+<li>获取RDD中每个key对应的元素个数</li>
+</ul>
+</li>
+<li><p>first</p>
+<ul>
+<li>获取RDD中的第一个元素</li>
+</ul>
+</li>
+<li><p>take</p>
+<ul>
+<li>获取RDD中的前几个元素</li>
+</ul>
+</li>
+<li><p>takeOrdered</p>
+<ul>
+<li>获取排序后的RDD中的前几个元素</li>
+</ul>
+</li>
+<li><p>aggregate&amp;fold</p>
+<ul>
+<li>aggregateByKey  处理kv类型的RDD，并且在进行分区间聚合的时候，初始值不参与运算</li>
+<li>fold 是aggregate的简化版</li>
+</ul>
+</li>
+<li><p>save相关的算子</p>
+<ul>
+<li>saveAsTextFile</li>
+<li>saveAsObjectFile</li>
+<li>saveAsSequenceFile(只针对KV类型RDD)</li>
+</ul>
+</li>
+</ul>
+<h3 id="RDD序列化"><a href="#RDD序列化" class="headerlink" title="RDD序列化"></a>RDD序列化</h3><ul>
+<li>为什么要序列化：因为在spark程序中，算子相关的操作在Excutor上执行，算子之外的代码在Driver端执行，在执行有些算子时，需要使用Driver里面定义的数据，这就涉及到了跨进程或者跨节点之间的通讯，所以这就涉及到了跨进程或者跨节点之间的通讯。所以要求传递给Excutor中的数组所属的类型必须实现Serializable接口。</li>
+<li>如何判断是否实现了序列化接口：在作业job提交之前，其中有一行代码 val cleanF = sc.clean(f)，用于进行闭包检查之所以叫闭包检查，是因为在当前函数的内部访问了外部函数的变量，属于闭包的形式。如果算子的参数是函数的形式，都会存在这种情况</li>
+</ul>
+<h3 id="RDD的血缘关系以及依赖关系"><a href="#RDD的血缘关系以及依赖关系" class="headerlink" title="RDD的血缘关系以及依赖关系"></a>RDD的血缘关系以及依赖关系</h3><ul>
+<li>血缘关系<ul>
+<li>toDebugString</li>
+</ul>
+</li>
+<li>依赖关系<ul>
+<li>dependencies</li>
+<li>窄依赖：父RDD一个分区中的数据，还是交给子RDD的一个分区处理</li>
+<li>宽依赖：父RDD一个分区中的数据，交给子RDD的多个分区处理。分区中数据打乱了，进行了shuffle操作</li>
+</ul>
+</li>
+</ul>
+<h3 id="Spark的Job调度"><a href="#Spark的Job调度" class="headerlink" title="Spark的Job调度"></a>Spark的Job调度</h3><ul>
+<li>集群(Standalone|Yarn)<ul>
+<li>一个Spark集群可以同时运行多个spark应用</li>
+</ul>
+</li>
+<li>应用<ul>
+<li>我们所编写完成某些功能的程序</li>
+<li>一个应用可以并发的运行多个Job</li>
+</ul>
+</li>
+<li>Job<ul>
+<li>Job对应着应用中的行动算子，每次执行一个行动算子，都会提交一个Job</li>
+<li>一个Job由多个stage组成</li>
+</ul>
+</li>
+<li>Stage<ul>
+<li>一个宽依赖做一次阶段的划分</li>
+<li>阶段的个数=宽依赖的个数+1</li>
+<li>一个Stage由多个Task组成</li>
+</ul>
+</li>
+<li>Task<ul>
+<li>每一个阶段最后一个RDD的分区数，就是当前阶段的Task个数</li>
+</ul>
+</li>
+</ul>
+<h3 id="数据读取与保存"><a href="#数据读取与保存" class="headerlink" title="数据读取与保存"></a>数据读取与保存</h3><h4 id="RDD的持久化"><a href="#RDD的持久化" class="headerlink" title="RDD的持久化"></a>RDD的持久化</h4><ul>
+<li>cache   底层调用persist，默认存储在内存中  相当于缓存，当有多个行动算子时，前面相同的操作部分可以进行缓存，减少重复计算。</li>
+<li>persist  可以通过参数指定存储级别   内存，磁盘</li>
+<li>checkpoint   检查点会切断血缘关系，会把中间结果记录下来，一般存储在高可用的存储系统中（如HDFS）<ul>
+<li>作用：为了避免容错执行时间过长</li>
+<li>一般和缓存搭配使用，因为在切断血缘关系后，为保证中间结果的正确性，会将前面的操作再运行一遍，加上缓存后，就不用再重复计算一遍。</li>
+</ul>
+</li>
+</ul>
+<h4 id="文件保存"><a href="#文件保存" class="headerlink" title="文件保存"></a>文件保存</h4><ul>
+<li>textFile</li>
+<li>sequenceFile   SequenceFile文件是Hadoop用来存储二进制形式的key-value对而设计的一种平面文件(Flat File)</li>
+<li>objectFile        对象文件是将对象序列化后保存的文件，采用Java的序列化机制。</li>
+<li>Json   本质还是通过textFile读取文本，对读到的内容进行处理</li>
+<li>HDFS</li>
+<li>MySQL<ul>
+<li>map———mapPartition</li>
+<li>foreach——-foreachPartion</li>
+</ul>
+</li>
+</ul>
+<h3 id="累加器-广播变量"><a href="#累加器-广播变量" class="headerlink" title="累加器 广播变量"></a>累加器 广播变量</h3><ul>
+<li>Spark三大结构<ul>
+<li>RDD   弹性分布式数据集</li>
+<li>累加器   分布式共享只写变量</li>
+<li>广播变量  分布式共享只读变量</li>
+</ul>
+</li>
+<li>累加器    Driver端的变量会复制到Excutor端的Task中去，但是Driver端不能读到Excutor中的变量。累加器可以实现将EXcutor端数据的改变传回到Driver端去<ul>
+<li>自定义累加器：继承AccumulatorV2，设定输入、输出泛型     重写方法</li>
+</ul>
+</li>
+<li>广播变量<ul>
+<li>在多个并行操作中（Executor）使用同一个变量，Spark默认会为每个任务(Task)分别发送，这样如果共享比较大的对象，会占用很大工作节点的内存。</li>
+<li>广播变量用来高效分发较大的对象。向所有工作节点发送一个较大的只读值，以供一个或多个Spark操作使用。</li>
+<li>实现Excutor端Task之间共享变量，节省内存</li>
+</ul>
+</li>
+</ul>
+<h2 id="Spark-SQL"><a href="#Spark-SQL" class="headerlink" title="Spark SQL"></a>Spark SQL</h2><h3 id="Spark-SQL概述"><a href="#Spark-SQL概述" class="headerlink" title="Spark SQL概述"></a>Spark SQL概述</h3><ul>
+<li><p>Spark SQL是Spark用于结构化数据（structured data）处理Spark模块</p>
+</li>
+<li><p>与Hive类似，将Spark SQL转换成RDD，然后提交到集群执行，执行效率非常快</p>
+</li>
+<li><p>Spark Sql提供了2个编程抽象，类似Spark Core中的RDD</p>
+<ul>
+<li>DataFrame</li>
+<li>DataSet</li>
+</ul>
+</li>
+<li><p>DataFrame</p>
+<ul>
+<li>在Spark中，<font color=red>DataFrame是一种以RDD为基础的分布式数据集，类似于传统数据中的二维表格。</font></li>
+<li>DataFrame与RDD的主要区别在于，前者带有schema元信息，即DataFrame所表示的二维表数据集的每一列都带有名称和类型。</li>
+<li>这使得Spark SQL得以洞察更多的结构信息，从而对藏于DataFrame背后的数据源以及作用于DataFrame之上的变换进行了针对性的优化，最终达到大幅提升运行时效率的目标。反观RDD，由于无从得知所存数据元素的具体内部结构，Spark Core只能在stage层面进行简单、通用的流水线优化。</li>
+</ul>
+</li>
+<li><p>DataSet</p>
+<ul>
+<li>DataSet是分布式数据集合。</li>
+<li>是DataFrame的一个扩展。它提供了RDD的优势（强类型，使用强大的lambda函数的能力）以及Spark SQL优化执行引擎的优点。DataSet也可以使用功能性的转换（操作map，flatMap，filter等等）。</li>
+<li>DataFrame是DataSet的特例</li>
+</ul>
+</li>
+</ul>
+<h3 id="Spark-SQL编程"><a href="#Spark-SQL编程" class="headerlink" title="Spark SQL编程"></a>Spark SQL编程</h3><ul>
+<li>SparkSession是spark最新的SQL查询起始点</li>
+</ul>
+<h4 id="DataFrame"><a href="#DataFrame" class="headerlink" title="DataFrame"></a>DataFrame</h4><ul>
+<li>创建DataFrame<ul>
+<li>通过spark的数据源进行创建<ul>
+<li>如果从内存中读取数据，spark可以知道是什么数据类型，如果是数字，默认做Int处理；但是从文件中读取的数字，不能确定是什么类型，所以用bigint接收，可以和Long类型转换，但是和Int不能进行转换。</li>
+</ul>
+</li>
+<li>从一个存在的RDD进行转换</li>
+<li>从hive Table进行查询返回</li>
+</ul>
+</li>
+<li>SQL风格语法：是指我们查询数据的时候使用SQL语句来查询，这种风格的查询必须要有临时视图或者全局视图来辅助。</li>
+<li>DSL风格语法：DataFrame提供一个特定领域语言（domain-specific language,DSL）去管理结构化的数据，可以在Scala，Java，Python和R中使用DSL，使用DSL语法风格不必再创建视图了。</li>
+</ul>
+<h4 id="DataSet"><a href="#DataSet" class="headerlink" title="DataSet"></a>DataSet</h4><ul>
+<li>DataSet是具有强类型的数据集合，需要提供对应的类型信息。它是和类对应起来的。</li>
+<li>创建方式<ul>
+<li>使用样例类序列创建DataSet</li>
+<li>使用基本类型的序列创建DataSet</li>
+<li>RDD，DataFrame转换为DataSet</li>
+</ul>
+</li>
+</ul>
+<h4 id="RDD，DataFrame，DataSet三者之间的关系"><a href="#RDD，DataFrame，DataSet三者之间的关系" class="headerlink" title="RDD，DataFrame，DataSet三者之间的关系"></a>RDD，DataFrame，DataSet三者之间的关系</h4><ul>
+<li><p>三者的共性</p>
+<ul>
+<li>都是spark平台下的分布式弹性数据集，为处理超大型数据提供便利</li>
+<li>三者都有惰性，再创建，转换，等操作时不会立即执行，只有再遇到Action操作时，才会开始运算。</li>
+</ul>
+</li>
+<li><p>三者的区别</p>
+<ul>
+<li>RDD不支持SparkSQL操作</li>
+<li>DataFrame每一行的类型固定为Row,每一列的值没法直接访问，只有通过解析才能获取各个字段的值。</li>
+<li>DataFrame是DataSet的一个特例  type DataFrame=Dataset[Row]</li>
+<li>DataFrame也可以叫DataSet[Row],每一行的类型Row，不解析，每一行究竟有哪些字段，各个字段又是什么类型都无法得知，只能用getAS方法或者共性中的第七条提到的模式匹配拿出特定字段。而DataSet中，每一行是什么类型是不一定的，在自定义了case  class之后可以很方便的获取每一行的信息。</li>
+</ul>
+</li>
+<li><p>三者之间的转换关系图</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://imgtu.com/i/4Dw8YQ"><img src="https://z3.ax1x.com/2021/09/24/4Dw8YQ.png" srcset="/img/loading.gif" lazyload alt="4Dw8YQ.png"></a></li>
+<li>如果需要RDD与DF或者DS之间操作，那么需要引入<font color=red>import spark.implicits._ (spark不是包名，而是sparkSession对象的名称，所以必须先创建SparkSession再导入对象，.implicits是一个内部的object)</font></li>
+</ul>
+</li>
+</ul>
+<h4 id="用户自定函数"><a href="#用户自定函数" class="headerlink" title="用户自定函数"></a>用户自定函数</h4><ul>
+<li>UDF（User-Defined-Function)   用户自定义函数  （一进一出）</li>
+<li>UDAF（User-Defined Aggregation Function）用户自定义聚合函数（多进一出）如 count()，countDistinct()，avg()，max()，min()<ul>
+<li>实现：通过继承UserDefinedAggregateFunction来实现用户自定义聚合函数</li>
+</ul>
+</li>
+<li>UDTF（User-Defined Table-Generating Functions）用户自定义表生成函数 （一进多出） Spark中没有UDTF，spark中使用flatMap实现UDTF的功能</li>
+</ul>
+<h3 id="数据加载与保存"><a href="#数据加载与保存" class="headerlink" title="数据加载与保存"></a>数据加载与保存</h3><ul>
+<li>spark.read.load 是加载数据的通用方法</li>
+<li>df.write.save 是保存数据的通用方法</li>
+</ul>
+<h2 id="Spark-Streaming"><a href="#Spark-Streaming" class="headerlink" title="Spark Streaming"></a>Spark Streaming</h2><h3 id="Spark-Streaming概述"><a href="#Spark-Streaming概述" class="headerlink" title="Spark Streaming概述"></a>Spark Streaming概述</h3><ul>
+<li>离线计算：就是在计算开始前就已知所有输入数据，输入数据不会产生变化，一般数据量大，计算时间也较长。最经典的就是Hadoop的MapReduce方式。</li>
+<li>实时计算：输入数据是可以以序列化的方式一个个输入并进行处理的，也就是说在开始的时候不需要知道所有数据，与离线计算相比，运行时间短，计算量级相对较小。强调计算过程的时间要短，即所查当下给出结果。</li>
+<li>数据处理的方式<ul>
+<li>批：处理离线数据，冷数据。单个处理数据量大，处理速度比流慢。</li>
+<li>流：在线，实时产生的数据。单次处理的数据量小，但处理速度更快。</li>
+</ul>
+</li>
+<li>Spark Streaming 用于流式数据的处理。</li>
+<li>Spark Streaming使用了一个高级抽象离散化流（discretized stream），叫做DStream。</li>
+<li><font color=red>DStreams是随时间推移而收到的数据的序列。在内部，每个时间区间收到的数据都作为RDD存在，而DStream是由这些RDD所组成的序列（因此得名“离散化”）</font></li>
+<li>Spark Streaming 是一种“微量批处理”架构，和其他基于”一次处理一条记录”架构的系统相比，他的延迟会相对高一些。</li>
+<li>背压机制：</li>
+</ul>
+<h3 id="DStream"><a href="#DStream" class="headerlink" title="DStream"></a>DStream</h3><ul>
+<li>DataFrame创建<ul>
+<li>使用ssc.queueStream(queueOfRDDs)来创建DStream，每一个推送到这个队列中的RDD，都会作为一个DStream处理。</li>
+<li>自定义数据源：继承Receiver，并实现onStart,onStop方法来自定义数据源采集。</li>
+<li>Kafaka数据源<ul>
+<li>kafka 0-10 Direct模式</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>DStream转换<ul>
+<li>与RDD类似，分为Transformations（转换）和Output Operations(输出)两种</li>
+</ul>
+</li>
+<li>Transformations（转换）<ul>
+<li>无状态转换操作就是把简单的RDD转化操作应用到每个批次上，也就是转化DStream 中的每一个RDD。不会记录历史结果</li>
+<li>有状态转换操作：<ul>
+<li>UpdateStateByKey  算子用于将历史结果应用到当前批次，该操作允许在使用新信息不断更新的同时能保留它的状态。保留历史结果到下一次计算。</li>
+<li>window 窗口操作。 窗口时长：计算内容的时间范围。滑动时长：间隔多久触发一次计算。这两者都必须为采集周期的整数倍。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>DStream输出<ul>
+<li>print() 在运行流程序的驱动结点上打印DStream中每一批次数据的最开始10个元素。这用于开发和调试。</li>
+<li>foreachRDD(func) 即将函数func用产生于stream的每一个RDD，其中参数传入的函数func应该实现将每一个RDD中数据推送到外部系统。</li>
 </ul>
 </li>
 </ul>
