@@ -185,7 +185,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      1.9k 字
+      3.2k 字
     </span>
   
 
@@ -195,7 +195,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      20
+      33
        分钟
     </span>
   
@@ -229,7 +229,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2021年8月3日 上午
+                  本文最后更新于：2021年10月1日 上午
                 
               </p>
             
@@ -310,10 +310,20 @@
 </li>
 <li><p>维度建模分成三种模型：</p>
 <ul>
-<li>星型模型</li>
-<li>雪花模型</li>
+<li>星型模型<ul>
+<li>标准的星型模型维度只有一层</li>
+</ul>
+</li>
+<li>雪花模型<ul>
+<li>比较靠近3NF，但是无法完全遵循，雪花模型的维度会设计多层。</li>
+</ul>
+</li>
+<li>雪花模型和星型模型的主要区别在于维度的层级。</li>
+<li>选择星型模型还是雪花模型，取决于性能优先还是灵活更优先。在实际开发中，不会绝对选择一种，会根据情况灵活组合甚至并存，但是从整体上看<font color=red>更倾向与维度更少的星型模型,尤其对于Hadoop 体系，减少join就是减少Shuffle，性能差距很大</font></li>
 <li><a target="_blank" rel="noopener" href="https://imgtu.com/i/WzGEEd"><img src="https://z3.ax1x.com/2021/08/01/WzGEEd.png" srcset="/img/loading.gif" lazyload alt="WzGEEd.png"></a></li>
 <li>星座模型</li>
+<li>星座模型与星型模型和雪花模型的区别是<font color=red>事实表的数量，星座模型是基于多个事实表。</font></li>
+<li>星座模型基本上是很多数据仓库的常态，因为很多数据仓库都是多个事实表的，所以看是否为星座模型要看是否有多个事实表，他们之间是否共享一些维度表。</li>
 <li><img src="C:\Users\Hasee\AppData\Roaming\Typora\typora-user-images\image-20210801175519654.png" srcset="/img/loading.gif" lazyload alt="image-20210801175519654"></li>
 </ul>
 </li>
@@ -365,9 +375,9 @@
 </li>
 <li><p>声明粒度：声明粒度指数据仓库中保存数据的细化程度或综合程度的级别。声明粒度意味着精确定义事实表中的一行数据表示什么，应该尽可能选择最小粒度，以此来应对各种各样的需求。</p>
 </li>
-<li><p>确定维度：维度的主要作用是描述业务是事实。</p>
+<li><p>确定维度：维度的主要作用是描述业务是事实。会将业务系统中的表进行一些合并，即维度退化。</p>
 </li>
-<li><p>确定事实：此处事实指业务中的度量值。在DWD层中，以业务过程为建模驱动，基于每个具体以业务过程的特点，构建最细粒度的明细层事实表。</p>
+<li><p>确定事实：此处事实指业务中的度量值（事实表中数值型的度量值）。在DWD层中，以业务过程为建模驱动，基于每个具体以业务过程的特点，构建最细粒度的明细层事实表。</p>
 </li>
 </ul>
 </li>
@@ -501,6 +511,147 @@
 </li>
 </ul>
 <h4 id="ADS"><a href="#ADS" class="headerlink" title="ADS"></a>ADS</h4><ul>
+<li>对电商系统各大主题指标分别进行分析。</li>
+</ul>
+<h3 id="Hive环境准备"><a href="#Hive环境准备" class="headerlink" title="Hive环境准备"></a>Hive环境准备</h3><ul>
+<li>安装配置Spark<ul>
+<li>spark需要重新编译（spark本身就有hive依赖，不需要hive的相关依赖，防止与hive冲突）</li>
+</ul>
+</li>
+<li>Hive on spark</li>
+<li>配置多队列，yarn默认容量调度器且默认只有一个default队列，再配置一个hive队列。在capacity-scheduler.xml中进行配置。</li>
+</ul>
+<h2 id="数仓搭建"><a href="#数仓搭建" class="headerlink" title="数仓搭建"></a>数仓搭建</h2><h3 id="ODS层-1"><a href="#ODS层-1" class="headerlink" title="ODS层"></a>ODS层</h3><ul>
+<li>业务数据根据不同的同步策略，通过脚本将数据写入到ODS层。</li>
+</ul>
+<ul>
+<li>保持数据源码不做修改，起到备份数据的作用，采用LZO压缩。</li>
+<li>创建分区表，防止全表扫描</li>
+<li>创建外部表</li>
+</ul>
+<h3 id="DWD层-1"><a href="#DWD层-1" class="headerlink" title="DWD层"></a>DWD层</h3><ul>
+<li>列式存储</li>
+<li>LZO压缩</li>
+<li>分区表，外部表</li>
+</ul>
+<h4 id="日志数据"><a href="#日志数据" class="headerlink" title="日志数据"></a>日志数据</h4><ul>
+<li>启动日志解析<ul>
+<li>get_json_object函数使用，使用get_json_object函数将启动日志的字段解析出来</li>
+</ul>
+</li>
+<li>事件日志解析<ul>
+<li><a target="_blank" rel="noopener" href="https://imgtu.com/i/4oW8YR"><img src="https://z3.ax1x.com/2021/09/30/4oW8YR.png" srcset="/img/loading.gif" lazyload alt="4oW8YR.png"></a></li>
+<li>自定义UDF函数，解析公共字段<ul>
+<li>定义类继承UDF，重写evaluate（）方法</li>
+<li>UDF函数的返回值是什么evaluate()方法的返回值就是什么</li>
+<li>函数的输入参数是什么evaluate()方法的参数就是什么</li>
+</ul>
+</li>
+<li>自定义UDTF函数解析具体事件（解析json数组）<ul>
+<li>定义类继承c抽象类GenericUDTF，实现initialize()；process()；close()</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="业务数据"><a href="#业务数据" class="headerlink" title="业务数据"></a>业务数据</h4><ul>
+<li><p>事实表分类</p>
+<ul>
+<li><p>事务型事实表（增量同步）</p>
+<ul>
+<li><p>订单详情事实表</p>
+</li>
+<li><p>支付事实表</p>
+</li>
+<li><p>退款事实表</p>
+</li>
+<li><p>评价事实表</p>
+</li>
+<li><p>只会新增，不会修改</p>
+</li>
+</ul>
+</li>
+<li><p>周期型快照事实表（全量同步）</p>
+<ul>
+<li><p>加购事实表</p>
+</li>
+<li><p>收藏事实表</p>
+</li>
+<li><p>数据周期性变化，可能增加，也可能删除（但是并不关心变化的过程，只关心周期性的一个数据结果）。所以选择全量同步。</p>
+</li>
+</ul>
+</li>
+<li><p>累积型快照事实表（新增及变化同步）</p>
+<ul>
+<li><p>优惠卷领用事实表</p>
+</li>
+<li><p>订单事实表</p>
+</li>
+<li><p>数据是会累积的，适用于随时间变化的。适用于周期性的业务。比如优惠卷领取时间，使用时间（下单），使用时间（支付）。如订单事实表中的创建时间，支付时间，取消时间，完成时间，退款时间，退款完成时间。</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>维度表</p>
+<ul>
+<li>全量同步<ul>
+<li>商品维度表</li>
+<li>优惠卷维度表</li>
+<li>活动维度表</li>
+</ul>
+</li>
+<li>特殊同步（导一次）<ul>
+<li>地区维度表</li>
+<li>时间维度表</li>
+</ul>
+</li>
+<li>拉链表<ul>
+<li>用户维度表</li>
+<li>用户表中的数据每日既有可能新增，也有可能修改，但修改频率并不高，属于缓慢变化维度，此处采用拉链表存储用户维度数据。</li>
+<li>拉链表，记录每条信息的声明周期，一旦一天记录的生命周期结束，就重新开始一天新的记录，并把当前日期放入生效开始日期。</li>
+<li>拉链表适合于数据会发生变化，但是大部分是不变的。（即缓慢变化）</li>
+<li>拉链表的更新：用户当天全部数据和MySQL中每天变化的数据拼接在一起，然后insert overwrite回旧的拉链表。insert overwrite会形成一个临时的拉链表。用临时的拉链表覆盖旧的拉链表数据。</li>
+<li><a target="_blank" rel="noopener" href="https://imgtu.com/i/4TkIpj"><img src="https://z3.ax1x.com/2021/09/30/4TkIpj.png" srcset="/img/loading.gif" lazyload alt="4TkIpj.png"></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://imgtu.com/i/fpvuSf"><img src="https://z3.ax1x.com/2021/08/02/fpvuSf.png" srcset="/img/loading.gif" lazyload alt="fpvuSf.png"></a></p>
+</li>
+</ul>
+<h3 id="DWS层"><a href="#DWS层" class="headerlink" title="DWS层"></a>DWS层</h3><ul>
+<li><p>列式存储</p>
+</li>
+<li><p>宽表：字面意思就是说字段比较多的数据库表，通常是指业务主题的指标，维度，属性关联在一起的一张数据库表。由于把不同的内容都放在同一张表存储，宽表已经不符合三范式的模式设计规范，随之带来的坏处就是大量冗余，与之相应的好处就是查询性能的提高与便捷。</p>
+</li>
+<li><p>DWS层的宽表字段，是站在不同维度的视角去看事实表。重点关注事实表的度量值。</p>
+</li>
+<li><p>业务</p>
+<ul>
+<li>每日会员行为</li>
+<li>每日商品行为</li>
+<li>每日活动统计</li>
+<li>每日地区统计</li>
+</ul>
+</li>
+<li><p>用户行为</p>
+<ul>
+<li>每日设备行为</li>
+</ul>
+</li>
+</ul>
+<h3 id="DWT层"><a href="#DWT层" class="headerlink" title="DWT层"></a>DWT层</h3><ul>
+<li>列式存储</li>
+</ul>
+<ul>
+<li>设备主题宽表</li>
+<li>会员主题宽表</li>
+<li>商品主题宽表</li>
+<li>活动主题宽表</li>
+<li>地区主题宽表</li>
+</ul>
+<h3 id="ADS层"><a href="#ADS层" class="headerlink" title="ADS层"></a>ADS层</h3><ul>
 <li>对电商系统各大主题指标分别进行分析。</li>
 </ul>
 

@@ -229,7 +229,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2021年9月24日 晚上
+                  本文最后更新于：2021年9月29日 下午
                 
               </p>
             
@@ -254,7 +254,10 @@
 <ul>
 <li>Local模式：本地部署单个spark模式</li>
 <li>Standalone：spark自带的任务调度模式</li>
-<li>YARN模式：spark使用Hadoop的YARN组件进行资源与任务调度。（重点）</li>
+<li>YARN模式：spark使用Hadoop的YARN组件进行资源与任务调度。（重点）<ul>
+<li>修改/opt/module/spark/conf/spark-env.sh，添加YARN_CONF_DIR配置，保证后续运行任务的路径都变成集群路径</li>
+</ul>
+</li>
 <li>Mesos模式：saprk使用Mesos平台进行资源与任务的调度。</li>
 </ul>
 </li>
