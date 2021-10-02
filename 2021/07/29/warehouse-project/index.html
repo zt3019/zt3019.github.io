@@ -185,7 +185,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      3.2k 字
+      3.3k 字
     </span>
   
 
@@ -229,7 +229,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2021年10月1日 上午
+                  本文最后更新于：2021年10月1日 晚上
                 
               </p>
             
@@ -530,7 +530,7 @@
 <li>创建外部表</li>
 </ul>
 <h3 id="DWD层-1"><a href="#DWD层-1" class="headerlink" title="DWD层"></a>DWD层</h3><ul>
-<li>列式存储</li>
+<li>列式存储。优点：查询速度快，占用磁盘空间少（压缩比非常高）</li>
 <li>LZO压缩</li>
 <li>分区表，外部表</li>
 </ul>
@@ -548,7 +548,7 @@
 </ul>
 </li>
 <li>自定义UDTF函数解析具体事件（解析json数组）<ul>
-<li>定义类继承c抽象类GenericUDTF，实现initialize()；process()；close()</li>
+<li>定义类继承c抽象类GenericUDTF，实现initialize()（自定义输出的列名和类型）；process() （将结果返回forward(result)）；close()</li>
 </ul>
 </li>
 </ul>
