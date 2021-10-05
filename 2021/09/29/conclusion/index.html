@@ -185,7 +185,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      4.8k 字
+      5.5k 字
     </span>
   
 
@@ -195,7 +195,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      53
+      62
        分钟
     </span>
   
@@ -229,7 +229,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2021年10月3日 上午
+                  本文最后更新于：2021年10月5日 下午
                 
               </p>
             
@@ -353,7 +353,7 @@
 <li>会将溢写到磁盘的文件进行归并排序，在溢写和归并的过程中，都要调用Partitioner进行分区和针对key进行排序</li>
 <li>ReduceTask 会根据分区号，去各个MapTask上取相应的结果分区数据。将数据写入内存</li>
 <li>ReduceTask会取到同一分区来自不同MapTask的结果文件，内存不够时，也会触发溢写操作，将数据写入磁盘。</li>
-<li>ReduceTask会将这些文件进行合并（归并排序）还可以将归并完成的文件看需求是否进行分组操作，合并成大文件后，shuffle过程结束。之后将数据reduce 方法去处理。</li>
+<li>ReduceTask会将这些文件进行合并（归并排序）还可以将归并完成的文件看需求是否进行分组操作，合并成大文件后，shuffle过程结束。之后将数据按reduce 方法去处理。</li>
 </ul>
 </li>
 <li>优化：<ul>
@@ -373,19 +373,36 @@
 <li>单个任务默认内存:8g</li>
 <li>MapTask默认内存：1g</li>
 <li>ReduceTask默认内存:1g</li>
-</ul>
-<h3 id="YARN"><a href="#YARN" class="headerlink" title="YARN"></a>YARN</h3><ul>
-<li>yarn工作调度流程<ul>
-<li>可户端向RM申请运行一个Application</li>
-<li>RM向client 返回应用程序的资源提交路径</li>
-<li>client将资源提交到HDFS上</li>
-<li>资源提交完成，申请运行AppMaster</li>
-<li>下载Client提交的资源到本地</li>
-<li>APPMaster向RM申请多个任务资源，运行MapReduce程序</li>
-<li>运行完成后，MR会向RM申请注销自己。</li>
+<li>MapJoin:在Map端缓存多张表，提前处理业务逻辑，这样增加Map端业务，减少Reduce端数据的压力，尽可能的减少数据倾斜。mapjoin适合一张表很大，一张表很小的场景。将小表缓存<ul>
+<li>在Mapper的setup阶段(重写setup方法)，将文件读取到缓存集合中</li>
+<li>在驱动函数中加载缓存，缓存普通文件到Task运行节点</li>
+<li>job.addCacheFile(new URL(“file://e:/cache/xxx.txt”))</li>
 </ul>
 </li>
-<li>yarn资源调度器<ul>
+</ul>
+<h3 id="YARN"><a href="#YARN" class="headerlink" title="YARN"></a>YARN</h3><ul>
+<li><p>yarn工作调度流程(8步)</p>
+<ul>
+<li><p>客户端执行job.waitForCompletion</p>
+</li>
+<li><p>客户端向RM申请运行一个Application</p>
+</li>
+<li><p>RM向client 返回Application的资源提交路径和job_id</p>
+</li>
+<li><p>client将资源(切片信息，配置信息，所需jar包)提交到HDFS上</p>
+</li>
+<li><p>资源提交完成，申请运行AppMaster</p>
+</li>
+<li><p>AppMaster下载Client提交的资源到本地</p>
+</li>
+<li><p>APPMaster向RM申请多个任务资源，运行MapReduce程序</p>
+</li>
+<li><p>运行完成后，MR会向RM申请注销自己。</p>
+</li>
+</ul>
+</li>
+<li><p>yarn资源调度器</p>
+<ul>
 <li>FIFO<ul>
 <li>队列形式，先进先出</li>
 </ul>
@@ -395,7 +412,7 @@
 <li>优先满足先进入的任务</li>
 </ul>
 </li>
-<li>公平调度器<ul>
+<li>公平调度器 （能最大限度的利用集群资源）<ul>
 <li>最大限度的利用集群资源</li>
 <li>每个任务都公平的享有资源，并发度高</li>
 <li>同一队列的作业按照其优先级分享整个队列的资源，并发执行</li>
@@ -443,6 +460,16 @@
 </ul>
 </li>
 <li><p>常用命令</p>
+<ul>
+<li>ls path 查看当前znode中所包含的内容</li>
+<li>create 普通创建 -s含有序列  -e 临时（重启或超时消失）</li>
+<li>get path 获得节点的值</li>
+<li>set 设置节点的具体值</li>
+<li>stat 查看节点状态</li>
+</ul>
+</li>
+<li><p>HA</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/2lA1SS"><img src="https://z3.ax1x.com/2021/06/02/2lA1SS.png" srcset="/img/loading.gif" lazyload alt="2lA1SS.png"></a></p>
 </li>
 </ul>
 <h2 id="Flume"><a href="#Flume" class="headerlink" title="Flume"></a>Flume</h2><ul>
@@ -530,10 +557,10 @@
 <li>producer:  消息生产者,向Kafak集群发消息的客户端</li>
 <li>Kafka Cluster：Kafka集群</li>
 <li>consumer: 消息消费者，向Kafka Broker取消息的客户端</li>
-<li>consumer group:消费者组，每个消费者组由多个consumer组成。消费者组内每个消费者负责消费不同分区的数据，一个分区只能由一个消费者消费。消费者组之间互不影响，所有消费者组都属于某个消费者组，即消费者组是逻辑上的一个订阅者。</li>
+<li>consumer group:消费者组，每个消费者组由多个consumer组成。消费者组内每个消费者负责消费不同分区的数据，一个分区只能由一个消费者消费。消费者组之间互不影响，所有消费者都属于某个消费者组，即消费者组是逻辑上的一个订阅者。</li>
 <li>broker ：Kafka集群中的每一台机器就是一个broker ，一个Kafka集群由多个broker 组成。</li>
 <li>topic: 可以理解为一个消息队列，生产者和消费者面向的都是一个个topic。一台broker 可以容纳多个topic</li>
-<li>partition：一个topic可以分为多个partition，每个partition都是一个有序的队列。可以实现很好的扩展性，一个非常大的topic可以分不到多个broker上。</li>
+<li>partition：一个topic可以分为多个partition，每个partition都是一个有序的队列。可以实现很好的扩展性，一个非常大的topic可以分布到多个broker上。</li>
 <li>replica：副本，保证数据的可靠性。即当集群中的某个节点发生故障时，为保证数据的完整性，kfak提供了副本机制，一个topic的每个partition都有若干个副本，一个leader和若干个follower</li>
 <li>leader:副本的”主“，生产者发送数据的对象，以及消费者消费数据的对象都是leader </li>
 <li>follower: 副本中的”从“，实时从leader中同步数据，保持和leader数据的同步，leader发生故障时，会选出某个follower成为新的leader</li>
@@ -601,7 +628,7 @@
 </li>
 <li><p>其它</p>
 <ul>
-<li><p>exactly once语义：At Least Once + 幂等性 = Exactly Once。</p>
+<li><p>Exactly once语义：At Least Once + 幂等性 = Exactly Once。</p>
 </li>
 <li><p>幂等性就是指Producer不论向Server发送多少次重复数据，Server端都只会持久化一条。</p>
 </li>
@@ -626,6 +653,11 @@
 </li>
 </ul>
 </li>
+<li><p>Zookeeper在Kafka中的作用</p>
+<ul>
+<li>Kafka集群中有一个broker会被选举为Controller，<font color=red>负责管理集群broker的上下线，所有topic的分区副本分配和leader选举等工作。</font>Controller的管理工作是依赖于Zookeeper的。</li>
+</ul>
+</li>
 </ul>
 <h2 id="Hive"><a href="#Hive" class="headerlink" title="Hive"></a>Hive</h2><ul>
 <li><p>组成</p>
@@ -642,6 +674,12 @@
 <li>外部表  删除后，只删除了元数据</li>
 </ul>
 </li>
+<li><p>插入数据</p>
+<ul>
+<li>insert into :以追加数据的方式插入到表或分区，原有数据不会删除</li>
+<li>insert overwrite:会覆盖表或分区中已经存在的数据</li>
+</ul>
+</li>
 <li><p>4个by</p>
 <ul>
 <li>order by  全局排序（都会进入一个Reduce）很容易造成数据倾斜</li>
@@ -652,11 +690,42 @@
 </li>
 <li><p>系统函数</p>
 <ul>
-<li>常用内置函数</li>
-<li>date_add,date_sub  </li>
-<li>next_day </li>
-<li>date_format,lastday</li>
-<li>解析json(get_json_object)</li>
+<li><p>常用内置函数</p>
+</li>
+<li><p>date_add</p>
+<ul>
+<li>返回日期的后n天的日期</li>
+<li>select date_sub(‘2015-04-09’,4)；输出2015-04-13</li>
+</ul>
+</li>
+<li><p>date_sub  </p>
+<ul>
+<li>返回日期前n天的日期</li>
+<li>select date_sub(‘2015-04-09’,4);输出：2015-04-05；</li>
+</ul>
+</li>
+<li><p>next_day </p>
+<ul>
+<li>返回当前时间的下一个星期几对应的日期</li>
+<li>select next_day(‘2018-02-27 10:03:01’, ‘TU’); –2018-03-06</li>
+<li>说明，输入日期为2-27，下个星期的周二为03-06，如果想要知道下周一的日期就是MO，周日就是SU，以此类推。</li>
+<li>注意：西方都是任务周日是每周的第一天</li>
+</ul>
+</li>
+<li><p>date_format</p>
+<ul>
+<li>日期格式化，把字符串或者日期转成指定格式的日期</li>
+<li>date_format(“2016-06-22”,”yyyy-MM-dd”)=2016-06-22</li>
+</ul>
+</li>
+<li><p>last_day</p>
+<ul>
+<li>返回这个月的最后一天的日期</li>
+<li>select last_day(“2021-10-04”);=2021-10-31</li>
+</ul>
+</li>
+<li><p>解析json(get_json_object)</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> get_json_object(<span class="hljs-string">&#x27;[&#123;&quot;name&quot;:&quot;大郎&quot;,&quot;sex&quot;:&quot;男&quot;,&quot;age&quot;:&quot;25&quot;&#125;,&#123;&quot;name&quot;:&quot;西门庆&quot;,&quot;sex&quot;:&quot;男&quot;,&quot;age&quot;:&quot;47&quot;&#125;]&#x27;</span>,<span class="hljs-string">&quot;$[0].age&quot;</span>);<br><br>- 结果：25<br><span class="hljs-keyword">select</span> get_json_object(<span class="hljs-string">&#x27;[&#123;&quot;name&quot;:&quot;大郎&quot;,&quot;sex&quot;:&quot;男&quot;,&quot;age&quot;:&quot;25&quot;&#125;,&#123;&quot;name&quot;:&quot;西门庆&quot;,&quot;sex&quot;:&quot;男&quot;,&quot;age&quot;:&quot;47&quot;&#125;]&#x27;</span>,<span class="hljs-string">&#x27;$[0]&#x27;</span>);<br><br>- 结果：&#123;&quot;name&quot;:&quot;大郎&quot;,&quot;sex&quot;:&quot;男&quot;,&quot;age&quot;:&quot;25&quot;&#125;<br><br></code></pre></td></tr></table></figure></li>
 </ul>
 </li>
 <li><p>自定义函数</p>
@@ -667,16 +736,10 @@
 </li>
 <li><p>窗口函数</p>
 <ul>
-<li><p>窗口函数：指定分析函数工作的数据窗口大小，这个数据窗口大小可能会随着行的变化变化。（查询的数据会随着where,gruopby,having等条</p>
-</li>
-<li><p>件的加入过滤掉一些数据）</p>
-</li>
-<li><p>rank()排名不重复，排名数和总数一样，dense_rank() 相同的排名一样，数据重复的话排名数会比总数少。row_number() 直接排名，相同排名也不一样，排名数和总数一样。</p>
-</li>
-<li><p>over()</p>
-</li>
-<li><p>手写topn</p>
-</li>
+<li>窗口函数：指定分析函数工作的数据窗口大小，这个数据窗口大小可能会随着行的变化变化。（查询的数据会随着where,gruopby,having等条件的加入过滤掉一些数据）</li>
+<li>rank()排名会重复，重复数据的话，排名数不会连续，排名数和总数一样，dense_rank() 相同的排名一样，数据重复的话排名数会比总数少。row_number() 直接排名，相同排名也不一样，排名数和总数一样。</li>
+<li>over((partition by xxx order by xxx)</li>
+<li>手写topn</li>
 </ul>
 </li>
 <li><p>优化</p>

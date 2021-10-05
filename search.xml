@@ -620,105 +620,6 @@
       </tags>
   </entry>
   <entry>
-    <title>flume</title>
-    <url>/2021/06/21/flume/</url>
-    <content><![CDATA[<h1 id="Flume"><a href="#Flume" class="headerlink" title="Flume"></a>Flume</h1><h2 id="Flume概述"><a href="#Flume概述" class="headerlink" title="Flume概述"></a>Flume概述</h2><ul>
-<li><p>配置文档，自定义Source,Interceptor,sink就来看官方文档：<a href="http://flume.apache.org/releases/content/1.9.0/FlumeUserGuide.html#spooling-directory-source">官方文档</a></p>
-</li>
-<li><p>flume是一个高可用的，可靠的，分布式的<em><strong>海量日志采集，聚合，和传输的系统</strong></em>基于流式框架，灵活简单。</p>
-</li>
-<li><p>基础架构：</p>
-<p><a href="https://imgtu.com/i/REvBm8"><img src="https://z3.ax1x.com/2021/06/21/REvBm8.png" alt="REvBm8.png"></a></p>
-<ul>
-<li>Agent:是一个JVM进程，它以事件的形式将数据从源头送至目的</li>
-<li>source负责接收数据到Flume agent 的组件。可以处理各种类型，格式的日志数据。例如：spooling directory，netcat,avro,exec</li>
-<li>sink不断轮询channel中的事件并且批量的移除他们，将这些事件批量写入到存储或索引系统，或者被发送到另一个flume agent。sink组件发送目的地包括：hdfs,logger,avro,file,HBase</li>
-<li>Channel是位于source和sink之间缓冲区。Flume自带两种Channel：Memory Channel和File Channel。</li>
-</ul>
-</li>
-<li><p>event:flume传输数据的基本单元。由Header和Body组成。Header用来存放该event的一些属性，为K-V结构，Body用来存放该条数据，形式为字节数组。</p>
-</li>
-</ul>
-<h2 id="flume入门案例"><a href="#flume入门案例" class="headerlink" title="flume入门案例"></a>flume入门案例</h2><ul>
-<li><p>实时监控Hive日志，并上传到HDFS中</p>
-<figure class="highlight nix"><table><tr><td class="code"><pre><code class="hljs nix"><span class="hljs-number">1</span>.第一种方式<br>flume-ng agent --name agent的名字 --conf 配置文件的目录 --conf-file agent的配置文件（自己手动写）-Dflume.root.<span class="hljs-attr">logger=INFO,console</span><br><br>需要写配置文件<br>基本步骤：<br><span class="hljs-comment">#1.agent的source,channel,sink组件</span><br><span class="hljs-comment">#2.source配置</span><br><span class="hljs-comment">#3.channel配置</span><br><span class="hljs-comment">#4.sink配置</span><br><span class="hljs-comment">#5.source,channel,sink之间的关系</span><br><span class="hljs-comment"># Name the components on this agent</span><br>a2.<span class="hljs-attr">sources</span> = r2<br>a2.<span class="hljs-attr">sinks</span> = k2<br>a2.<span class="hljs-attr">channels</span> = c2<br><br><span class="hljs-comment"># Describe/configure the source</span><br>a2.sources.r2.<span class="hljs-attr">type</span> = exec<br>a2.sources.r2.<span class="hljs-attr">command</span> = tail -F /opt/module/hive/logs/hive.log<br>a2.sources.r2.<span class="hljs-attr">shell</span> = /bin/bash -c<br><br><span class="hljs-comment"># Describe the sink</span><br>a2.sinks.k2.<span class="hljs-attr">type</span> = hdfs<br>a2.sinks.k2.hdfs.<span class="hljs-attr">path</span> = hdfs://hadoop102:<span class="hljs-number">8020</span>/flume/%Y%m%d/%H<br><span class="hljs-comment">#上传文件的前缀</span><br>a2.sinks.k2.hdfs.<span class="hljs-attr">filePrefix</span> = logs-<br><span class="hljs-comment">#是否按照时间滚动文件夹</span><br>a2.sinks.k2.hdfs.<span class="hljs-attr">round</span> = <span class="hljs-literal">true</span><br><span class="hljs-comment">#多少时间单位创建一个新的文件夹</span><br>a2.sinks.k2.hdfs.<span class="hljs-attr">roundValue</span> = <span class="hljs-number">1</span><br><span class="hljs-comment">#重新定义时间单位</span><br>a2.sinks.k2.hdfs.<span class="hljs-attr">roundUnit</span> = hour<br><span class="hljs-comment">#是否使用本地时间戳</span><br>a2.sinks.k2.hdfs.<span class="hljs-attr">useLocalTimeStamp</span> = <span class="hljs-literal">true</span><br><span class="hljs-comment">#积攒多少个Event才flush到HDFS一次</span><br>a2.sinks.k2.hdfs.<span class="hljs-attr">batchSize</span> = <span class="hljs-number">100</span><br><span class="hljs-comment">#设置文件类型，可支持压缩</span><br>a2.sinks.k2.hdfs.<span class="hljs-attr">fileType</span> = DataStream<br><span class="hljs-comment">#多久生成一个新的文件</span><br>a2.sinks.k2.hdfs.<span class="hljs-attr">rollInterval</span> = <span class="hljs-number">60</span><br><span class="hljs-comment">#设置每个文件的滚动大小</span><br>a2.sinks.k2.hdfs.<span class="hljs-attr">rollSize</span> = <span class="hljs-number">134217700</span><br><span class="hljs-comment">#文件的滚动与Event数量无关</span><br>a2.sinks.k2.hdfs.<span class="hljs-attr">rollCount</span> = <span class="hljs-number">0</span><br><br><span class="hljs-comment"># Use a channel which buffers events in memory</span><br>a2.channels.c2.<span class="hljs-attr">type</span> = memory<br>a2.channels.c2.<span class="hljs-attr">capacity</span> = <span class="hljs-number">1000</span><br>a2.channels.c2.<span class="hljs-attr">transactionCapacity</span> = <span class="hljs-number">100</span><br><br><span class="hljs-comment"># Bind the source and sink to the channel</span><br>a2.sources.r2.<span class="hljs-attr">channels</span> = c2<br>a2.sinks.k2.<span class="hljs-attr">channel</span> = c2<br></code></pre></td></tr></table></figure></li>
-<li><p>log4j.properties(日志架构)，类似于程序中的调试代码，输出一些东西，供编码的时候调试。但是项目上线后不能再直接输出，于是将这些调试输出输出到专门的日志文件中。</p>
-</li>
-</ul>
-<h2 id="Flume进阶"><a href="#Flume进阶" class="headerlink" title="Flume进阶"></a>Flume进阶</h2><ul>
-<li><p>flume事务。主要是为了保证数据不会丢失。</p>
-<p><a href="https://imgtu.com/i/RZxhvR"><img src="https://z3.ax1x.com/2021/06/22/RZxhvR.png" alt="RZxhvR.png"></a></p>
-</li>
-<li><p>flume agent内部原理：</p>
-<p><a href="https://imgtu.com/i/RZxsbV"><img src="https://z3.ax1x.com/2021/06/22/RZxsbV.png" alt="RZxsbV.png"></a></p>
-</li>
-</ul>
-<ul>
-<li><ol>
-<li><p>Source接受数据，将数据以event的形式发给ChannnelProcessor</p>
-</li>
-<li><p>ChannelProcessor将事件传递给拦截器，在拦截其中可以对event数据进行更改。</p>
-</li>
-<li><p>拦截器再将事件返回到ChannelProcessor，ChannelProcessor将每个事件给Channel选择器。ChannelSelector的作用就是选出Event将要被发往哪个Channel。其共有两种类型，分别是Replicating（复制）和Multiplexing（多路复用）。</p>
-</li>
-<li><p>再返回到ChannelProcessor，根据选择器的选择，event进入不同的channel</p>
-</li>
-<li><p>SinkProcessor再决定channel中的enevt的走向。</p>
-<p>SinkProcessor共有三种类型，分别是DefaultSinkProcessor、LoadBalancingSinkProcessor和FailoverSinkProcessor。</p>
-<p>DefaultSinkProcessor对应的是单个的Sink，LoadBalancingSinkProcessor和FailoverSinkProcessor对应的是Sink Group，LoadBalancingSinkProcessor可以实现负载均衡的功能，FailoverSinkProcessor可以错误恢复的功能(故障转移）。</p>
-</li>
-</ol>
-</li>
-<li><p>flume拓扑结构</p>
-<ul>
-<li>简单串联。多个agent串起来</li>
-<li>复制和多路复用。Flume支持将事件流向一个或者多个目的地。这种模式可以将相同数据复制到多个channel中，或者将不同数据分发到不同的channel中，sink可以选择传送到不同的目的地。</li>
-<li>负载均衡和故障转移。Flume支持使用将多个sink逻辑上分到一个sink组，sink组配合不同的SinkProcessor可以实现负载均衡和错误恢复的功能。</li>
-<li>聚合。将多台服务器部署一个flume日志采集，再将所有日志聚合到一个集中收集日志的flume，由此上传到HDFS,HBase，进行数据分析。</li>
-</ul>
-</li>
-</ul>
-<h3 id="API编程"><a href="#API编程" class="headerlink" title="API编程"></a>API编程</h3><ul>
-<li>可以查看官网的开发者文档。</li>
-<li>自定义Interceptor。定义类实现Interceptor接口，重写四个方法（初始化，单event修改，多event修改，关闭资源）还需要一个Builder静态内部类。</li>
-</ul>
-<h2 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h2><h3 id="flume的source-sink-Channel的作用？"><a href="#flume的source-sink-Channel的作用？" class="headerlink" title="flume的source,sink,Channel的作用？"></a>flume的source,sink,Channel的作用？</h3><ul>
-<li><p>作用：</p>
-<p>（1）Source组件是专门用来收集数据的，可以处理各种类型、各种格式的日志数据，包括avro、thrift、exec、jms、spooling directory、netcat、sequence generator、syslog、http、legacy</p>
-<p>（2）Channel组件对采集到的数据进行缓存，可以存放在Memory或File中。</p>
-<p>（3）Sink组件是用于把数据发送到目的地的组件，目的地包括Hdfs、Logger、avro、thrift、ipc、file、Hbase、solr、自定义。</p>
-</li>
-</ul>
-<h3 id="flume参数调优"><a href="#flume参数调优" class="headerlink" title="flume参数调优"></a>flume参数调优</h3><ul>
-<li><p><em><strong>1. source</strong></em></p>
-<p>增加Source个（使用Tair Dir Source时可增加FileGroups个数）可以增大Source的读取数据的能力。例如：当某一个目录产生的文件过多时需要将这个文件目录拆分成多个文件目录，同时配置好多个Source 以保证Source有足够的能力获取到新产生的数据。</p>
-<p>batchSize参数决定Source一次批量运输到Channel的event条数，适当调大这个参数可以提高Source搬运Event到Channel时的性能。</p>
-<p><em><strong>2. Channel:</strong></em></p>
-<p>type 选择memory时Channel的性能最好，但是如果Flume进程意外挂掉可能会丢失数据。type选择file时Channel的容错性更好，但是性能上会比memory channel差。</p>
-<p>使用file Channel时dataDirs配置多个不同盘下的目录可以提高性能。</p>
-<p>Capacity 参数决定Channel可容纳最大的event条数。transactionCapacity 参数决定每次Source往channel里面写的最大event条数和每次Sink从channel里面读的最大event条数。transactionCapacity需要大于Source和Sink的batchSize参数。</p>
-<p><em><strong>3. Sink</strong></em></p>
-<p>增加Sink的个数可以增加Sink消费event的能力。Sink也不是越多越好够用就行，过多的Sink会占用系统资源，造成系统资源不必要的浪费。</p>
-<p>batchSize参数决定Sink一次批量从Channel读取的event条数，适当调大这个参数可以提高Sink从Channel搬出event的性能。</p>
-</li>
-</ul>
-<h3 id="flume数据是否会丢失？"><a href="#flume数据是否会丢失？" class="headerlink" title="flume数据是否会丢失？"></a>flume数据是否会丢失？</h3><ul>
-<li>flume采用事务机制，Flume使用两个独立的事务分别负责从Soucrce到Channel，以及从Channel到Sink的事件传递。如果因为某种原因使得事件无法记录，那么事务将会回滚。</li>
-<li>正是因为flume完善的事务机制，flume不会丢失数据。</li>
-<li>唯一可能丢失数据的情况是Channel采用memoryChannel，agent宕机导致数据丢失，或者Channel存储数据已满，导致Source不再写入，未写入的数据丢失。</li>
-<li>Flume不会丢失数据，但是有可能造成数据的重复，例如数据已经成功由Sink发出，但是没有接收到响应，Sink会再次发送数据，此时可能会导致数据的重复。</li>
-</ul>
-]]></content>
-      <categories>
-        <category>大数据</category>
-        <category>flume</category>
-      </categories>
-      <tags>
-        <tag>大数据</tag>
-        <tag>flume</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>hbase</title>
     <url>/2021/06/27/hbase/</url>
     <content><![CDATA[<h1 id="HBase"><a href="#HBase" class="headerlink" title="HBase"></a>HBase</h1><h2 id="HBbse概述"><a href="#HBbse概述" class="headerlink" title="HBbse概述"></a>HBbse概述</h2><ul>
@@ -902,6 +803,105 @@
 
 <p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
 ]]></content>
+  </entry>
+  <entry>
+    <title>flume</title>
+    <url>/2021/06/21/flume/</url>
+    <content><![CDATA[<h1 id="Flume"><a href="#Flume" class="headerlink" title="Flume"></a>Flume</h1><h2 id="Flume概述"><a href="#Flume概述" class="headerlink" title="Flume概述"></a>Flume概述</h2><ul>
+<li><p>配置文档，自定义Source,Interceptor,sink就来看官方文档：<a href="http://flume.apache.org/releases/content/1.9.0/FlumeUserGuide.html#spooling-directory-source">官方文档</a></p>
+</li>
+<li><p>flume是一个高可用的，可靠的，分布式的<em><strong>海量日志采集，聚合，和传输的系统</strong></em>基于流式框架，灵活简单。</p>
+</li>
+<li><p>基础架构：</p>
+<p><a href="https://imgtu.com/i/REvBm8"><img src="https://z3.ax1x.com/2021/06/21/REvBm8.png" alt="REvBm8.png"></a></p>
+<ul>
+<li>Agent:是一个JVM进程，它以事件的形式将数据从源头送至目的</li>
+<li>source负责接收数据到Flume agent 的组件。可以处理各种类型，格式的日志数据。例如：spooling directory，netcat,avro,exec</li>
+<li>sink不断轮询channel中的事件并且批量的移除他们，将这些事件批量写入到存储或索引系统，或者被发送到另一个flume agent。sink组件发送目的地包括：hdfs,logger,avro,file,HBase</li>
+<li>Channel是位于source和sink之间缓冲区。Flume自带两种Channel：Memory Channel和File Channel。</li>
+</ul>
+</li>
+<li><p>event:flume传输数据的基本单元。由Header和Body组成。Header用来存放该event的一些属性，为K-V结构，Body用来存放该条数据，形式为字节数组。</p>
+</li>
+</ul>
+<h2 id="flume入门案例"><a href="#flume入门案例" class="headerlink" title="flume入门案例"></a>flume入门案例</h2><ul>
+<li><p>实时监控Hive日志，并上传到HDFS中</p>
+<figure class="highlight nix"><table><tr><td class="code"><pre><code class="hljs nix"><span class="hljs-number">1</span>.第一种方式<br>flume-ng agent --name agent的名字 --conf 配置文件的目录 --conf-file agent的配置文件（自己手动写）-Dflume.root.<span class="hljs-attr">logger=INFO,console</span><br><br>需要写配置文件<br>基本步骤：<br><span class="hljs-comment">#1.agent的source,channel,sink组件</span><br><span class="hljs-comment">#2.source配置</span><br><span class="hljs-comment">#3.channel配置</span><br><span class="hljs-comment">#4.sink配置</span><br><span class="hljs-comment">#5.source,channel,sink之间的关系</span><br><span class="hljs-comment"># Name the components on this agent</span><br>a2.<span class="hljs-attr">sources</span> = r2<br>a2.<span class="hljs-attr">sinks</span> = k2<br>a2.<span class="hljs-attr">channels</span> = c2<br><br><span class="hljs-comment"># Describe/configure the source</span><br>a2.sources.r2.<span class="hljs-attr">type</span> = exec<br>a2.sources.r2.<span class="hljs-attr">command</span> = tail -F /opt/module/hive/logs/hive.log<br>a2.sources.r2.<span class="hljs-attr">shell</span> = /bin/bash -c<br><br><span class="hljs-comment"># Describe the sink</span><br>a2.sinks.k2.<span class="hljs-attr">type</span> = hdfs<br>a2.sinks.k2.hdfs.<span class="hljs-attr">path</span> = hdfs://hadoop102:<span class="hljs-number">8020</span>/flume/%Y%m%d/%H<br><span class="hljs-comment">#上传文件的前缀</span><br>a2.sinks.k2.hdfs.<span class="hljs-attr">filePrefix</span> = logs-<br><span class="hljs-comment">#是否按照时间滚动文件夹</span><br>a2.sinks.k2.hdfs.<span class="hljs-attr">round</span> = <span class="hljs-literal">true</span><br><span class="hljs-comment">#多少时间单位创建一个新的文件夹</span><br>a2.sinks.k2.hdfs.<span class="hljs-attr">roundValue</span> = <span class="hljs-number">1</span><br><span class="hljs-comment">#重新定义时间单位</span><br>a2.sinks.k2.hdfs.<span class="hljs-attr">roundUnit</span> = hour<br><span class="hljs-comment">#是否使用本地时间戳</span><br>a2.sinks.k2.hdfs.<span class="hljs-attr">useLocalTimeStamp</span> = <span class="hljs-literal">true</span><br><span class="hljs-comment">#积攒多少个Event才flush到HDFS一次</span><br>a2.sinks.k2.hdfs.<span class="hljs-attr">batchSize</span> = <span class="hljs-number">100</span><br><span class="hljs-comment">#设置文件类型，可支持压缩</span><br>a2.sinks.k2.hdfs.<span class="hljs-attr">fileType</span> = DataStream<br><span class="hljs-comment">#多久生成一个新的文件</span><br>a2.sinks.k2.hdfs.<span class="hljs-attr">rollInterval</span> = <span class="hljs-number">60</span><br><span class="hljs-comment">#设置每个文件的滚动大小</span><br>a2.sinks.k2.hdfs.<span class="hljs-attr">rollSize</span> = <span class="hljs-number">134217700</span><br><span class="hljs-comment">#文件的滚动与Event数量无关</span><br>a2.sinks.k2.hdfs.<span class="hljs-attr">rollCount</span> = <span class="hljs-number">0</span><br><br><span class="hljs-comment"># Use a channel which buffers events in memory</span><br>a2.channels.c2.<span class="hljs-attr">type</span> = memory<br>a2.channels.c2.<span class="hljs-attr">capacity</span> = <span class="hljs-number">1000</span><br>a2.channels.c2.<span class="hljs-attr">transactionCapacity</span> = <span class="hljs-number">100</span><br><br><span class="hljs-comment"># Bind the source and sink to the channel</span><br>a2.sources.r2.<span class="hljs-attr">channels</span> = c2<br>a2.sinks.k2.<span class="hljs-attr">channel</span> = c2<br></code></pre></td></tr></table></figure></li>
+<li><p>log4j.properties(日志架构)，类似于程序中的调试代码，输出一些东西，供编码的时候调试。但是项目上线后不能再直接输出，于是将这些调试输出输出到专门的日志文件中。</p>
+</li>
+</ul>
+<h2 id="Flume进阶"><a href="#Flume进阶" class="headerlink" title="Flume进阶"></a>Flume进阶</h2><ul>
+<li><p>flume事务。主要是为了保证数据不会丢失。</p>
+<p><a href="https://imgtu.com/i/RZxhvR"><img src="https://z3.ax1x.com/2021/06/22/RZxhvR.png" alt="RZxhvR.png"></a></p>
+</li>
+<li><p>flume agent内部原理：</p>
+<p><a href="https://imgtu.com/i/RZxsbV"><img src="https://z3.ax1x.com/2021/06/22/RZxsbV.png" alt="RZxsbV.png"></a></p>
+</li>
+</ul>
+<ul>
+<li><ol>
+<li><p>Source接受数据，将数据以event的形式发给ChannnelProcessor</p>
+</li>
+<li><p>ChannelProcessor将事件传递给拦截器，在拦截其中可以对event数据进行更改。</p>
+</li>
+<li><p>拦截器再将事件返回到ChannelProcessor，ChannelProcessor将每个事件给Channel选择器。ChannelSelector的作用就是选出Event将要被发往哪个Channel。其共有两种类型，分别是Replicating（复制）和Multiplexing（多路复用）。</p>
+</li>
+<li><p>再返回到ChannelProcessor，根据选择器的选择，event进入不同的channel</p>
+</li>
+<li><p>SinkProcessor再决定channel中的enevt的走向。</p>
+<p>SinkProcessor共有三种类型，分别是DefaultSinkProcessor、LoadBalancingSinkProcessor和FailoverSinkProcessor。</p>
+<p>DefaultSinkProcessor对应的是单个的Sink，LoadBalancingSinkProcessor和FailoverSinkProcessor对应的是Sink Group，LoadBalancingSinkProcessor可以实现负载均衡的功能，FailoverSinkProcessor可以错误恢复的功能(故障转移）。</p>
+</li>
+</ol>
+</li>
+<li><p>flume拓扑结构</p>
+<ul>
+<li>简单串联。多个agent串起来</li>
+<li>复制和多路复用。Flume支持将事件流向一个或者多个目的地。这种模式可以将相同数据复制到多个channel中，或者将不同数据分发到不同的channel中，sink可以选择传送到不同的目的地。</li>
+<li>负载均衡和故障转移。Flume支持使用将多个sink逻辑上分到一个sink组，sink组配合不同的SinkProcessor可以实现负载均衡和错误恢复的功能。</li>
+<li>聚合。将多台服务器部署一个flume日志采集，再将所有日志聚合到一个集中收集日志的flume，由此上传到HDFS,HBase，进行数据分析。</li>
+</ul>
+</li>
+</ul>
+<h3 id="API编程"><a href="#API编程" class="headerlink" title="API编程"></a>API编程</h3><ul>
+<li>可以查看官网的开发者文档。</li>
+<li>自定义Interceptor。定义类实现Interceptor接口，重写四个方法（初始化，单event修改，多event修改，关闭资源）还需要一个Builder静态内部类。</li>
+</ul>
+<h2 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h2><h3 id="flume的source-sink-Channel的作用？"><a href="#flume的source-sink-Channel的作用？" class="headerlink" title="flume的source,sink,Channel的作用？"></a>flume的source,sink,Channel的作用？</h3><ul>
+<li><p>作用：</p>
+<p>（1）Source组件是专门用来收集数据的，可以处理各种类型、各种格式的日志数据，包括avro、thrift、exec、jms、spooling directory、netcat、sequence generator、syslog、http、legacy</p>
+<p>（2）Channel组件对采集到的数据进行缓存，可以存放在Memory或File中。</p>
+<p>（3）Sink组件是用于把数据发送到目的地的组件，目的地包括Hdfs、Logger、avro、thrift、ipc、file、Hbase、solr、自定义。</p>
+</li>
+</ul>
+<h3 id="flume参数调优"><a href="#flume参数调优" class="headerlink" title="flume参数调优"></a>flume参数调优</h3><ul>
+<li><p><em><strong>1. source</strong></em></p>
+<p>增加Source个（使用Tair Dir Source时可增加FileGroups个数）可以增大Source的读取数据的能力。例如：当某一个目录产生的文件过多时需要将这个文件目录拆分成多个文件目录，同时配置好多个Source 以保证Source有足够的能力获取到新产生的数据。</p>
+<p>batchSize参数决定Source一次批量运输到Channel的event条数，适当调大这个参数可以提高Source搬运Event到Channel时的性能。</p>
+<p><em><strong>2. Channel:</strong></em></p>
+<p>type 选择memory时Channel的性能最好，但是如果Flume进程意外挂掉可能会丢失数据。type选择file时Channel的容错性更好，但是性能上会比memory channel差。</p>
+<p>使用file Channel时dataDirs配置多个不同盘下的目录可以提高性能。</p>
+<p>Capacity 参数决定Channel可容纳最大的event条数。transactionCapacity 参数决定每次Source往channel里面写的最大event条数和每次Sink从channel里面读的最大event条数。transactionCapacity需要大于Source和Sink的batchSize参数。</p>
+<p><em><strong>3. Sink</strong></em></p>
+<p>增加Sink的个数可以增加Sink消费event的能力。Sink也不是越多越好够用就行，过多的Sink会占用系统资源，造成系统资源不必要的浪费。</p>
+<p>batchSize参数决定Sink一次批量从Channel读取的event条数，适当调大这个参数可以提高Sink从Channel搬出event的性能。</p>
+</li>
+</ul>
+<h3 id="flume数据是否会丢失？"><a href="#flume数据是否会丢失？" class="headerlink" title="flume数据是否会丢失？"></a>flume数据是否会丢失？</h3><ul>
+<li>flume采用事务机制，Flume使用两个独立的事务分别负责从Soucrce到Channel，以及从Channel到Sink的事件传递。如果因为某种原因使得事件无法记录，那么事务将会回滚。</li>
+<li>正是因为flume完善的事务机制，flume不会丢失数据。</li>
+<li>唯一可能丢失数据的情况是Channel采用memoryChannel，agent宕机导致数据丢失，或者Channel存储数据已满，导致Source不再写入，未写入的数据丢失。</li>
+<li>Flume不会丢失数据，但是有可能造成数据的重复，例如数据已经成功由Sink发出，但是没有接收到响应，Sink会再次发送数据，此时可能会导致数据的重复。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>大数据</category>
+        <category>flume</category>
+      </categories>
+      <tags>
+        <tag>大数据</tag>
+        <tag>flume</tag>
+      </tags>
   </entry>
   <entry>
     <title>kafka</title>
@@ -1425,444 +1425,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Java反射</title>
-    <url>/2021/04/22/Java-reflect/</url>
-    <content><![CDATA[<h1 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h1><h2 id="单元测试类"><a href="#单元测试类" class="headerlink" title="单元测试类"></a>单元测试类</h2><blockquote>
-<ul>
-<li>单元测试方法的要求：类必须是公共的，必需不能有任何构造器</li>
-<li>方法必修是公共非静态无返回值参数</li>
-<li>执行：在方法名中右击，点击run as -junit</li>
-<li>包装类：把基本数据类型包装成对象</li>
-</ul>
-</blockquote>
-<h2 id="反射概述"><a href="#反射概述" class="headerlink" title="反射概述"></a>反射概述</h2><ul>
-<li><p>JAVA反射机制是在运行状态中，对于任意一个类，都能够知道这个类的所有属性和方法；对于任意一个对象，都能够调用它的任意一个方法和属性；这种动态获取的信息以及动态调用对象的方法的功能称为java语言的反射机制。</p>
-<p>要想解剖一个类,必须先要获取到该类的字节码文件对象。而解剖使用的就是Class类中的方法.所以先要获取到每一个字节码文件对应的Class类型的对象.</p>
-</li>
-<li><p>反射就是把Java类中的各种成分映射成一个个的Java对象</p>
-<p>例如：一个类有：成员变量、方法、构造方法、包等等信息，利用反射技术可以对一个类进行解剖，把个个组成部分映射成一个个对象。</p>
-<p>   （其实：一个类中这些成员方法、构造方法、在加入类中都有一个类来描述）</p>
-</li>
-<li><p>参考链接：CSDN博客 <a href="https://blog.csdn.net/qq_36226453/article/details/82790375">链接</a></p>
-</li>
-</ul>
-<h2 id="反射基础实例代码"><a href="#反射基础实例代码" class="headerlink" title="反射基础实例代码"></a>反射基础实例代码</h2><figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs Java"><span class="hljs-keyword">package</span> reflect;<br><br><span class="hljs-keyword">import</span> <span class="hljs-keyword">static</span> org.junit.Assert.*;<br><br><span class="hljs-keyword">import</span> java.io.FileInputStream;<br><span class="hljs-keyword">import</span> java.io.IOException;<br><span class="hljs-keyword">import</span> java.io.InputStream;<br><span class="hljs-keyword">import</span> java.io.Serializable;<br><span class="hljs-keyword">import</span> java.lang.annotation.Annotation;<br><span class="hljs-keyword">import</span> java.lang.annotation.ElementType;<br><span class="hljs-keyword">import</span> java.lang.annotation.Retention;<br><span class="hljs-keyword">import</span> java.lang.annotation.RetentionPolicy;<br><span class="hljs-keyword">import</span> java.lang.annotation.Target;<br><span class="hljs-keyword">import</span> java.lang.reflect.Constructor;<br><span class="hljs-keyword">import</span> java.lang.reflect.Field;<br><span class="hljs-keyword">import</span> java.lang.reflect.InvocationTargetException;<br><span class="hljs-keyword">import</span> java.lang.reflect.Method;<br><span class="hljs-keyword">import</span> java.util.ArrayList;<br><span class="hljs-keyword">import</span> java.util.HashMap;<br><span class="hljs-keyword">import</span> java.util.Map.Entry;<br><span class="hljs-keyword">import</span> java.util.Properties;<br><span class="hljs-keyword">import</span> java.util.Set;<br><br><span class="hljs-keyword">import</span> org.junit.Test;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 反射 : java的动态处理技术</span><br><span class="hljs-comment"> */</span><br><span class="hljs-meta">@Target(&#123;ElementType.TYPE, ElementType.FIELD&#125;)</span><br><span class="hljs-meta">@Retention(RetentionPolicy.RUNTIME)</span><br><span class="hljs-meta">@interface</span> HelloAnnotation &#123;<br>	<span class="hljs-function">String <span class="hljs-title">name</span><span class="hljs-params">()</span> <span class="hljs-keyword">default</span> &quot;缺省名字&quot;</span>;<br>	<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">id</span><span class="hljs-params">()</span> <span class="hljs-keyword">default</span> 10</span>;<br>&#125;<br><br><span class="hljs-meta">@HelloAnnotation(name=&quot;abc&quot;)</span><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Teacher</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">ArrayList</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Serializable</span>, <span class="hljs-title">Comparable</span>, <span class="hljs-title">Runnable</span> </span>&#123;<br>	<br>	<span class="hljs-meta">@HelloAnnotation</span><br>	<span class="hljs-keyword">private</span> String name;<br>	<span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> age;<br>	<span class="hljs-keyword">private</span> String gender;<br>	<br>	<span class="hljs-comment">//@HelloAnnotation</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Teacher</span><span class="hljs-params">()</span> </span>&#123;<br>	&#125;<br>	<span class="hljs-comment">//构造方法，Ctrl+Alt+S+O</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Teacher</span><span class="hljs-params">(String name)</span> </span>&#123;<br>		<span class="hljs-keyword">this</span>.name = name;<br>	&#125;<br>	<br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Teacher</span><span class="hljs-params">(<span class="hljs-keyword">int</span> age)</span> </span>&#123;<br>		<span class="hljs-keyword">this</span>.age = age;<br>	&#125;<br><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Teacher</span><span class="hljs-params">(String name,String gender)</span> </span>&#123;<br>		<span class="hljs-keyword">this</span>.name = name;<br>		<span class="hljs-keyword">this</span>.gender = gender;<br>	&#125;<br><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Teacher</span><span class="hljs-params">(String name, <span class="hljs-keyword">int</span> age, String gender)</span> </span>&#123;<br>		<span class="hljs-keyword">this</span>.name = name;<br>		<span class="hljs-keyword">this</span>.age = age;<br>		<span class="hljs-keyword">this</span>.gender = gender;<br>	&#125;<br>    <span class="hljs-comment">//set,get方法 快捷键Ctrl+Alt+S+R</span><br>	<span class="hljs-comment">//@HelloAnnotation</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">getName</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> name;<br>	&#125;<br><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setName</span><span class="hljs-params">(String name)</span> </span>&#123;<br>		<span class="hljs-keyword">this</span>.name = name;<br>	&#125;<br><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">getAge</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> age;<br>	&#125;<br><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setAge</span><span class="hljs-params">(<span class="hljs-keyword">int</span> age)</span> </span>&#123;<br>		<span class="hljs-keyword">this</span>.age = age;<br>	&#125;<br><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">getGender</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> gender;<br>	&#125;<br><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setGender</span><span class="hljs-params">(String gender)</span> </span>&#123;<br>		<span class="hljs-keyword">this</span>.gender = gender;<br>	&#125;<br>    <span class="hljs-comment">//Ctrl+Alt+S+S</span><br>	<span class="hljs-meta">@Override</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">toString</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> <span class="hljs-string">&quot;Teacher [name=&quot;</span> + name + <span class="hljs-string">&quot;, age=&quot;</span> + age + <span class="hljs-string">&quot;, gender=&quot;</span> + gender + <span class="hljs-string">&quot;]&quot;</span>;<br>	&#125;<br><br>	<span class="hljs-meta">@Override</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">run</span><span class="hljs-params">()</span> </span>&#123;<br>	&#125;<br><br>	<span class="hljs-meta">@Override</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">compareTo</span><span class="hljs-params">(Object o)</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>	&#125;<br>	<br>	<span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">lesson</span><span class="hljs-params">(String content, <span class="hljs-keyword">int</span> time)</span> </span>&#123;<br>		System.out.println(<span class="hljs-string">&quot;老师在上[&quot;</span> + content + <span class="hljs-string">&quot;]课, 共上了[&quot;</span> + time +<span class="hljs-string">&quot;]小时&quot;</span>);<br>		<span class="hljs-comment">//return true;</span><br>		<span class="hljs-comment">//throw new RuntimeException(&quot;一个异常&quot;);</span><br>	&#125;<br>	<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ReflectTest</span> </span>&#123;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">testName</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception </span>&#123;<br>		Class clazz = Class.forName(<span class="hljs-string">&quot;reflect.Teacher&quot;</span>);<br>		Annotation[] annotations = clazz.getAnnotations();<br>		System.out.println(annotations.length);<br>		System.out.println(annotations[<span class="hljs-number">0</span>]);<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test14</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception </span>&#123;<br>		Class clazz = Class.forName(<span class="hljs-string">&quot;reflect.Teacher&quot;</span>);<br>		System.out.println(<span class="hljs-string">&quot;父类 : &quot;</span> + clazz.getSuperclass());<br>		Constructor[] constructors = clazz.getConstructors();<br>		<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; constructors.length; i++) &#123;<br>			System.out.println(<span class="hljs-string">&quot;构造器 : &quot;</span> + constructors[i]);<br>		&#125;<br>		System.out.println(<span class="hljs-string">&quot;************************************************&quot;</span>);<br>		Field[] fields = clazz.getFields(); <span class="hljs-comment">// 所有公共属性</span><br>		<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; fields.length; i++) &#123;<br>			System.out.println(<span class="hljs-string">&quot;公共属性：&quot;</span>+fields[i]);<br>		&#125;<br>		<span class="hljs-comment">//反射尽量不要破坏封装性，容易发生严重后果，慎用getDeclared.....()方法</span><br>		Field[] declaredFields = clazz.getDeclaredFields(); <span class="hljs-comment">// 所有本类属性</span><br>		<span class="hljs-keyword">for</span> (Field field : declaredFields) &#123;<br>			System.out.println(<span class="hljs-string">&quot;本类属性：&quot;</span>+field);<br>		&#125;<br>		System.out.println(<span class="hljs-string">&quot;************************************************&quot;</span>);<br>		Method[] methods = clazz.getMethods();<span class="hljs-comment">//所有公共方法</span><br>		<span class="hljs-keyword">for</span> (Method method : methods) &#123;<br>			System.out.println(<span class="hljs-string">&quot;公共方法&quot;</span>+method);<br>		&#125;<br>		System.out.println(<span class="hljs-string">&quot;************************************************&quot;</span>);<br>		Method[] declaredMethods = clazz.getDeclaredMethods();<span class="hljs-comment">//所有本类方法</span><br>		<span class="hljs-keyword">for</span> (Method method : declaredMethods) &#123;<br>			System.out.println(<span class="hljs-string">&quot;本类方法：&quot;</span>+method);<br>		&#125;<br>	&#125;<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test13</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">try</span> &#123;<br>			Class clazz = Class.forName(<span class="hljs-string">&quot;reflect.Teacher&quot;</span>);<br>			Method lessonMethod = clazz.getDeclaredMethod(<span class="hljs-string">&quot;lesson&quot;</span>, String.class, <span class="hljs-keyword">int</span>.class);<br>			lessonMethod.setAccessible(<span class="hljs-keyword">true</span>);<br>			<br>			Short n = <span class="hljs-number">3</span>;<br>			Object retValue = lessonMethod.invoke(<span class="hljs-keyword">null</span>, <span class="hljs-string">&quot;JavaWEB&quot;</span>, n); <span class="hljs-comment">// 静态方法传null, 不需要传入对象</span><br>			System.out.println(retValue);<br>		&#125; <span class="hljs-keyword">catch</span> (ClassNotFoundException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (IllegalAccessException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (NoSuchMethodException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (SecurityException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (IllegalArgumentException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (InvocationTargetException e) &#123;<br>			e.printStackTrace();<br>		&#125;<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test12</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">try</span> &#123;<br>			Class clazz = Class.forName(<span class="hljs-string">&quot;reflect.Teacher&quot;</span>);<br>			Constructor constructor = clazz.getConstructor(String.class, <span class="hljs-keyword">int</span>.class, String.class);<br>			Object object = constructor.newInstance(<span class="hljs-string">&quot;佟刚&quot;</span>, <span class="hljs-number">40</span>, <span class="hljs-string">&quot;男&quot;</span>);<br>			<br>			<span class="hljs-comment">// getMethod只能获取公共的方法, 包括从父类继承的. </span><br>			<span class="hljs-comment">//Method lessonMethod = clazz.getMethod(&quot;lesson&quot;, String.class, int.class); </span><br>			<br>			<span class="hljs-comment">// getDeclaredMethod可以获取本类中所有声明的方法</span><br>			Method lessonMethod = clazz.getDeclaredMethod(<span class="hljs-string">&quot;lesson&quot;</span>, String.class, <span class="hljs-keyword">int</span>.class);<br>			lessonMethod.setAccessible(<span class="hljs-keyword">true</span>);<br>			<br>			Short n = <span class="hljs-number">3</span>;<br>			Object retValue = lessonMethod.invoke(object, <span class="hljs-string">&quot;JavaWEB&quot;</span>, n); <br>			System.out.println(retValue);<br>			<span class="hljs-comment">/*</span><br><span class="hljs-comment">		    private String outOfBoundsMsg(int index) &#123;</span><br><span class="hljs-comment">		        return &quot;Index: &quot;+index+&quot;, Size: &quot;+size;</span><br><span class="hljs-comment">		    &#125;</span><br><span class="hljs-comment">		    */</span><br>			<span class="hljs-comment">/*</span><br><span class="hljs-comment">			//拿父类的方法，会有警告，最好不要暴力访问私有方法，属性</span><br><span class="hljs-comment">			Method declaredMethod = clazz.getSuperclass().getDeclaredMethod(&quot;outOfBoundsMsg&quot;, int.class);</span><br><span class="hljs-comment">			System.out.println(declaredMethod);</span><br><span class="hljs-comment">			//危险操作</span><br><span class="hljs-comment">			declaredMethod.setAccessible(true);</span><br><span class="hljs-comment">			</span><br><span class="hljs-comment">			Object invoke = declaredMethod.invoke(object, 20);</span><br><span class="hljs-comment">			System.out.println(invoke);</span><br><span class="hljs-comment">			*/</span><br>		&#125; <span class="hljs-keyword">catch</span> (ClassNotFoundException e) &#123; <span class="hljs-comment">// 类未找到</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (NoSuchMethodException e) &#123; <span class="hljs-comment">// 方法没有找到, 方法名错误或参数列表错误</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (SecurityException e) &#123; <span class="hljs-comment">// 安全异常</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (InstantiationException e) &#123; <span class="hljs-comment">// 创建对象时出现异常</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (IllegalAccessException e) &#123; <span class="hljs-comment">// 非法访问异常</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (IllegalArgumentException e) &#123; <span class="hljs-comment">// 非法实参异常, 实参和形参不匹配, 类型和顺序和数量</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (InvocationTargetException e) &#123; <span class="hljs-comment">// 调用的目标方法内部出现异常了.</span><br>			e.printStackTrace();<br>		&#125;<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test11</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">try</span> &#123;<br>			Class clazz = Class.forName(<span class="hljs-string">&quot;reflect.Teacher&quot;</span>);<br>			Constructor constructor = clazz.getConstructor(String.class, <span class="hljs-keyword">int</span>.class, String.class);<br>			Object object = constructor.newInstance(<span class="hljs-string">&quot;佟刚&quot;</span>, <span class="hljs-number">40</span>, <span class="hljs-string">&quot;男&quot;</span>);<br>			<br>			<span class="hljs-comment">//object.lesson(&quot;JavaWEB&quot;, 3);</span><br>			<span class="hljs-comment">//先获取方法</span><br>			<br>			Method lessonMethod = clazz.getMethod(<span class="hljs-string">&quot;lesson&quot;</span>, String.class, <span class="hljs-keyword">int</span>.class); <span class="hljs-comment">// 后面是方法参数类型列表</span><br>			<span class="hljs-keyword">short</span> n = <span class="hljs-number">3</span>;<br>			Object retValue = lessonMethod.invoke(object, <span class="hljs-string">&quot;JavaWEB&quot;</span>, n); <span class="hljs-comment">// 后面是实参列表, 如果方法没有返回值, 它的返回值是null</span><br>			System.out.println(retValue);<br>		&#125; <span class="hljs-keyword">catch</span> (ClassNotFoundException e) &#123; <span class="hljs-comment">// 类未找到</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (NoSuchMethodException e) &#123; <span class="hljs-comment">// 方法没有找到, 方法名错误或参数列表错误</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (SecurityException e) &#123; <span class="hljs-comment">// 安全异常</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (InstantiationException e) &#123; <span class="hljs-comment">// 创建对象时出现异常</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (IllegalAccessException e) &#123; <span class="hljs-comment">// 非法访问异常</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (IllegalArgumentException e) &#123; <span class="hljs-comment">// 非法实参异常, 实参和形参不匹配, 类型和顺序和数量</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (InvocationTargetException e) &#123; <span class="hljs-comment">// 调用的目标方法内部出现异常了.</span><br>			e.printStackTrace();<br>		&#125;<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test10</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">try</span> &#123;<br>			Class clazz = Class.forName(<span class="hljs-string">&quot;reflect.Teacher&quot;</span>);<br>			<span class="hljs-comment">//Object object = clazz.newInstance(); 没有无参构造器时出问题</span><br>			<br>			<span class="hljs-comment">//public Teacher(String name, int age, String gender) 要想定位这个构造器, 必须让参数列表一致.</span><br>			<br>			<span class="hljs-comment">// 提供形式参数类型列表, 是类模板对象的列表</span><br>			Constructor constructor = clazz.getConstructor(String.class, <span class="hljs-keyword">int</span>.class, String.class); <span class="hljs-comment">// 定位合适的构造器</span><br>			<span class="hljs-comment">// 调用时必须给定实参列表</span><br>			Object object = constructor.newInstance(<span class="hljs-string">&quot;程程&quot;</span>, <span class="hljs-number">20</span>, <span class="hljs-string">&quot;女&quot;</span>); <span class="hljs-comment">// new Teacher(&quot;程程&quot;, 20, &quot;女&quot;);</span><br>			System.out.println(object);<br>			<br>		&#125; <span class="hljs-keyword">catch</span> (ClassNotFoundException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (InstantiationException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (IllegalAccessException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (NoSuchMethodException e) &#123; <span class="hljs-comment">// 参数列表出错, 或者方法名出错</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (SecurityException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (IllegalArgumentException e) &#123; <span class="hljs-comment">// 方法调用时实参和形参不匹配</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (InvocationTargetException e) &#123;<br>			e.printStackTrace();<br>		&#125;<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test9</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> IOException  </span>&#123;<br>		<span class="hljs-comment">//FileInputStream fis = new FileInputStream(&quot;只能读当前目录下的文件&quot;);</span><br>		ClassLoader classLoader = <span class="hljs-keyword">this</span>.getClass().getClassLoader();<br>		<span class="hljs-comment">// 只能加载build-path和src下的文件</span><br>		<span class="hljs-comment">//InputStream inputStream = classLoader.getResourceAsStream(&quot;com/sun/corba/se/impl/logging/LogStrings.properties&quot;); // 读取资源文件, 只要是Build-Path(classpath)中的文件都可以</span><br>		InputStream inputStream = classLoader.getResourceAsStream(<span class="hljs-string">&quot;s2&quot;</span>);<br>		Properties properties = <span class="hljs-keyword">new</span> Properties();<br>		properties.load(inputStream);<br>		<br>		Set&lt;Entry&lt;Object, Object&gt;&gt; entrySet = properties.entrySet();<br>		<span class="hljs-keyword">for</span> (Entry&lt;Object, Object&gt; entry : entrySet) &#123;<br>			System.out.println(entry);<br>		&#125;<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test8</span><span class="hljs-params">()</span>  </span>&#123;<br>		ClassLoader classLoader1 = ClassLoader.getSystemClassLoader(); <span class="hljs-comment">// 获取系统类加载器</span><br>		System.out.println(classLoader1);<br>		ClassLoader classLoader2 = <span class="hljs-keyword">this</span>.getClass().getClassLoader(); <span class="hljs-comment">// 使用最多的, 获取当前类的类加载器</span><br>		System.out.println(classLoader2);<br>		<br>		ClassLoader classLoader3 = classLoader1.getParent(); <span class="hljs-comment">// 获取父 &quot;类加载器&quot;,  是 扩展 &quot;类加载器&quot;</span><br>		System.out.println(classLoader3);<br>		<br>		ClassLoader classLoader4 = classLoader3.getParent(); <span class="hljs-comment">// 获取到的是引导类加载器(Bootstrap )</span><br>		System.out.println(classLoader4); <span class="hljs-comment">// 这个类加载器无法获取, 无法使用</span><br>		<br>		<span class="hljs-comment">/*</span><br><span class="hljs-comment">		双亲委派机制</span><br><span class="hljs-comment">		用户类加载器加载类时, 必须把此加载请求转发给父类加载器, 父类加载器再继续向父类加载器委派, 直到Bootstrap类加载器</span><br><span class="hljs-comment">		从Bootstrap类加载器开始真正加载, 各司其职. </span><br><span class="hljs-comment">		*/</span><br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test7</span><span class="hljs-params">()</span>  </span>&#123;<br>		Class strClazz = String.class;<br>		System.out.println(strClazz);<br>		<br>		<span class="hljs-comment">// 基本数据类型的类模板只能用第一种方式获取.</span><br>		Class clazz1 = <span class="hljs-keyword">int</span>.class; <span class="hljs-comment">// 基本数据类型也有相应的类模板对象, 但是不能获取属性和方法, 只能作为一个标记来使用.</span><br>		Class clazz2 = Integer.class; <span class="hljs-comment">// 这是一个普通类模板.</span><br>		System.out.println(clazz1 == clazz2);<br>		<br>		<span class="hljs-comment">// 判断类模板类型</span><br>		System.out.println(<span class="hljs-string">&quot;是否是基本型 : &quot;</span> + clazz1.isPrimitive());<br>		System.out.println(<span class="hljs-string">&quot;是否是基本型 : &quot;</span> + clazz2.isPrimitive());<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test6</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> ClassNotFoundException </span>&#123;<br>		<span class="hljs-comment">// 获取类模板对象的方法 ，有４种</span><br>		<span class="hljs-comment">// 1) 直接通过类.class, 效率最高, 最安全.</span><br>		Class clazz1 = Teacher.class;<br>		<br>		<span class="hljs-comment">// 2) 根据对象, 调用它的getClass()方法获取, 此方法也很常用.</span><br>		Teacher teacher = <span class="hljs-keyword">new</span> Teacher(<span class="hljs-string">&quot;佟刚&quot;</span>, <span class="hljs-number">40</span>, <span class="hljs-string">&quot;男&quot;</span>);<br>		Class clazz2 = teacher.getClass();<br>		<br>		System.out.println(clazz1 == clazz2);<br>		<br>		<span class="hljs-comment">// 3) 反射中最常用的 Class.forName(&quot;全限定类名&quot;);</span><br>		Class clazz3 = Class.forName(<span class="hljs-string">&quot;reflect.Teacher&quot;</span>);<br>		System.out.println(clazz2 == clazz3);<br>		<br>		<span class="hljs-comment">// 4) 通过类加载器对象动态加载类</span><br>		ClassLoader classLoader = <span class="hljs-keyword">this</span>.getClass().getClassLoader();<br>		Class clazz4 = classLoader.loadClass(<span class="hljs-string">&quot;reflect.Teacher&quot;</span>);<br>		System.out.println(clazz3 == clazz4);<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test5</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> ClassNotFoundException </span>&#123;<br>		Class clazz = Class.forName(<span class="hljs-string">&quot;reflect.Teacher&quot;</span>);<br>		String name = clazz.getName();<br>		System.out.println(<span class="hljs-string">&quot;类名 : &quot;</span> + name);<br>		System.out.println(<span class="hljs-string">&quot;简单类名 :  &quot;</span> + clazz.getSimpleName());<br>		Class superclass = clazz.getSuperclass();<br>		System.out.println(<span class="hljs-string">&quot;父类 : &quot;</span> + superclass);<br>		Class[] interfaces = clazz.getInterfaces();<br>		System.out.println(<span class="hljs-string">&quot;接口列表 &quot;</span>);<br>		<span class="hljs-keyword">for</span> (Class class1 : interfaces) &#123;<br>			System.out.println(class1);<br>		&#125;<br>		<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test4</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">try</span> &#123;<br>			Class clazz = Class.forName(<span class="hljs-string">&quot;reflect.Teacher&quot;</span>);<br>			Object object = clazz.newInstance();<br>			System.out.println(object);<br>			<br>			<span class="hljs-comment">//Field ageField = clazz.getField(&quot;age&quot;); // getField方法只能获取公共的属性, 也包括从父类继承的属性, 不可以获取私有属性</span><br>			Field ageField = clazz.getDeclaredField(<span class="hljs-string">&quot;age&quot;</span>); <span class="hljs-comment">// 获取本类中声明的任意属性 </span><br>			<span class="hljs-comment">// 暴力反射!!! 不推荐使用!!</span><br>			ageField.setAccessible(<span class="hljs-keyword">true</span>); <span class="hljs-comment">// 设置此属性为可访问的.</span><br>			ageField.set(object, <span class="hljs-number">40</span>); <br>			System.out.println(ageField.get(object)); <br>			<br>			Field nameField = clazz.getDeclaredField(<span class="hljs-string">&quot;name&quot;</span>);<br>			nameField.setAccessible(<span class="hljs-keyword">true</span>);<br>			nameField.set(object, <span class="hljs-string">&quot;佟刚&quot;</span>);<br>			<br>			System.out.println(object);<br>		&#125; <span class="hljs-keyword">catch</span> (ClassNotFoundException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (InstantiationException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (IllegalAccessException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (NoSuchFieldException e) &#123; <span class="hljs-comment">// 查找属性时, 有可能属性名不对, 可能是属性不存在</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (SecurityException e) &#123; <span class="hljs-comment">// 如果有安全检查.</span><br>			e.printStackTrace();<br>		&#125;<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test3</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">try</span> &#123;<br>			Class clazz = Class.forName(<span class="hljs-string">&quot;reflect.Teacher&quot;</span>);<br>			Object object = clazz.newInstance();<br>			System.out.println(object);<br>			<br>			<span class="hljs-comment">// 要想使用属性, 1)先获取属性定义对象 2) 配合目标this对象完成对象属性的间接访问.</span><br>			Field ageField = clazz.getField(<span class="hljs-string">&quot;age&quot;</span>); <span class="hljs-comment">// 根据属性名获取属性的定义对象</span><br>			ageField.set(object, <span class="hljs-number">40</span>); <span class="hljs-comment">// 设置属性值, 相当于 object.age = 40; </span><br>			System.out.println(ageField.get(object)); <span class="hljs-comment">// 获取属性值,  相当于 System.out.println(object.age)</span><br>			<br>			Field nameField = clazz.getField(<span class="hljs-string">&quot;name&quot;</span>);<br>			nameField.set(object, <span class="hljs-string">&quot;佟刚&quot;</span>); <span class="hljs-comment">// object.name = &quot;佟刚&quot;</span><br>			<br>			Field genderField = clazz.getField(<span class="hljs-string">&quot;gender&quot;</span>);<br>			genderField.set(object, <span class="hljs-string">&quot;男&quot;</span>);<br>			<br>			System.out.println(object);<br>		&#125; <span class="hljs-keyword">catch</span> (ClassNotFoundException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (InstantiationException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (IllegalAccessException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (NoSuchFieldException e) &#123; <span class="hljs-comment">// 查找属性时, 有可能属性名不对, 可能是属性不存在</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (SecurityException e) &#123; <span class="hljs-comment">// 如果有安全检查.</span><br>			e.printStackTrace();<br>		&#125;<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test2</span><span class="hljs-params">()</span> </span>&#123; <span class="hljs-comment">// 软编码, 灵活, 把问题延迟到运行时.</span><br>		<span class="hljs-keyword">try</span> &#123;<br>			<span class="hljs-comment">// 干预类的加载, 直接获取类模板对象.</span><br>			Class clazz = Class.forName(<span class="hljs-string">&quot;reflect.Teacher&quot;</span>); <span class="hljs-comment">// 类名必须全限定!!!</span><br>			<span class="hljs-comment">// 通过类模板对象.newInstance创建实体对象</span><br>			Object object = clazz.newInstance(); <span class="hljs-comment">// 调用无参构造器创建对象</span><br>			System.out.println(object);<br>		&#125; <span class="hljs-keyword">catch</span> (ClassNotFoundException e) &#123; <span class="hljs-comment">// 在运行时动态加载类时, 发现没有找到类</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (InstantiationException e) &#123; <span class="hljs-comment">// 在创建对象时出现异常, 可能是构造器不存在</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (IllegalAccessException e) &#123; <span class="hljs-comment">// 非法访问, 访问权限不够时出现</span><br>			e.printStackTrace();<br>		&#125;<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test1</span><span class="hljs-params">()</span> </span>&#123; <span class="hljs-comment">// 编译时必须依赖类, 硬编码</span><br>		<br>		<span class="hljs-comment">//Teacher t1 = new Teacher(); // 强烈依赖类</span><br>		<span class="hljs-comment">//t1.name = &quot;佟刚&quot;;</span><br>		<span class="hljs-comment">//t1.age = 40;</span><br>		<span class="hljs-comment">//t1.gender = &quot;男&quot;;</span><br>		<br>		<span class="hljs-comment">//System.out.println(t1.name);</span><br>		<span class="hljs-comment">//System.out.println(t1.age);</span><br>		<span class="hljs-comment">//System.out.println(t1.gender);</span><br>		<br>		<span class="hljs-comment">//System.out.println(t1);</span><br>		<br>		Teacher t2 = <span class="hljs-keyword">new</span> Teacher(<span class="hljs-string">&quot;程程&quot;</span>, <span class="hljs-number">20</span>, <span class="hljs-string">&quot;女&quot;</span>);<br>		System.out.println(t2);<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test0</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-comment">// 测试方法所在的线程永远是守护线程</span><br>	&#125;<br>	<br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;<br>		<span class="hljs-comment">// 守护线程, setDaemon(true); 此方法必须在start()以前调用.</span><br>		<span class="hljs-comment">// 主线程永远是用户线程</span><br>	&#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>Java</category>
-      </categories>
-      <tags>
-        <tag>java</tag>
-        <tag>反射</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>JavaWeb</title>
-    <url>/2021/05/26/JavaWeb/</url>
-    <content><![CDATA[<h1 id="JavaWeb"><a href="#JavaWeb" class="headerlink" title="JavaWeb"></a>JavaWeb</h1><h2 id="网页的组成"><a href="#网页的组成" class="headerlink" title="网页的组成"></a>网页的组成</h2><ul>
-<li>结构（HTML)<ul>
-<li>超文本标记语言</li>
-<li>网页的主要内容通过html来实现</li>
-<li>用来写网页的语言</li>
-</ul>
-</li>
-<li>表现（CSS)<ul>
-<li>层叠样式表</li>
-<li>网页的字体颜色、背景色、背景图片等通过它来实现</li>
-<li>用来美化网页</li>
-</ul>
-</li>
-<li>行为（JavaScript/jQuery）<ul>
-<li>用来实现网页上的一下动态的效果</li>
-</ul>
-</li>
-<li>一个良好的网页要求结构、表现、行为三者分离</li>
-</ul>
-<h2 id="HTML"><a href="#HTML" class="headerlink" title="HTML"></a>HTML</h2><ul>
-<li><p>常用的标签</p>
-<ul>
-<li><p>标题标签</p>
-<ul>
-<li>一共六个（h1到h6）</li>
-</ul>
-<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span><br>    一级标题<br><span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">h2</span>&gt;</span><br>    二级标题<br><span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span><br>...<br><span class="hljs-tag">&lt;<span class="hljs-name">h6</span>&gt;</span><br>    六级标题<br><span class="hljs-tag">&lt;/<span class="hljs-name">h6</span>&gt;</span><br></code></pre></td></tr></table></figure></li>
-<li><p>超链接</p>
-<ul>
-<li><p>通过a标签创建一个超链接</p>
-<ul>
-<li>通过a标签中的href属性指定要跳转的页面的地址</li>
-</ul>
-<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;设置要跳转的页面的地址&quot;</span>&gt;</span>我是超链接<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span><br></code></pre></td></tr></table></figure></li>
-</ul>
-</li>
-<li><p>表格</p>
-<ul>
-<li>通过table标签创建一个表格<ul>
-<li>表格中的行通过tr标签来表示<ul>
-<li>表格中的表头通过th标签来表示</li>
-<li>表格中的列（单元格）通过td标签来标签<ul>
-<li>通过rowspan属性跨行合并单元格</li>
-<li>通过colspan属性跨列合并单元格</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">table</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span><br>    	<span class="hljs-tag">&lt;<span class="hljs-name">th</span>&gt;</span>姓名<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">th</span>&gt;</span>性别<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">th</span>&gt;</span>年龄<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span><br>    	<span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>盖伦<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>男<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>19<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">table</span>&gt;</span><br></code></pre></td></tr></table></figure></li>
-<li><p>表单</p>
-<ul>
-<li>使用form标签创建一个表单<ul>
-<li>通过action属性指定要提交的服务器的地址</li>
-<li>通过method属性指定提交的请求方式</li>
-<li>通过input标签创建表单项<ul>
-<li>type值是text的是文本框</li>
-<li>type值是password的是密码框</li>
-<li>type值是submit的是提交按钮</li>
-<li>type值不可用任意指定，通过alt+/根据提示选择</li>
-<li>必须给input指定name属性值<ul>
-<li>name属性值可用任意指定</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-comment">&lt;!-- 通过form标签创建一个表单 </span><br><span class="hljs-comment">		action属性：设置要提交的服务器的地址</span><br><span class="hljs-comment">		method属性：设置请求方式</span><br><span class="hljs-comment">			get：将发送一个GET请求，此时用户输入的数据是通过浏览器的地址栏进行传输</span><br><span class="hljs-comment">			post：将发送一个POST请求，此时用户输入的数据通过HTTP协议中请求报文中的请求体进行传输</span><br><span class="hljs-comment">	--&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">action</span>=<span class="hljs-string">&quot;success.html&quot;</span> <span class="hljs-attr">method</span>=<span class="hljs-string">&quot;post&quot;</span>&gt;</span><br>		<span class="hljs-comment">&lt;!-- </span><br><span class="hljs-comment">			表单中的表单项通过input标签来创建，表单项的类型通过type属性来指定；</span><br><span class="hljs-comment">			必须给表单项指定name属性值，用户输入的数据通过name属性值进行携带，并以键值对的形式发送到</span><br><span class="hljs-comment">			服务器，多个键值对之间使用 &amp;符号分隔，例如：username=admin&amp;password=123456</span><br><span class="hljs-comment">		 --&gt;</span><br>		用户名称：<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">br</span>&gt;</span><br>		用户密码：<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;password&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;password&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">br</span>&gt;</span><br>		<span class="hljs-comment">&lt;!-- 提交按钮上显示的文字通过value指定 --&gt;</span><br>		<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;submit&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;登录&quot;</span>&gt;</span><br>	<span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span><br></code></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ul>
-<h2 id="CSS"><a href="#CSS" class="headerlink" title="CSS"></a>CSS</h2><ul>
-<li><p>CSS样式可用书写的位置</p>
-<ul>
-<li><p>1）写在标签的style属性中</p>
-<ul>
-<li>结构与表现相耦合，不建议使用</li>
-</ul>
-<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;color: red;font-size: &quot;</span>&gt;</span>我是一个段落<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span><br></code></pre></td></tr></table></figure></li>
-<li><p>2）写在style标签中，style标签放在head标签中</p>
-<ul>
-<li>开发测试阶段使用这种方式</li>
-</ul>
-<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">style</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text/css&quot;</span>&gt;</span><br><span class="css">	<span class="hljs-selector-id">#rd</span>&#123;</span><br><span class="css">		<span class="hljs-selector-tag">color</span>: <span class="hljs-selector-id">#FBA</span></span><br>	&#125;<br><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span><br></code></pre></td></tr></table></figure></li>
-<li><p>3）引入外部的css文件</p>
-<ul>
-<li>项目上线后使用这种方式</li>
-</ul>
-<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;stylesheet&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text/css&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;style.css&quot;</span> /&gt;</span><br></code></pre></td></tr></table></figure></li>
-</ul>
-</li>
-<li><p>CSS种的基本选择器</p>
-<ul>
-<li>标签选择器</li>
-</ul>
-<figure class="highlight css"><table><tr><td class="code"><pre><code class="hljs css"><span class="hljs-selector-tag">h1</span> &#123;<br>	<span class="hljs-attribute">color</span>: red<br>&#125;<br></code></pre></td></tr></table></figure>
-
-
-
-<ul>
-<li>ID选择器<ul>
-<li>格式：#id属性值</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight css"><table><tr><td class="code"><pre><code class="hljs css"><span class="hljs-selector-id">#p1</span> &#123;<br>	<span class="hljs-attribute">color</span>: green<br>&#125;<br></code></pre></td></tr></table></figure>
-
-
-
-<ul>
-<li>类选择器<ul>
-<li>格式：.class属性值</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight css"><table><tr><td class="code"><pre><code class="hljs css"><span class="hljs-selector-class">.p2</span> &#123;<br>	<span class="hljs-attribute">color</span>: blue<br>&#125;<br></code></pre></td></tr></table></figure>
-
-
-
-<ul>
-<li>分组选择器</li>
-</ul>
-<figure class="highlight css"><table><tr><td class="code"><pre><code class="hljs css"><span class="hljs-selector-id">#p1</span>, <span class="hljs-selector-class">.p2</span> &#123;<br>	<span class="hljs-attribute">font-size</span>: <span class="hljs-number">20px</span><br>&#125;<br></code></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="JavaScript"><a href="#JavaScript" class="headerlink" title="JavaScript"></a>JavaScript</h2><ul>
-<li><p>JavaScript可用书写的位置跟CSS类似，一共三种方式</p>
-</li>
-<li><p>变量</p>
-<ul>
-<li>通过var关键字声明一个变量</li>
-<li>在使用变量的过程种可用给它赋任意值</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">var</span> a; a=<span class="hljs-number">123</span>; a=<span class="hljs-string">&quot;hello&quot;</span>;a=函数；a=对象；<br><span class="hljs-keyword">var</span> a = <span class="hljs-string">&quot;javascript&quot;</span>;<br></code></pre></td></tr></table></figure></li>
-<li><p>函数</p>
-<ul>
-<li>通过function关键字声明一个函数</li>
-<li>在声明函数时不需要指定返回值的类型及形参的类型</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">//方式一：</span><br><span class="hljs-comment">//不带参数的函数</span><br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">fun</span>(<span class="hljs-params"></span>)</span>&#123;<br>    <span class="hljs-comment">//函数体</span><br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sum</span>(<span class="hljs-params">a,b</span>)</span>&#123;<br>    <span class="hljs-keyword">return</span> a + b;<br>&#125;<br><span class="hljs-comment">//方式二：</span><br><span class="hljs-keyword">var</span> sum2 = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">a,b,c</span>)</span>&#123;<br>    <span class="hljs-keyword">return</span> a + b + c;<br>&#125;<br><span class="hljs-comment">//我们通常是通过方式二这种方式将一个函数赋给对象的事件属性</span><br></code></pre></td></tr></table></figure></li>
-<li><p>DOM</p>
-<ul>
-<li>全称：Document Object Model，文档对象模型</li>
-<li>DOM种常用的属性和方法<ul>
-<li>document.getElementById(“id属性值”)<ul>
-<li>根据标签的id属性值获取一个具体的标签对象</li>
-</ul>
-</li>
-<li>对象.innerHTML<ul>
-<li>获取或设置成对出现的标签中的文本内容<ul>
-<li>对象.innerHTML<ul>
-<li>获取文本内容</li>
-</ul>
-</li>
-<li>对象.innerHTML=”new valule”<ul>
-<li>设置文本内容</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>在jQuery中与之对应的是text()/html()方法</li>
-</ul>
-</li>
-<li>对象.onclick<ul>
-<li>给对象绑定单击事件</li>
-<li>在jQuery中与之对应的是click()方法</li>
-</ul>
-</li>
-<li>对象.onfocus<ul>
-<li>给对象绑定获取焦点事件</li>
-<li>在jQuery中与之对应的是focus()方法</li>
-</ul>
-</li>
-<li>对象.onblur<ul>
-<li>给对象绑定失去焦点的事件</li>
-<li>在jQuery中与之对应的是blur()方法</li>
-</ul>
-</li>
-<li>对象.onchange<ul>
-<li>给对象内容改变的事件</li>
-<li>在jQuery中与之对应的是change()方法</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="Servlet"><a href="#Servlet" class="headerlink" title="Servlet"></a>Servlet</h2><ul>
-<li>Servlet是服务器端的一个组件，用来处理用户的请求</li>
-<li>直接new一个Sersvlet，然后配置映射的请求地址即可</li>
-<li>doGet和doPost方法中的两个参数request和response的作用<ul>
-<li>request的作用<ul>
-<li>获取请求参数</li>
-<li>转发</li>
-<li>它是一个域对象</li>
-</ul>
-</li>
-<li>response的作用<ul>
-<li>给浏览器响应一个字符串或一个页面</li>
-<li>重定向</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//处理GET请求的方法</span><br>	<span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title">doGet</span><span class="hljs-params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="hljs-keyword">throws</span> ServletException, IOException </span>&#123;<br>		System.out.println(<span class="hljs-string">&quot;doGet方法被调用&quot;</span>);<br>		<span class="hljs-comment">//request的作用</span><br>		<span class="hljs-comment">//1.获取请求参数</span><br>		<span class="hljs-comment">/*</span><br><span class="hljs-comment">		 * GET请求的请求中文乱码问题的解决方案：</span><br><span class="hljs-comment">		 * 在Tomcat的配置文件server.xml中的第一个Connector标签中添加属性URIEncoding=&quot;UTF-8&quot;</span><br><span class="hljs-comment">		 */</span><br>		String username = request.getParameter(<span class="hljs-string">&quot;username&quot;</span>);<br>		String password = request.getParameter(<span class="hljs-string">&quot;password&quot;</span>);<br>		System.out.println(username);<br>		System.out.println(password);<br>		<span class="hljs-comment">//2.转发</span><br>		<span class="hljs-comment">//获取转发器</span><br>		RequestDispatcher requestDispatcher = request.getRequestDispatcher(<span class="hljs-string">&quot;WEB-INF/success.html&quot;</span>);<br>		<span class="hljs-comment">//进行请求的转发</span><br>		requestDispatcher.forward(request, response);<br>		<span class="hljs-comment">//3.request是一个域对象（下回分解）</span><br>	&#125;<br>	<span class="hljs-comment">//处理POST请求的方法</span><br>	<span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title">doPost</span><span class="hljs-params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="hljs-keyword">throws</span> ServletException, IOException </span>&#123;<br>		System.out.println(<span class="hljs-string">&quot;doPost方法被调用&quot;</span>);<br>		<span class="hljs-comment">/*</span><br><span class="hljs-comment">		 * POST请求的请求中文乱码问题的解决方案：</span><br><span class="hljs-comment">		 * 在第一次获取请求参数之前，通过request设置字符集位UTF-8</span><br><span class="hljs-comment">		 */</span><br>		request.setCharacterEncoding(<span class="hljs-string">&quot;UTF-8&quot;</span>);<br>		String username = request.getParameter(<span class="hljs-string">&quot;username&quot;</span>);<br>		String password = request.getParameter(<span class="hljs-string">&quot;password&quot;</span>);<br>		System.out.println(username);<br>		System.out.println(password);<br>		<span class="hljs-comment">//response的作用</span><br>		<span class="hljs-comment">//1.给浏览器响应一个字符串或一个页面</span><br>		<span class="hljs-comment">/*</span><br><span class="hljs-comment">		 * 响应中文乱码的解决方案：</span><br><span class="hljs-comment">		 * 	在获取流之前设置内容的类型，内容的类型中包含UTF-8字符集</span><br><span class="hljs-comment">		 */</span><br>		response.setContentType(<span class="hljs-string">&quot;text/html;charset=UTF-8&quot;</span>);<br>		PrintWriter writer = response.getWriter();<br><span class="hljs-comment">//		writer.write(&quot;Response Success!&quot;);</span><br><span class="hljs-comment">//		writer.write(&quot;响应成功！&quot;);</span><br><span class="hljs-comment">//		writer.write(&quot;&lt;!DOCTYPE html&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;&lt;html&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;&lt;head&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;&lt;meta charset=\&quot;UTF-8\&quot;&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;&lt;title&gt;Insert title here&lt;/title&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;&lt;/head&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;&lt;body&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;	&lt;h1&gt;请求处理成功！&lt;/h1&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;&lt;/body&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;&lt;/html&gt;&quot;);</span><br>		<span class="hljs-comment">//2.重定向</span><br>		response.sendRedirect(<span class="hljs-string">&quot;WEB-INF/success.html&quot;</span>);<br>		<br>		<span class="hljs-comment">/*</span><br><span class="hljs-comment">		 * 转发与重定向的区别：</span><br><span class="hljs-comment">		 * 	1.转发浏览器发送一次请求；重定向浏览器发送两次请求</span><br><span class="hljs-comment">		 * 	2.转发浏览器地址栏地址无变化；重定向浏览器地址栏地址有变化</span><br><span class="hljs-comment">		 * 	3.转发可以访问WEB-INF目录下的资源；重定向不可以访问WEB-INF目录下的资源</span><br><span class="hljs-comment">		 * 	4.转发可以共享request域中的数据；重定向不可以共享request域中的数据</span><br><span class="hljs-comment">		 */</span><br>	&#125;<br><br></code></pre></td></tr></table></figure>
-
-<h2 id="JSP"><a href="#JSP" class="headerlink" title="JSP"></a>JSP</h2><ul>
-<li><p>JSP必须运行服务器上，它本质上是一个Servlet</p>
-</li>
-<li><p>HTML和Servlet能实现的功能JSP都可用实现</p>
-</li>
-<li><p>JSP中的基本语法</p>
-<ul>
-<li>JSP脚本片段<ul>
-<li>格式：&lt;%   %&gt;</li>
-<li>作用：在里面写Java代码</li>
-</ul>
-</li>
-<li>JSP表达式<ul>
-<li>格式：&lt;%=  %&gt;</li>
-<li>作用：用来输出对象</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight jsp"><table><tr><td class="code"><pre><code class="hljs jsp">&lt;%<br>		<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span> ; i &lt; <span class="hljs-number">10</span> ; i++)&#123;<br>			<span class="hljs-comment">//out.print(&quot;伊朗要干美国了！&quot;);</span><br>	%&gt;<br>	&lt;h1&gt;伊朗要干美国了！&lt;/h1&gt;<br>	&lt;%	<br>		&#125;<br>	%&gt;<br><br> &lt;%=<span class="hljs-string">&quot;我是通过JSP表达式输出的&quot;</span> %&gt;<br></code></pre></td></tr></table></figure></li>
-<li><p>四个域</p>
-<ul>
-<li>page域<ul>
-<li>范围：当前页面</li>
-<li>对应的域对象：pageContext</li>
-<li>域对象的类型：PageContext</li>
-</ul>
-</li>
-<li>request域<ul>
-<li>范围：当前请求（一次请求）</li>
-<li>对应的域对象：request</li>
-<li>域对象的类型：HttpServletRequest</li>
-</ul>
-</li>
-<li>session<ul>
-<li>范围：当前会话（一次会话）</li>
-<li>对应的域对象：session</li>
-<li>域对象的类型：HttpSession</li>
-</ul>
-</li>
-<li>application域<ul>
-<li>范围：当前Web应用</li>
-<li>对应的域对象：application</li>
-<li>域对象的类型：ServletContext</li>
-</ul>
-</li>
-<li>四个域对象都有以下三个方法<ul>
-<li>void setAttribute(String key , Object value)</li>
-<li>Object getAttribute(String key)</li>
-<li>void removeAttribute(String key)</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight jsp"><table><tr><td class="code"><pre><code class="hljs jsp">&lt;!-- 在当前页面中分别向四个域中添加四个属性 --&gt;<br>	 &lt;%<br>	 	pageContext.setAttribute(<span class="hljs-string">&quot;pageKey&quot;</span>, <span class="hljs-string">&quot;pageValue&quot;</span>);<br>	 	request.setAttribute(<span class="hljs-string">&quot;reqKey&quot;</span>, <span class="hljs-string">&quot;reqValue&quot;</span>);<br>	 	session.setAttribute(<span class="hljs-string">&quot;sessKey&quot;</span>, <span class="hljs-string">&quot;sessValue&quot;</span>);<br>	 	application.setAttribute(<span class="hljs-string">&quot;appKey&quot;</span>, <span class="hljs-string">&quot;appValue&quot;</span>);<br>	 %&gt;<br>	 &lt;h1&gt;在当前页面中分别获取四个域中的属性值&lt;/h1&gt;<br>	 page域中的属性值是：&lt;%=pageContext.getAttribute(<span class="hljs-string">&quot;pageKey&quot;</span>) %&gt;&lt;br&gt;<br>	 request域中的属性值是：&lt;%=request.getAttribute(<span class="hljs-string">&quot;reqKey&quot;</span>) %&gt;&lt;br&gt;<br>	 session域中的属性值是：&lt;%=session.getAttribute(<span class="hljs-string">&quot;sessKey&quot;</span>) %&gt;&lt;br&gt;<br>	 application域中的属性值是：&lt;%=application.getAttribute(<span class="hljs-string">&quot;appKey&quot;</span>) %&gt;&lt;br&gt;<br></code></pre></td></tr></table></figure></li>
-<li><p>EL</p>
-<ul>
-<li>EL全称是Expression Language，是JSP的内置表达式</li>
-<li>格式：${表达式}</li>
-<li>作用：主要用来获取域对象中的属性值，用来代替JSP的表达式</li>
-<li>EL表达式获取数据时才输出，获取不到数据则什么也不输出</li>
-<li>EL中的四个Scope对象<ul>
-<li>pageScope<ul>
-<li>获取page域中的属性值</li>
-</ul>
-</li>
-<li>requestScope<ul>
-<li>获取request域中的属性值</li>
-</ul>
-</li>
-<li>sessionScope<ul>
-<li>获取session域中的属性值</li>
-</ul>
-</li>
-<li>applicationScope<ul>
-<li>获取application域中的属性值</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight jsp"><table><tr><td class="code"><pre><code class="hljs jsp">&lt;%<br>	 	Date date = <span class="hljs-keyword">new</span> Date();<br>	 	<span class="hljs-comment">//分别向四个域中添加四个属性</span><br>	 	pageContext.setAttribute(<span class="hljs-string">&quot;date&quot;</span>, date+<span class="hljs-string">&quot;-&quot;</span>);<br>	 	request.setAttribute(<span class="hljs-string">&quot;date&quot;</span>, date+<span class="hljs-string">&quot;--&quot;</span>);<br>	 	session.setAttribute(<span class="hljs-string">&quot;date&quot;</span>, date+<span class="hljs-string">&quot;---&quot;</span>);<br>	 	application.setAttribute(<span class="hljs-string">&quot;date&quot;</span>, date+<span class="hljs-string">&quot;----&quot;</span>);<br>	 %&gt;<br>	 通过JSP表达式获取域对象中的属性值：&lt;%=pageContext.getAttribute(<span class="hljs-string">&quot;date&quot;</span>) %&gt;&lt;br&gt;<br>	 通过EL表达式获取域对象中的属性值：$&#123;date &#125;&lt;br&gt;<br>	 通过EL表达式获取request域中的属性值：$&#123;requestScope.date &#125;<br></code></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="Ajax"><a href="#Ajax" class="headerlink" title="Ajax"></a>Ajax</h2><ul>
-<li><p>全称：Asynchronous JavaScript And XML，通过JavaScript发送请求，使用XML作为响应数据，后来XML已经被另外一种数据格式JSON所替代</p>
-</li>
-<li><p>同步请求和异步请求的区别</p>
-<ul>
-<li>同步请求<ul>
-<li>发送请求之后必须等待服务器的响应成功之后才能发送其他请求，有一个等待的过程</li>
-<li>响应成功之后会刷新整个页面</li>
-</ul>
-</li>
-<li>异步请求<ul>
-<li>发送请求之后无需等待服务器的响应即可发送其他请求</li>
-<li>响应成功之后不会刷新整个页面，可用局部更新页面中的内容</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>如果通过jQuery发送ajax请求</p>
-<ul>
-<li><p>使用$.ajax()方法发送Ajax请求</p>
-<ul>
-<li>ajax()方法中的常用选项<ul>
-<li>url<ul>
-<li>必须的。用来设置请求地址，值是一个字符串</li>
-</ul>
-</li>
-<li>type<ul>
-<li>可选的。用来设置请求方式。GET或POST，默认是GET，值是一个字符串</li>
-</ul>
-</li>
-<li>data<ul>
-<li>可选的。用来设置请求参数，值是一个字符串</li>
-</ul>
-</li>
-<li>success<ul>
-<li>可选的。用来设置一个回调函数，当响应成功之后系统会自动调用该函数，响应数据会以参数的形式传入到该函数中</li>
-</ul>
-</li>
-<li>dataType<ul>
-<li>可选的。用来设置响应数据的类型，如 text、json等</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript">$.ajax(&#123;<br>				url:<span class="hljs-string">&quot;AjaxServlet&quot;</span>,<br>				type:<span class="hljs-string">&quot;get&quot;</span>,<br>				data:<span class="hljs-string">&quot;username=admin&amp;password=123456&quot;</span>,<br>				success:<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">res</span>)</span>&#123;<br>					<span class="hljs-comment">//将响应数据设置到span标签中</span><br>					$(<span class="hljs-string">&quot;#msg&quot;</span>).text(res);<br>				&#125;,<br>				dataType:<span class="hljs-string">&quot;text&quot;</span><br>			&#125;);<br></code></pre></td></tr></table></figure></li>
-<li><p>JSON</p>
-<ul>
-<li>JOSN格式<ul>
-<li>JSON对象</li>
-<li>JSON数组</li>
-</ul>
-</li>
-<li>JSON中接受的数据类型<ul>
-<li>字符串</li>
-<li>数字</li>
-<li>null</li>
-<li>布尔类型</li>
-<li>数组</li>
-<li>对象</li>
-</ul>
-</li>
-<li>在JS中JSON对象和JSON字符串之间的转换<ul>
-<li>JSON对象转JSON字符串<ul>
-<li>JSON.stringify(JSON对象)</li>
-</ul>
-</li>
-<li>JSON字符串转JSON对象<ul>
-<li>JSON.parse(JSON字符串)</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">//JSON的格式：</span><br>	<span class="hljs-comment">//1.JSON对象</span><br>	<span class="hljs-comment">//属性名必须使用双引号括起来；属性名和属性值之间使用冒号分隔；多个属性之间使用逗号分隔</span><br>	<span class="hljs-keyword">var</span> jsonObj = &#123;<span class="hljs-string">&quot;name&quot;</span>:<span class="hljs-string">&quot;孙悟空&quot;</span>,<span class="hljs-string">&quot;age&quot;</span>:<span class="hljs-number">520</span>&#125;;<br><span class="hljs-comment">// 	alert(jsonObj);</span><br>	<span class="hljs-comment">//2.JSON数组</span><br>	<span class="hljs-keyword">var</span> jsonArry = [<span class="hljs-string">&quot;猪八戒&quot;</span>,<span class="hljs-number">1500</span>,<span class="hljs-literal">true</span>,<span class="hljs-literal">null</span>,jsonObj];<br>	<span class="hljs-comment">//获取jsonArry中的jsonObj中的age属性值</span><br><span class="hljs-comment">// 	alert(jsonArry[4].age);</span><br>	<br>	<span class="hljs-comment">//在JS中将JSON对象转换为JSON字符串</span><br>	<span class="hljs-keyword">var</span> objToStr = <span class="hljs-built_in">JSON</span>.stringify(jsonObj);<br><span class="hljs-comment">// 	alert(objToStr);</span><br>	<span class="hljs-comment">//声明一个JSON字符串</span><br>	<span class="hljs-keyword">var</span> jsonStr = <span class="hljs-string">&#x27;&#123;&quot;name&quot;:&quot;唐僧&quot;,&quot;age&quot;:18&#125;&#x27;</span>;<br><span class="hljs-comment">// 	alert(jsonStr);</span><br>	<span class="hljs-comment">//在JS中将JSON字符串转换为JSON对象</span><br>	<span class="hljs-keyword">var</span> strToObj = <span class="hljs-built_in">JSON</span>.parse(jsonStr);<br><span class="hljs-comment">// 	alert(strToObj.name);</span><br></code></pre></td></tr></table></figure>
-
-<ul>
-<li><p>在Java中对象与JSON字符串之间的转换</p>
-<ul>
-<li><p>借助于第三方工具json-lib、jackson、gson等可用将Java对象转换为JSON字符串，也可用将JSON字符串转换回Java对象</p>
-</li>
-<li><p>通常是前端发送一个Ajax请求，在后台查询到对象之后将对象转换为JOSN字符串响应到前端</p>
-</li>
-<li><p>通过发送Ajax请求接收JSON格式的响应数据</p>
-<ul>
-<li>前端代码</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">//发送Ajax请求接收JSON格式的响应数据</span><br>			$.ajax(&#123;<br>				url:<span class="hljs-string">&quot;JSONServlet&quot;</span>,<br>				success:<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">res</span>)</span>&#123;<br>					alert(res.id);<br>				&#125;,<br>				dataType:<span class="hljs-string">&quot;json&quot;</span><br>			&#125;);<br></code></pre></td></tr></table></figure>
-
-
-
-<ul>
-<li>后端代码</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title">doGet</span><span class="hljs-params">(HttpServletRequest request, HttpServletResponse response)</span></span><br><span class="hljs-function">			<span class="hljs-keyword">throws</span> ServletException, IOException </span>&#123;<br>		response.setContentType(<span class="hljs-string">&quot;text/html;charset=UTF-8&quot;</span>);<br>		<span class="hljs-comment">//假设从数据库中查询到员工的信息</span><br>		Employee employee = <span class="hljs-keyword">new</span> Employee(<span class="hljs-number">1</span>, <span class="hljs-string">&quot;张三&quot;</span>, <span class="hljs-string">&quot;zhangsan@atguigu.com&quot;</span>);<br>		<span class="hljs-comment">//创建Gson对象</span><br>		Gson gson = <span class="hljs-keyword">new</span> Gson();<br>		<span class="hljs-comment">//将Employee对象转换为JSON字符串</span><br>		String json = gson.toJson(employee);<br>		System.out.println(json);<br>		<span class="hljs-comment">//给浏览器响应一个JSON格式的字符串</span><br>		response.getWriter().write(json);<br>	&#125;<br></code></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Java</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>JVM</title>
     <url>/2021/05/02/JVM/</url>
     <content><![CDATA[<h1 id="JVM"><a href="#JVM" class="headerlink" title="JVM"></a>JVM</h1><h2 id="JVM定义"><a href="#JVM定义" class="headerlink" title="JVM定义"></a>JVM定义</h2><blockquote>
@@ -2008,11 +1570,11 @@
 <li>标记压缩算法<blockquote>
 <ul>
 <li>优点：1.不需要双倍空间，也不会产生内存碎片 2.不需要维护内存碎片的列表，只需要记录内存的起始地址即可 </li>
-<li>缺点：开销大，学要更新对象的地址</li>
+<li>缺点：开销大，需要更新对象的地址</li>
 </ul>
 </blockquote>
 </li>
-<li>标记清楚压缩算法 标记清除压缩(Mark-Sweep-Compact)算法是标记清除算法和标记压缩算法的结合算法。其原理和标记清除算法一致，只不过会在多次GC后，进行一次Compact压缩操作！</li>
+<li>标记清除压缩算法 标记清除压缩(Mark-Sweep-Compact)算法是标记清除算法和标记压缩算法的结合算法。其原理和标记清除算法一致，只不过会在多次GC后，进行一次Compact压缩操作！</li>
 </ol>
 <h2 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h2><h3 id="JVM内存分几个区，每个区的作用是什么？"><a href="#JVM内存分几个区，每个区的作用是什么？" class="headerlink" title="JVM内存分几个区，每个区的作用是什么？"></a>JVM内存分几个区，每个区的作用是什么？</h3><ul>
 <li>方法区<ul>
@@ -2034,7 +1596,7 @@
 </li>
 <li>堆<ul>
 <li>堆是所有线程所共享的一块内存，在虚拟机启动时创建，几乎所有的对象实例都在这里创建，因此该区域经常发生垃圾回收操作。</li>
-<li>堆区被所有线程</li>
+<li>堆区被所有线程共享</li>
 </ul>
 </li>
 <li>程序计数器<ul>
@@ -2142,6 +1704,39 @@
       </categories>
       <tags>
         <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Java反射</title>
+    <url>/2021/04/22/Java-reflect/</url>
+    <content><![CDATA[<h1 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h1><h2 id="单元测试类"><a href="#单元测试类" class="headerlink" title="单元测试类"></a>单元测试类</h2><blockquote>
+<ul>
+<li>单元测试方法的要求：类必须是公共的，必需不能有任何构造器</li>
+<li>方法必修是公共非静态无返回值参数</li>
+<li>执行：在方法名中右击，点击run as -junit</li>
+<li>包装类：把基本数据类型包装成对象</li>
+</ul>
+</blockquote>
+<h2 id="反射概述"><a href="#反射概述" class="headerlink" title="反射概述"></a>反射概述</h2><ul>
+<li><p>JAVA反射机制是在运行状态中，对于任意一个类，都能够知道这个类的所有属性和方法；对于任意一个对象，都能够调用它的任意一个方法和属性；这种动态获取的信息以及动态调用对象的方法的功能称为java语言的反射机制。</p>
+<p>要想解剖一个类,必须先要获取到该类的字节码文件对象。而解剖使用的就是Class类中的方法.所以先要获取到每一个字节码文件对应的Class类型的对象.</p>
+</li>
+<li><p>反射就是把Java类中的各种成分映射成一个个的Java对象</p>
+<p>例如：一个类有：成员变量、方法、构造方法、包等等信息，利用反射技术可以对一个类进行解剖，把个个组成部分映射成一个个对象。</p>
+<p>   （其实：一个类中这些成员方法、构造方法、在加入类中都有一个类来描述）</p>
+</li>
+<li><p>参考链接：CSDN博客 <a href="https://blog.csdn.net/qq_36226453/article/details/82790375">链接</a></p>
+</li>
+</ul>
+<h2 id="反射基础实例代码"><a href="#反射基础实例代码" class="headerlink" title="反射基础实例代码"></a>反射基础实例代码</h2><figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs Java"><span class="hljs-keyword">package</span> reflect;<br><br><span class="hljs-keyword">import</span> <span class="hljs-keyword">static</span> org.junit.Assert.*;<br><br><span class="hljs-keyword">import</span> java.io.FileInputStream;<br><span class="hljs-keyword">import</span> java.io.IOException;<br><span class="hljs-keyword">import</span> java.io.InputStream;<br><span class="hljs-keyword">import</span> java.io.Serializable;<br><span class="hljs-keyword">import</span> java.lang.annotation.Annotation;<br><span class="hljs-keyword">import</span> java.lang.annotation.ElementType;<br><span class="hljs-keyword">import</span> java.lang.annotation.Retention;<br><span class="hljs-keyword">import</span> java.lang.annotation.RetentionPolicy;<br><span class="hljs-keyword">import</span> java.lang.annotation.Target;<br><span class="hljs-keyword">import</span> java.lang.reflect.Constructor;<br><span class="hljs-keyword">import</span> java.lang.reflect.Field;<br><span class="hljs-keyword">import</span> java.lang.reflect.InvocationTargetException;<br><span class="hljs-keyword">import</span> java.lang.reflect.Method;<br><span class="hljs-keyword">import</span> java.util.ArrayList;<br><span class="hljs-keyword">import</span> java.util.HashMap;<br><span class="hljs-keyword">import</span> java.util.Map.Entry;<br><span class="hljs-keyword">import</span> java.util.Properties;<br><span class="hljs-keyword">import</span> java.util.Set;<br><br><span class="hljs-keyword">import</span> org.junit.Test;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 反射 : java的动态处理技术</span><br><span class="hljs-comment"> */</span><br><span class="hljs-meta">@Target(&#123;ElementType.TYPE, ElementType.FIELD&#125;)</span><br><span class="hljs-meta">@Retention(RetentionPolicy.RUNTIME)</span><br><span class="hljs-meta">@interface</span> HelloAnnotation &#123;<br>	<span class="hljs-function">String <span class="hljs-title">name</span><span class="hljs-params">()</span> <span class="hljs-keyword">default</span> &quot;缺省名字&quot;</span>;<br>	<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">id</span><span class="hljs-params">()</span> <span class="hljs-keyword">default</span> 10</span>;<br>&#125;<br><br><span class="hljs-meta">@HelloAnnotation(name=&quot;abc&quot;)</span><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Teacher</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">ArrayList</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Serializable</span>, <span class="hljs-title">Comparable</span>, <span class="hljs-title">Runnable</span> </span>&#123;<br>	<br>	<span class="hljs-meta">@HelloAnnotation</span><br>	<span class="hljs-keyword">private</span> String name;<br>	<span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> age;<br>	<span class="hljs-keyword">private</span> String gender;<br>	<br>	<span class="hljs-comment">//@HelloAnnotation</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Teacher</span><span class="hljs-params">()</span> </span>&#123;<br>	&#125;<br>	<span class="hljs-comment">//构造方法，Ctrl+Alt+S+O</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Teacher</span><span class="hljs-params">(String name)</span> </span>&#123;<br>		<span class="hljs-keyword">this</span>.name = name;<br>	&#125;<br>	<br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Teacher</span><span class="hljs-params">(<span class="hljs-keyword">int</span> age)</span> </span>&#123;<br>		<span class="hljs-keyword">this</span>.age = age;<br>	&#125;<br><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Teacher</span><span class="hljs-params">(String name,String gender)</span> </span>&#123;<br>		<span class="hljs-keyword">this</span>.name = name;<br>		<span class="hljs-keyword">this</span>.gender = gender;<br>	&#125;<br><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Teacher</span><span class="hljs-params">(String name, <span class="hljs-keyword">int</span> age, String gender)</span> </span>&#123;<br>		<span class="hljs-keyword">this</span>.name = name;<br>		<span class="hljs-keyword">this</span>.age = age;<br>		<span class="hljs-keyword">this</span>.gender = gender;<br>	&#125;<br>    <span class="hljs-comment">//set,get方法 快捷键Ctrl+Alt+S+R</span><br>	<span class="hljs-comment">//@HelloAnnotation</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">getName</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> name;<br>	&#125;<br><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setName</span><span class="hljs-params">(String name)</span> </span>&#123;<br>		<span class="hljs-keyword">this</span>.name = name;<br>	&#125;<br><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">getAge</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> age;<br>	&#125;<br><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setAge</span><span class="hljs-params">(<span class="hljs-keyword">int</span> age)</span> </span>&#123;<br>		<span class="hljs-keyword">this</span>.age = age;<br>	&#125;<br><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">getGender</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> gender;<br>	&#125;<br><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setGender</span><span class="hljs-params">(String gender)</span> </span>&#123;<br>		<span class="hljs-keyword">this</span>.gender = gender;<br>	&#125;<br>    <span class="hljs-comment">//Ctrl+Alt+S+S</span><br>	<span class="hljs-meta">@Override</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">toString</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> <span class="hljs-string">&quot;Teacher [name=&quot;</span> + name + <span class="hljs-string">&quot;, age=&quot;</span> + age + <span class="hljs-string">&quot;, gender=&quot;</span> + gender + <span class="hljs-string">&quot;]&quot;</span>;<br>	&#125;<br><br>	<span class="hljs-meta">@Override</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">run</span><span class="hljs-params">()</span> </span>&#123;<br>	&#125;<br><br>	<span class="hljs-meta">@Override</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">compareTo</span><span class="hljs-params">(Object o)</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>	&#125;<br>	<br>	<span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">lesson</span><span class="hljs-params">(String content, <span class="hljs-keyword">int</span> time)</span> </span>&#123;<br>		System.out.println(<span class="hljs-string">&quot;老师在上[&quot;</span> + content + <span class="hljs-string">&quot;]课, 共上了[&quot;</span> + time +<span class="hljs-string">&quot;]小时&quot;</span>);<br>		<span class="hljs-comment">//return true;</span><br>		<span class="hljs-comment">//throw new RuntimeException(&quot;一个异常&quot;);</span><br>	&#125;<br>	<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ReflectTest</span> </span>&#123;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">testName</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception </span>&#123;<br>		Class clazz = Class.forName(<span class="hljs-string">&quot;reflect.Teacher&quot;</span>);<br>		Annotation[] annotations = clazz.getAnnotations();<br>		System.out.println(annotations.length);<br>		System.out.println(annotations[<span class="hljs-number">0</span>]);<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test14</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception </span>&#123;<br>		Class clazz = Class.forName(<span class="hljs-string">&quot;reflect.Teacher&quot;</span>);<br>		System.out.println(<span class="hljs-string">&quot;父类 : &quot;</span> + clazz.getSuperclass());<br>		Constructor[] constructors = clazz.getConstructors();<br>		<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; constructors.length; i++) &#123;<br>			System.out.println(<span class="hljs-string">&quot;构造器 : &quot;</span> + constructors[i]);<br>		&#125;<br>		System.out.println(<span class="hljs-string">&quot;************************************************&quot;</span>);<br>		Field[] fields = clazz.getFields(); <span class="hljs-comment">// 所有公共属性</span><br>		<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; fields.length; i++) &#123;<br>			System.out.println(<span class="hljs-string">&quot;公共属性：&quot;</span>+fields[i]);<br>		&#125;<br>		<span class="hljs-comment">//反射尽量不要破坏封装性，容易发生严重后果，慎用getDeclared.....()方法</span><br>		Field[] declaredFields = clazz.getDeclaredFields(); <span class="hljs-comment">// 所有本类属性</span><br>		<span class="hljs-keyword">for</span> (Field field : declaredFields) &#123;<br>			System.out.println(<span class="hljs-string">&quot;本类属性：&quot;</span>+field);<br>		&#125;<br>		System.out.println(<span class="hljs-string">&quot;************************************************&quot;</span>);<br>		Method[] methods = clazz.getMethods();<span class="hljs-comment">//所有公共方法</span><br>		<span class="hljs-keyword">for</span> (Method method : methods) &#123;<br>			System.out.println(<span class="hljs-string">&quot;公共方法&quot;</span>+method);<br>		&#125;<br>		System.out.println(<span class="hljs-string">&quot;************************************************&quot;</span>);<br>		Method[] declaredMethods = clazz.getDeclaredMethods();<span class="hljs-comment">//所有本类方法</span><br>		<span class="hljs-keyword">for</span> (Method method : declaredMethods) &#123;<br>			System.out.println(<span class="hljs-string">&quot;本类方法：&quot;</span>+method);<br>		&#125;<br>	&#125;<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test13</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">try</span> &#123;<br>			Class clazz = Class.forName(<span class="hljs-string">&quot;reflect.Teacher&quot;</span>);<br>			Method lessonMethod = clazz.getDeclaredMethod(<span class="hljs-string">&quot;lesson&quot;</span>, String.class, <span class="hljs-keyword">int</span>.class);<br>			lessonMethod.setAccessible(<span class="hljs-keyword">true</span>);<br>			<br>			Short n = <span class="hljs-number">3</span>;<br>			Object retValue = lessonMethod.invoke(<span class="hljs-keyword">null</span>, <span class="hljs-string">&quot;JavaWEB&quot;</span>, n); <span class="hljs-comment">// 静态方法传null, 不需要传入对象</span><br>			System.out.println(retValue);<br>		&#125; <span class="hljs-keyword">catch</span> (ClassNotFoundException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (IllegalAccessException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (NoSuchMethodException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (SecurityException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (IllegalArgumentException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (InvocationTargetException e) &#123;<br>			e.printStackTrace();<br>		&#125;<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test12</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">try</span> &#123;<br>			Class clazz = Class.forName(<span class="hljs-string">&quot;reflect.Teacher&quot;</span>);<br>			Constructor constructor = clazz.getConstructor(String.class, <span class="hljs-keyword">int</span>.class, String.class);<br>			Object object = constructor.newInstance(<span class="hljs-string">&quot;佟刚&quot;</span>, <span class="hljs-number">40</span>, <span class="hljs-string">&quot;男&quot;</span>);<br>			<br>			<span class="hljs-comment">// getMethod只能获取公共的方法, 包括从父类继承的. </span><br>			<span class="hljs-comment">//Method lessonMethod = clazz.getMethod(&quot;lesson&quot;, String.class, int.class); </span><br>			<br>			<span class="hljs-comment">// getDeclaredMethod可以获取本类中所有声明的方法</span><br>			Method lessonMethod = clazz.getDeclaredMethod(<span class="hljs-string">&quot;lesson&quot;</span>, String.class, <span class="hljs-keyword">int</span>.class);<br>			lessonMethod.setAccessible(<span class="hljs-keyword">true</span>);<br>			<br>			Short n = <span class="hljs-number">3</span>;<br>			Object retValue = lessonMethod.invoke(object, <span class="hljs-string">&quot;JavaWEB&quot;</span>, n); <br>			System.out.println(retValue);<br>			<span class="hljs-comment">/*</span><br><span class="hljs-comment">		    private String outOfBoundsMsg(int index) &#123;</span><br><span class="hljs-comment">		        return &quot;Index: &quot;+index+&quot;, Size: &quot;+size;</span><br><span class="hljs-comment">		    &#125;</span><br><span class="hljs-comment">		    */</span><br>			<span class="hljs-comment">/*</span><br><span class="hljs-comment">			//拿父类的方法，会有警告，最好不要暴力访问私有方法，属性</span><br><span class="hljs-comment">			Method declaredMethod = clazz.getSuperclass().getDeclaredMethod(&quot;outOfBoundsMsg&quot;, int.class);</span><br><span class="hljs-comment">			System.out.println(declaredMethod);</span><br><span class="hljs-comment">			//危险操作</span><br><span class="hljs-comment">			declaredMethod.setAccessible(true);</span><br><span class="hljs-comment">			</span><br><span class="hljs-comment">			Object invoke = declaredMethod.invoke(object, 20);</span><br><span class="hljs-comment">			System.out.println(invoke);</span><br><span class="hljs-comment">			*/</span><br>		&#125; <span class="hljs-keyword">catch</span> (ClassNotFoundException e) &#123; <span class="hljs-comment">// 类未找到</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (NoSuchMethodException e) &#123; <span class="hljs-comment">// 方法没有找到, 方法名错误或参数列表错误</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (SecurityException e) &#123; <span class="hljs-comment">// 安全异常</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (InstantiationException e) &#123; <span class="hljs-comment">// 创建对象时出现异常</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (IllegalAccessException e) &#123; <span class="hljs-comment">// 非法访问异常</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (IllegalArgumentException e) &#123; <span class="hljs-comment">// 非法实参异常, 实参和形参不匹配, 类型和顺序和数量</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (InvocationTargetException e) &#123; <span class="hljs-comment">// 调用的目标方法内部出现异常了.</span><br>			e.printStackTrace();<br>		&#125;<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test11</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">try</span> &#123;<br>			Class clazz = Class.forName(<span class="hljs-string">&quot;reflect.Teacher&quot;</span>);<br>			Constructor constructor = clazz.getConstructor(String.class, <span class="hljs-keyword">int</span>.class, String.class);<br>			Object object = constructor.newInstance(<span class="hljs-string">&quot;佟刚&quot;</span>, <span class="hljs-number">40</span>, <span class="hljs-string">&quot;男&quot;</span>);<br>			<br>			<span class="hljs-comment">//object.lesson(&quot;JavaWEB&quot;, 3);</span><br>			<span class="hljs-comment">//先获取方法</span><br>			<br>			Method lessonMethod = clazz.getMethod(<span class="hljs-string">&quot;lesson&quot;</span>, String.class, <span class="hljs-keyword">int</span>.class); <span class="hljs-comment">// 后面是方法参数类型列表</span><br>			<span class="hljs-keyword">short</span> n = <span class="hljs-number">3</span>;<br>			Object retValue = lessonMethod.invoke(object, <span class="hljs-string">&quot;JavaWEB&quot;</span>, n); <span class="hljs-comment">// 后面是实参列表, 如果方法没有返回值, 它的返回值是null</span><br>			System.out.println(retValue);<br>		&#125; <span class="hljs-keyword">catch</span> (ClassNotFoundException e) &#123; <span class="hljs-comment">// 类未找到</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (NoSuchMethodException e) &#123; <span class="hljs-comment">// 方法没有找到, 方法名错误或参数列表错误</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (SecurityException e) &#123; <span class="hljs-comment">// 安全异常</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (InstantiationException e) &#123; <span class="hljs-comment">// 创建对象时出现异常</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (IllegalAccessException e) &#123; <span class="hljs-comment">// 非法访问异常</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (IllegalArgumentException e) &#123; <span class="hljs-comment">// 非法实参异常, 实参和形参不匹配, 类型和顺序和数量</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (InvocationTargetException e) &#123; <span class="hljs-comment">// 调用的目标方法内部出现异常了.</span><br>			e.printStackTrace();<br>		&#125;<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test10</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">try</span> &#123;<br>			Class clazz = Class.forName(<span class="hljs-string">&quot;reflect.Teacher&quot;</span>);<br>			<span class="hljs-comment">//Object object = clazz.newInstance(); 没有无参构造器时出问题</span><br>			<br>			<span class="hljs-comment">//public Teacher(String name, int age, String gender) 要想定位这个构造器, 必须让参数列表一致.</span><br>			<br>			<span class="hljs-comment">// 提供形式参数类型列表, 是类模板对象的列表</span><br>			Constructor constructor = clazz.getConstructor(String.class, <span class="hljs-keyword">int</span>.class, String.class); <span class="hljs-comment">// 定位合适的构造器</span><br>			<span class="hljs-comment">// 调用时必须给定实参列表</span><br>			Object object = constructor.newInstance(<span class="hljs-string">&quot;程程&quot;</span>, <span class="hljs-number">20</span>, <span class="hljs-string">&quot;女&quot;</span>); <span class="hljs-comment">// new Teacher(&quot;程程&quot;, 20, &quot;女&quot;);</span><br>			System.out.println(object);<br>			<br>		&#125; <span class="hljs-keyword">catch</span> (ClassNotFoundException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (InstantiationException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (IllegalAccessException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (NoSuchMethodException e) &#123; <span class="hljs-comment">// 参数列表出错, 或者方法名出错</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (SecurityException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (IllegalArgumentException e) &#123; <span class="hljs-comment">// 方法调用时实参和形参不匹配</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (InvocationTargetException e) &#123;<br>			e.printStackTrace();<br>		&#125;<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test9</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> IOException  </span>&#123;<br>		<span class="hljs-comment">//FileInputStream fis = new FileInputStream(&quot;只能读当前目录下的文件&quot;);</span><br>		ClassLoader classLoader = <span class="hljs-keyword">this</span>.getClass().getClassLoader();<br>		<span class="hljs-comment">// 只能加载build-path和src下的文件</span><br>		<span class="hljs-comment">//InputStream inputStream = classLoader.getResourceAsStream(&quot;com/sun/corba/se/impl/logging/LogStrings.properties&quot;); // 读取资源文件, 只要是Build-Path(classpath)中的文件都可以</span><br>		InputStream inputStream = classLoader.getResourceAsStream(<span class="hljs-string">&quot;s2&quot;</span>);<br>		Properties properties = <span class="hljs-keyword">new</span> Properties();<br>		properties.load(inputStream);<br>		<br>		Set&lt;Entry&lt;Object, Object&gt;&gt; entrySet = properties.entrySet();<br>		<span class="hljs-keyword">for</span> (Entry&lt;Object, Object&gt; entry : entrySet) &#123;<br>			System.out.println(entry);<br>		&#125;<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test8</span><span class="hljs-params">()</span>  </span>&#123;<br>		ClassLoader classLoader1 = ClassLoader.getSystemClassLoader(); <span class="hljs-comment">// 获取系统类加载器</span><br>		System.out.println(classLoader1);<br>		ClassLoader classLoader2 = <span class="hljs-keyword">this</span>.getClass().getClassLoader(); <span class="hljs-comment">// 使用最多的, 获取当前类的类加载器</span><br>		System.out.println(classLoader2);<br>		<br>		ClassLoader classLoader3 = classLoader1.getParent(); <span class="hljs-comment">// 获取父 &quot;类加载器&quot;,  是 扩展 &quot;类加载器&quot;</span><br>		System.out.println(classLoader3);<br>		<br>		ClassLoader classLoader4 = classLoader3.getParent(); <span class="hljs-comment">// 获取到的是引导类加载器(Bootstrap )</span><br>		System.out.println(classLoader4); <span class="hljs-comment">// 这个类加载器无法获取, 无法使用</span><br>		<br>		<span class="hljs-comment">/*</span><br><span class="hljs-comment">		双亲委派机制</span><br><span class="hljs-comment">		用户类加载器加载类时, 必须把此加载请求转发给父类加载器, 父类加载器再继续向父类加载器委派, 直到Bootstrap类加载器</span><br><span class="hljs-comment">		从Bootstrap类加载器开始真正加载, 各司其职. </span><br><span class="hljs-comment">		*/</span><br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test7</span><span class="hljs-params">()</span>  </span>&#123;<br>		Class strClazz = String.class;<br>		System.out.println(strClazz);<br>		<br>		<span class="hljs-comment">// 基本数据类型的类模板只能用第一种方式获取.</span><br>		Class clazz1 = <span class="hljs-keyword">int</span>.class; <span class="hljs-comment">// 基本数据类型也有相应的类模板对象, 但是不能获取属性和方法, 只能作为一个标记来使用.</span><br>		Class clazz2 = Integer.class; <span class="hljs-comment">// 这是一个普通类模板.</span><br>		System.out.println(clazz1 == clazz2);<br>		<br>		<span class="hljs-comment">// 判断类模板类型</span><br>		System.out.println(<span class="hljs-string">&quot;是否是基本型 : &quot;</span> + clazz1.isPrimitive());<br>		System.out.println(<span class="hljs-string">&quot;是否是基本型 : &quot;</span> + clazz2.isPrimitive());<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test6</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> ClassNotFoundException </span>&#123;<br>		<span class="hljs-comment">// 获取类模板对象的方法 ，有４种</span><br>		<span class="hljs-comment">// 1) 直接通过类.class, 效率最高, 最安全.</span><br>		Class clazz1 = Teacher.class;<br>		<br>		<span class="hljs-comment">// 2) 根据对象, 调用它的getClass()方法获取, 此方法也很常用.</span><br>		Teacher teacher = <span class="hljs-keyword">new</span> Teacher(<span class="hljs-string">&quot;佟刚&quot;</span>, <span class="hljs-number">40</span>, <span class="hljs-string">&quot;男&quot;</span>);<br>		Class clazz2 = teacher.getClass();<br>		<br>		System.out.println(clazz1 == clazz2);<br>		<br>		<span class="hljs-comment">// 3) 反射中最常用的 Class.forName(&quot;全限定类名&quot;);</span><br>		Class clazz3 = Class.forName(<span class="hljs-string">&quot;reflect.Teacher&quot;</span>);<br>		System.out.println(clazz2 == clazz3);<br>		<br>		<span class="hljs-comment">// 4) 通过类加载器对象动态加载类</span><br>		ClassLoader classLoader = <span class="hljs-keyword">this</span>.getClass().getClassLoader();<br>		Class clazz4 = classLoader.loadClass(<span class="hljs-string">&quot;reflect.Teacher&quot;</span>);<br>		System.out.println(clazz3 == clazz4);<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test5</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> ClassNotFoundException </span>&#123;<br>		Class clazz = Class.forName(<span class="hljs-string">&quot;reflect.Teacher&quot;</span>);<br>		String name = clazz.getName();<br>		System.out.println(<span class="hljs-string">&quot;类名 : &quot;</span> + name);<br>		System.out.println(<span class="hljs-string">&quot;简单类名 :  &quot;</span> + clazz.getSimpleName());<br>		Class superclass = clazz.getSuperclass();<br>		System.out.println(<span class="hljs-string">&quot;父类 : &quot;</span> + superclass);<br>		Class[] interfaces = clazz.getInterfaces();<br>		System.out.println(<span class="hljs-string">&quot;接口列表 &quot;</span>);<br>		<span class="hljs-keyword">for</span> (Class class1 : interfaces) &#123;<br>			System.out.println(class1);<br>		&#125;<br>		<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test4</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">try</span> &#123;<br>			Class clazz = Class.forName(<span class="hljs-string">&quot;reflect.Teacher&quot;</span>);<br>			Object object = clazz.newInstance();<br>			System.out.println(object);<br>			<br>			<span class="hljs-comment">//Field ageField = clazz.getField(&quot;age&quot;); // getField方法只能获取公共的属性, 也包括从父类继承的属性, 不可以获取私有属性</span><br>			Field ageField = clazz.getDeclaredField(<span class="hljs-string">&quot;age&quot;</span>); <span class="hljs-comment">// 获取本类中声明的任意属性 </span><br>			<span class="hljs-comment">// 暴力反射!!! 不推荐使用!!</span><br>			ageField.setAccessible(<span class="hljs-keyword">true</span>); <span class="hljs-comment">// 设置此属性为可访问的.</span><br>			ageField.set(object, <span class="hljs-number">40</span>); <br>			System.out.println(ageField.get(object)); <br>			<br>			Field nameField = clazz.getDeclaredField(<span class="hljs-string">&quot;name&quot;</span>);<br>			nameField.setAccessible(<span class="hljs-keyword">true</span>);<br>			nameField.set(object, <span class="hljs-string">&quot;佟刚&quot;</span>);<br>			<br>			System.out.println(object);<br>		&#125; <span class="hljs-keyword">catch</span> (ClassNotFoundException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (InstantiationException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (IllegalAccessException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (NoSuchFieldException e) &#123; <span class="hljs-comment">// 查找属性时, 有可能属性名不对, 可能是属性不存在</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (SecurityException e) &#123; <span class="hljs-comment">// 如果有安全检查.</span><br>			e.printStackTrace();<br>		&#125;<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test3</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">try</span> &#123;<br>			Class clazz = Class.forName(<span class="hljs-string">&quot;reflect.Teacher&quot;</span>);<br>			Object object = clazz.newInstance();<br>			System.out.println(object);<br>			<br>			<span class="hljs-comment">// 要想使用属性, 1)先获取属性定义对象 2) 配合目标this对象完成对象属性的间接访问.</span><br>			Field ageField = clazz.getField(<span class="hljs-string">&quot;age&quot;</span>); <span class="hljs-comment">// 根据属性名获取属性的定义对象</span><br>			ageField.set(object, <span class="hljs-number">40</span>); <span class="hljs-comment">// 设置属性值, 相当于 object.age = 40; </span><br>			System.out.println(ageField.get(object)); <span class="hljs-comment">// 获取属性值,  相当于 System.out.println(object.age)</span><br>			<br>			Field nameField = clazz.getField(<span class="hljs-string">&quot;name&quot;</span>);<br>			nameField.set(object, <span class="hljs-string">&quot;佟刚&quot;</span>); <span class="hljs-comment">// object.name = &quot;佟刚&quot;</span><br>			<br>			Field genderField = clazz.getField(<span class="hljs-string">&quot;gender&quot;</span>);<br>			genderField.set(object, <span class="hljs-string">&quot;男&quot;</span>);<br>			<br>			System.out.println(object);<br>		&#125; <span class="hljs-keyword">catch</span> (ClassNotFoundException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (InstantiationException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (IllegalAccessException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (NoSuchFieldException e) &#123; <span class="hljs-comment">// 查找属性时, 有可能属性名不对, 可能是属性不存在</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (SecurityException e) &#123; <span class="hljs-comment">// 如果有安全检查.</span><br>			e.printStackTrace();<br>		&#125;<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test2</span><span class="hljs-params">()</span> </span>&#123; <span class="hljs-comment">// 软编码, 灵活, 把问题延迟到运行时.</span><br>		<span class="hljs-keyword">try</span> &#123;<br>			<span class="hljs-comment">// 干预类的加载, 直接获取类模板对象.</span><br>			Class clazz = Class.forName(<span class="hljs-string">&quot;reflect.Teacher&quot;</span>); <span class="hljs-comment">// 类名必须全限定!!!</span><br>			<span class="hljs-comment">// 通过类模板对象.newInstance创建实体对象</span><br>			Object object = clazz.newInstance(); <span class="hljs-comment">// 调用无参构造器创建对象</span><br>			System.out.println(object);<br>		&#125; <span class="hljs-keyword">catch</span> (ClassNotFoundException e) &#123; <span class="hljs-comment">// 在运行时动态加载类时, 发现没有找到类</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (InstantiationException e) &#123; <span class="hljs-comment">// 在创建对象时出现异常, 可能是构造器不存在</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (IllegalAccessException e) &#123; <span class="hljs-comment">// 非法访问, 访问权限不够时出现</span><br>			e.printStackTrace();<br>		&#125;<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test1</span><span class="hljs-params">()</span> </span>&#123; <span class="hljs-comment">// 编译时必须依赖类, 硬编码</span><br>		<br>		<span class="hljs-comment">//Teacher t1 = new Teacher(); // 强烈依赖类</span><br>		<span class="hljs-comment">//t1.name = &quot;佟刚&quot;;</span><br>		<span class="hljs-comment">//t1.age = 40;</span><br>		<span class="hljs-comment">//t1.gender = &quot;男&quot;;</span><br>		<br>		<span class="hljs-comment">//System.out.println(t1.name);</span><br>		<span class="hljs-comment">//System.out.println(t1.age);</span><br>		<span class="hljs-comment">//System.out.println(t1.gender);</span><br>		<br>		<span class="hljs-comment">//System.out.println(t1);</span><br>		<br>		Teacher t2 = <span class="hljs-keyword">new</span> Teacher(<span class="hljs-string">&quot;程程&quot;</span>, <span class="hljs-number">20</span>, <span class="hljs-string">&quot;女&quot;</span>);<br>		System.out.println(t2);<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test0</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-comment">// 测试方法所在的线程永远是守护线程</span><br>	&#125;<br>	<br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;<br>		<span class="hljs-comment">// 守护线程, setDaemon(true); 此方法必须在start()以前调用.</span><br>		<span class="hljs-comment">// 主线程永远是用户线程</span><br>	&#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>反射</tag>
       </tags>
   </entry>
   <entry>
@@ -2696,6 +2291,411 @@
       <tags>
         <tag>大数据</tag>
         <tag>spark</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>JavaWeb</title>
+    <url>/2021/05/26/JavaWeb/</url>
+    <content><![CDATA[<h1 id="JavaWeb"><a href="#JavaWeb" class="headerlink" title="JavaWeb"></a>JavaWeb</h1><h2 id="网页的组成"><a href="#网页的组成" class="headerlink" title="网页的组成"></a>网页的组成</h2><ul>
+<li>结构（HTML)<ul>
+<li>超文本标记语言</li>
+<li>网页的主要内容通过html来实现</li>
+<li>用来写网页的语言</li>
+</ul>
+</li>
+<li>表现（CSS)<ul>
+<li>层叠样式表</li>
+<li>网页的字体颜色、背景色、背景图片等通过它来实现</li>
+<li>用来美化网页</li>
+</ul>
+</li>
+<li>行为（JavaScript/jQuery）<ul>
+<li>用来实现网页上的一下动态的效果</li>
+</ul>
+</li>
+<li>一个良好的网页要求结构、表现、行为三者分离</li>
+</ul>
+<h2 id="HTML"><a href="#HTML" class="headerlink" title="HTML"></a>HTML</h2><ul>
+<li><p>常用的标签</p>
+<ul>
+<li><p>标题标签</p>
+<ul>
+<li>一共六个（h1到h6）</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span><br>    一级标题<br><span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">h2</span>&gt;</span><br>    二级标题<br><span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span><br>...<br><span class="hljs-tag">&lt;<span class="hljs-name">h6</span>&gt;</span><br>    六级标题<br><span class="hljs-tag">&lt;/<span class="hljs-name">h6</span>&gt;</span><br></code></pre></td></tr></table></figure></li>
+<li><p>超链接</p>
+<ul>
+<li><p>通过a标签创建一个超链接</p>
+<ul>
+<li>通过a标签中的href属性指定要跳转的页面的地址</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;设置要跳转的页面的地址&quot;</span>&gt;</span>我是超链接<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>表格</p>
+<ul>
+<li>通过table标签创建一个表格<ul>
+<li>表格中的行通过tr标签来表示<ul>
+<li>表格中的表头通过th标签来表示</li>
+<li>表格中的列（单元格）通过td标签来标签<ul>
+<li>通过rowspan属性跨行合并单元格</li>
+<li>通过colspan属性跨列合并单元格</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">table</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span><br>    	<span class="hljs-tag">&lt;<span class="hljs-name">th</span>&gt;</span>姓名<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">th</span>&gt;</span>性别<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">th</span>&gt;</span>年龄<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span><br>    	<span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>盖伦<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>男<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>19<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">table</span>&gt;</span><br></code></pre></td></tr></table></figure></li>
+<li><p>表单</p>
+<ul>
+<li>使用form标签创建一个表单<ul>
+<li>通过action属性指定要提交的服务器的地址</li>
+<li>通过method属性指定提交的请求方式</li>
+<li>通过input标签创建表单项<ul>
+<li>type值是text的是文本框</li>
+<li>type值是password的是密码框</li>
+<li>type值是submit的是提交按钮</li>
+<li>type值不可用任意指定，通过alt+/根据提示选择</li>
+<li>必须给input指定name属性值<ul>
+<li>name属性值可用任意指定</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-comment">&lt;!-- 通过form标签创建一个表单 </span><br><span class="hljs-comment">		action属性：设置要提交的服务器的地址</span><br><span class="hljs-comment">		method属性：设置请求方式</span><br><span class="hljs-comment">			get：将发送一个GET请求，此时用户输入的数据是通过浏览器的地址栏进行传输</span><br><span class="hljs-comment">			post：将发送一个POST请求，此时用户输入的数据通过HTTP协议中请求报文中的请求体进行传输</span><br><span class="hljs-comment">	--&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">action</span>=<span class="hljs-string">&quot;success.html&quot;</span> <span class="hljs-attr">method</span>=<span class="hljs-string">&quot;post&quot;</span>&gt;</span><br>		<span class="hljs-comment">&lt;!-- </span><br><span class="hljs-comment">			表单中的表单项通过input标签来创建，表单项的类型通过type属性来指定；</span><br><span class="hljs-comment">			必须给表单项指定name属性值，用户输入的数据通过name属性值进行携带，并以键值对的形式发送到</span><br><span class="hljs-comment">			服务器，多个键值对之间使用 &amp;符号分隔，例如：username=admin&amp;password=123456</span><br><span class="hljs-comment">		 --&gt;</span><br>		用户名称：<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">br</span>&gt;</span><br>		用户密码：<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;password&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;password&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">br</span>&gt;</span><br>		<span class="hljs-comment">&lt;!-- 提交按钮上显示的文字通过value指定 --&gt;</span><br>		<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;submit&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;登录&quot;</span>&gt;</span><br>	<span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<h2 id="CSS"><a href="#CSS" class="headerlink" title="CSS"></a>CSS</h2><ul>
+<li><p>CSS样式可用书写的位置</p>
+<ul>
+<li><p>1）写在标签的style属性中</p>
+<ul>
+<li>结构与表现相耦合，不建议使用</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;color: red;font-size: &quot;</span>&gt;</span>我是一个段落<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span><br></code></pre></td></tr></table></figure></li>
+<li><p>2）写在style标签中，style标签放在head标签中</p>
+<ul>
+<li>开发测试阶段使用这种方式</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">style</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text/css&quot;</span>&gt;</span><br><span class="css">	<span class="hljs-selector-id">#rd</span>&#123;</span><br><span class="css">		<span class="hljs-selector-tag">color</span>: <span class="hljs-selector-id">#FBA</span></span><br>	&#125;<br><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span><br></code></pre></td></tr></table></figure></li>
+<li><p>3）引入外部的css文件</p>
+<ul>
+<li>项目上线后使用这种方式</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;stylesheet&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text/css&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;style.css&quot;</span> /&gt;</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>CSS种的基本选择器</p>
+<ul>
+<li>标签选择器</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="code"><pre><code class="hljs css"><span class="hljs-selector-tag">h1</span> &#123;<br>	<span class="hljs-attribute">color</span>: red<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>ID选择器<ul>
+<li>格式：#id属性值</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="code"><pre><code class="hljs css"><span class="hljs-selector-id">#p1</span> &#123;<br>	<span class="hljs-attribute">color</span>: green<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>类选择器<ul>
+<li>格式：.class属性值</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="code"><pre><code class="hljs css"><span class="hljs-selector-class">.p2</span> &#123;<br>	<span class="hljs-attribute">color</span>: blue<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>分组选择器</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="code"><pre><code class="hljs css"><span class="hljs-selector-id">#p1</span>, <span class="hljs-selector-class">.p2</span> &#123;<br>	<span class="hljs-attribute">font-size</span>: <span class="hljs-number">20px</span><br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="JavaScript"><a href="#JavaScript" class="headerlink" title="JavaScript"></a>JavaScript</h2><ul>
+<li><p>JavaScript可用书写的位置跟CSS类似，一共三种方式</p>
+</li>
+<li><p>变量</p>
+<ul>
+<li>通过var关键字声明一个变量</li>
+<li>在使用变量的过程种可用给它赋任意值</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">var</span> a; a=<span class="hljs-number">123</span>; a=<span class="hljs-string">&quot;hello&quot;</span>;a=函数；a=对象；<br><span class="hljs-keyword">var</span> a = <span class="hljs-string">&quot;javascript&quot;</span>;<br></code></pre></td></tr></table></figure></li>
+<li><p>函数</p>
+<ul>
+<li>通过function关键字声明一个函数</li>
+<li>在声明函数时不需要指定返回值的类型及形参的类型</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">//方式一：</span><br><span class="hljs-comment">//不带参数的函数</span><br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">fun</span>(<span class="hljs-params"></span>)</span>&#123;<br>    <span class="hljs-comment">//函数体</span><br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">sum</span>(<span class="hljs-params">a,b</span>)</span>&#123;<br>    <span class="hljs-keyword">return</span> a + b;<br>&#125;<br><span class="hljs-comment">//方式二：</span><br><span class="hljs-keyword">var</span> sum2 = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">a,b,c</span>)</span>&#123;<br>    <span class="hljs-keyword">return</span> a + b + c;<br>&#125;<br><span class="hljs-comment">//我们通常是通过方式二这种方式将一个函数赋给对象的事件属性</span><br></code></pre></td></tr></table></figure></li>
+<li><p>DOM</p>
+<ul>
+<li>全称：Document Object Model，文档对象模型</li>
+<li>DOM种常用的属性和方法<ul>
+<li>document.getElementById(“id属性值”)<ul>
+<li>根据标签的id属性值获取一个具体的标签对象</li>
+</ul>
+</li>
+<li>对象.innerHTML<ul>
+<li>获取或设置成对出现的标签中的文本内容<ul>
+<li>对象.innerHTML<ul>
+<li>获取文本内容</li>
+</ul>
+</li>
+<li>对象.innerHTML=”new valule”<ul>
+<li>设置文本内容</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>在jQuery中与之对应的是text()/html()方法</li>
+</ul>
+</li>
+<li>对象.onclick<ul>
+<li>给对象绑定单击事件</li>
+<li>在jQuery中与之对应的是click()方法</li>
+</ul>
+</li>
+<li>对象.onfocus<ul>
+<li>给对象绑定获取焦点事件</li>
+<li>在jQuery中与之对应的是focus()方法</li>
+</ul>
+</li>
+<li>对象.onblur<ul>
+<li>给对象绑定失去焦点的事件</li>
+<li>在jQuery中与之对应的是blur()方法</li>
+</ul>
+</li>
+<li>对象.onchange<ul>
+<li>给对象内容改变的事件</li>
+<li>在jQuery中与之对应的是change()方法</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Servlet"><a href="#Servlet" class="headerlink" title="Servlet"></a>Servlet</h2><ul>
+<li>Servlet是服务器端的一个组件，用来处理用户的请求</li>
+<li>直接new一个Sersvlet，然后配置映射的请求地址即可</li>
+<li>doGet和doPost方法中的两个参数request和response的作用<ul>
+<li>request的作用<ul>
+<li>获取请求参数</li>
+<li>转发</li>
+<li>它是一个域对象</li>
+</ul>
+</li>
+<li>response的作用<ul>
+<li>给浏览器响应一个字符串或一个页面</li>
+<li>重定向</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//处理GET请求的方法</span><br>	<span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title">doGet</span><span class="hljs-params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="hljs-keyword">throws</span> ServletException, IOException </span>&#123;<br>		System.out.println(<span class="hljs-string">&quot;doGet方法被调用&quot;</span>);<br>		<span class="hljs-comment">//request的作用</span><br>		<span class="hljs-comment">//1.获取请求参数</span><br>		<span class="hljs-comment">/*</span><br><span class="hljs-comment">		 * GET请求的请求中文乱码问题的解决方案：</span><br><span class="hljs-comment">		 * 在Tomcat的配置文件server.xml中的第一个Connector标签中添加属性URIEncoding=&quot;UTF-8&quot;</span><br><span class="hljs-comment">		 */</span><br>		String username = request.getParameter(<span class="hljs-string">&quot;username&quot;</span>);<br>		String password = request.getParameter(<span class="hljs-string">&quot;password&quot;</span>);<br>		System.out.println(username);<br>		System.out.println(password);<br>		<span class="hljs-comment">//2.转发</span><br>		<span class="hljs-comment">//获取转发器</span><br>		RequestDispatcher requestDispatcher = request.getRequestDispatcher(<span class="hljs-string">&quot;WEB-INF/success.html&quot;</span>);<br>		<span class="hljs-comment">//进行请求的转发</span><br>		requestDispatcher.forward(request, response);<br>		<span class="hljs-comment">//3.request是一个域对象（下回分解）</span><br>	&#125;<br>	<span class="hljs-comment">//处理POST请求的方法</span><br>	<span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title">doPost</span><span class="hljs-params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="hljs-keyword">throws</span> ServletException, IOException </span>&#123;<br>		System.out.println(<span class="hljs-string">&quot;doPost方法被调用&quot;</span>);<br>		<span class="hljs-comment">/*</span><br><span class="hljs-comment">		 * POST请求的请求中文乱码问题的解决方案：</span><br><span class="hljs-comment">		 * 在第一次获取请求参数之前，通过request设置字符集位UTF-8</span><br><span class="hljs-comment">		 */</span><br>		request.setCharacterEncoding(<span class="hljs-string">&quot;UTF-8&quot;</span>);<br>		String username = request.getParameter(<span class="hljs-string">&quot;username&quot;</span>);<br>		String password = request.getParameter(<span class="hljs-string">&quot;password&quot;</span>);<br>		System.out.println(username);<br>		System.out.println(password);<br>		<span class="hljs-comment">//response的作用</span><br>		<span class="hljs-comment">//1.给浏览器响应一个字符串或一个页面</span><br>		<span class="hljs-comment">/*</span><br><span class="hljs-comment">		 * 响应中文乱码的解决方案：</span><br><span class="hljs-comment">		 * 	在获取流之前设置内容的类型，内容的类型中包含UTF-8字符集</span><br><span class="hljs-comment">		 */</span><br>		response.setContentType(<span class="hljs-string">&quot;text/html;charset=UTF-8&quot;</span>);<br>		PrintWriter writer = response.getWriter();<br><span class="hljs-comment">//		writer.write(&quot;Response Success!&quot;);</span><br><span class="hljs-comment">//		writer.write(&quot;响应成功！&quot;);</span><br><span class="hljs-comment">//		writer.write(&quot;&lt;!DOCTYPE html&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;&lt;html&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;&lt;head&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;&lt;meta charset=\&quot;UTF-8\&quot;&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;&lt;title&gt;Insert title here&lt;/title&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;&lt;/head&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;&lt;body&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;	&lt;h1&gt;请求处理成功！&lt;/h1&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;&lt;/body&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;&lt;/html&gt;&quot;);</span><br>		<span class="hljs-comment">//2.重定向</span><br>		response.sendRedirect(<span class="hljs-string">&quot;WEB-INF/success.html&quot;</span>);<br>		<br>		<span class="hljs-comment">/*</span><br><span class="hljs-comment">		 * 转发与重定向的区别：</span><br><span class="hljs-comment">		 * 	1.转发浏览器发送一次请求；重定向浏览器发送两次请求</span><br><span class="hljs-comment">		 * 	2.转发浏览器地址栏地址无变化；重定向浏览器地址栏地址有变化</span><br><span class="hljs-comment">		 * 	3.转发可以访问WEB-INF目录下的资源；重定向不可以访问WEB-INF目录下的资源</span><br><span class="hljs-comment">		 * 	4.转发可以共享request域中的数据；重定向不可以共享request域中的数据</span><br><span class="hljs-comment">		 */</span><br>	&#125;<br><br></code></pre></td></tr></table></figure>
+
+<h2 id="JSP"><a href="#JSP" class="headerlink" title="JSP"></a>JSP</h2><ul>
+<li><p>JSP必须运行服务器上，它本质上是一个Servlet</p>
+</li>
+<li><p>HTML和Servlet能实现的功能JSP都可用实现</p>
+</li>
+<li><p>JSP中的基本语法</p>
+<ul>
+<li>JSP脚本片段<ul>
+<li>格式：&lt;%   %&gt;</li>
+<li>作用：在里面写Java代码</li>
+</ul>
+</li>
+<li>JSP表达式<ul>
+<li>格式：&lt;%=  %&gt;</li>
+<li>作用：用来输出对象</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight jsp"><table><tr><td class="code"><pre><code class="hljs jsp">&lt;%<br>		<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span> ; i &lt; <span class="hljs-number">10</span> ; i++)&#123;<br>			<span class="hljs-comment">//out.print(&quot;伊朗要干美国了！&quot;);</span><br>	%&gt;<br>	&lt;h1&gt;伊朗要干美国了！&lt;/h1&gt;<br>	&lt;%	<br>		&#125;<br>	%&gt;<br><br> &lt;%=<span class="hljs-string">&quot;我是通过JSP表达式输出的&quot;</span> %&gt;<br></code></pre></td></tr></table></figure></li>
+<li><p>四个域</p>
+<ul>
+<li>page域<ul>
+<li>范围：当前页面</li>
+<li>对应的域对象：pageContext</li>
+<li>域对象的类型：PageContext</li>
+</ul>
+</li>
+<li>request域<ul>
+<li>范围：当前请求（一次请求）</li>
+<li>对应的域对象：request</li>
+<li>域对象的类型：HttpServletRequest</li>
+</ul>
+</li>
+<li>session<ul>
+<li>范围：当前会话（一次会话）</li>
+<li>对应的域对象：session</li>
+<li>域对象的类型：HttpSession</li>
+</ul>
+</li>
+<li>application域<ul>
+<li>范围：当前Web应用</li>
+<li>对应的域对象：application</li>
+<li>域对象的类型：ServletContext</li>
+</ul>
+</li>
+<li>四个域对象都有以下三个方法<ul>
+<li>void setAttribute(String key , Object value)</li>
+<li>Object getAttribute(String key)</li>
+<li>void removeAttribute(String key)</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight jsp"><table><tr><td class="code"><pre><code class="hljs jsp">&lt;!-- 在当前页面中分别向四个域中添加四个属性 --&gt;<br>	 &lt;%<br>	 	pageContext.setAttribute(<span class="hljs-string">&quot;pageKey&quot;</span>, <span class="hljs-string">&quot;pageValue&quot;</span>);<br>	 	request.setAttribute(<span class="hljs-string">&quot;reqKey&quot;</span>, <span class="hljs-string">&quot;reqValue&quot;</span>);<br>	 	session.setAttribute(<span class="hljs-string">&quot;sessKey&quot;</span>, <span class="hljs-string">&quot;sessValue&quot;</span>);<br>	 	application.setAttribute(<span class="hljs-string">&quot;appKey&quot;</span>, <span class="hljs-string">&quot;appValue&quot;</span>);<br>	 %&gt;<br>	 &lt;h1&gt;在当前页面中分别获取四个域中的属性值&lt;/h1&gt;<br>	 page域中的属性值是：&lt;%=pageContext.getAttribute(<span class="hljs-string">&quot;pageKey&quot;</span>) %&gt;&lt;br&gt;<br>	 request域中的属性值是：&lt;%=request.getAttribute(<span class="hljs-string">&quot;reqKey&quot;</span>) %&gt;&lt;br&gt;<br>	 session域中的属性值是：&lt;%=session.getAttribute(<span class="hljs-string">&quot;sessKey&quot;</span>) %&gt;&lt;br&gt;<br>	 application域中的属性值是：&lt;%=application.getAttribute(<span class="hljs-string">&quot;appKey&quot;</span>) %&gt;&lt;br&gt;<br></code></pre></td></tr></table></figure></li>
+<li><p>EL</p>
+<ul>
+<li>EL全称是Expression Language，是JSP的内置表达式</li>
+<li>格式：${表达式}</li>
+<li>作用：主要用来获取域对象中的属性值，用来代替JSP的表达式</li>
+<li>EL表达式获取数据时才输出，获取不到数据则什么也不输出</li>
+<li>EL中的四个Scope对象<ul>
+<li>pageScope<ul>
+<li>获取page域中的属性值</li>
+</ul>
+</li>
+<li>requestScope<ul>
+<li>获取request域中的属性值</li>
+</ul>
+</li>
+<li>sessionScope<ul>
+<li>获取session域中的属性值</li>
+</ul>
+</li>
+<li>applicationScope<ul>
+<li>获取application域中的属性值</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight jsp"><table><tr><td class="code"><pre><code class="hljs jsp">&lt;%<br>	 	Date date = <span class="hljs-keyword">new</span> Date();<br>	 	<span class="hljs-comment">//分别向四个域中添加四个属性</span><br>	 	pageContext.setAttribute(<span class="hljs-string">&quot;date&quot;</span>, date+<span class="hljs-string">&quot;-&quot;</span>);<br>	 	request.setAttribute(<span class="hljs-string">&quot;date&quot;</span>, date+<span class="hljs-string">&quot;--&quot;</span>);<br>	 	session.setAttribute(<span class="hljs-string">&quot;date&quot;</span>, date+<span class="hljs-string">&quot;---&quot;</span>);<br>	 	application.setAttribute(<span class="hljs-string">&quot;date&quot;</span>, date+<span class="hljs-string">&quot;----&quot;</span>);<br>	 %&gt;<br>	 通过JSP表达式获取域对象中的属性值：&lt;%=pageContext.getAttribute(<span class="hljs-string">&quot;date&quot;</span>) %&gt;&lt;br&gt;<br>	 通过EL表达式获取域对象中的属性值：$&#123;date &#125;&lt;br&gt;<br>	 通过EL表达式获取request域中的属性值：$&#123;requestScope.date &#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="Ajax"><a href="#Ajax" class="headerlink" title="Ajax"></a>Ajax</h2><ul>
+<li><p>全称：Asynchronous JavaScript And XML，通过JavaScript发送请求，使用XML作为响应数据，后来XML已经被另外一种数据格式JSON所替代</p>
+</li>
+<li><p>同步请求和异步请求的区别</p>
+<ul>
+<li>同步请求<ul>
+<li>发送请求之后必须等待服务器的响应成功之后才能发送其他请求，有一个等待的过程</li>
+<li>响应成功之后会刷新整个页面</li>
+</ul>
+</li>
+<li>异步请求<ul>
+<li>发送请求之后无需等待服务器的响应即可发送其他请求</li>
+<li>响应成功之后不会刷新整个页面，可用局部更新页面中的内容</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>如果通过jQuery发送ajax请求</p>
+<ul>
+<li><p>使用$.ajax()方法发送Ajax请求</p>
+<ul>
+<li>ajax()方法中的常用选项<ul>
+<li>url<ul>
+<li>必须的。用来设置请求地址，值是一个字符串</li>
+</ul>
+</li>
+<li>type<ul>
+<li>可选的。用来设置请求方式。GET或POST，默认是GET，值是一个字符串</li>
+</ul>
+</li>
+<li>data<ul>
+<li>可选的。用来设置请求参数，值是一个字符串</li>
+</ul>
+</li>
+<li>success<ul>
+<li>可选的。用来设置一个回调函数，当响应成功之后系统会自动调用该函数，响应数据会以参数的形式传入到该函数中</li>
+</ul>
+</li>
+<li>dataType<ul>
+<li>可选的。用来设置响应数据的类型，如 text、json等</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript">$.ajax(&#123;<br>				url:<span class="hljs-string">&quot;AjaxServlet&quot;</span>,<br>				type:<span class="hljs-string">&quot;get&quot;</span>,<br>				data:<span class="hljs-string">&quot;username=admin&amp;password=123456&quot;</span>,<br>				success:<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">res</span>)</span>&#123;<br>					<span class="hljs-comment">//将响应数据设置到span标签中</span><br>					$(<span class="hljs-string">&quot;#msg&quot;</span>).text(res);<br>				&#125;,<br>				dataType:<span class="hljs-string">&quot;text&quot;</span><br>			&#125;);<br></code></pre></td></tr></table></figure></li>
+<li><p>JSON</p>
+<ul>
+<li>JOSN格式<ul>
+<li>JSON对象</li>
+<li>JSON数组</li>
+</ul>
+</li>
+<li>JSON中接受的数据类型<ul>
+<li>字符串</li>
+<li>数字</li>
+<li>null</li>
+<li>布尔类型</li>
+<li>数组</li>
+<li>对象</li>
+</ul>
+</li>
+<li>在JS中JSON对象和JSON字符串之间的转换<ul>
+<li>JSON对象转JSON字符串<ul>
+<li>JSON.stringify(JSON对象)</li>
+</ul>
+</li>
+<li>JSON字符串转JSON对象<ul>
+<li>JSON.parse(JSON字符串)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">//JSON的格式：</span><br>	<span class="hljs-comment">//1.JSON对象</span><br>	<span class="hljs-comment">//属性名必须使用双引号括起来；属性名和属性值之间使用冒号分隔；多个属性之间使用逗号分隔</span><br>	<span class="hljs-keyword">var</span> jsonObj = &#123;<span class="hljs-string">&quot;name&quot;</span>:<span class="hljs-string">&quot;孙悟空&quot;</span>,<span class="hljs-string">&quot;age&quot;</span>:<span class="hljs-number">520</span>&#125;;<br><span class="hljs-comment">// 	alert(jsonObj);</span><br>	<span class="hljs-comment">//2.JSON数组</span><br>	<span class="hljs-keyword">var</span> jsonArry = [<span class="hljs-string">&quot;猪八戒&quot;</span>,<span class="hljs-number">1500</span>,<span class="hljs-literal">true</span>,<span class="hljs-literal">null</span>,jsonObj];<br>	<span class="hljs-comment">//获取jsonArry中的jsonObj中的age属性值</span><br><span class="hljs-comment">// 	alert(jsonArry[4].age);</span><br>	<br>	<span class="hljs-comment">//在JS中将JSON对象转换为JSON字符串</span><br>	<span class="hljs-keyword">var</span> objToStr = <span class="hljs-built_in">JSON</span>.stringify(jsonObj);<br><span class="hljs-comment">// 	alert(objToStr);</span><br>	<span class="hljs-comment">//声明一个JSON字符串</span><br>	<span class="hljs-keyword">var</span> jsonStr = <span class="hljs-string">&#x27;&#123;&quot;name&quot;:&quot;唐僧&quot;,&quot;age&quot;:18&#125;&#x27;</span>;<br><span class="hljs-comment">// 	alert(jsonStr);</span><br>	<span class="hljs-comment">//在JS中将JSON字符串转换为JSON对象</span><br>	<span class="hljs-keyword">var</span> strToObj = <span class="hljs-built_in">JSON</span>.parse(jsonStr);<br><span class="hljs-comment">// 	alert(strToObj.name);</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p>在Java中对象与JSON字符串之间的转换</p>
+<ul>
+<li><p>借助于第三方工具json-lib、jackson、gson等可用将Java对象转换为JSON字符串，也可用将JSON字符串转换回Java对象</p>
+</li>
+<li><p>通常是前端发送一个Ajax请求，在后台查询到对象之后将对象转换为JOSN字符串响应到前端</p>
+</li>
+<li><p>通过发送Ajax请求接收JSON格式的响应数据</p>
+<ul>
+<li>前端代码</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">//发送Ajax请求接收JSON格式的响应数据</span><br>			$.ajax(&#123;<br>				url:<span class="hljs-string">&quot;JSONServlet&quot;</span>,<br>				success:<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">res</span>)</span>&#123;<br>					alert(res.id);<br>				&#125;,<br>				dataType:<span class="hljs-string">&quot;json&quot;</span><br>			&#125;);<br></code></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>后端代码</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title">doGet</span><span class="hljs-params">(HttpServletRequest request, HttpServletResponse response)</span></span><br><span class="hljs-function">			<span class="hljs-keyword">throws</span> ServletException, IOException </span>&#123;<br>		response.setContentType(<span class="hljs-string">&quot;text/html;charset=UTF-8&quot;</span>);<br>		<span class="hljs-comment">//假设从数据库中查询到员工的信息</span><br>		Employee employee = <span class="hljs-keyword">new</span> Employee(<span class="hljs-number">1</span>, <span class="hljs-string">&quot;张三&quot;</span>, <span class="hljs-string">&quot;zhangsan@atguigu.com&quot;</span>);<br>		<span class="hljs-comment">//创建Gson对象</span><br>		Gson gson = <span class="hljs-keyword">new</span> Gson();<br>		<span class="hljs-comment">//将Employee对象转换为JSON字符串</span><br>		String json = gson.toJson(employee);<br>		System.out.println(json);<br>		<span class="hljs-comment">//给浏览器响应一个JSON格式的字符串</span><br>		response.getWriter().write(json);<br>	&#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
       </tags>
   </entry>
   <entry>
@@ -3700,6 +3700,12 @@
 <h2 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h2><ul>
 <li><p>Btree索引：</p>
 <p><a href="https://imgtu.com/i/4qdvuQ"><img src="https://z3.ax1x.com/2021/10/03/4qdvuQ.png" alt="4qdvuQ.png"></a></p>
+<ul>
+<li>查找过程：<ul>
+<li>如果要查找数据项29，那么首先会把磁盘块1由磁盘加载到内存，此时发生一次IO，在内存中用二分查找确定29在17和35之间，锁定磁盘块1的P2指针，内存时间因为非常短（相比磁盘的IO）可以忽略不计，通过磁盘块1的P2指针的磁盘地址把磁盘块3由磁盘加载到内存，发生第二次IO，29在26和30之间，锁定磁盘块3的P2指针，通过指针加载磁盘块8到内存，发生第三次IO，同时内存中做二分查找找到29，结束查询，总计三次IO。</li>
+</ul>
+</li>
+</ul>
 </li>
 <li><p>B+tree索引：MySQL默认索引</p>
 <p><a href="https://imgtu.com/i/4qwF3T"><img src="https://z3.ax1x.com/2021/10/03/4qwF3T.png" alt="4qwF3T.png"></a></p>
@@ -3708,7 +3714,7 @@
 <ul>
 <li>b树索引，关键字，记录是放在一起的。b+树的非叶子节点只有指向下一个节点的索引和关键字，记录只存放在叶子节点中。</li>
 <li>b树中越靠近根节点的记录查的越快。而b+树每个记录的查找时间都是一样的，都需要从根节点走到叶子节点，并在叶子节点中查找关键字。</li>
-<li>b+树的性能更好。因为b+树的非叶子节点不存放实际的数据，因此可以容纳的元素的更多，同样的数据下，树高比b树小，这样带来的好处是减少磁盘访问次数。尽管B+树找到一个记录所需的比较次数要比b树多，但是一次磁盘访问的时间远远比内存比较的时间长。实际中，b+树的性能更好一些，而且b+树的叶子节点使用指针连接在一起，方便顺序遍历（例如查看一个目录下的所有文件，一个表中的所有记录等），这也是很多数据库和文件系统使用b+树的缘故。</li>
+<li>b+树的性能更好。因为b+树的非叶子节点不存放实际的数据，因此可以容纳的元素的更多，同样的数据下，树高比b树小，这样带来的好处是减少磁盘访问次数（例如，同样的数据量，b树三层，b+树两层，这样的话b+树就少一次IO操作，会快很多）。尽管B+树找到一个记录所需的比较次数要比b树多，但是一次磁盘访问的时间远远比内存比较的时间长。实际中，b+树的性能更好一些，而且b+树的叶子节点使用指针连接在一起，方便顺序遍历（例如查看一个目录下的所有文件，一个表中的所有记录等），这也是很多数据库和文件系统使用b+树的缘故。</li>
 </ul>
 </li>
 <li><p>为什么B+树更适合在实际应用中做操作系统的文件索引和数据库索引？</p>
@@ -4797,10 +4803,10 @@ copyToLocal#与get完全一样
 <li>如果代码中没有风险，但是有时不满足方法继续的条件时，直接抛出<h2 id="关键字"><a href="#关键字" class="headerlink" title="关键字"></a>关键字</h2></li>
 <li>volatile :提醒子线程，此主存中的属性不要制作副本…</li>
 </ul>
-<h2 id="排序算法"><a href="#排序算法" class="headerlink" title="排序算法"></a>排序算法</h2><h3 id="冒泡排序："><a href="#冒泡排序：" class="headerlink" title="冒泡排序："></a>冒泡排序：</h3> <figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">int</span>[] arr=<span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[<span class="hljs-number">10</span>];<br><span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>;i&lt;arr.length;i++) &#123;<br>	arr[i]=(<span class="hljs-keyword">int</span>)(Math.random()*<span class="hljs-number">20</span>);<br>&#125;<br><span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> tmp:arr) &#123;<br>System.out.print(tmp+<span class="hljs-string">&quot; &quot;</span>);<br>&#125;<br>System.out.println();<br><span class="hljs-comment">//冒泡排序</span><br><span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>;i&lt;arr.length-<span class="hljs-number">1</span>;i++) &#123;<span class="hljs-comment">//控制趟数</span><br>	<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> j=<span class="hljs-number">0</span>;j&lt;arr.length-<span class="hljs-number">1</span>-i;j++) &#123;<span class="hljs-comment">//控制每一趟的交换次数，应该随着外循环的增加而减少</span><br>		<span class="hljs-keyword">if</span>(arr[j]&gt;arr[j+<span class="hljs-number">1</span>]) &#123;<span class="hljs-comment">//比较相邻元素，满足条件，则交换.</span><br>			<span class="hljs-keyword">int</span> tmp=arr[j];<br>			arr[j]=arr[j+<span class="hljs-number">1</span>];<br>			arr[j+<span class="hljs-number">1</span>]=tmp;<br>		&#125;<br>	&#125;<br>&#125;<br><span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> tmp:arr) &#123;<br>System.out.print(tmp+<span class="hljs-string">&quot; &quot;</span>);<br>&#125;<br>System.out.println();<br></code></pre></td></tr></table></figure>
+<h2 id="排序算法"><a href="#排序算法" class="headerlink" title="排序算法"></a>排序算法</h2><h3 id="冒泡排序："><a href="#冒泡排序：" class="headerlink" title="冒泡排序："></a>冒泡排序：</h3> <figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MaopaoSort</span> </span>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;<br>        <span class="hljs-keyword">int</span>[] data=<span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[<span class="hljs-number">20</span>];<br>        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt;data.length ; i++) &#123;<br>            data[i]=(<span class="hljs-keyword">int</span>)(Math.random()*<span class="hljs-number">20</span>);<br>        &#125;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> d : data) &#123;<br>            System.out.print(d+<span class="hljs-string">&quot; &quot;</span>);<br>        &#125;<br>        System.out.println();<br>        System.out.println(<span class="hljs-string">&quot;===================================&quot;</span>);<br>        maopaoSort(data);<br>        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i : data) &#123;<br>            System.out.print(i+<span class="hljs-string">&quot; &quot;</span>);<br>        &#125;<br>    &#125;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">maopaoSort</span><span class="hljs-params">(<span class="hljs-keyword">int</span>[] arr)</span></span>&#123;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt;arr.length ; i++) &#123;<br>            <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> j=<span class="hljs-number">1</span>;j&lt;arr.length-i;j++)&#123;<span class="hljs-comment">//每一次循环，最大的数以及到了数组末尾，所以每一轮都可以少遍历一个数据</span><br>                <span class="hljs-keyword">if</span>(arr[j]&lt;arr[j-<span class="hljs-number">1</span>])&#123;<br>                    <span class="hljs-keyword">int</span> tmp=arr[j];<br>                    arr[j]=arr[j-<span class="hljs-number">1</span>];<br>                    arr[j-<span class="hljs-number">1</span>]=tmp;<br>                &#125;<br>            &#125;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 <h3 id="选择排序"><a href="#选择排序" class="headerlink" title="选择排序"></a>选择排序</h3><figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">int</span>[] arr1=<span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[<span class="hljs-number">10</span>];<br><span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>;i&lt;arr1.length;i++) &#123;<br>	arr1[i]=(<span class="hljs-keyword">int</span>)(Math.random()*<span class="hljs-number">20</span>);<br>&#125;<br><span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> tmp:arr1) &#123;<br>System.out.print(tmp+<span class="hljs-string">&quot; &quot;</span>);<br>&#125;<br>System.out.println();<br><span class="hljs-comment">//选择排序</span><br><span class="hljs-keyword">int</span> minindex;<br><span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>;i&lt;arr1.length-<span class="hljs-number">1</span>;i++) &#123;<span class="hljs-comment">//从0开始到倒数第二个位置</span><br>	minindex=i;<span class="hljs-comment">//最小下标先默认等于i</span><br>	<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> j=i+<span class="hljs-number">1</span>;j&lt;arr1.length;j++) &#123;<span class="hljs-comment">//遍历从i+1开始到数组长度的所有数</span><br>		<span class="hljs-keyword">if</span>(arr1[j]&lt;arr1[minindex]) &#123;<span class="hljs-comment">//找最小值</span><br>			minindex=j;<span class="hljs-comment">//更新最小下标</span><br>		&#125;<br>	&#125;<br>	<span class="hljs-comment">//交换元素，实现最小值赋值到基准位置i</span><br>	<span class="hljs-keyword">int</span> tmp=arr1[i];<br>	arr1[i]=arr1[minindex];<br>	arr1[minindex]=tmp;<br>&#125;<br><span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> tmp:arr1) &#123;<br>System.out.print(tmp+<span class="hljs-string">&quot; &quot;</span>);<br>&#125;<br>System.out.println();<br></code></pre></td></tr></table></figure>
 
-<h3 id="快速排序"><a href="#快速排序" class="headerlink" title="快速排序"></a>快速排序</h3><figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">QuickSort</span> </span>&#123;<br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">quick</span><span class="hljs-params">(<span class="hljs-keyword">int</span> []arr,<span class="hljs-keyword">int</span> begin,<span class="hljs-keyword">int</span> end)</span> </span>&#123;<span class="hljs-comment">//结束索引不包含</span><br>		<span class="hljs-keyword">if</span>(end-begin&lt;=<span class="hljs-number">1</span>) &#123;<span class="hljs-comment">//递归结束条件</span><br>			<span class="hljs-keyword">return</span>;<br>		&#125;<br>		<span class="hljs-comment">//分区，分三个部分，中间是键，左边比键小，右边比键大</span><br>		<span class="hljs-comment">//定位索引最关键</span><br>		<span class="hljs-keyword">int</span> key=arr[begin];<span class="hljs-comment">//总是取第一个元素为键值</span><br>		<span class="hljs-keyword">int</span> keyIndex=begin;<span class="hljs-comment">// 键索引值，用于动态保存比键值小的值的索引</span><br>		<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=begin+<span class="hljs-number">1</span>;i&lt;end;i++) &#123;<br>			<span class="hljs-keyword">if</span>(arr[i]&lt;key) &#123;<br>				keyIndex++;<span class="hljs-comment">//只要找到比key小的数据，keyIndex就往右移</span><br>				<span class="hljs-comment">//交换下标为keyIndex和i位置的数据</span><br>				<span class="hljs-keyword">int</span> tmp=arr[keyIndex];<br>				arr[keyIndex]=arr[i];<span class="hljs-comment">//保证比键小的值在键的右面依次保存</span><br>				arr[i]=tmp;<br>			&#125;<br>		&#125;<br>		<span class="hljs-comment">//让键值归为到keyIndex位置处</span><br>		arr[begin]=arr[keyIndex];<br>		arr[keyIndex]=key;<br>		<span class="hljs-comment">//左子列递归</span><br>		quick(arr,begin,keyIndex-<span class="hljs-number">1</span>);<br>		<span class="hljs-comment">//右子列递归</span><br>		 quick(arr,keyIndex+<span class="hljs-number">1</span>,end);<br>	&#125;<br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;<br>		<span class="hljs-keyword">int</span>[] arr=<span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[<span class="hljs-number">10</span>];<br>		<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>;i&lt;arr.length;i++) &#123;<br>			arr[i]=(<span class="hljs-keyword">int</span>)(Math.random()*<span class="hljs-number">20</span>);<br>		&#125;<br>		<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> tmp:arr) &#123;<br>		System.out.print(tmp+<span class="hljs-string">&quot; &quot;</span>);<br>		&#125;<br>		System.out.println();<br>		quick(arr,<span class="hljs-number">0</span>,arr.length);<br>		<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> tmp:arr) &#123;<br>		System.out.print(tmp+<span class="hljs-string">&quot; &quot;</span>);<br>		&#125;<br>		System.out.println();<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="快速排序"><a href="#快速排序" class="headerlink" title="快速排序"></a>快速排序</h3><figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">QuickSort</span> </span>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;<br>        <span class="hljs-comment">//int[] data = &#123;3,18,13,3,3&#125;;</span><br>        <span class="hljs-keyword">int</span>[] data=<span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[<span class="hljs-number">20</span>];<br>        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; data.length; i++) &#123;<br>            data[i] = (<span class="hljs-keyword">int</span>) (Math.random() * <span class="hljs-number">20</span>);<br>        &#125;<br>        <span class="hljs-comment">//排序前</span><br>        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; data.length; i++) &#123;<br>            System.out.print(data[i] + <span class="hljs-string">&quot; &quot;</span>);<br>        &#125;<br>        <span class="hljs-comment">//排序后</span><br>        System.out.println();<br>        System.out.println(<span class="hljs-string">&quot;====================================&quot;</span>);<br>        quickSort(data, <span class="hljs-number">0</span>, data.length-<span class="hljs-number">1</span>);<br>        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i : data) &#123;<br>            System.out.print(i + <span class="hljs-string">&quot; &quot;</span>);<br>        &#125;<br>    &#125;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">quickSort</span><span class="hljs-params">(<span class="hljs-keyword">int</span>[] arr, <span class="hljs-keyword">int</span> begin, <span class="hljs-keyword">int</span> end)</span> </span>&#123;<br>        <span class="hljs-keyword">if</span> (end - begin &lt;= <span class="hljs-number">0</span>) &#123;<span class="hljs-comment">//当一直递归后只剩下一个元素了，说明不用排序了递归结束</span><br>            <span class="hljs-keyword">return</span>;<br>        &#125;<br>        <span class="hljs-comment">//分区，分三个部分，中间是键值，左边比键值小，右边比键值大</span><br>        <span class="hljs-comment">//定位索引最关键</span><br>        <span class="hljs-keyword">int</span> key = arr[begin];<span class="hljs-comment">//总是取第一个元素为键值</span><br>        <span class="hljs-keyword">int</span> keyIndex = begin;<span class="hljs-comment">//键值索引，用于动态保存比键值小的值的索引</span><br>        <span class="hljs-comment">//来找比key小的元素，放到左边</span><br>        <span class="hljs-comment">//默认取第一个元素作为键值，第一个元素不用遍历</span><br>        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = begin + <span class="hljs-number">1</span>; i &lt;= end; i++) &#123;<br>            <span class="hljs-keyword">if</span> (arr[i] &lt; key) &#123;<br>                keyIndex++;<span class="hljs-comment">//只要找到比key小的元素，keyIndex就往右移一个，因为肯定就有一个元素在键值的左边</span><br>                <span class="hljs-comment">//交换keyIndex和i的位置</span><br>                <span class="hljs-comment">//当keyIndex和i之间有大于key时，交换位置</span><br>                <span class="hljs-keyword">if</span>(i!=keyIndex) &#123;<br>                    <span class="hljs-keyword">int</span> tmp = arr[keyIndex];<br>                    arr[keyIndex] = arr[i];<br>                    arr[i] = tmp;<br>                &#125;<br>            &#125;<br>        &#125;<br>        <span class="hljs-comment">//此时keyIndex处的值与begin交换，因为从keyIndex开始到begin的值肯定是比键小的值</span><br>        arr[begin] = arr[keyIndex];<br>        arr[keyIndex] = key;<br>        <span class="hljs-comment">//左递归</span><br>        quickSort(arr, begin, keyIndex - <span class="hljs-number">1</span>);<br>        <span class="hljs-comment">//右递归</span><br>        quickSort(arr, keyIndex + <span class="hljs-number">1</span>, end);<br><br>    &#125;<br></code></pre></td></tr></table></figure>
 <h2 id="注解"><a href="#注解" class="headerlink" title="注解"></a>注解</h2><figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.lang.annotation.ElementType;<br><span class="hljs-keyword">import</span> java.lang.annotation.Retention;<br><span class="hljs-keyword">import</span> java.lang.annotation.RetentionPolicy;<br><span class="hljs-keyword">import</span> java.lang.annotation.Target;<br><br><span class="hljs-keyword">import</span> javax.lang.model.element.Element;<br><br><span class="hljs-keyword">import</span> jdk.jfr.Registered;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 注解的处理只能通过反射，要想反射，必须使用元注解<span class="hljs-doctag">@Retention</span></span><br><span class="hljs-comment"> * <span class="hljs-doctag">@author</span> Hasee</span><br><span class="hljs-comment"> *注解：是一种特殊的注释，不参与程序的执行，特殊之处在于编译器和JVM都可以识别它.</span><br><span class="hljs-comment"> *<span class="hljs-doctag">@Override</span> 作用是告诉编译器，它修饰的方法要完成方法覆盖，请帮助做条件检查，只能修饰方法</span><br><span class="hljs-comment"> *<span class="hljs-doctag">@Deprecated</span> 作用是警告使用者，它修饰的目标过期了，可以修饰类，属性，方法，构造器，形参，局部变量</span><br><span class="hljs-comment"> *<span class="hljs-doctag">@SuppressWarnings</span> 作用是抑制编译器警告，并且可以传递参数，参数可以是一个值也可以是一个数组</span><br><span class="hljs-comment"> *注解：</span><br><span class="hljs-comment"> *1）没有属性的，称为标记型注解</span><br><span class="hljs-comment"> *2）有属性的，可以进一步传递数据</span><br><span class="hljs-comment"> */</span><br><span class="hljs-comment">//@Target(&#123;ElementType.TYPE&#125;)</span><br><span class="hljs-comment">//自定义注解,默认可以修饰类，属性，构造器，方法，形参，局部变量</span><br><span class="hljs-meta">@Retention(RetentionPolicy.RUNTIME)</span><span class="hljs-comment">//只有注解的停留期定义在运行时才可以被反射</span><br><span class="hljs-meta">@interface</span> MyAnnotation&#123;<br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">abstract</span> <span class="hljs-keyword">int</span> <span class="hljs-title">id</span><span class="hljs-params">()</span><span class="hljs-keyword">default</span> 10</span>;<br>	<span class="hljs-function">String <span class="hljs-title">name</span><span class="hljs-params">()</span> <span class="hljs-keyword">default</span> &quot;我是缺省值&quot;</span>;<span class="hljs-comment">//可以有缺省值</span><br>	<span class="hljs-function">String <span class="hljs-title">value</span><span class="hljs-params">()</span> <span class="hljs-keyword">default</span> &quot;qaq&quot;</span>;<span class="hljs-comment">//当属性名为value()时可以省略属性名</span><br>&#125;<br><span class="hljs-meta">@MyAnnotation(id = 0, name = &quot;sda&quot;)</span><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Person</span></span>&#123;<br>	<span class="hljs-keyword">private</span> String name;<br>	<span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> age;<br>	<span class="hljs-keyword">private</span> String gender;<br>	<span class="hljs-meta">@SuppressWarnings(&quot;unused&quot;)</span><br>	<span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> n;<br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Person</span><span class="hljs-params">()</span> </span>&#123;<br><br>	&#125;<br>	<span class="hljs-meta">@MyAnnotation</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Person</span><span class="hljs-params">(String name, <span class="hljs-keyword">int</span> age, String gender)</span> </span>&#123;<br>		<span class="hljs-keyword">super</span>();<br>		<span class="hljs-keyword">this</span>.name = name;<br>		<span class="hljs-keyword">this</span>.age = age;<br>		<span class="hljs-keyword">this</span>.gender = gender;<br>	&#125;<br>	<span class="hljs-meta">@Override</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">toString</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> <span class="hljs-string">&quot;Person [name=&quot;</span> + name + <span class="hljs-string">&quot;, age=&quot;</span> + age + <span class="hljs-string">&quot;, gender=&quot;</span> + gender + <span class="hljs-string">&quot;]&quot;</span>;<br>	&#125;<br>	<span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">getName</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> name;<br>	&#125;<br>	<span class="hljs-meta">@MyAnnotation(&quot;aqa&quot;)</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setName</span><span class="hljs-params">(String name)</span> </span>&#123;<br>		<span class="hljs-keyword">this</span>.name = name;<br>	&#125;<br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">getAge</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> age;<br>	&#125;<br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setAge</span><span class="hljs-params">(<span class="hljs-keyword">int</span> age)</span> </span>&#123;<br>		<span class="hljs-keyword">this</span>.age = age;<br>	&#125;<br>	<span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">getGender</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> gender;<br>	&#125;<br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setGender</span><span class="hljs-params">(String gender)</span> </span>&#123;<br>		<span class="hljs-keyword">this</span>.gender = gender;<br>	&#125;<br>	<br>&#125;<br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AnnotationTest</span> </span>&#123;<br><br>&#125;<br></code></pre></td></tr></table></figure>
 <h2 id="路径问题："><a href="#路径问题：" class="headerlink" title="路径问题："></a>路径问题：</h2><blockquote>
 <ul>
