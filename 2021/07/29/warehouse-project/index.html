@@ -185,7 +185,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      3.3k 字
+      5.1k 字
     </span>
   
 
@@ -195,7 +195,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      34
+      56
        分钟
     </span>
   
@@ -229,7 +229,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2021年10月3日 上午
+                  本文最后更新于：2021年10月7日 下午
                 
               </p>
             
@@ -245,6 +245,13 @@
 <li>ADS层 （Application Data Store）应用数据层，为各种统计报表提供数据。</li>
 </ul>
 </li>
+<li><p>为什么要分层：</p>
+<ul>
+<li>把复杂问题简单化：将复杂的任务分解成多层来完成，每一层只处理简单的任务，方便定位问题。</li>
+<li>减少重复开发：规范数据分层，通过中间数据层，能够减少极大的重复计算，增加一次计算结果的复用性。</li>
+<li>隔离原始数据：不论是数据的异常还是数据的敏感性，使真实数据与统计数据解耦开。</li>
+</ul>
+</li>
 </ul>
 <h2 id="数仓理论"><a href="#数仓理论" class="headerlink" title="数仓理论"></a>数仓理论</h2><h3 id="范式概念"><a href="#范式概念" class="headerlink" title="范式概念"></a>范式概念</h3><ul>
 <li>范式可以理解为设计一张数据表的表结构应符合的标准级别。</li>
@@ -254,7 +261,7 @@
 <h4 id="函数依赖"><a href="#函数依赖" class="headerlink" title="函数依赖"></a>函数依赖</h4><ul>
 <li>完全函数依赖：简单来说：就是AB能推出C，但是AB单独时不能推出C，那么说C完全依赖于AB。</li>
 <li>部分函数依赖：AB能推出C,AB单独也能推出C，即C部分依赖于AB。</li>
-<li>传递函数依赖：通过A推出B，通过B推出C，但是C推不出A，那么C传递函数依赖于A。</li>
+<li>传递函数依赖：通过A推出B，通过B推出C，但是C推不出A，但是A能推出C，那么C传递函数依赖于A。</li>
 </ul>
 <h4 id="范式区别"><a href="#范式区别" class="headerlink" title="范式区别"></a>范式区别</h4><ul>
 <li>第一范式：属性不可切割</li>
@@ -364,21 +371,25 @@
 <h3 id="数据仓库建模"><a href="#数据仓库建模" class="headerlink" title="数据仓库建模"></a>数据仓库建模</h3><h4 id="ODS层"><a href="#ODS层" class="headerlink" title="ODS层"></a>ODS层</h4><ul>
 <li>保持数据原貌不做任何修改，起到数据备份的作用</li>
 <li>数据进行压缩，减少磁盘存储空间</li>
-<li>创建分区表，避免全表扫描</li>
+<li>创建分区表（按照天进行分区），避免全表扫描</li>
 </ul>
 <h4 id="DWD层"><a href="#DWD层" class="headerlink" title="DWD层"></a>DWD层</h4><ul>
 <li><p>DWD层采用维度建模，采用星型模型</p>
 </li>
 <li><p>维度建模步骤：<font color=red>选择业务过程–&gt;声明粒度–&gt;确认维度–&gt;确认事实</font></p>
 <ul>
-<li><p>选择业务过程：一条业务线对应一张事实表</p>
+<li>选择业务过程：一条业务线对应一张事实表。比如下单业务，支付业务，退款业务，物流业务，一条业务线对应一张事实表。</li>
+<li>声明粒度：声明粒度指数据仓库中<font color=red>保存数据的细化程度或综合程度的级别。</font>声明粒度意味着精确定义事实表中的一行数据表示什么，应该尽可能选择最小粒度，以此来应对各种各样的需求。<ul>
+<li>典型的粒度声明：<ul>
+<li>订单中，每个商品项作为下单事实表中的一行</li>
+<li>每周的订单次数作为一行，粒度就是每周下单</li>
+<li>每月的订单次数作为一行，粒度就是每月下单</li>
+</ul>
 </li>
-<li><p>声明粒度：声明粒度指数据仓库中保存数据的细化程度或综合程度的级别。声明粒度意味着精确定义事实表中的一行数据表示什么，应该尽可能选择最小粒度，以此来应对各种各样的需求。</p>
+</ul>
 </li>
-<li><p>确定维度：维度的主要作用是描述业务是事实。会将业务系统中的表进行一些合并，即维度退化。</p>
-</li>
-<li><p>确定事实：此处事实指业务中的度量值（事实表中数值型的度量值）。在DWD层中，以业务过程为建模驱动，基于每个具体以业务过程的特点，构建最细粒度的明细层事实表。</p>
-</li>
+<li>确定维度：维度的主要作用是描述业务事实。会将业务系统中的表进行一些合并，即维度退化。</li>
+<li>确定事实：此处事实指业务中的度量值（事实表中数值型的度量值）。在DWD层中，以业务过程为建模驱动，基于每个具体以业务过程的特点，构建最细粒度的明细层事实表。</li>
 </ul>
 </li>
 <li><p><a target="_blank" rel="noopener" href="https://imgtu.com/i/fpvuSf"><img src="https://z3.ax1x.com/2021/08/02/fpvuSf.png" srcset="/img/loading.gif" lazyload alt="fpvuSf.png"></a></p>
@@ -523,17 +534,22 @@
 <li>set mapreduce.job.queuename=hive;</li>
 </ul>
 <h2 id="数仓搭建"><a href="#数仓搭建" class="headerlink" title="数仓搭建"></a>数仓搭建</h2><h3 id="ODS层-1"><a href="#ODS层-1" class="headerlink" title="ODS层"></a>ODS层</h3><ul>
-<li>业务数据根据不同的同步策略，通过脚本将数据写入到ODS层。</li>
+<li>业务数据根据不同的数据同步策略，通过脚本将数据写入到ODS层。</li>
 </ul>
 <ul>
 <li>保持数据源码不做修改，起到备份数据的作用，采用LZO压缩。</li>
 <li>创建分区表，防止全表扫描</li>
 <li>创建外部表</li>
 </ul>
-<h3 id="DWD层-1"><a href="#DWD层-1" class="headerlink" title="DWD层"></a>DWD层</h3><ul>
+<h3 id="DWD层（重点）"><a href="#DWD层（重点）" class="headerlink" title="DWD层（重点）"></a>DWD层（重点）</h3><ul>
 <li>列式存储。优点：查询速度快，占用磁盘空间少（压缩比非常高）</li>
 <li>LZO压缩</li>
 <li>分区表，外部表</li>
+<li>主要操作<ul>
+<li>ETL(数据清洗，启动日志，事件日志的解析)</li>
+<li>维度建模（维度退化）</li>
+</ul>
+</li>
 </ul>
 <h4 id="日志数据"><a href="#日志数据" class="headerlink" title="日志数据"></a>日志数据</h4><ul>
 <li>启动日志解析<ul>
@@ -541,17 +557,28 @@
 </ul>
 </li>
 <li>事件日志解析<ul>
-<li><a target="_blank" rel="noopener" href="https://imgtu.com/i/4oW8YR"><img src="https://z3.ax1x.com/2021/09/30/4oW8YR.png" srcset="/img/loading.gif" lazyload alt="4oW8YR.png"></a></li>
-<li>自定义UDF函数，解析公共字段<ul>
-<li>定义类继承UDF，重写evaluate（）方法</li>
-<li>UDF函数的返回值是什么evaluate()方法的返回值就是什么</li>
-<li>函数的输入参数是什么evaluate()方法的参数就是什么</li>
+<li><p><a target="_blank" rel="noopener" href="https://imgtu.com/i/4oW8YR"><img src="https://z3.ax1x.com/2021/09/30/4oW8YR.png" srcset="/img/loading.gif" lazyload alt="4oW8YR.png"></a></p>
+</li>
+<li><p>自定义UDF函数，解析公共字段(一进一出)</p>
+<ul>
+<li><p>定义类继承UDF，重写evaluate() 方法</p>
+</li>
+<li><p>UDF函数的返回值是什么evaluate()方法的返回值就是什么</p>
+</li>
+<li><p>函数的输入参数是什么evaluate()方法的参数就是什么</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.zt.gmall.hive;<br><br><span class="hljs-keyword">import</span> org.apache.commons.lang.StringUtils;<br><span class="hljs-keyword">import</span> org.apache.hadoop.hive.ql.exec.UDF;<br><span class="hljs-keyword">import</span> org.json.JSONObject;<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">LogUDF</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">UDF</span> </span>&#123;<br>    <span class="hljs-comment">//UDF函数的返回值与evaluate方法的返回值类型相同</span><br>    <span class="hljs-comment">//UDF函数的参数和evaluat方法的参数相同</span><br>    <span class="hljs-comment">//line指事件日志，key指需要的数据，</span><br>    <span class="hljs-comment">// 如果是&quot;st&quot;，返回servertime;</span><br>    <span class="hljs-comment">//如果是&quot;et&quot;,返回事件数组</span><br>    <span class="hljs-comment">//如果是公共字段的值,返回各个公共字段的值</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">evaluate</span><span class="hljs-params">(String line, String key)</span> </span>&#123;<br>        <span class="hljs-keyword">if</span> (StringUtils.isBlank(line)) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;&quot;</span>;<br>        &#125;<br>        <span class="hljs-comment">//split中的参数为一个正则表达式，</span><br>        <span class="hljs-comment">// 而|在正则表示中有含义需要\转义，</span><br>        <span class="hljs-comment">// 而\在java中也有特殊含义，所以又需要转义</span><br>        String[] split = line.split(<span class="hljs-string">&quot;\\|&quot;</span>);<br>        <span class="hljs-keyword">if</span> (split.length != <span class="hljs-number">2</span>) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;&quot;</span>;<br>        &#125;<br>        String serverTime = split[<span class="hljs-number">0</span>];<br>        String jsonStr = split[<span class="hljs-number">1</span>];<br>        JSONObject jsonObject = <span class="hljs-keyword">new</span> JSONObject(jsonStr);<br>        <span class="hljs-keyword">if</span>(<span class="hljs-string">&quot;st&quot;</span>.equals(key))&#123;<br>            <span class="hljs-keyword">return</span> serverTime;<br>        &#125;<br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(<span class="hljs-string">&quot;et&quot;</span>.equals(key))&#123;<br>            <span class="hljs-keyword">if</span>(jsonObject.has(<span class="hljs-string">&quot;et&quot;</span>)) &#123;<br>                <span class="hljs-keyword">return</span> jsonObject.getString(<span class="hljs-string">&quot;et&quot;</span>);<br>            &#125;<br>        &#125;<span class="hljs-keyword">else</span> &#123;<br>            <span class="hljs-comment">//获取到cm子JSON对象</span><br>            JSONObject cm = jsonObject.getJSONObject(<span class="hljs-string">&quot;cm&quot;</span>);<br>            <span class="hljs-keyword">if</span>(cm.has(key))&#123;<br>                <span class="hljs-keyword">return</span> cm.getString(key);<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;&quot;</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
 </ul>
 </li>
-<li>自定义UDTF函数解析具体事件（解析json数组）<ul>
-<li>定义类继承c抽象类GenericUDTF，实现initialize()（自定义输出的列名和类型）；process() （将结果返回forward(result)）；close()</li>
+<li><p>自定义UDTF函数解析具体事件（解析json数组）</p>
+<ul>
+<li><p>定义类继承c抽象类GenericUDTF，实现initialize()（自定义输出的列名和类型）；process() （将结果返回forward(result)）；close()</p>
+</li>
+<li><p>输出事件名和事件json 对象</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.zt.gmall.hive;<br><br><span class="hljs-keyword">import</span> org.apache.hadoop.hive.ql.exec.UDFArgumentException;<br><span class="hljs-keyword">import</span> org.apache.hadoop.hive.ql.metadata.HiveException;<br><span class="hljs-keyword">import</span> org.apache.hadoop.hive.ql.udf.generic.GenericUDTF;<br><span class="hljs-keyword">import</span> org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;<br><span class="hljs-keyword">import</span> org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorFactory;<br><span class="hljs-keyword">import</span> org.apache.hadoop.hive.serde2.objectinspector.StructField;<br><span class="hljs-keyword">import</span> org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;<br><span class="hljs-keyword">import</span> org.apache.hadoop.hive.serde2.objectinspector.primitive.PrimitiveObjectInspectorFactory;<br><span class="hljs-keyword">import</span> org.json.JSONArray;<br><br><span class="hljs-keyword">import</span> java.util.ArrayList;<br><span class="hljs-keyword">import</span> java.util.List;<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">LogUDTF</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">GenericUDTF</span> </span>&#123;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">close</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> HiveException </span>&#123;<br>    &#125;<br>    <span class="hljs-comment">//initialize方法可以校验传入参数类型是否合法</span><br>    <span class="hljs-comment">//ObjectInspector对象检查器  封装了数据类型（封装了输出类型）</span><br>    <span class="hljs-comment">//处理时间数组</span><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> StructObjectInspector <span class="hljs-title">initialize</span><span class="hljs-params">(StructObjectInspector argOIs)</span> <span class="hljs-keyword">throws</span> UDFArgumentException </span>&#123;<br>        List&lt;? extends StructField&gt; allStructFieldRefs = argOIs.getAllStructFieldRefs();<br>        <span class="hljs-comment">//入参的校验</span><br>        <span class="hljs-keyword">if</span>(allStructFieldRefs.size()!=<span class="hljs-number">1</span>)&#123;<br>            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> UDFArgumentException(<span class="hljs-string">&quot;参数个数只能为1&quot;</span>);<br>        &#125;<br>        <span class="hljs-comment">//这里返回的类型是hive的数据类型</span><br>        <span class="hljs-keyword">if</span>(!<span class="hljs-string">&quot;string&quot;</span>.equals(allStructFieldRefs.get(<span class="hljs-number">0</span>).getFieldObjectInspector().getTypeName()))&#123;<br>            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> UDFArgumentException(<span class="hljs-string">&quot;参数类型只能为string&quot;</span>);<br>        &#125;<br>        ArrayList&lt;String&gt; fieldNames = <span class="hljs-keyword">new</span> ArrayList&lt;String&gt;();<br>        ArrayList&lt;ObjectInspector&gt; fieldOIs = <span class="hljs-keyword">new</span> ArrayList&lt;ObjectInspector&gt;();<br>        <span class="hljs-comment">//返回回去的两个列</span><br>        fieldNames.add(<span class="hljs-string">&quot;event_name&quot;</span>);<br>        fieldNames.add(<span class="hljs-string">&quot;event_json&quot;</span>);<br>        fieldOIs.add(PrimitiveObjectInspectorFactory.javaStringObjectInspector);<br>        fieldOIs.add(PrimitiveObjectInspectorFactory.javaStringObjectInspector);<br>        <span class="hljs-keyword">return</span> ObjectInspectorFactory.getStandardStructObjectInspector(fieldNames,<br>                fieldOIs);<br>    &#125;<br>    <span class="hljs-comment">//完成initialize方法后，将每一行交给process()方法，每一行经过处理变成多行，传递给forward()，forward将结果带出</span><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">process</span><span class="hljs-params">(Object[] args)</span> <span class="hljs-keyword">throws</span> HiveException </span>&#123;<br>        String eventArray = args[<span class="hljs-number">0</span>].toString();<br>        JSONArray jsonArray = <span class="hljs-keyword">new</span> JSONArray(eventArray);<br>        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt;jsonArray.length() ; i++) &#123;<br>            String[] result=<span class="hljs-keyword">new</span> String[<span class="hljs-number">2</span>];<br>            result[<span class="hljs-number">0</span>]=jsonArray.getJSONObject(i).getString(<span class="hljs-string">&quot;en&quot;</span>);<br>            result[<span class="hljs-number">1</span>]=jsonArray.getString(i);<br>            forward(result);<br>        &#125;<br>    &#125;<br>    <br>&#125;<br></code></pre></td></tr></table></figure></li>
 </ul>
 </li>
+<li><p>把jar包打包上传到HDFS上的user/hive/jars路径下，创建永久函数与开发好的Java class关联</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">create</span> <span class="hljs-keyword">function</span> base_analizer <span class="hljs-keyword">as</span> <span class="hljs-string">&#x27;com.zt.udf.BaseFieldUDF&#x27;</span> <span class="hljs-keyword">using</span> jar <span class="hljs-string">&#x27;hdfs://hadoop100:9000/user/hive/jars/hivefunction-1.0-SNAPSHOT.jar&#x27;</span>;<br><br><span class="hljs-keyword">create</span> <span class="hljs-keyword">function</span> flat_analizer <span class="hljs-keyword">as</span> <span class="hljs-string">&#x27;com.zt.udtf.EventJsonUDTF&#x27;</span> <span class="hljs-keyword">using</span> jar <span class="hljs-string">&#x27;hdfs://hadoop100:9000/user/hive/jars/hivefunction-1.0-SNAPSHOT.jar&#x27;</span>; <br></code></pre></td></tr></table></figure></li>
 </ul>
 </li>
 </ul>
@@ -560,23 +587,39 @@
 <ul>
 <li><p>事务型事实表（增量同步）</p>
 <ul>
-<li><p>订单详情事实表</p>
+<li>订单详情事实表<ul>
+<li>以订单业务作为具体的业务过程，以<font color=red>商品数量，商品金额</font>作为度量值。与<font color=red>时间，地区，商品</font>维度表相关联。</li>
+</ul>
 </li>
-<li><p>支付事实表</p>
+<li>支付事实表<ul>
+<li>以支付业务为具体的业务过程，以<font color=red>支付金额</font>作为度量值，与<font color=red>时间，地区</font>维度表关联。</li>
+</ul>
 </li>
-<li><p>退款事实表</p>
+<li>退款事实表<ul>
+<li>以退款业务为具体的业务过程，以<font color=red>退款数量，退款金额</font>作为度量值，与<font color=red>时间，用户，商品</font>维度表关联。</li>
+</ul>
 </li>
-<li><p>评价事实表</p>
+<li>评价事实表<ul>
+<li>以评价业务为具体的业务过程，以<font color=red>数量</font>作为度量值，与<font color=red>时间，用户，商品</font>维度表关联。</li>
+</ul>
 </li>
-<li><p>只会新增，不会修改</p>
-</li>
+<li>只会新增，不会修改</li>
 </ul>
 </li>
 <li><p>周期型快照事实表（全量同步）</p>
 <ul>
+<li><p>周期型快照事实表的劣势：存储的数据量会比较大。解决办法：周期型快照事实表存储的数据比较讲究时效性，时间太久了的意义不大，可以删除以前的数据。</p>
+</li>
 <li><p>加购事实表</p>
+<ul>
+<li>由于购物车的数量会发生变化，不适合导入增量。每天做一次快照，全量导入</li>
+<li>以加购物车为具体的业务过程，以<font color=red>数量，金额</font>作为度量值，与<font color=red>时间，用户，商品</font>维度表关联。</li>
+</ul>
 </li>
 <li><p>收藏事实表</p>
+<ul>
+<li>以收藏为具体业务过程，以<font color=red>数量</font>作为度量值，与<font color=red>时间，用户，商品</font>维度表关联。</li>
+</ul>
 </li>
 <li><p>数据周期性变化，可能增加，也可能删除（但是并不关心变化的过程，只关心周期性的一个数据结果）。所以选择全量同步。</p>
 </li>
@@ -584,12 +627,18 @@
 </li>
 <li><p>累积型快照事实表（新增及变化同步）</p>
 <ul>
-<li><p>优惠卷领用事实表</p>
+<li>优惠卷领用事实表<ul>
+<li>优惠卷的生命周期：领取优惠卷–&gt;使用优惠卷下端–&gt;优惠卷参与支付</li>
+<li>累积型快照事实表的使用：统计优惠卷领取次数，优惠卷下单次数，优惠卷参与支付次数。</li>
+<li>以优惠卷为具体业务过程，以<font color=red>数量</font>为度量值，与<font color=red>时间，用户，优惠卷</font>维度表关联。</li>
+</ul>
 </li>
-<li><p>订单事实表</p>
+<li>订单事实表<ul>
+<li>订单生命周期：创建时间–&gt;支付时间–&gt;取消时间–&gt;完成时间–&gt;退款时间–&gt;退款完成时间</li>
+<li>以订单业务为具体的业务过程，以<font color=red>数量，金额</font>为度量值，与<font color=red>时间，用户，读取，活动</font>维度表关联。</li>
+</ul>
 </li>
-<li><p>数据是会累积的，适用于随时间变化的。适用于周期性的业务。比如优惠卷领取时间，使用时间（下单），使用时间（支付）。如订单事实表中的创建时间，支付时间，取消时间，完成时间，退款时间，退款完成时间。</p>
-</li>
+<li>数据是会累积的，适用于随时间变化的。适用于周期性的业务。比如优惠卷领取时间，使用时间（下单），使用时间（支付）。如订单事实表中的创建时间，支付时间，取消时间，完成时间，退款时间，退款完成时间。</li>
 </ul>
 </li>
 </ul>
@@ -597,18 +646,37 @@
 <li><p>维度表</p>
 <ul>
 <li>全量同步<ul>
-<li>商品维度表</li>
-<li>优惠卷维度表</li>
-<li>活动维度表</li>
+<li>商品维度表<ul>
+<li>维度退化：以SKU表为主体，与商品三级，二级，一级分类表和SPU表，品牌表连接选择相应字段加入SKU表中，形成商品维度表</li>
+</ul>
+</li>
+<li>优惠卷维度表<ul>
+<li>以优惠卷表为主体建立优惠卷维度表</li>
+</ul>
+</li>
+<li>活动维度表<ul>
+<li>维度退化：以活动表为主体，与活动规则表连接选择相应字段建立活动维度表。</li>
+</ul>
+</li>
 </ul>
 </li>
 <li>特殊同步（导一次）<ul>
-<li>地区维度表</li>
-<li>时间维度表</li>
+<li>地区维度表<ul>
+<li>一般不会更改，将数据一次导入</li>
+<li>维度退化：将省份表和地区表合并作为地区维度表</li>
+</ul>
+</li>
+<li>时间维度表<ul>
+<li>可以设计将时间数据一次性导入（将很多年的时间都导入，后续就不用再导表了）</li>
+</ul>
+</li>
 </ul>
 </li>
 <li>拉链表<ul>
-<li>用户维度表</li>
+<li>用户维度表<ul>
+<li>以用户表为主体，<font color= red>最好有”有效开始日期“，”有效结束日期”</font>,拉链表根据这两个日期判断更新，用户最新状态等信息。</li>
+</ul>
+</li>
 <li>用户表中的数据每日既有可能新增，也有可能修改，但修改频率并不高，属于缓慢变化维度，此处采用拉链表存储用户维度数据。</li>
 <li>拉链表，记录每条信息的声明周期，一旦一天记录的生命周期结束，就重新开始一天新的记录，并把当前日期放入生效开始日期。</li>
 <li>拉链表适合于数据会发生变化，但是大部分是不变的。（即缓慢变化）</li>
@@ -622,22 +690,17 @@
 </li>
 </ul>
 <h3 id="DWS层"><a href="#DWS层" class="headerlink" title="DWS层"></a>DWS层</h3><ul>
-<li><p>列式存储</p>
-</li>
-<li><p>宽表：字面意思就是说字段比较多的数据库表，通常是指业务主题的指标，维度，属性关联在一起的一张数据库表。由于把不同的内容都放在同一张表存储，宽表已经不符合三范式的模式设计规范，随之带来的坏处就是大量冗余，与之相应的好处就是查询性能的提高与便捷。</p>
-</li>
-<li><p>DWS层的宽表字段，是站在不同维度的视角去看事实表。重点关注事实表的度量值。</p>
-</li>
-<li><p>业务</p>
-<ul>
+<li>列式存储</li>
+<li>宽表：字面意思就是说字段比较多的数据库表，通常是指业务主题的指标，维度，属性关联在一起的一张数据库表。由于把不同的内容都放在同一张表存储，宽表已经不符合三范式的模式设计规范，随之带来的坏处就是大量冗余，与之相应的好处就是查询性能的提高与便捷。</li>
+<li>DWS层的宽表字段，是站在不同维度的视角去看事实表。重点关注事实表的度量值。</li>
+<li>业务<ul>
 <li>每日会员行为</li>
 <li>每日商品行为</li>
 <li>每日活动统计</li>
 <li>每日地区统计</li>
 </ul>
 </li>
-<li><p>用户行为</p>
-<ul>
+<li>用户行为<ul>
 <li>每日设备行为</li>
 </ul>
 </li>
@@ -654,6 +717,34 @@
 </ul>
 <h3 id="ADS层"><a href="#ADS层" class="headerlink" title="ADS层"></a>ADS层</h3><ul>
 <li>对电商系统各大主题指标分别进行分析。</li>
+<li>设备主题：<ul>
+<li>活跃设备数（日，周，月）</li>
+<li>每日新增设备</li>
+<li>流失用户数</li>
+<li>留存率</li>
+<li>最近连续三周活跃用户数</li>
+<li>最近七天内连续三天活跃用户数</li>
+</ul>
+</li>
+<li>会员主题<ul>
+<li>会员主题信息</li>
+</ul>
+</li>
+<li>商品主题<ul>
+<li>商品销量排行</li>
+<li>商品差评率</li>
+<li>商品退款率排名（最近30天）</li>
+</ul>
+</li>
+<li>营销主题（活动主题）<ul>
+<li>下单数目统计</li>
+<li>支付信息统计</li>
+</ul>
+</li>
+<li>地区主题<ul>
+<li>地区主题信息</li>
+</ul>
+</li>
 </ul>
 
             </div>
