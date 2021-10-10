@@ -620,6 +620,30 @@
       </tags>
   </entry>
   <entry>
+    <title>algorithm</title>
+    <url>/2021/10/04/algorithm/</url>
+    <content><![CDATA[<h1 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h1><h2 id="动态规划"><a href="#动态规划" class="headerlink" title="动态规划"></a>动态规划</h2><ul>
+<li>首先，动态规划问题一般形式就是求最值，求解动态规划的核心问题是穷举。</li>
+<li>由于动态规划这类问题基本存在<strong>重叠子问题</strong>，如果暴力求解的话效率会很低，所以需要<strong>备忘录或者DP table</strong>来优化穷举过程。</li>
+<li>动态规划问题一定会具备<strong>最优子结构</strong>，这样就能通过子问题求解原问题。要符合最优子结构，子问题之间必须相互独立。</li>
+<li>正确的<strong>状态转移方程</strong>才能正确的求解。</li>
+<li>求解动态规划的一般办法：<ul>
+<li>确定基础案例，也就是最简单的子问题。</li>
+<li>确定状态，也就是原问题和子问题中会变化的量</li>
+<li>确定选择，也就是导致状态变化的行为</li>
+<li>明确dp 数组的含义</li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>flume</title>
     <url>/2021/06/21/flume/</url>
     <content><![CDATA[<h1 id="Flume"><a href="#Flume" class="headerlink" title="Flume"></a>Flume</h1><h2 id="Flume概述"><a href="#Flume概述" class="headerlink" title="Flume概述"></a>Flume概述</h2><ul>
@@ -769,6 +793,141 @@
       </tags>
   </entry>
   <entry>
+    <title>hbase</title>
+    <url>/2021/06/27/hbase/</url>
+    <content><![CDATA[<h1 id="HBase"><a href="#HBase" class="headerlink" title="HBase"></a>HBase</h1><h2 id="HBbse概述"><a href="#HBbse概述" class="headerlink" title="HBbse概述"></a>HBbse概述</h2><ul>
+<li><p>HBase是一种分布式，可扩展，，支持海量数据存储的NoSQL数据库。</p>
+</li>
+<li><p>逻辑结构</p>
+</li>
+<li><p><a href="https://imgtu.com/i/RJBhlV"><img src="https://z3.ax1x.com/2021/06/27/RJBhlV.png" alt="RJBhlV.png"></a></p>
+</li>
+<li><p>row key类似于主键</p>
+</li>
+<li><p>region在行上的一个切分，几行分一个region</p>
+</li>
+<li><p>列族：Column Qualifier。</p>
+</li>
+<li><p>store：按照region和列族可以分为一个个store</p>
+</li>
+<li><p>物理结构</p>
+<p><a href="https://imgtu.com/i/RJBomF"><img src="https://z3.ax1x.com/2021/06/27/RJBomF.png" alt="RJBomF.png"></a></p>
+</li>
+<li><p>数据模型</p>
+<p><strong>1.</strong> <em><strong>Name Space</strong></em></p>
+<p>命名空间，类似于关系型数据库的DatabBase概念，每个命名空间下有多个表。HBase有两个自带的命名空间，分别是hbase和default，hbase中存放的是HBase内置的表，default表是用户默认使用的命名空间。</p>
+<p><strong>2.</strong> <em><strong>Region</strong></em></p>
+<p>类似于关系型数据库的表概念。不同的是，HBase定义表时只需要声明列族即可，不需要声明具体的列。这意味着，往HBase写入数据时，字段可以动态、按需指定。因此，和关系型数据库相比，HBase能够轻松应对字段变更的场景。</p>
+<p><strong>3.</strong> <em><strong>Row</strong></em></p>
+<p>HBase表中的每行数据都由一个<em><strong>RowKey</strong></em>和多个<em><strong>Column</strong></em>（列）组成，数据是按照RowKey的字典顺序存储的，并且查询数据时只能根据RowKey进行检索，所以RowKey的设计十分重要。</p>
+<p><strong>4.</strong> <em><strong>Column</strong></em></p>
+<p>HBase中的每个列都由Column Family(列族)和Column Qualifier（列限定符）进行限定，例如info：name，info：age。建表时，只需指明列族，而列限定符无需预先定义。</p>
+<p><strong>5.</strong> <em><strong>Time</strong></em> <em><strong>Stamp</strong></em></p>
+<p>用于标识数据的不同版本（version），每条数据写入时，如果不指定时间戳，系统会自动为其加上该字段，其值为写入HBase的时间。</p>
+<p><strong>6.</strong> <em><strong>Cell</strong></em></p>
+<p>由{rowkey, column Family：column Qualifier, time Stamp} 唯一确定的单元。cell中的数据是没有类型的，全部是字节数组形式存贮。</p>
+</li>
+<li><p>架构</p>
+<p><a href="https://imgtu.com/i/RJDyjK"><img src="https://z3.ax1x.com/2021/06/27/RJDyjK.png" alt="RJDyjK.png"></a></p>
+</li>
+<li><p>Region Server：region的管理者</p>
+</li>
+<li><p>Master：所有Region Server的管理者</p>
+</li>
+<li><p>Zookeeper：HBase通过Zookeeper来做Master的高可用、RegionServer的监控、元数据的入口以及集群配置的维护等工作。</p>
+</li>
+<li><p>HDFS:HDFS为HBase提供最终的底层数据存储服务，同时为HBase提供高可用的支持。</p>
+</li>
+<li><p>一个RegionServer中有多个Region，每个Region中有多个store，每个Store中有一个Memstore和多个StoreFile</p>
+</li>
+</ul>
+<h2 id="HBase架构"><a href="#HBase架构" class="headerlink" title="HBase架构"></a>HBase架构</h2><p><a href="https://imgtu.com/i/RDKkkR"><img src="https://z3.ax1x.com/2021/06/30/RDKkkR.png" alt="RDKkkR.png"></a></p>
+<p>HBase分多个RegionServer，每个RegionServer内又有多个Region，每个Region中又有多个store，store中数据先写到内存，再写到SotreFile（分布式文件系统）上去。</p>
+<ul>
+<li>WAL:Write-Ahead logfile，防止写入内存后数据丢失，先写到这样一个日志文件中。类似于yarn中的edits文件。</li>
+<li>保存实际数据的物理文件，StoreFile以HFile的形式存储在HDFS上。每个Store会有一个或多个StoreFile（HFile），数据在每个StoreFile中都是有序的。</li>
+</ul>
+<h3 id="写数据流程"><a href="#写数据流程" class="headerlink" title="写数据流程"></a>写数据流程</h3><p><a href="https://imgtu.com/i/RDKXHH"><img src="https://z3.ax1x.com/2021/06/30/RDKXHH.png" alt="RDKXHH.png"></a></p>
+<p>meta表中存放了表的信息，而meta的元数据信息存放在ZK上。</p>
+<ol>
+<li><p>Client先访问zookeeper，获取hbase:meta（）表位于哪个Region Server，client如果在MetaCache中发现有该表的信息，就不会向ZK请求获取meta的位置了。</p>
+</li>
+<li><p>访问对应的Region Server，获取hbase:meta表，根据读请求的namespace:table/rowkey，查询出目标数据位于哪个Region Server中的哪个Region中。并将该table的region信息以及meta表的位置信息缓存在客户端的meta cache，方便下次访问。</p>
+</li>
+<li><p>与目标Region Server进行通讯；</p>
+</li>
+<li><p>将数据顺序写入（追加）到WAL；</p>
+</li>
+<li><p>将数据写入对应的MemStore，数据会在MemStore进行排序；</p>
+</li>
+<li><p>向客户端发送ack；</p>
+</li>
+<li><p>等达到MemStore的刷写时机后，将数据刷写到HFile（分布式存储中）。</p>
+</li>
+</ol>
+<h3 id="MemStore的刷写时机"><a href="#MemStore的刷写时机" class="headerlink" title="MemStore的刷写时机"></a>MemStore的刷写时机</h3><ul>
+<li>当某个memstroe的大小达到了<strong>hbase.hregion.memstore.flush.size</strong>（默认值128M），其所在region的所有memstore都会刷写。但是数据持续写入到memstore也不会达到128就刷，当memstore的大小达到了128*4时，会阻止继续往该memstore写数据。</li>
+<li>Java heap size 堆栈大小, 指Java 虚拟机的内存大小。在Java虚拟机中，分配多少内存用于调用对象,函数和数组。因为底层中，函数和数组的调用在计算机中是用堆栈实现。</li>
+<li>当region server中memstore的总大小达到<br><strong>java_heapsize*hbase.regionserver.global.memstore.size.upper.limit</strong>（默认值0.95），<br>Region server会把它的所有region按照其所有memstore的大小顺序（由大到小）依次进行刷写。直到region server中所有region的memstore的总大小减小到*<strong>hbase.regionserver.global.memstore.size.lower.limit</strong>以下。</li>
+<li>当region server中memstore的总大小达到<br><strong>java_heapsize*hbase.regionserver.global.memstore.size</strong>（默认值0.4）<br>时，会阻止继续往所有的memstore写数据。</li>
+<li>达到自动刷写时间。默认1h。<strong>hbase.regionserver.optionalcacheflushinterval</strong></li>
+</ul>
+<h3 id="读数据流程"><a href="#读数据流程" class="headerlink" title="读数据流程"></a>读数据流程</h3><p><a href="https://imgtu.com/i/RrMr7Q"><img src="https://z3.ax1x.com/2021/07/01/RrMr7Q.png" alt="RrMr7Q.png"></a></p>
+<ul>
+<li>与写数据流程差不多。说一下区别，去目标RegionServer读取数据时，会向Block Cache(读缓存),MemStore,StoreFile中查询数据，并将所有数据进行合并。此处所有数据是指同一条数据的不同版本（time stamp）或者不同的类型（Put/Delete）。</li>
+<li>将从文件中查询到的数据块缓存到Block Cache中。客户端从读缓存中读取相应的数据。返回ACK。</li>
+</ul>
+<h3 id="StoreFile-Compaction"><a href="#StoreFile-Compaction" class="headerlink" title="StoreFile Compaction"></a>StoreFile Compaction</h3><ul>
+<li><p>由于memstore每次刷写都会生成一个新的HFile，且同一个字段的不同版本（timestamp）和不同类型（Put/Delete）有可能会分布在不同的HFile中，因此查询时需要遍历所有的HFile。为了减少HFile的个数，以及清理掉过期和删除的数据，会进行StoreFile Compaction。</p>
+</li>
+<li><p>Compaction（合并）分为两种：分别是Minor Compaction和Major Compaction。</p>
+</li>
+<li><p>Minor Compaction会将临近的若干个较小的HFile合并成一个较大的HFile，但不会清理过期和删除的数据。默认是三个小文件会进行合并，达到一定的数量后也不会直接合并，会根据一个算法判断是否要进行合并。</p>
+</li>
+<li><p>Major Compaction会将一个Store下的所有的HFile合并成一个大HFile，并且会清理掉过期和删除的数据。比较耗费资源，默认是一星期进行一次。</p>
+</li>
+</ul>
+<h3 id="Region-Split"><a href="#Region-Split" class="headerlink" title="Region Split"></a>Region Split</h3><ul>
+<li><p>默认情况下，每个Table起初只有一个Region，随着数据的不断写入，Region会自动进行拆分。刚拆分时，两个子Region都位于当前的Region Server，但处于负载均衡的考虑，HMaster有可能会将某个Region转移给其他的Region Server。</p>
+</li>
+<li><p>分裂时机：如果当前RegionServer上只有一个Region，当这个Region中的所有Store file的总和超过2*hbase.hregion.memstore.flush.size分裂，否则按照超过hbase.hregion.max.filesize 分裂。</p>
+</li>
+<li><p>这样切分会尽量使每个Table的在每个RegionServer中的Region数量尽量一致。</p>
+</li>
+</ul>
+<h2 id="Hive与HBase集成"><a href="#Hive与HBase集成" class="headerlink" title="Hive与HBase集成"></a>Hive与HBase集成</h2><ul>
+<li>hive默认是有jar包可与HBase集成的，可以用Hive对HBase中的数据进行分析，再将分析结果又返回到HBase中，方便其它的工作对分析好的数据的使用。</li>
+</ul>
+<h2 id="Phoenix"><a href="#Phoenix" class="headerlink" title="Phoenix"></a>Phoenix</h2><ul>
+<li>Phoenix是HBase的开源SQL皮肤。可以使用标准JDBC API代替HBase客户端API来创建表，插入数据和查询HBase数据。</li>
+<li>可以用类sql语言操作hbase</li>
+<li>优势：支持索引。</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>大数据</tag>
+        <tag>flume</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2020/09/22/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo new <span class="hljs-string">&quot;My New Post&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo server<br></code></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo generate<br></code></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo deploy<br></code></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
+  </entry>
+  <entry>
     <title>kafka</title>
     <url>/2021/06/24/kafka/</url>
     <content><![CDATA[<h1 id="kafka"><a href="#kafka" class="headerlink" title="kafka"></a>kafka</h1><h2 id="Kafka概述"><a href="#Kafka概述" class="headerlink" title="Kafka概述"></a>Kafka概述</h2><ul>
@@ -906,141 +1065,6 @@
       </tags>
   </entry>
   <entry>
-    <title>hbase</title>
-    <url>/2021/06/27/hbase/</url>
-    <content><![CDATA[<h1 id="HBase"><a href="#HBase" class="headerlink" title="HBase"></a>HBase</h1><h2 id="HBbse概述"><a href="#HBbse概述" class="headerlink" title="HBbse概述"></a>HBbse概述</h2><ul>
-<li><p>HBase是一种分布式，可扩展，，支持海量数据存储的NoSQL数据库。</p>
-</li>
-<li><p>逻辑结构</p>
-</li>
-<li><p><a href="https://imgtu.com/i/RJBhlV"><img src="https://z3.ax1x.com/2021/06/27/RJBhlV.png" alt="RJBhlV.png"></a></p>
-</li>
-<li><p>row key类似于主键</p>
-</li>
-<li><p>region在行上的一个切分，几行分一个region</p>
-</li>
-<li><p>列族：Column Qualifier。</p>
-</li>
-<li><p>store：按照region和列族可以分为一个个store</p>
-</li>
-<li><p>物理结构</p>
-<p><a href="https://imgtu.com/i/RJBomF"><img src="https://z3.ax1x.com/2021/06/27/RJBomF.png" alt="RJBomF.png"></a></p>
-</li>
-<li><p>数据模型</p>
-<p><strong>1.</strong> <em><strong>Name Space</strong></em></p>
-<p>命名空间，类似于关系型数据库的DatabBase概念，每个命名空间下有多个表。HBase有两个自带的命名空间，分别是hbase和default，hbase中存放的是HBase内置的表，default表是用户默认使用的命名空间。</p>
-<p><strong>2.</strong> <em><strong>Region</strong></em></p>
-<p>类似于关系型数据库的表概念。不同的是，HBase定义表时只需要声明列族即可，不需要声明具体的列。这意味着，往HBase写入数据时，字段可以动态、按需指定。因此，和关系型数据库相比，HBase能够轻松应对字段变更的场景。</p>
-<p><strong>3.</strong> <em><strong>Row</strong></em></p>
-<p>HBase表中的每行数据都由一个<em><strong>RowKey</strong></em>和多个<em><strong>Column</strong></em>（列）组成，数据是按照RowKey的字典顺序存储的，并且查询数据时只能根据RowKey进行检索，所以RowKey的设计十分重要。</p>
-<p><strong>4.</strong> <em><strong>Column</strong></em></p>
-<p>HBase中的每个列都由Column Family(列族)和Column Qualifier（列限定符）进行限定，例如info：name，info：age。建表时，只需指明列族，而列限定符无需预先定义。</p>
-<p><strong>5.</strong> <em><strong>Time</strong></em> <em><strong>Stamp</strong></em></p>
-<p>用于标识数据的不同版本（version），每条数据写入时，如果不指定时间戳，系统会自动为其加上该字段，其值为写入HBase的时间。</p>
-<p><strong>6.</strong> <em><strong>Cell</strong></em></p>
-<p>由{rowkey, column Family：column Qualifier, time Stamp} 唯一确定的单元。cell中的数据是没有类型的，全部是字节数组形式存贮。</p>
-</li>
-<li><p>架构</p>
-<p><a href="https://imgtu.com/i/RJDyjK"><img src="https://z3.ax1x.com/2021/06/27/RJDyjK.png" alt="RJDyjK.png"></a></p>
-</li>
-<li><p>Region Server：region的管理者</p>
-</li>
-<li><p>Master：所有Region Server的管理者</p>
-</li>
-<li><p>Zookeeper：HBase通过Zookeeper来做Master的高可用、RegionServer的监控、元数据的入口以及集群配置的维护等工作。</p>
-</li>
-<li><p>HDFS:HDFS为HBase提供最终的底层数据存储服务，同时为HBase提供高可用的支持。</p>
-</li>
-<li><p>一个RegionServer中有多个Region，每个Region中有多个store，每个Store中有一个Memstore和多个StoreFile</p>
-</li>
-</ul>
-<h2 id="HBase架构"><a href="#HBase架构" class="headerlink" title="HBase架构"></a>HBase架构</h2><p><a href="https://imgtu.com/i/RDKkkR"><img src="https://z3.ax1x.com/2021/06/30/RDKkkR.png" alt="RDKkkR.png"></a></p>
-<p>HBase分多个RegionServer，每个RegionServer内又有多个Region，每个Region中又有多个store，store中数据先写到内存，再写到SotreFile（分布式文件系统）上去。</p>
-<ul>
-<li>WAL:Write-Ahead logfile，防止写入内存后数据丢失，先写到这样一个日志文件中。类似于yarn中的edits文件。</li>
-<li>保存实际数据的物理文件，StoreFile以HFile的形式存储在HDFS上。每个Store会有一个或多个StoreFile（HFile），数据在每个StoreFile中都是有序的。</li>
-</ul>
-<h3 id="写数据流程"><a href="#写数据流程" class="headerlink" title="写数据流程"></a>写数据流程</h3><p><a href="https://imgtu.com/i/RDKXHH"><img src="https://z3.ax1x.com/2021/06/30/RDKXHH.png" alt="RDKXHH.png"></a></p>
-<p>meta表中存放了表的信息，而meta的元数据信息存放在ZK上。</p>
-<ol>
-<li><p>Client先访问zookeeper，获取hbase:meta（）表位于哪个Region Server，client如果在MetaCache中发现有该表的信息，就不会向ZK请求获取meta的位置了。</p>
-</li>
-<li><p>访问对应的Region Server，获取hbase:meta表，根据读请求的namespace:table/rowkey，查询出目标数据位于哪个Region Server中的哪个Region中。并将该table的region信息以及meta表的位置信息缓存在客户端的meta cache，方便下次访问。</p>
-</li>
-<li><p>与目标Region Server进行通讯；</p>
-</li>
-<li><p>将数据顺序写入（追加）到WAL；</p>
-</li>
-<li><p>将数据写入对应的MemStore，数据会在MemStore进行排序；</p>
-</li>
-<li><p>向客户端发送ack；</p>
-</li>
-<li><p>等达到MemStore的刷写时机后，将数据刷写到HFile（分布式存储中）。</p>
-</li>
-</ol>
-<h3 id="MemStore的刷写时机"><a href="#MemStore的刷写时机" class="headerlink" title="MemStore的刷写时机"></a>MemStore的刷写时机</h3><ul>
-<li>当某个memstroe的大小达到了<strong>hbase.hregion.memstore.flush.size</strong>（默认值128M），其所在region的所有memstore都会刷写。但是数据持续写入到memstore也不会达到128就刷，当memstore的大小达到了128*4时，会阻止继续往该memstore写数据。</li>
-<li>Java heap size 堆栈大小, 指Java 虚拟机的内存大小。在Java虚拟机中，分配多少内存用于调用对象,函数和数组。因为底层中，函数和数组的调用在计算机中是用堆栈实现。</li>
-<li>当region server中memstore的总大小达到<br><strong>java_heapsize*hbase.regionserver.global.memstore.size.upper.limit</strong>（默认值0.95），<br>Region server会把它的所有region按照其所有memstore的大小顺序（由大到小）依次进行刷写。直到region server中所有region的memstore的总大小减小到*<strong>hbase.regionserver.global.memstore.size.lower.limit</strong>以下。</li>
-<li>当region server中memstore的总大小达到<br><strong>java_heapsize*hbase.regionserver.global.memstore.size</strong>（默认值0.4）<br>时，会阻止继续往所有的memstore写数据。</li>
-<li>达到自动刷写时间。默认1h。<strong>hbase.regionserver.optionalcacheflushinterval</strong></li>
-</ul>
-<h3 id="读数据流程"><a href="#读数据流程" class="headerlink" title="读数据流程"></a>读数据流程</h3><p><a href="https://imgtu.com/i/RrMr7Q"><img src="https://z3.ax1x.com/2021/07/01/RrMr7Q.png" alt="RrMr7Q.png"></a></p>
-<ul>
-<li>与写数据流程差不多。说一下区别，去目标RegionServer读取数据时，会向Block Cache(读缓存),MemStore,StoreFile中查询数据，并将所有数据进行合并。此处所有数据是指同一条数据的不同版本（time stamp）或者不同的类型（Put/Delete）。</li>
-<li>将从文件中查询到的数据块缓存到Block Cache中。客户端从读缓存中读取相应的数据。返回ACK。</li>
-</ul>
-<h3 id="StoreFile-Compaction"><a href="#StoreFile-Compaction" class="headerlink" title="StoreFile Compaction"></a>StoreFile Compaction</h3><ul>
-<li><p>由于memstore每次刷写都会生成一个新的HFile，且同一个字段的不同版本（timestamp）和不同类型（Put/Delete）有可能会分布在不同的HFile中，因此查询时需要遍历所有的HFile。为了减少HFile的个数，以及清理掉过期和删除的数据，会进行StoreFile Compaction。</p>
-</li>
-<li><p>Compaction（合并）分为两种：分别是Minor Compaction和Major Compaction。</p>
-</li>
-<li><p>Minor Compaction会将临近的若干个较小的HFile合并成一个较大的HFile，但不会清理过期和删除的数据。默认是三个小文件会进行合并，达到一定的数量后也不会直接合并，会根据一个算法判断是否要进行合并。</p>
-</li>
-<li><p>Major Compaction会将一个Store下的所有的HFile合并成一个大HFile，并且会清理掉过期和删除的数据。比较耗费资源，默认是一星期进行一次。</p>
-</li>
-</ul>
-<h3 id="Region-Split"><a href="#Region-Split" class="headerlink" title="Region Split"></a>Region Split</h3><ul>
-<li><p>默认情况下，每个Table起初只有一个Region，随着数据的不断写入，Region会自动进行拆分。刚拆分时，两个子Region都位于当前的Region Server，但处于负载均衡的考虑，HMaster有可能会将某个Region转移给其他的Region Server。</p>
-</li>
-<li><p>分裂时机：如果当前RegionServer上只有一个Region，当这个Region中的所有Store file的总和超过2*hbase.hregion.memstore.flush.size分裂，否则按照超过hbase.hregion.max.filesize 分裂。</p>
-</li>
-<li><p>这样切分会尽量使每个Table的在每个RegionServer中的Region数量尽量一致。</p>
-</li>
-</ul>
-<h2 id="Hive与HBase集成"><a href="#Hive与HBase集成" class="headerlink" title="Hive与HBase集成"></a>Hive与HBase集成</h2><ul>
-<li>hive默认是有jar包可与HBase集成的，可以用Hive对HBase中的数据进行分析，再将分析结果又返回到HBase中，方便其它的工作对分析好的数据的使用。</li>
-</ul>
-<h2 id="Phoenix"><a href="#Phoenix" class="headerlink" title="Phoenix"></a>Phoenix</h2><ul>
-<li>Phoenix是HBase的开源SQL皮肤。可以使用标准JDBC API代替HBase客户端API来创建表，插入数据和查询HBase数据。</li>
-<li>可以用类sql语言操作hbase</li>
-<li>优势：支持索引。</li>
-</ul>
-]]></content>
-      <tags>
-        <tag>大数据</tag>
-        <tag>flume</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Hello World</title>
-    <url>/2020/09/22/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo new <span class="hljs-string">&quot;My New Post&quot;</span><br></code></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo server<br></code></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo generate<br></code></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo deploy<br></code></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-]]></content>
-  </entry>
-  <entry>
     <title>Java多线程基础</title>
     <url>/2021/04/20/multithreading/</url>
     <content><![CDATA[<h1 id="Java多线程"><a href="#Java多线程" class="headerlink" title="Java多线程"></a>Java多线程</h1><h2 id="1-程序，进程，线程"><a href="#1-程序，进程，线程" class="headerlink" title="1.程序，进程，线程"></a>1.程序，进程，线程</h2><blockquote>
@@ -1170,6 +1194,178 @@
       <tags>
         <tag>Java</tag>
         <tag>多线程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>project</title>
+    <url>/2021/09/29/project/</url>
+    <content><![CDATA[<h1 id="项目总结"><a href="#项目总结" class="headerlink" title="项目总结"></a>项目总结</h1><h2 id="数据采集项目"><a href="#数据采集项目" class="headerlink" title="数据采集项目"></a>数据采集项目</h2><ul>
+<li><p>项目框架版本：</p>
+<ul>
+<li>hadoop 3.1.3</li>
+<li>flume 1.9</li>
+<li>kafka 2.41</li>
+<li>Zookeeper 3.5.7</li>
+<li>hive 3.1.2</li>
+</ul>
+</li>
+<li><p>项目架构</p>
+<ul>
+<li><a href="https://imgtu.com/i/4fmBm8"><img src="https://z3.ax1x.com/2021/09/28/4fmBm8.png" alt="4fmBm8.png"></a></li>
+</ul>
+</li>
+</ul>
+<h3 id="日志数据采集平台"><a href="#日志数据采集平台" class="headerlink" title="日志数据采集平台"></a>日志数据采集平台</h3><ul>
+<li><p>埋点用户行为数据的形式：</p>
+<ul>
+<li>存储在文件中</li>
+<li>分为启动日志数据（启动日志=公共字段+启动事件数据）和事件日志数据</li>
+</ul>
+</li>
+<li><p>埋点用户行为数据：（数据流动路径）</p>
+<ul>
+<li><p>生产flume数据流向</p>
+</li>
+<li><p><a href="https://imgtu.com/i/4fuJxI"><img src="https://z3.ax1x.com/2021/09/28/4fuJxI.png" alt="4fuJxI.png"></a></p>
+</li>
+</ul>
+</li>
+<li><p>生产flume</p>
+<ul>
+<li><p>为什么用Kafka，基于磁盘，当数据峰值来临时可以消峰，暂时存储在Kafka中，防止太多数据涌入HDFS导致Hadoop 宕机。</p>
+</li>
+<li><p>采用TaiDirSource:支持断点续传，多目录。数据可能会重复，后续再处理</p>
+</li>
+<li><p>采用Kafka Channel：速度高于 MemoryChannel + KafkaSink</p>
+</li>
+<li><p>flume具体配置，flume配置文件一般命名成数据的走向形式，例如：file-flume-kafka.conf</p>
+</li>
+<li><p>flume 五步走：(具体配置查看官网的各个组件不同的案例)</p>
+<ul>
+<li>定义Source，Channel,Sink组件</li>
+<li>配置Source</li>
+<li>配置Channel</li>
+<li>配置Sink</li>
+<li>配置三者之间的关系</li>
+</ul>
+</li>
+<li><p>配置拦截器</p>
+<ul>
+<li><p>打包，然后放到flume/lib/目录下 </p>
+</li>
+<li><p>ETL拦截器</p>
+<ul>
+<li>过滤时间戳不合法和Json数据不完整的数据。</li>
+<li>实现Interceptor接口，重写initialize(),intercept()，close()方法，实现一个静态内部类，返回定义的拦截器对象。intercept()重载了两个，分别表示单event处理，多event处理（多event处理一般只需要在里面调用单event处理就行了）</li>
+<li>启动日志判断是否是以“{”开头“}”结尾</li>
+<li>判断事件日志的格式：<ul>
+<li>1.是否是时间戳+logs，</li>
+<li>2.时间戳是否是合法的时间戳：时间戳长度是否为13，NumberUtils.isDigits() :判断字符串中是否全为数字</li>
+<li>logs是否以“{”开头，“}”结尾</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>日志类型区分拦截器</p>
+<ul>
+<li>主要是为了给ChannelSelector配置mutiplexing根据event头，将启动日志和事件日志分开，进入不同的KafkaTopic。</li>
+<li>在intercept()方法中，getHeaders()，再根据body中的数据判断为启动日志还是事件日志，分别给头加上不同的标识，要与配置的flume 文件匹配。headers.put(“topic”,”topic_start”);headers.put(“topic”,”topic_event”);</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>生产flume配置</p>
+<figure class="highlight ini"><table><tr><td class="code"><pre><code class="hljs ini"><span class="hljs-attr">a1.sources</span>=r1<br><span class="hljs-attr">a1.channels</span>=c1 c2<br><br><span class="hljs-comment"># configure source</span><br><span class="hljs-attr">a1.sources.r1.type</span> = TAILDIR<br><span class="hljs-attr">a1.sources.r1.positionFile</span> = /opt/module/flume/test/log_position.json<br><span class="hljs-attr">a1.sources.r1.filegroups</span> = f1<br><span class="hljs-attr">a1.sources.r1.filegroups.f1</span> = /tmp/logs/app.+<br><span class="hljs-attr">a1.sources.r1.fileHeader</span> = <span class="hljs-literal">true</span><br><span class="hljs-attr">a1.sources.r1.channels</span> = c1 c2<br><br><span class="hljs-comment">#interceptor</span><br><span class="hljs-attr">a1.sources.r1.interceptors</span> =  i1 i2<br><span class="hljs-attr">a1.sources.r1.interceptors.i1.type</span> = com.zt.flume.interceptor.LogETLInterceptor<span class="hljs-variable">$Builder</span><br><span class="hljs-attr">a1.sources.r1.interceptors.i2.type</span> = com.zt.flume.interceptor.LogTypeInterceptor<span class="hljs-variable">$Builder</span><br><span class="hljs-comment">#配置多路复用，根据header的不同去往不同的channel</span><br><span class="hljs-attr">a1.sources.r1.selector.type</span> = multiplexing<br><span class="hljs-attr">a1.sources.r1.selector.header</span> = topic<br><span class="hljs-attr">a1.sources.r1.selector.mapping.topic_start</span> = c1<br><span class="hljs-attr">a1.sources.r1.selector.mapping.topic_event</span> = c2<br><br><span class="hljs-comment"># configure channel</span><br><span class="hljs-attr">a1.channels.c1.type</span> = org.apache.flume.channel.kafka.KafkaChannel<br><span class="hljs-attr">a1.channels.c1.kafka.bootstrap.servers</span> = hadoop100:<span class="hljs-number">9092</span>,hadoop101:<span class="hljs-number">9092</span>,hadoop102:<span class="hljs-number">9092</span><br><span class="hljs-attr">a1.channels.c1.kafka.topic</span> = topic_start<br><span class="hljs-comment">#配置parseAsFlumeEvent为false，不让header信息传到Kafka中去，只传输body中的数据</span><br><span class="hljs-attr">a1.channels.c1.parseAsFlumeEvent</span> = <span class="hljs-literal">false</span><br><span class="hljs-attr">a1.channels.c1.kafka.consumer.group.id</span> = flume-consumer<br><br><span class="hljs-attr">a1.channels.c2.type</span> = org.apache.flume.channel.kafka.KafkaChannel<br><span class="hljs-attr">a1.channels.c2.kafka.bootstrap.servers</span> = hadoop100:<span class="hljs-number">9092</span>,hadoop101:<span class="hljs-number">9092</span>,hadoop102:<span class="hljs-number">9092</span><br><span class="hljs-attr">a1.channels.c2.kafka.topic</span> = topic_event<br><span class="hljs-attr">a1.channels.c2.parseAsFlumeEvent</span> = <span class="hljs-literal">false</span><br><span class="hljs-attr">a1.channels.c2.kafka.consumer.group.id</span> = flume-consumer<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>–conf/-c:表示配置文件存储来conf/目录</li>
+<li>–name/-n:表示给agent起名为a1</li>
+<li>–conf-file/-f：flume本次读取的配置文件</li>
+<li>-Dflume.root.logger=INFO,console ：-D表示flume运行时动态修改flume.root.logger参数属性值，并将控制台日志打印级别设置为INFO级别。日志级别包括:log、info、warn、error。</li>
+<li>flume-ng agent –conf-file /opt/module/flume/conf/file-flume-kafka.conf –name a1 -Dflume.root.logger=INFO,LOGFILE</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>消费flume</p>
+<ul>
+<li><p><a href="https://imgtu.com/i/4fWyEq"><img src="https://z3.ax1x.com/2021/09/28/4fWyEq.png" alt="4fWyEq.png"></a></p>
+</li>
+<li><p>flume agent里面的组件更多的时候代表的是逻辑上的概念。比如两个KafkaChannel ,但是Kafka集群却可以有很多。</p>
+</li>
+<li><p>采用Kafka Source  FileChannel  HDFS Sink的方式传输数据</p>
+<figure class="highlight ini"><table><tr><td class="code"><pre><code class="hljs ini"><span class="hljs-comment">## 组件</span><br><span class="hljs-attr">a1.sources</span>=r1 r2<br><span class="hljs-attr">a1.channels</span>=c1 c2<br><span class="hljs-attr">a1.sinks</span>=k1 k2<br><br><span class="hljs-comment">## source1</span><br><span class="hljs-attr">a1.sources.r1.type</span> = org.apache.flume.source.kafka.KafkaSource<br><span class="hljs-comment">#一次传出event的条数</span><br><span class="hljs-attr">a1.sources.r1.batchSize</span> = <span class="hljs-number">5000</span><br><span class="hljs-attr">a1.sources.r1.batchDurationMillis</span> = <span class="hljs-number">2000</span><br><span class="hljs-attr">a1.sources.r1.kafka.bootstrap.servers</span> = hadoop100:<span class="hljs-number">9092</span>,hadoop101:<span class="hljs-number">9092</span>,hadoop102:<span class="hljs-number">9092</span><br><span class="hljs-attr">a1.sources.r1.kafka.topics</span>=topic_start<br><br><span class="hljs-comment">## source2</span><br><span class="hljs-attr">a1.sources.r2.type</span> = org.apache.flume.source.kafka.KafkaSource<br><span class="hljs-attr">a1.sources.r2.batchSize</span> = <span class="hljs-number">5000</span><br><span class="hljs-attr">a1.sources.r2.batchDurationMillis</span> = <span class="hljs-number">2000</span><br><span class="hljs-attr">a1.sources.r2.kafka.bootstrap.servers</span> = hadoop100:<span class="hljs-number">9092</span>,hadoop101:<span class="hljs-number">9092</span>,hadoop102:<span class="hljs-number">9092</span><br><span class="hljs-attr">a1.sources.r2.kafka.topics</span>=topic_event<br><br><span class="hljs-comment">## channel1</span><br><span class="hljs-attr">a1.channels.c1.type</span> = file<br><span class="hljs-attr">a1.channels.c1.checkpointDir</span> = /opt/module/flume/checkpoint/behavior1<br><span class="hljs-attr">a1.channels.c1.dataDirs</span> = /opt/module/flume/data/behavior1/<br><span class="hljs-attr">a1.channels.c1.maxFileSize</span> = <span class="hljs-number">2146435071</span><br><span class="hljs-attr">a1.channels.c1.capacity</span> = <span class="hljs-number">1000000</span><br><span class="hljs-attr">a1.channels.c1.keep-alive</span> = <span class="hljs-number">6</span><br><br><span class="hljs-comment">## channel2</span><br><span class="hljs-attr">a1.channels.c2.type</span> = file<br><span class="hljs-attr">a1.channels.c2.checkpointDir</span> = /opt/module/flume/checkpoint/behavior2<br><span class="hljs-attr">a1.channels.c2.dataDirs</span> = /opt/module/flume/data/behavior2/<br><span class="hljs-attr">a1.channels.c2.maxFileSize</span> = <span class="hljs-number">2146435071</span><br><span class="hljs-attr">a1.channels.c2.capacity</span> = <span class="hljs-number">1000000</span><br><span class="hljs-attr">a1.channels.c2.keep-alive</span> = <span class="hljs-number">6</span><br><br><span class="hljs-comment">## sink1</span><br><span class="hljs-attr">a1.sinks.k1.type</span> = hdfs<br><span class="hljs-attr">a1.sinks.k1.hdfs.path</span> = /origin_data/gmall/log/topic_start/%Y-%m-%d<br><span class="hljs-attr">a1.sinks.k1.hdfs.filePrefix</span> = logstart-<br><br><span class="hljs-comment">##sink2</span><br><span class="hljs-attr">a1.sinks.k2.type</span> = hdfs<br><span class="hljs-attr">a1.sinks.k2.hdfs.path</span> = /origin_data/gmall/log/topic_event/%Y-%m-%d<br><span class="hljs-attr">a1.sinks.k2.hdfs.filePrefix</span> = logevent-<br><br><span class="hljs-comment">## 不要产生大量小文件</span><br><span class="hljs-attr">a1.sinks.k1.hdfs.rollInterval</span> = <span class="hljs-number">10</span><br><span class="hljs-attr">a1.sinks.k1.hdfs.rollSize</span> = <span class="hljs-number">134217728</span><br><span class="hljs-attr">a1.sinks.k1.hdfs.rollCount</span> = <span class="hljs-number">0</span><br><br><span class="hljs-attr">a1.sinks.k2.hdfs.rollInterval</span> = <span class="hljs-number">10</span><br><span class="hljs-attr">a1.sinks.k2.hdfs.rollSize</span> = <span class="hljs-number">134217728</span><br><span class="hljs-attr">a1.sinks.k2.hdfs.rollCount</span> = <span class="hljs-number">0</span><br><br><span class="hljs-comment">## 控制输出文件是原生文件。</span><br><span class="hljs-attr">a1.sinks.k1.hdfs.fileType</span> = CompressedStream <br><span class="hljs-attr">a1.sinks.k2.hdfs.fileType</span> = CompressedStream <br><br><span class="hljs-attr">a1.sinks.k1.hdfs.codeC</span> = lzop<br><span class="hljs-attr">a1.sinks.k2.hdfs.codeC</span> = lzop<br><br><span class="hljs-comment">## 三者之间的关系</span><br><span class="hljs-attr">a1.sources.r1.channels</span> = c1<br><span class="hljs-attr">a1.sinks.k1.channel</span>= c1<br><br><span class="hljs-attr">a1.sources.r2.channels</span> = c2<br><span class="hljs-attr">a1.sinks.k2.channel</span>= c2<br></code></pre></td></tr></table></figure></li>
+<li><p>HDFS Sink产生小文件问题 </p>
+<ul>
+<li><p>a1.sinks.k1.hdfs.rollInterval = 10  多久生产一个新文件10s</p>
+<p>a1.sinks.k1.hdfs.rollSize = 134217728  设置每个文件的滚动大小128M</p>
+<p>a1.sinks.k1.hdfs.rollCount = 0    文件的滚动与Event数量无关  never roll based on number of events)</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="业务数据采集平台"><a href="#业务数据采集平台" class="headerlink" title="业务数据采集平台"></a>业务数据采集平台</h3><ul>
+<li>电商常识<ul>
+<li>SKU（库存量基本单位），每种产品均对应有唯一的SKU号</li>
+<li>SPU（商品信息聚合的最小单位）</li>
+<li>iPhoneX手机就是SPU。一台银色、128G内存的、支持联通网络的iPhoneX，就是SKU。</li>
+</ul>
+</li>
+<li>电商业务表结构<ul>
+<li><a href="https://imgtu.com/i/4hPENt"><img src="https://z3.ax1x.com/2021/09/28/4hPENt.png" alt="4hPENt.png"></a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>同步策略</p>
+<ul>
+<li>数据同步策略类型包括：全量同步策略，增量同步策略，新增及变化同步策略，特殊同步策略</li>
+<li>全量表：存储完整的数据<ul>
+<li>每日全量，就是每天存储一份完整数据，作为一个分区</li>
+<li>适用于表数据量不大，且每天会有新数据插入，也会有旧数据修改的场景</li>
+</ul>
+</li>
+<li>增量表：存储新增加的数据<ul>
+<li>每日增量，就是每天存储一份增量数据，作为一个分区</li>
+<li>适用于表数据量大，且每天只会有新数据插入的场景</li>
+</ul>
+</li>
+<li>新增及变化表：存储新增加的数据和变化的数据<ul>
+<li>每日新增及变化，就是存储创建时间和操作时间都是今天的数据。</li>
+<li>适用场景，表的数据量大，既会有新增，又会有变化</li>
+</ul>
+</li>
+<li>特殊表：只需要存储一次<ul>
+<li>某些特殊的维度表，可不必遵循上述同步策略</li>
+<li>客观世界维度：没有变化的客观世界维度（性别，地区，名族，政治成分，鞋子尺码）可以只存一份固定值。</li>
+<li>日期维度：日期维度可以一次性导入一年或若干年的数据</li>
+<li>地区维度：省份表，地区表</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>业务数据导入HDFS</p>
+<ul>
+<li><p>分析表同步策略</p>
+<p><a href="https://imgtu.com/i/4hiS5q"><img src="https://z3.ax1x.com/2021/09/28/4hiS5q.png" alt="4hiS5q.png"></a></p>
+<ul>
+<li>活动参与商品表没有放入ods层</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>根据不同的同步策略，编写脚本把数据导入到HDFS中去。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>项目</category>
+      </categories>
+      <tags>
+        <tag>项目</tag>
       </tags>
   </entry>
   <entry>
@@ -1422,6 +1618,39 @@
       <tags>
         <tag>大数据</tag>
         <tag>shell</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Java反射</title>
+    <url>/2021/04/22/Java-reflect/</url>
+    <content><![CDATA[<h1 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h1><h2 id="单元测试类"><a href="#单元测试类" class="headerlink" title="单元测试类"></a>单元测试类</h2><blockquote>
+<ul>
+<li>单元测试方法的要求：类必须是公共的，必需不能有任何构造器</li>
+<li>方法必修是公共非静态无返回值参数</li>
+<li>执行：在方法名中右击，点击run as -junit</li>
+<li>包装类：把基本数据类型包装成对象</li>
+</ul>
+</blockquote>
+<h2 id="反射概述"><a href="#反射概述" class="headerlink" title="反射概述"></a>反射概述</h2><ul>
+<li><p>JAVA反射机制是在运行状态中，对于任意一个类，都能够知道这个类的所有属性和方法；对于任意一个对象，都能够调用它的任意一个方法和属性；这种动态获取的信息以及动态调用对象的方法的功能称为java语言的反射机制。</p>
+<p>要想解剖一个类,必须先要获取到该类的字节码文件对象。而解剖使用的就是Class类中的方法.所以先要获取到每一个字节码文件对应的Class类型的对象.</p>
+</li>
+<li><p>反射就是把Java类中的各种成分映射成一个个的Java对象</p>
+<p>例如：一个类有：成员变量、方法、构造方法、包等等信息，利用反射技术可以对一个类进行解剖，把个个组成部分映射成一个个对象。</p>
+<p>   （其实：一个类中这些成员方法、构造方法、在加入类中都有一个类来描述）</p>
+</li>
+<li><p>参考链接：CSDN博客 <a href="https://blog.csdn.net/qq_36226453/article/details/82790375">链接</a></p>
+</li>
+</ul>
+<h2 id="反射基础实例代码"><a href="#反射基础实例代码" class="headerlink" title="反射基础实例代码"></a>反射基础实例代码</h2><figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs Java"><span class="hljs-keyword">package</span> reflect;<br><br><span class="hljs-keyword">import</span> <span class="hljs-keyword">static</span> org.junit.Assert.*;<br><br><span class="hljs-keyword">import</span> java.io.FileInputStream;<br><span class="hljs-keyword">import</span> java.io.IOException;<br><span class="hljs-keyword">import</span> java.io.InputStream;<br><span class="hljs-keyword">import</span> java.io.Serializable;<br><span class="hljs-keyword">import</span> java.lang.annotation.Annotation;<br><span class="hljs-keyword">import</span> java.lang.annotation.ElementType;<br><span class="hljs-keyword">import</span> java.lang.annotation.Retention;<br><span class="hljs-keyword">import</span> java.lang.annotation.RetentionPolicy;<br><span class="hljs-keyword">import</span> java.lang.annotation.Target;<br><span class="hljs-keyword">import</span> java.lang.reflect.Constructor;<br><span class="hljs-keyword">import</span> java.lang.reflect.Field;<br><span class="hljs-keyword">import</span> java.lang.reflect.InvocationTargetException;<br><span class="hljs-keyword">import</span> java.lang.reflect.Method;<br><span class="hljs-keyword">import</span> java.util.ArrayList;<br><span class="hljs-keyword">import</span> java.util.HashMap;<br><span class="hljs-keyword">import</span> java.util.Map.Entry;<br><span class="hljs-keyword">import</span> java.util.Properties;<br><span class="hljs-keyword">import</span> java.util.Set;<br><br><span class="hljs-keyword">import</span> org.junit.Test;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 反射 : java的动态处理技术</span><br><span class="hljs-comment"> */</span><br><span class="hljs-meta">@Target(&#123;ElementType.TYPE, ElementType.FIELD&#125;)</span><br><span class="hljs-meta">@Retention(RetentionPolicy.RUNTIME)</span><br><span class="hljs-meta">@interface</span> HelloAnnotation &#123;<br>	<span class="hljs-function">String <span class="hljs-title">name</span><span class="hljs-params">()</span> <span class="hljs-keyword">default</span> &quot;缺省名字&quot;</span>;<br>	<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">id</span><span class="hljs-params">()</span> <span class="hljs-keyword">default</span> 10</span>;<br>&#125;<br><br><span class="hljs-meta">@HelloAnnotation(name=&quot;abc&quot;)</span><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Teacher</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">ArrayList</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Serializable</span>, <span class="hljs-title">Comparable</span>, <span class="hljs-title">Runnable</span> </span>&#123;<br>	<br>	<span class="hljs-meta">@HelloAnnotation</span><br>	<span class="hljs-keyword">private</span> String name;<br>	<span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> age;<br>	<span class="hljs-keyword">private</span> String gender;<br>	<br>	<span class="hljs-comment">//@HelloAnnotation</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Teacher</span><span class="hljs-params">()</span> </span>&#123;<br>	&#125;<br>	<span class="hljs-comment">//构造方法，Ctrl+Alt+S+O</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Teacher</span><span class="hljs-params">(String name)</span> </span>&#123;<br>		<span class="hljs-keyword">this</span>.name = name;<br>	&#125;<br>	<br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Teacher</span><span class="hljs-params">(<span class="hljs-keyword">int</span> age)</span> </span>&#123;<br>		<span class="hljs-keyword">this</span>.age = age;<br>	&#125;<br><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Teacher</span><span class="hljs-params">(String name,String gender)</span> </span>&#123;<br>		<span class="hljs-keyword">this</span>.name = name;<br>		<span class="hljs-keyword">this</span>.gender = gender;<br>	&#125;<br><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Teacher</span><span class="hljs-params">(String name, <span class="hljs-keyword">int</span> age, String gender)</span> </span>&#123;<br>		<span class="hljs-keyword">this</span>.name = name;<br>		<span class="hljs-keyword">this</span>.age = age;<br>		<span class="hljs-keyword">this</span>.gender = gender;<br>	&#125;<br>    <span class="hljs-comment">//set,get方法 快捷键Ctrl+Alt+S+R</span><br>	<span class="hljs-comment">//@HelloAnnotation</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">getName</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> name;<br>	&#125;<br><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setName</span><span class="hljs-params">(String name)</span> </span>&#123;<br>		<span class="hljs-keyword">this</span>.name = name;<br>	&#125;<br><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">getAge</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> age;<br>	&#125;<br><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setAge</span><span class="hljs-params">(<span class="hljs-keyword">int</span> age)</span> </span>&#123;<br>		<span class="hljs-keyword">this</span>.age = age;<br>	&#125;<br><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">getGender</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> gender;<br>	&#125;<br><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setGender</span><span class="hljs-params">(String gender)</span> </span>&#123;<br>		<span class="hljs-keyword">this</span>.gender = gender;<br>	&#125;<br>    <span class="hljs-comment">//Ctrl+Alt+S+S</span><br>	<span class="hljs-meta">@Override</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">toString</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> <span class="hljs-string">&quot;Teacher [name=&quot;</span> + name + <span class="hljs-string">&quot;, age=&quot;</span> + age + <span class="hljs-string">&quot;, gender=&quot;</span> + gender + <span class="hljs-string">&quot;]&quot;</span>;<br>	&#125;<br><br>	<span class="hljs-meta">@Override</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">run</span><span class="hljs-params">()</span> </span>&#123;<br>	&#125;<br><br>	<span class="hljs-meta">@Override</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">compareTo</span><span class="hljs-params">(Object o)</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>	&#125;<br>	<br>	<span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">lesson</span><span class="hljs-params">(String content, <span class="hljs-keyword">int</span> time)</span> </span>&#123;<br>		System.out.println(<span class="hljs-string">&quot;老师在上[&quot;</span> + content + <span class="hljs-string">&quot;]课, 共上了[&quot;</span> + time +<span class="hljs-string">&quot;]小时&quot;</span>);<br>		<span class="hljs-comment">//return true;</span><br>		<span class="hljs-comment">//throw new RuntimeException(&quot;一个异常&quot;);</span><br>	&#125;<br>	<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ReflectTest</span> </span>&#123;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">testName</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception </span>&#123;<br>		Class clazz = Class.forName(<span class="hljs-string">&quot;reflect.Teacher&quot;</span>);<br>		Annotation[] annotations = clazz.getAnnotations();<br>		System.out.println(annotations.length);<br>		System.out.println(annotations[<span class="hljs-number">0</span>]);<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test14</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception </span>&#123;<br>		Class clazz = Class.forName(<span class="hljs-string">&quot;reflect.Teacher&quot;</span>);<br>		System.out.println(<span class="hljs-string">&quot;父类 : &quot;</span> + clazz.getSuperclass());<br>		Constructor[] constructors = clazz.getConstructors();<br>		<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; constructors.length; i++) &#123;<br>			System.out.println(<span class="hljs-string">&quot;构造器 : &quot;</span> + constructors[i]);<br>		&#125;<br>		System.out.println(<span class="hljs-string">&quot;************************************************&quot;</span>);<br>		Field[] fields = clazz.getFields(); <span class="hljs-comment">// 所有公共属性</span><br>		<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; fields.length; i++) &#123;<br>			System.out.println(<span class="hljs-string">&quot;公共属性：&quot;</span>+fields[i]);<br>		&#125;<br>		<span class="hljs-comment">//反射尽量不要破坏封装性，容易发生严重后果，慎用getDeclared.....()方法</span><br>		Field[] declaredFields = clazz.getDeclaredFields(); <span class="hljs-comment">// 所有本类属性</span><br>		<span class="hljs-keyword">for</span> (Field field : declaredFields) &#123;<br>			System.out.println(<span class="hljs-string">&quot;本类属性：&quot;</span>+field);<br>		&#125;<br>		System.out.println(<span class="hljs-string">&quot;************************************************&quot;</span>);<br>		Method[] methods = clazz.getMethods();<span class="hljs-comment">//所有公共方法</span><br>		<span class="hljs-keyword">for</span> (Method method : methods) &#123;<br>			System.out.println(<span class="hljs-string">&quot;公共方法&quot;</span>+method);<br>		&#125;<br>		System.out.println(<span class="hljs-string">&quot;************************************************&quot;</span>);<br>		Method[] declaredMethods = clazz.getDeclaredMethods();<span class="hljs-comment">//所有本类方法</span><br>		<span class="hljs-keyword">for</span> (Method method : declaredMethods) &#123;<br>			System.out.println(<span class="hljs-string">&quot;本类方法：&quot;</span>+method);<br>		&#125;<br>	&#125;<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test13</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">try</span> &#123;<br>			Class clazz = Class.forName(<span class="hljs-string">&quot;reflect.Teacher&quot;</span>);<br>			Method lessonMethod = clazz.getDeclaredMethod(<span class="hljs-string">&quot;lesson&quot;</span>, String.class, <span class="hljs-keyword">int</span>.class);<br>			lessonMethod.setAccessible(<span class="hljs-keyword">true</span>);<br>			<br>			Short n = <span class="hljs-number">3</span>;<br>			Object retValue = lessonMethod.invoke(<span class="hljs-keyword">null</span>, <span class="hljs-string">&quot;JavaWEB&quot;</span>, n); <span class="hljs-comment">// 静态方法传null, 不需要传入对象</span><br>			System.out.println(retValue);<br>		&#125; <span class="hljs-keyword">catch</span> (ClassNotFoundException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (IllegalAccessException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (NoSuchMethodException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (SecurityException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (IllegalArgumentException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (InvocationTargetException e) &#123;<br>			e.printStackTrace();<br>		&#125;<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test12</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">try</span> &#123;<br>			Class clazz = Class.forName(<span class="hljs-string">&quot;reflect.Teacher&quot;</span>);<br>			Constructor constructor = clazz.getConstructor(String.class, <span class="hljs-keyword">int</span>.class, String.class);<br>			Object object = constructor.newInstance(<span class="hljs-string">&quot;佟刚&quot;</span>, <span class="hljs-number">40</span>, <span class="hljs-string">&quot;男&quot;</span>);<br>			<br>			<span class="hljs-comment">// getMethod只能获取公共的方法, 包括从父类继承的. </span><br>			<span class="hljs-comment">//Method lessonMethod = clazz.getMethod(&quot;lesson&quot;, String.class, int.class); </span><br>			<br>			<span class="hljs-comment">// getDeclaredMethod可以获取本类中所有声明的方法</span><br>			Method lessonMethod = clazz.getDeclaredMethod(<span class="hljs-string">&quot;lesson&quot;</span>, String.class, <span class="hljs-keyword">int</span>.class);<br>			lessonMethod.setAccessible(<span class="hljs-keyword">true</span>);<br>			<br>			Short n = <span class="hljs-number">3</span>;<br>			Object retValue = lessonMethod.invoke(object, <span class="hljs-string">&quot;JavaWEB&quot;</span>, n); <br>			System.out.println(retValue);<br>			<span class="hljs-comment">/*</span><br><span class="hljs-comment">		    private String outOfBoundsMsg(int index) &#123;</span><br><span class="hljs-comment">		        return &quot;Index: &quot;+index+&quot;, Size: &quot;+size;</span><br><span class="hljs-comment">		    &#125;</span><br><span class="hljs-comment">		    */</span><br>			<span class="hljs-comment">/*</span><br><span class="hljs-comment">			//拿父类的方法，会有警告，最好不要暴力访问私有方法，属性</span><br><span class="hljs-comment">			Method declaredMethod = clazz.getSuperclass().getDeclaredMethod(&quot;outOfBoundsMsg&quot;, int.class);</span><br><span class="hljs-comment">			System.out.println(declaredMethod);</span><br><span class="hljs-comment">			//危险操作</span><br><span class="hljs-comment">			declaredMethod.setAccessible(true);</span><br><span class="hljs-comment">			</span><br><span class="hljs-comment">			Object invoke = declaredMethod.invoke(object, 20);</span><br><span class="hljs-comment">			System.out.println(invoke);</span><br><span class="hljs-comment">			*/</span><br>		&#125; <span class="hljs-keyword">catch</span> (ClassNotFoundException e) &#123; <span class="hljs-comment">// 类未找到</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (NoSuchMethodException e) &#123; <span class="hljs-comment">// 方法没有找到, 方法名错误或参数列表错误</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (SecurityException e) &#123; <span class="hljs-comment">// 安全异常</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (InstantiationException e) &#123; <span class="hljs-comment">// 创建对象时出现异常</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (IllegalAccessException e) &#123; <span class="hljs-comment">// 非法访问异常</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (IllegalArgumentException e) &#123; <span class="hljs-comment">// 非法实参异常, 实参和形参不匹配, 类型和顺序和数量</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (InvocationTargetException e) &#123; <span class="hljs-comment">// 调用的目标方法内部出现异常了.</span><br>			e.printStackTrace();<br>		&#125;<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test11</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">try</span> &#123;<br>			Class clazz = Class.forName(<span class="hljs-string">&quot;reflect.Teacher&quot;</span>);<br>			Constructor constructor = clazz.getConstructor(String.class, <span class="hljs-keyword">int</span>.class, String.class);<br>			Object object = constructor.newInstance(<span class="hljs-string">&quot;佟刚&quot;</span>, <span class="hljs-number">40</span>, <span class="hljs-string">&quot;男&quot;</span>);<br>			<br>			<span class="hljs-comment">//object.lesson(&quot;JavaWEB&quot;, 3);</span><br>			<span class="hljs-comment">//先获取方法</span><br>			<br>			Method lessonMethod = clazz.getMethod(<span class="hljs-string">&quot;lesson&quot;</span>, String.class, <span class="hljs-keyword">int</span>.class); <span class="hljs-comment">// 后面是方法参数类型列表</span><br>			<span class="hljs-keyword">short</span> n = <span class="hljs-number">3</span>;<br>			Object retValue = lessonMethod.invoke(object, <span class="hljs-string">&quot;JavaWEB&quot;</span>, n); <span class="hljs-comment">// 后面是实参列表, 如果方法没有返回值, 它的返回值是null</span><br>			System.out.println(retValue);<br>		&#125; <span class="hljs-keyword">catch</span> (ClassNotFoundException e) &#123; <span class="hljs-comment">// 类未找到</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (NoSuchMethodException e) &#123; <span class="hljs-comment">// 方法没有找到, 方法名错误或参数列表错误</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (SecurityException e) &#123; <span class="hljs-comment">// 安全异常</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (InstantiationException e) &#123; <span class="hljs-comment">// 创建对象时出现异常</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (IllegalAccessException e) &#123; <span class="hljs-comment">// 非法访问异常</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (IllegalArgumentException e) &#123; <span class="hljs-comment">// 非法实参异常, 实参和形参不匹配, 类型和顺序和数量</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (InvocationTargetException e) &#123; <span class="hljs-comment">// 调用的目标方法内部出现异常了.</span><br>			e.printStackTrace();<br>		&#125;<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test10</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">try</span> &#123;<br>			Class clazz = Class.forName(<span class="hljs-string">&quot;reflect.Teacher&quot;</span>);<br>			<span class="hljs-comment">//Object object = clazz.newInstance(); 没有无参构造器时出问题</span><br>			<br>			<span class="hljs-comment">//public Teacher(String name, int age, String gender) 要想定位这个构造器, 必须让参数列表一致.</span><br>			<br>			<span class="hljs-comment">// 提供形式参数类型列表, 是类模板对象的列表</span><br>			Constructor constructor = clazz.getConstructor(String.class, <span class="hljs-keyword">int</span>.class, String.class); <span class="hljs-comment">// 定位合适的构造器</span><br>			<span class="hljs-comment">// 调用时必须给定实参列表</span><br>			Object object = constructor.newInstance(<span class="hljs-string">&quot;程程&quot;</span>, <span class="hljs-number">20</span>, <span class="hljs-string">&quot;女&quot;</span>); <span class="hljs-comment">// new Teacher(&quot;程程&quot;, 20, &quot;女&quot;);</span><br>			System.out.println(object);<br>			<br>		&#125; <span class="hljs-keyword">catch</span> (ClassNotFoundException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (InstantiationException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (IllegalAccessException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (NoSuchMethodException e) &#123; <span class="hljs-comment">// 参数列表出错, 或者方法名出错</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (SecurityException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (IllegalArgumentException e) &#123; <span class="hljs-comment">// 方法调用时实参和形参不匹配</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (InvocationTargetException e) &#123;<br>			e.printStackTrace();<br>		&#125;<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test9</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> IOException  </span>&#123;<br>		<span class="hljs-comment">//FileInputStream fis = new FileInputStream(&quot;只能读当前目录下的文件&quot;);</span><br>		ClassLoader classLoader = <span class="hljs-keyword">this</span>.getClass().getClassLoader();<br>		<span class="hljs-comment">// 只能加载build-path和src下的文件</span><br>		<span class="hljs-comment">//InputStream inputStream = classLoader.getResourceAsStream(&quot;com/sun/corba/se/impl/logging/LogStrings.properties&quot;); // 读取资源文件, 只要是Build-Path(classpath)中的文件都可以</span><br>		InputStream inputStream = classLoader.getResourceAsStream(<span class="hljs-string">&quot;s2&quot;</span>);<br>		Properties properties = <span class="hljs-keyword">new</span> Properties();<br>		properties.load(inputStream);<br>		<br>		Set&lt;Entry&lt;Object, Object&gt;&gt; entrySet = properties.entrySet();<br>		<span class="hljs-keyword">for</span> (Entry&lt;Object, Object&gt; entry : entrySet) &#123;<br>			System.out.println(entry);<br>		&#125;<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test8</span><span class="hljs-params">()</span>  </span>&#123;<br>		ClassLoader classLoader1 = ClassLoader.getSystemClassLoader(); <span class="hljs-comment">// 获取系统类加载器</span><br>		System.out.println(classLoader1);<br>		ClassLoader classLoader2 = <span class="hljs-keyword">this</span>.getClass().getClassLoader(); <span class="hljs-comment">// 使用最多的, 获取当前类的类加载器</span><br>		System.out.println(classLoader2);<br>		<br>		ClassLoader classLoader3 = classLoader1.getParent(); <span class="hljs-comment">// 获取父 &quot;类加载器&quot;,  是 扩展 &quot;类加载器&quot;</span><br>		System.out.println(classLoader3);<br>		<br>		ClassLoader classLoader4 = classLoader3.getParent(); <span class="hljs-comment">// 获取到的是引导类加载器(Bootstrap )</span><br>		System.out.println(classLoader4); <span class="hljs-comment">// 这个类加载器无法获取, 无法使用</span><br>		<br>		<span class="hljs-comment">/*</span><br><span class="hljs-comment">		双亲委派机制</span><br><span class="hljs-comment">		用户类加载器加载类时, 必须把此加载请求转发给父类加载器, 父类加载器再继续向父类加载器委派, 直到Bootstrap类加载器</span><br><span class="hljs-comment">		从Bootstrap类加载器开始真正加载, 各司其职. </span><br><span class="hljs-comment">		*/</span><br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test7</span><span class="hljs-params">()</span>  </span>&#123;<br>		Class strClazz = String.class;<br>		System.out.println(strClazz);<br>		<br>		<span class="hljs-comment">// 基本数据类型的类模板只能用第一种方式获取.</span><br>		Class clazz1 = <span class="hljs-keyword">int</span>.class; <span class="hljs-comment">// 基本数据类型也有相应的类模板对象, 但是不能获取属性和方法, 只能作为一个标记来使用.</span><br>		Class clazz2 = Integer.class; <span class="hljs-comment">// 这是一个普通类模板.</span><br>		System.out.println(clazz1 == clazz2);<br>		<br>		<span class="hljs-comment">// 判断类模板类型</span><br>		System.out.println(<span class="hljs-string">&quot;是否是基本型 : &quot;</span> + clazz1.isPrimitive());<br>		System.out.println(<span class="hljs-string">&quot;是否是基本型 : &quot;</span> + clazz2.isPrimitive());<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test6</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> ClassNotFoundException </span>&#123;<br>		<span class="hljs-comment">// 获取类模板对象的方法 ，有４种</span><br>		<span class="hljs-comment">// 1) 直接通过类.class, 效率最高, 最安全.</span><br>		Class clazz1 = Teacher.class;<br>		<br>		<span class="hljs-comment">// 2) 根据对象, 调用它的getClass()方法获取, 此方法也很常用.</span><br>		Teacher teacher = <span class="hljs-keyword">new</span> Teacher(<span class="hljs-string">&quot;佟刚&quot;</span>, <span class="hljs-number">40</span>, <span class="hljs-string">&quot;男&quot;</span>);<br>		Class clazz2 = teacher.getClass();<br>		<br>		System.out.println(clazz1 == clazz2);<br>		<br>		<span class="hljs-comment">// 3) 反射中最常用的 Class.forName(&quot;全限定类名&quot;);</span><br>		Class clazz3 = Class.forName(<span class="hljs-string">&quot;reflect.Teacher&quot;</span>);<br>		System.out.println(clazz2 == clazz3);<br>		<br>		<span class="hljs-comment">// 4) 通过类加载器对象动态加载类</span><br>		ClassLoader classLoader = <span class="hljs-keyword">this</span>.getClass().getClassLoader();<br>		Class clazz4 = classLoader.loadClass(<span class="hljs-string">&quot;reflect.Teacher&quot;</span>);<br>		System.out.println(clazz3 == clazz4);<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test5</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> ClassNotFoundException </span>&#123;<br>		Class clazz = Class.forName(<span class="hljs-string">&quot;reflect.Teacher&quot;</span>);<br>		String name = clazz.getName();<br>		System.out.println(<span class="hljs-string">&quot;类名 : &quot;</span> + name);<br>		System.out.println(<span class="hljs-string">&quot;简单类名 :  &quot;</span> + clazz.getSimpleName());<br>		Class superclass = clazz.getSuperclass();<br>		System.out.println(<span class="hljs-string">&quot;父类 : &quot;</span> + superclass);<br>		Class[] interfaces = clazz.getInterfaces();<br>		System.out.println(<span class="hljs-string">&quot;接口列表 &quot;</span>);<br>		<span class="hljs-keyword">for</span> (Class class1 : interfaces) &#123;<br>			System.out.println(class1);<br>		&#125;<br>		<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test4</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">try</span> &#123;<br>			Class clazz = Class.forName(<span class="hljs-string">&quot;reflect.Teacher&quot;</span>);<br>			Object object = clazz.newInstance();<br>			System.out.println(object);<br>			<br>			<span class="hljs-comment">//Field ageField = clazz.getField(&quot;age&quot;); // getField方法只能获取公共的属性, 也包括从父类继承的属性, 不可以获取私有属性</span><br>			Field ageField = clazz.getDeclaredField(<span class="hljs-string">&quot;age&quot;</span>); <span class="hljs-comment">// 获取本类中声明的任意属性 </span><br>			<span class="hljs-comment">// 暴力反射!!! 不推荐使用!!</span><br>			ageField.setAccessible(<span class="hljs-keyword">true</span>); <span class="hljs-comment">// 设置此属性为可访问的.</span><br>			ageField.set(object, <span class="hljs-number">40</span>); <br>			System.out.println(ageField.get(object)); <br>			<br>			Field nameField = clazz.getDeclaredField(<span class="hljs-string">&quot;name&quot;</span>);<br>			nameField.setAccessible(<span class="hljs-keyword">true</span>);<br>			nameField.set(object, <span class="hljs-string">&quot;佟刚&quot;</span>);<br>			<br>			System.out.println(object);<br>		&#125; <span class="hljs-keyword">catch</span> (ClassNotFoundException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (InstantiationException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (IllegalAccessException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (NoSuchFieldException e) &#123; <span class="hljs-comment">// 查找属性时, 有可能属性名不对, 可能是属性不存在</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (SecurityException e) &#123; <span class="hljs-comment">// 如果有安全检查.</span><br>			e.printStackTrace();<br>		&#125;<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test3</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">try</span> &#123;<br>			Class clazz = Class.forName(<span class="hljs-string">&quot;reflect.Teacher&quot;</span>);<br>			Object object = clazz.newInstance();<br>			System.out.println(object);<br>			<br>			<span class="hljs-comment">// 要想使用属性, 1)先获取属性定义对象 2) 配合目标this对象完成对象属性的间接访问.</span><br>			Field ageField = clazz.getField(<span class="hljs-string">&quot;age&quot;</span>); <span class="hljs-comment">// 根据属性名获取属性的定义对象</span><br>			ageField.set(object, <span class="hljs-number">40</span>); <span class="hljs-comment">// 设置属性值, 相当于 object.age = 40; </span><br>			System.out.println(ageField.get(object)); <span class="hljs-comment">// 获取属性值,  相当于 System.out.println(object.age)</span><br>			<br>			Field nameField = clazz.getField(<span class="hljs-string">&quot;name&quot;</span>);<br>			nameField.set(object, <span class="hljs-string">&quot;佟刚&quot;</span>); <span class="hljs-comment">// object.name = &quot;佟刚&quot;</span><br>			<br>			Field genderField = clazz.getField(<span class="hljs-string">&quot;gender&quot;</span>);<br>			genderField.set(object, <span class="hljs-string">&quot;男&quot;</span>);<br>			<br>			System.out.println(object);<br>		&#125; <span class="hljs-keyword">catch</span> (ClassNotFoundException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (InstantiationException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (IllegalAccessException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (NoSuchFieldException e) &#123; <span class="hljs-comment">// 查找属性时, 有可能属性名不对, 可能是属性不存在</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (SecurityException e) &#123; <span class="hljs-comment">// 如果有安全检查.</span><br>			e.printStackTrace();<br>		&#125;<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test2</span><span class="hljs-params">()</span> </span>&#123; <span class="hljs-comment">// 软编码, 灵活, 把问题延迟到运行时.</span><br>		<span class="hljs-keyword">try</span> &#123;<br>			<span class="hljs-comment">// 干预类的加载, 直接获取类模板对象.</span><br>			Class clazz = Class.forName(<span class="hljs-string">&quot;reflect.Teacher&quot;</span>); <span class="hljs-comment">// 类名必须全限定!!!</span><br>			<span class="hljs-comment">// 通过类模板对象.newInstance创建实体对象</span><br>			Object object = clazz.newInstance(); <span class="hljs-comment">// 调用无参构造器创建对象</span><br>			System.out.println(object);<br>		&#125; <span class="hljs-keyword">catch</span> (ClassNotFoundException e) &#123; <span class="hljs-comment">// 在运行时动态加载类时, 发现没有找到类</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (InstantiationException e) &#123; <span class="hljs-comment">// 在创建对象时出现异常, 可能是构造器不存在</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (IllegalAccessException e) &#123; <span class="hljs-comment">// 非法访问, 访问权限不够时出现</span><br>			e.printStackTrace();<br>		&#125;<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test1</span><span class="hljs-params">()</span> </span>&#123; <span class="hljs-comment">// 编译时必须依赖类, 硬编码</span><br>		<br>		<span class="hljs-comment">//Teacher t1 = new Teacher(); // 强烈依赖类</span><br>		<span class="hljs-comment">//t1.name = &quot;佟刚&quot;;</span><br>		<span class="hljs-comment">//t1.age = 40;</span><br>		<span class="hljs-comment">//t1.gender = &quot;男&quot;;</span><br>		<br>		<span class="hljs-comment">//System.out.println(t1.name);</span><br>		<span class="hljs-comment">//System.out.println(t1.age);</span><br>		<span class="hljs-comment">//System.out.println(t1.gender);</span><br>		<br>		<span class="hljs-comment">//System.out.println(t1);</span><br>		<br>		Teacher t2 = <span class="hljs-keyword">new</span> Teacher(<span class="hljs-string">&quot;程程&quot;</span>, <span class="hljs-number">20</span>, <span class="hljs-string">&quot;女&quot;</span>);<br>		System.out.println(t2);<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test0</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-comment">// 测试方法所在的线程永远是守护线程</span><br>	&#125;<br>	<br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;<br>		<span class="hljs-comment">// 守护线程, setDaemon(true); 此方法必须在start()以前调用.</span><br>		<span class="hljs-comment">// 主线程永远是用户线程</span><br>	&#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>反射</tag>
       </tags>
   </entry>
   <entry>
@@ -2109,39 +2338,6 @@
       </categories>
       <tags>
         <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Java反射</title>
-    <url>/2021/04/22/Java-reflect/</url>
-    <content><![CDATA[<h1 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h1><h2 id="单元测试类"><a href="#单元测试类" class="headerlink" title="单元测试类"></a>单元测试类</h2><blockquote>
-<ul>
-<li>单元测试方法的要求：类必须是公共的，必需不能有任何构造器</li>
-<li>方法必修是公共非静态无返回值参数</li>
-<li>执行：在方法名中右击，点击run as -junit</li>
-<li>包装类：把基本数据类型包装成对象</li>
-</ul>
-</blockquote>
-<h2 id="反射概述"><a href="#反射概述" class="headerlink" title="反射概述"></a>反射概述</h2><ul>
-<li><p>JAVA反射机制是在运行状态中，对于任意一个类，都能够知道这个类的所有属性和方法；对于任意一个对象，都能够调用它的任意一个方法和属性；这种动态获取的信息以及动态调用对象的方法的功能称为java语言的反射机制。</p>
-<p>要想解剖一个类,必须先要获取到该类的字节码文件对象。而解剖使用的就是Class类中的方法.所以先要获取到每一个字节码文件对应的Class类型的对象.</p>
-</li>
-<li><p>反射就是把Java类中的各种成分映射成一个个的Java对象</p>
-<p>例如：一个类有：成员变量、方法、构造方法、包等等信息，利用反射技术可以对一个类进行解剖，把个个组成部分映射成一个个对象。</p>
-<p>   （其实：一个类中这些成员方法、构造方法、在加入类中都有一个类来描述）</p>
-</li>
-<li><p>参考链接：CSDN博客 <a href="https://blog.csdn.net/qq_36226453/article/details/82790375">链接</a></p>
-</li>
-</ul>
-<h2 id="反射基础实例代码"><a href="#反射基础实例代码" class="headerlink" title="反射基础实例代码"></a>反射基础实例代码</h2><figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs Java"><span class="hljs-keyword">package</span> reflect;<br><br><span class="hljs-keyword">import</span> <span class="hljs-keyword">static</span> org.junit.Assert.*;<br><br><span class="hljs-keyword">import</span> java.io.FileInputStream;<br><span class="hljs-keyword">import</span> java.io.IOException;<br><span class="hljs-keyword">import</span> java.io.InputStream;<br><span class="hljs-keyword">import</span> java.io.Serializable;<br><span class="hljs-keyword">import</span> java.lang.annotation.Annotation;<br><span class="hljs-keyword">import</span> java.lang.annotation.ElementType;<br><span class="hljs-keyword">import</span> java.lang.annotation.Retention;<br><span class="hljs-keyword">import</span> java.lang.annotation.RetentionPolicy;<br><span class="hljs-keyword">import</span> java.lang.annotation.Target;<br><span class="hljs-keyword">import</span> java.lang.reflect.Constructor;<br><span class="hljs-keyword">import</span> java.lang.reflect.Field;<br><span class="hljs-keyword">import</span> java.lang.reflect.InvocationTargetException;<br><span class="hljs-keyword">import</span> java.lang.reflect.Method;<br><span class="hljs-keyword">import</span> java.util.ArrayList;<br><span class="hljs-keyword">import</span> java.util.HashMap;<br><span class="hljs-keyword">import</span> java.util.Map.Entry;<br><span class="hljs-keyword">import</span> java.util.Properties;<br><span class="hljs-keyword">import</span> java.util.Set;<br><br><span class="hljs-keyword">import</span> org.junit.Test;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 反射 : java的动态处理技术</span><br><span class="hljs-comment"> */</span><br><span class="hljs-meta">@Target(&#123;ElementType.TYPE, ElementType.FIELD&#125;)</span><br><span class="hljs-meta">@Retention(RetentionPolicy.RUNTIME)</span><br><span class="hljs-meta">@interface</span> HelloAnnotation &#123;<br>	<span class="hljs-function">String <span class="hljs-title">name</span><span class="hljs-params">()</span> <span class="hljs-keyword">default</span> &quot;缺省名字&quot;</span>;<br>	<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">id</span><span class="hljs-params">()</span> <span class="hljs-keyword">default</span> 10</span>;<br>&#125;<br><br><span class="hljs-meta">@HelloAnnotation(name=&quot;abc&quot;)</span><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Teacher</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">ArrayList</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Serializable</span>, <span class="hljs-title">Comparable</span>, <span class="hljs-title">Runnable</span> </span>&#123;<br>	<br>	<span class="hljs-meta">@HelloAnnotation</span><br>	<span class="hljs-keyword">private</span> String name;<br>	<span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> age;<br>	<span class="hljs-keyword">private</span> String gender;<br>	<br>	<span class="hljs-comment">//@HelloAnnotation</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Teacher</span><span class="hljs-params">()</span> </span>&#123;<br>	&#125;<br>	<span class="hljs-comment">//构造方法，Ctrl+Alt+S+O</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Teacher</span><span class="hljs-params">(String name)</span> </span>&#123;<br>		<span class="hljs-keyword">this</span>.name = name;<br>	&#125;<br>	<br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Teacher</span><span class="hljs-params">(<span class="hljs-keyword">int</span> age)</span> </span>&#123;<br>		<span class="hljs-keyword">this</span>.age = age;<br>	&#125;<br><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Teacher</span><span class="hljs-params">(String name,String gender)</span> </span>&#123;<br>		<span class="hljs-keyword">this</span>.name = name;<br>		<span class="hljs-keyword">this</span>.gender = gender;<br>	&#125;<br><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Teacher</span><span class="hljs-params">(String name, <span class="hljs-keyword">int</span> age, String gender)</span> </span>&#123;<br>		<span class="hljs-keyword">this</span>.name = name;<br>		<span class="hljs-keyword">this</span>.age = age;<br>		<span class="hljs-keyword">this</span>.gender = gender;<br>	&#125;<br>    <span class="hljs-comment">//set,get方法 快捷键Ctrl+Alt+S+R</span><br>	<span class="hljs-comment">//@HelloAnnotation</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">getName</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> name;<br>	&#125;<br><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setName</span><span class="hljs-params">(String name)</span> </span>&#123;<br>		<span class="hljs-keyword">this</span>.name = name;<br>	&#125;<br><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">getAge</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> age;<br>	&#125;<br><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setAge</span><span class="hljs-params">(<span class="hljs-keyword">int</span> age)</span> </span>&#123;<br>		<span class="hljs-keyword">this</span>.age = age;<br>	&#125;<br><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">getGender</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> gender;<br>	&#125;<br><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setGender</span><span class="hljs-params">(String gender)</span> </span>&#123;<br>		<span class="hljs-keyword">this</span>.gender = gender;<br>	&#125;<br>    <span class="hljs-comment">//Ctrl+Alt+S+S</span><br>	<span class="hljs-meta">@Override</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">toString</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> <span class="hljs-string">&quot;Teacher [name=&quot;</span> + name + <span class="hljs-string">&quot;, age=&quot;</span> + age + <span class="hljs-string">&quot;, gender=&quot;</span> + gender + <span class="hljs-string">&quot;]&quot;</span>;<br>	&#125;<br><br>	<span class="hljs-meta">@Override</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">run</span><span class="hljs-params">()</span> </span>&#123;<br>	&#125;<br><br>	<span class="hljs-meta">@Override</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">compareTo</span><span class="hljs-params">(Object o)</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>	&#125;<br>	<br>	<span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">lesson</span><span class="hljs-params">(String content, <span class="hljs-keyword">int</span> time)</span> </span>&#123;<br>		System.out.println(<span class="hljs-string">&quot;老师在上[&quot;</span> + content + <span class="hljs-string">&quot;]课, 共上了[&quot;</span> + time +<span class="hljs-string">&quot;]小时&quot;</span>);<br>		<span class="hljs-comment">//return true;</span><br>		<span class="hljs-comment">//throw new RuntimeException(&quot;一个异常&quot;);</span><br>	&#125;<br>	<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ReflectTest</span> </span>&#123;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">testName</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception </span>&#123;<br>		Class clazz = Class.forName(<span class="hljs-string">&quot;reflect.Teacher&quot;</span>);<br>		Annotation[] annotations = clazz.getAnnotations();<br>		System.out.println(annotations.length);<br>		System.out.println(annotations[<span class="hljs-number">0</span>]);<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test14</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> Exception </span>&#123;<br>		Class clazz = Class.forName(<span class="hljs-string">&quot;reflect.Teacher&quot;</span>);<br>		System.out.println(<span class="hljs-string">&quot;父类 : &quot;</span> + clazz.getSuperclass());<br>		Constructor[] constructors = clazz.getConstructors();<br>		<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; constructors.length; i++) &#123;<br>			System.out.println(<span class="hljs-string">&quot;构造器 : &quot;</span> + constructors[i]);<br>		&#125;<br>		System.out.println(<span class="hljs-string">&quot;************************************************&quot;</span>);<br>		Field[] fields = clazz.getFields(); <span class="hljs-comment">// 所有公共属性</span><br>		<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; fields.length; i++) &#123;<br>			System.out.println(<span class="hljs-string">&quot;公共属性：&quot;</span>+fields[i]);<br>		&#125;<br>		<span class="hljs-comment">//反射尽量不要破坏封装性，容易发生严重后果，慎用getDeclared.....()方法</span><br>		Field[] declaredFields = clazz.getDeclaredFields(); <span class="hljs-comment">// 所有本类属性</span><br>		<span class="hljs-keyword">for</span> (Field field : declaredFields) &#123;<br>			System.out.println(<span class="hljs-string">&quot;本类属性：&quot;</span>+field);<br>		&#125;<br>		System.out.println(<span class="hljs-string">&quot;************************************************&quot;</span>);<br>		Method[] methods = clazz.getMethods();<span class="hljs-comment">//所有公共方法</span><br>		<span class="hljs-keyword">for</span> (Method method : methods) &#123;<br>			System.out.println(<span class="hljs-string">&quot;公共方法&quot;</span>+method);<br>		&#125;<br>		System.out.println(<span class="hljs-string">&quot;************************************************&quot;</span>);<br>		Method[] declaredMethods = clazz.getDeclaredMethods();<span class="hljs-comment">//所有本类方法</span><br>		<span class="hljs-keyword">for</span> (Method method : declaredMethods) &#123;<br>			System.out.println(<span class="hljs-string">&quot;本类方法：&quot;</span>+method);<br>		&#125;<br>	&#125;<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test13</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">try</span> &#123;<br>			Class clazz = Class.forName(<span class="hljs-string">&quot;reflect.Teacher&quot;</span>);<br>			Method lessonMethod = clazz.getDeclaredMethod(<span class="hljs-string">&quot;lesson&quot;</span>, String.class, <span class="hljs-keyword">int</span>.class);<br>			lessonMethod.setAccessible(<span class="hljs-keyword">true</span>);<br>			<br>			Short n = <span class="hljs-number">3</span>;<br>			Object retValue = lessonMethod.invoke(<span class="hljs-keyword">null</span>, <span class="hljs-string">&quot;JavaWEB&quot;</span>, n); <span class="hljs-comment">// 静态方法传null, 不需要传入对象</span><br>			System.out.println(retValue);<br>		&#125; <span class="hljs-keyword">catch</span> (ClassNotFoundException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (IllegalAccessException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (NoSuchMethodException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (SecurityException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (IllegalArgumentException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (InvocationTargetException e) &#123;<br>			e.printStackTrace();<br>		&#125;<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test12</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">try</span> &#123;<br>			Class clazz = Class.forName(<span class="hljs-string">&quot;reflect.Teacher&quot;</span>);<br>			Constructor constructor = clazz.getConstructor(String.class, <span class="hljs-keyword">int</span>.class, String.class);<br>			Object object = constructor.newInstance(<span class="hljs-string">&quot;佟刚&quot;</span>, <span class="hljs-number">40</span>, <span class="hljs-string">&quot;男&quot;</span>);<br>			<br>			<span class="hljs-comment">// getMethod只能获取公共的方法, 包括从父类继承的. </span><br>			<span class="hljs-comment">//Method lessonMethod = clazz.getMethod(&quot;lesson&quot;, String.class, int.class); </span><br>			<br>			<span class="hljs-comment">// getDeclaredMethod可以获取本类中所有声明的方法</span><br>			Method lessonMethod = clazz.getDeclaredMethod(<span class="hljs-string">&quot;lesson&quot;</span>, String.class, <span class="hljs-keyword">int</span>.class);<br>			lessonMethod.setAccessible(<span class="hljs-keyword">true</span>);<br>			<br>			Short n = <span class="hljs-number">3</span>;<br>			Object retValue = lessonMethod.invoke(object, <span class="hljs-string">&quot;JavaWEB&quot;</span>, n); <br>			System.out.println(retValue);<br>			<span class="hljs-comment">/*</span><br><span class="hljs-comment">		    private String outOfBoundsMsg(int index) &#123;</span><br><span class="hljs-comment">		        return &quot;Index: &quot;+index+&quot;, Size: &quot;+size;</span><br><span class="hljs-comment">		    &#125;</span><br><span class="hljs-comment">		    */</span><br>			<span class="hljs-comment">/*</span><br><span class="hljs-comment">			//拿父类的方法，会有警告，最好不要暴力访问私有方法，属性</span><br><span class="hljs-comment">			Method declaredMethod = clazz.getSuperclass().getDeclaredMethod(&quot;outOfBoundsMsg&quot;, int.class);</span><br><span class="hljs-comment">			System.out.println(declaredMethod);</span><br><span class="hljs-comment">			//危险操作</span><br><span class="hljs-comment">			declaredMethod.setAccessible(true);</span><br><span class="hljs-comment">			</span><br><span class="hljs-comment">			Object invoke = declaredMethod.invoke(object, 20);</span><br><span class="hljs-comment">			System.out.println(invoke);</span><br><span class="hljs-comment">			*/</span><br>		&#125; <span class="hljs-keyword">catch</span> (ClassNotFoundException e) &#123; <span class="hljs-comment">// 类未找到</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (NoSuchMethodException e) &#123; <span class="hljs-comment">// 方法没有找到, 方法名错误或参数列表错误</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (SecurityException e) &#123; <span class="hljs-comment">// 安全异常</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (InstantiationException e) &#123; <span class="hljs-comment">// 创建对象时出现异常</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (IllegalAccessException e) &#123; <span class="hljs-comment">// 非法访问异常</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (IllegalArgumentException e) &#123; <span class="hljs-comment">// 非法实参异常, 实参和形参不匹配, 类型和顺序和数量</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (InvocationTargetException e) &#123; <span class="hljs-comment">// 调用的目标方法内部出现异常了.</span><br>			e.printStackTrace();<br>		&#125;<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test11</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">try</span> &#123;<br>			Class clazz = Class.forName(<span class="hljs-string">&quot;reflect.Teacher&quot;</span>);<br>			Constructor constructor = clazz.getConstructor(String.class, <span class="hljs-keyword">int</span>.class, String.class);<br>			Object object = constructor.newInstance(<span class="hljs-string">&quot;佟刚&quot;</span>, <span class="hljs-number">40</span>, <span class="hljs-string">&quot;男&quot;</span>);<br>			<br>			<span class="hljs-comment">//object.lesson(&quot;JavaWEB&quot;, 3);</span><br>			<span class="hljs-comment">//先获取方法</span><br>			<br>			Method lessonMethod = clazz.getMethod(<span class="hljs-string">&quot;lesson&quot;</span>, String.class, <span class="hljs-keyword">int</span>.class); <span class="hljs-comment">// 后面是方法参数类型列表</span><br>			<span class="hljs-keyword">short</span> n = <span class="hljs-number">3</span>;<br>			Object retValue = lessonMethod.invoke(object, <span class="hljs-string">&quot;JavaWEB&quot;</span>, n); <span class="hljs-comment">// 后面是实参列表, 如果方法没有返回值, 它的返回值是null</span><br>			System.out.println(retValue);<br>		&#125; <span class="hljs-keyword">catch</span> (ClassNotFoundException e) &#123; <span class="hljs-comment">// 类未找到</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (NoSuchMethodException e) &#123; <span class="hljs-comment">// 方法没有找到, 方法名错误或参数列表错误</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (SecurityException e) &#123; <span class="hljs-comment">// 安全异常</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (InstantiationException e) &#123; <span class="hljs-comment">// 创建对象时出现异常</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (IllegalAccessException e) &#123; <span class="hljs-comment">// 非法访问异常</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (IllegalArgumentException e) &#123; <span class="hljs-comment">// 非法实参异常, 实参和形参不匹配, 类型和顺序和数量</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (InvocationTargetException e) &#123; <span class="hljs-comment">// 调用的目标方法内部出现异常了.</span><br>			e.printStackTrace();<br>		&#125;<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test10</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">try</span> &#123;<br>			Class clazz = Class.forName(<span class="hljs-string">&quot;reflect.Teacher&quot;</span>);<br>			<span class="hljs-comment">//Object object = clazz.newInstance(); 没有无参构造器时出问题</span><br>			<br>			<span class="hljs-comment">//public Teacher(String name, int age, String gender) 要想定位这个构造器, 必须让参数列表一致.</span><br>			<br>			<span class="hljs-comment">// 提供形式参数类型列表, 是类模板对象的列表</span><br>			Constructor constructor = clazz.getConstructor(String.class, <span class="hljs-keyword">int</span>.class, String.class); <span class="hljs-comment">// 定位合适的构造器</span><br>			<span class="hljs-comment">// 调用时必须给定实参列表</span><br>			Object object = constructor.newInstance(<span class="hljs-string">&quot;程程&quot;</span>, <span class="hljs-number">20</span>, <span class="hljs-string">&quot;女&quot;</span>); <span class="hljs-comment">// new Teacher(&quot;程程&quot;, 20, &quot;女&quot;);</span><br>			System.out.println(object);<br>			<br>		&#125; <span class="hljs-keyword">catch</span> (ClassNotFoundException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (InstantiationException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (IllegalAccessException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (NoSuchMethodException e) &#123; <span class="hljs-comment">// 参数列表出错, 或者方法名出错</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (SecurityException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (IllegalArgumentException e) &#123; <span class="hljs-comment">// 方法调用时实参和形参不匹配</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (InvocationTargetException e) &#123;<br>			e.printStackTrace();<br>		&#125;<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test9</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> IOException  </span>&#123;<br>		<span class="hljs-comment">//FileInputStream fis = new FileInputStream(&quot;只能读当前目录下的文件&quot;);</span><br>		ClassLoader classLoader = <span class="hljs-keyword">this</span>.getClass().getClassLoader();<br>		<span class="hljs-comment">// 只能加载build-path和src下的文件</span><br>		<span class="hljs-comment">//InputStream inputStream = classLoader.getResourceAsStream(&quot;com/sun/corba/se/impl/logging/LogStrings.properties&quot;); // 读取资源文件, 只要是Build-Path(classpath)中的文件都可以</span><br>		InputStream inputStream = classLoader.getResourceAsStream(<span class="hljs-string">&quot;s2&quot;</span>);<br>		Properties properties = <span class="hljs-keyword">new</span> Properties();<br>		properties.load(inputStream);<br>		<br>		Set&lt;Entry&lt;Object, Object&gt;&gt; entrySet = properties.entrySet();<br>		<span class="hljs-keyword">for</span> (Entry&lt;Object, Object&gt; entry : entrySet) &#123;<br>			System.out.println(entry);<br>		&#125;<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test8</span><span class="hljs-params">()</span>  </span>&#123;<br>		ClassLoader classLoader1 = ClassLoader.getSystemClassLoader(); <span class="hljs-comment">// 获取系统类加载器</span><br>		System.out.println(classLoader1);<br>		ClassLoader classLoader2 = <span class="hljs-keyword">this</span>.getClass().getClassLoader(); <span class="hljs-comment">// 使用最多的, 获取当前类的类加载器</span><br>		System.out.println(classLoader2);<br>		<br>		ClassLoader classLoader3 = classLoader1.getParent(); <span class="hljs-comment">// 获取父 &quot;类加载器&quot;,  是 扩展 &quot;类加载器&quot;</span><br>		System.out.println(classLoader3);<br>		<br>		ClassLoader classLoader4 = classLoader3.getParent(); <span class="hljs-comment">// 获取到的是引导类加载器(Bootstrap )</span><br>		System.out.println(classLoader4); <span class="hljs-comment">// 这个类加载器无法获取, 无法使用</span><br>		<br>		<span class="hljs-comment">/*</span><br><span class="hljs-comment">		双亲委派机制</span><br><span class="hljs-comment">		用户类加载器加载类时, 必须把此加载请求转发给父类加载器, 父类加载器再继续向父类加载器委派, 直到Bootstrap类加载器</span><br><span class="hljs-comment">		从Bootstrap类加载器开始真正加载, 各司其职. </span><br><span class="hljs-comment">		*/</span><br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test7</span><span class="hljs-params">()</span>  </span>&#123;<br>		Class strClazz = String.class;<br>		System.out.println(strClazz);<br>		<br>		<span class="hljs-comment">// 基本数据类型的类模板只能用第一种方式获取.</span><br>		Class clazz1 = <span class="hljs-keyword">int</span>.class; <span class="hljs-comment">// 基本数据类型也有相应的类模板对象, 但是不能获取属性和方法, 只能作为一个标记来使用.</span><br>		Class clazz2 = Integer.class; <span class="hljs-comment">// 这是一个普通类模板.</span><br>		System.out.println(clazz1 == clazz2);<br>		<br>		<span class="hljs-comment">// 判断类模板类型</span><br>		System.out.println(<span class="hljs-string">&quot;是否是基本型 : &quot;</span> + clazz1.isPrimitive());<br>		System.out.println(<span class="hljs-string">&quot;是否是基本型 : &quot;</span> + clazz2.isPrimitive());<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test6</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> ClassNotFoundException </span>&#123;<br>		<span class="hljs-comment">// 获取类模板对象的方法 ，有４种</span><br>		<span class="hljs-comment">// 1) 直接通过类.class, 效率最高, 最安全.</span><br>		Class clazz1 = Teacher.class;<br>		<br>		<span class="hljs-comment">// 2) 根据对象, 调用它的getClass()方法获取, 此方法也很常用.</span><br>		Teacher teacher = <span class="hljs-keyword">new</span> Teacher(<span class="hljs-string">&quot;佟刚&quot;</span>, <span class="hljs-number">40</span>, <span class="hljs-string">&quot;男&quot;</span>);<br>		Class clazz2 = teacher.getClass();<br>		<br>		System.out.println(clazz1 == clazz2);<br>		<br>		<span class="hljs-comment">// 3) 反射中最常用的 Class.forName(&quot;全限定类名&quot;);</span><br>		Class clazz3 = Class.forName(<span class="hljs-string">&quot;reflect.Teacher&quot;</span>);<br>		System.out.println(clazz2 == clazz3);<br>		<br>		<span class="hljs-comment">// 4) 通过类加载器对象动态加载类</span><br>		ClassLoader classLoader = <span class="hljs-keyword">this</span>.getClass().getClassLoader();<br>		Class clazz4 = classLoader.loadClass(<span class="hljs-string">&quot;reflect.Teacher&quot;</span>);<br>		System.out.println(clazz3 == clazz4);<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test5</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> ClassNotFoundException </span>&#123;<br>		Class clazz = Class.forName(<span class="hljs-string">&quot;reflect.Teacher&quot;</span>);<br>		String name = clazz.getName();<br>		System.out.println(<span class="hljs-string">&quot;类名 : &quot;</span> + name);<br>		System.out.println(<span class="hljs-string">&quot;简单类名 :  &quot;</span> + clazz.getSimpleName());<br>		Class superclass = clazz.getSuperclass();<br>		System.out.println(<span class="hljs-string">&quot;父类 : &quot;</span> + superclass);<br>		Class[] interfaces = clazz.getInterfaces();<br>		System.out.println(<span class="hljs-string">&quot;接口列表 &quot;</span>);<br>		<span class="hljs-keyword">for</span> (Class class1 : interfaces) &#123;<br>			System.out.println(class1);<br>		&#125;<br>		<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test4</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">try</span> &#123;<br>			Class clazz = Class.forName(<span class="hljs-string">&quot;reflect.Teacher&quot;</span>);<br>			Object object = clazz.newInstance();<br>			System.out.println(object);<br>			<br>			<span class="hljs-comment">//Field ageField = clazz.getField(&quot;age&quot;); // getField方法只能获取公共的属性, 也包括从父类继承的属性, 不可以获取私有属性</span><br>			Field ageField = clazz.getDeclaredField(<span class="hljs-string">&quot;age&quot;</span>); <span class="hljs-comment">// 获取本类中声明的任意属性 </span><br>			<span class="hljs-comment">// 暴力反射!!! 不推荐使用!!</span><br>			ageField.setAccessible(<span class="hljs-keyword">true</span>); <span class="hljs-comment">// 设置此属性为可访问的.</span><br>			ageField.set(object, <span class="hljs-number">40</span>); <br>			System.out.println(ageField.get(object)); <br>			<br>			Field nameField = clazz.getDeclaredField(<span class="hljs-string">&quot;name&quot;</span>);<br>			nameField.setAccessible(<span class="hljs-keyword">true</span>);<br>			nameField.set(object, <span class="hljs-string">&quot;佟刚&quot;</span>);<br>			<br>			System.out.println(object);<br>		&#125; <span class="hljs-keyword">catch</span> (ClassNotFoundException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (InstantiationException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (IllegalAccessException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (NoSuchFieldException e) &#123; <span class="hljs-comment">// 查找属性时, 有可能属性名不对, 可能是属性不存在</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (SecurityException e) &#123; <span class="hljs-comment">// 如果有安全检查.</span><br>			e.printStackTrace();<br>		&#125;<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test3</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">try</span> &#123;<br>			Class clazz = Class.forName(<span class="hljs-string">&quot;reflect.Teacher&quot;</span>);<br>			Object object = clazz.newInstance();<br>			System.out.println(object);<br>			<br>			<span class="hljs-comment">// 要想使用属性, 1)先获取属性定义对象 2) 配合目标this对象完成对象属性的间接访问.</span><br>			Field ageField = clazz.getField(<span class="hljs-string">&quot;age&quot;</span>); <span class="hljs-comment">// 根据属性名获取属性的定义对象</span><br>			ageField.set(object, <span class="hljs-number">40</span>); <span class="hljs-comment">// 设置属性值, 相当于 object.age = 40; </span><br>			System.out.println(ageField.get(object)); <span class="hljs-comment">// 获取属性值,  相当于 System.out.println(object.age)</span><br>			<br>			Field nameField = clazz.getField(<span class="hljs-string">&quot;name&quot;</span>);<br>			nameField.set(object, <span class="hljs-string">&quot;佟刚&quot;</span>); <span class="hljs-comment">// object.name = &quot;佟刚&quot;</span><br>			<br>			Field genderField = clazz.getField(<span class="hljs-string">&quot;gender&quot;</span>);<br>			genderField.set(object, <span class="hljs-string">&quot;男&quot;</span>);<br>			<br>			System.out.println(object);<br>		&#125; <span class="hljs-keyword">catch</span> (ClassNotFoundException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (InstantiationException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (IllegalAccessException e) &#123;<br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (NoSuchFieldException e) &#123; <span class="hljs-comment">// 查找属性时, 有可能属性名不对, 可能是属性不存在</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (SecurityException e) &#123; <span class="hljs-comment">// 如果有安全检查.</span><br>			e.printStackTrace();<br>		&#125;<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test2</span><span class="hljs-params">()</span> </span>&#123; <span class="hljs-comment">// 软编码, 灵活, 把问题延迟到运行时.</span><br>		<span class="hljs-keyword">try</span> &#123;<br>			<span class="hljs-comment">// 干预类的加载, 直接获取类模板对象.</span><br>			Class clazz = Class.forName(<span class="hljs-string">&quot;reflect.Teacher&quot;</span>); <span class="hljs-comment">// 类名必须全限定!!!</span><br>			<span class="hljs-comment">// 通过类模板对象.newInstance创建实体对象</span><br>			Object object = clazz.newInstance(); <span class="hljs-comment">// 调用无参构造器创建对象</span><br>			System.out.println(object);<br>		&#125; <span class="hljs-keyword">catch</span> (ClassNotFoundException e) &#123; <span class="hljs-comment">// 在运行时动态加载类时, 发现没有找到类</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (InstantiationException e) &#123; <span class="hljs-comment">// 在创建对象时出现异常, 可能是构造器不存在</span><br>			e.printStackTrace();<br>		&#125; <span class="hljs-keyword">catch</span> (IllegalAccessException e) &#123; <span class="hljs-comment">// 非法访问, 访问权限不够时出现</span><br>			e.printStackTrace();<br>		&#125;<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test1</span><span class="hljs-params">()</span> </span>&#123; <span class="hljs-comment">// 编译时必须依赖类, 硬编码</span><br>		<br>		<span class="hljs-comment">//Teacher t1 = new Teacher(); // 强烈依赖类</span><br>		<span class="hljs-comment">//t1.name = &quot;佟刚&quot;;</span><br>		<span class="hljs-comment">//t1.age = 40;</span><br>		<span class="hljs-comment">//t1.gender = &quot;男&quot;;</span><br>		<br>		<span class="hljs-comment">//System.out.println(t1.name);</span><br>		<span class="hljs-comment">//System.out.println(t1.age);</span><br>		<span class="hljs-comment">//System.out.println(t1.gender);</span><br>		<br>		<span class="hljs-comment">//System.out.println(t1);</span><br>		<br>		Teacher t2 = <span class="hljs-keyword">new</span> Teacher(<span class="hljs-string">&quot;程程&quot;</span>, <span class="hljs-number">20</span>, <span class="hljs-string">&quot;女&quot;</span>);<br>		System.out.println(t2);<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test0</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-comment">// 测试方法所在的线程永远是守护线程</span><br>	&#125;<br>	<br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;<br>		<span class="hljs-comment">// 守护线程, setDaemon(true); 此方法必须在start()以前调用.</span><br>		<span class="hljs-comment">// 主线程永远是用户线程</span><br>	&#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>Java</category>
-      </categories>
-      <tags>
-        <tag>java</tag>
-        <tag>反射</tag>
       </tags>
   </entry>
   <entry>
@@ -3079,6 +3275,602 @@
       <tags>
         <tag>大数据</tag>
         <tag>spark</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>conclusion</title>
+    <url>/2021/09/29/conclusion/</url>
+    <content><![CDATA[<h1 id="重点知识点总结"><a href="#重点知识点总结" class="headerlink" title="重点知识点总结"></a>重点知识点总结</h1><h2 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h2><ul>
+<li><p>linux常用命令</p>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>命令</th>
+<th>命令解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>top</td>
+<td>查看内存</td>
+</tr>
+<tr>
+<td>2</td>
+<td>df -h</td>
+<td>查看磁盘存储情况</td>
+</tr>
+<tr>
+<td>3</td>
+<td>iotop</td>
+<td>查看磁盘IO读写情况，要root权限</td>
+</tr>
+<tr>
+<td>4</td>
+<td>iotop -o</td>
+<td>直接查看比较高的磁盘读写程序</td>
+</tr>
+<tr>
+<td>5</td>
+<td>netstat -tunlp | grep 端口号</td>
+<td>查看端口占用情况</td>
+</tr>
+<tr>
+<td>6</td>
+<td>uptime</td>
+<td>查看报告系统运行时长及平均负载</td>
+</tr>
+<tr>
+<td>7</td>
+<td>ps  -aux</td>
+<td>查看进程</td>
+</tr>
+</tbody></table>
+<p>ifconfig   查看IP地址</p>
+<p>ps -aux    显示USER PID %CPU %MEM VSZ RSS TTY STAT START TIME COMMAND</p>
+<p>ps -ef | grep flume    查看进程和父进程的ID（flume进程的关闭就可以通过此方式查看进程号）</p>
+<p>ps -ef 显示 UID    PID PPID C STIME TTY     TIME CMD</p>
+<p><font color=red>PID是程序被操作系统加载到内存成为进程后动态分配的资源，</font>每次程序执行的时候，操作系统都会重新加载，PID在每次加载都是不同的。</p>
+<p>PPID 是程序的父进程号</p>
+</li>
+</ul>
+<h2 id="Shell"><a href="#Shell" class="headerlink" title="Shell"></a>Shell</h2><ul>
+<li><p>框架启动关闭脚本</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell"><span class="hljs-meta">#</span><span class="bash">!/bin/bash</span><br><br>case $1 in<br>&quot;start&quot;)&#123;<br>	for i in hadoop100 hadoop101 hadoop102<br>	do<br>		ssh $i &quot;启动命令，用绝对路径&quot;<br>	done<br>&#125;;;<br>&quot;stop&quot;)&#123;<br><br>&#125;;;<br>esac<br><br></code></pre></td></tr></table></figure></li>
+<li><p>单引号和双引号的区别</p>
+<ul>
+<li>单引号：’$do_date’,在引号内部的变量不能解释里面变量对应的值</li>
+<li>双引号：”$do_date”,在引号内部，能够取出变量的值</li>
+<li>单引号，双引号嵌套：看谁在最外面</li>
+<li>``号表示，执行引号中的命令</li>
+</ul>
+</li>
+</ul>
+<h2 id="Hadoop"><a href="#Hadoop" class="headerlink" title="Hadoop"></a>Hadoop</h2><h3 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h3><ul>
+<li>Hadoop3.x常用端口<ul>
+<li>namenode rpc 端口 8020    2.x是9000</li>
+<li>namenode http 端口 9870    2.x是50070</li>
+<li>resourcemanager webapp.address  端口8088</li>
+<li>19888 历史服务器</li>
+</ul>
+</li>
+<li>安装配置文件<ul>
+<li>core-site.xml</li>
+<li>yarn-site.xml</li>
+<li>mapred-site.xml</li>
+<li>hdfs.site.xml</li>
+<li>workers(3.x)                       slaves(2.x)</li>
+</ul>
+</li>
+</ul>
+<h3 id="HDFS"><a href="#HDFS" class="headerlink" title="HDFS"></a>HDFS</h3><ul>
+<li>HDFS块大小2.x，3.x，默认都是128M   本地模式32M<ul>
+<li>块大小主要看服务器之间的传输速率</li>
+</ul>
+</li>
+<li>HDFS读写流程<ul>
+<li>写数据流程（8步）<ul>
+<li>客户端向NameNode请求写入数据</li>
+<li>NameNode响应是否上传文件</li>
+<li>客户端上传第一个Block的信息</li>
+<li>namenode返回datanode节点（dn1,dn2,dn3）</li>
+<li>客户端与datanode建立连接通道</li>
+<li>datanode逐级应答</li>
+<li>客户端向dn1传输数据（以Packet的形式64kb），dn1再向dn2传输，依次传输。<font color=red>dn1每传输一个packet会放入一个应答队列等待应答.</font></li>
+<li>重复3-7步，传输block2</li>
+</ul>
+</li>
+<li>读数据流程（4步）<ul>
+<li>客户端向Namenode请求读数据</li>
+<li>namenode返回元数据信息</li>
+<li>找最近的datanode</li>
+<li>datanode向客户端传输信息，以packet  的形式。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="MapReduce"><a href="#MapReduce" class="headerlink" title="MapReduce"></a>MapReduce</h3><ul>
+<li>shuffle流程以及优化<ul>
+<li>map方法之后，redece方法之前的数据处理过程</li>
+<li>大致流程<ul>
+<li>MapTask收集map()方法的K,V对，并将这些数据放入环形缓冲区中</li>
+<li>当环形缓冲区(默认100m）达到80%后，会进行溢写操作，将数据溢写到磁盘。在环形缓冲区中会进行快速排序</li>
+<li>会将溢写到磁盘的文件进行归并排序，在溢写和归并的过程中，都要调用Partitioner进行分区和针对key进行排序</li>
+<li>ReduceTask 会根据分区号，去各个MapTask上取相应的结果分区数据。将数据写入内存</li>
+<li>ReduceTask会取到同一分区来自不同MapTask的结果文件，内存不够时，也会触发溢写操作，将数据写入磁盘。</li>
+<li>ReduceTask会将这些文件进行合并（归并排序）还可以将归并完成的文件看需求是否进行分组操作，合并成大文件后，shuffle过程结束。之后将数据按reduce 方法去处理。</li>
+</ul>
+</li>
+<li>优化：<ul>
+<li>自定义分区（减少数据倾斜）</li>
+<li>可以设置环形缓冲区到90%，95%之后再进行溢写，减少溢写文件，提升速度</li>
+<li>再不影响业务逻辑的（如求和），可以进行Combiner操作。对MapTask的输出进行一个局部汇总</li>
+<li>在MapTask中，默认一次归并10个文件，可以设置更多提高性能</li>
+<li>MapTask输出可以进行压缩（snappy ,lzo），减少数据传输量,提升速度</li>
+<li>ReduceTask一次默认拉取5个MapTask同一分区的数据，可以根据集群性能调整</li>
+<li>ReduceTask从MapTask中拉取数据先放入内存中，可以适当提高内存，减少溢写，也增加传输速度</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>一般情况下1g内存   对应128M数据   比较合理</li>
+<li>NM默认内存：8g（服务器调整到100g左右）</li>
+<li>单个任务默认内存:8g</li>
+<li>MapTask默认内存：1g</li>
+<li>ReduceTask默认内存:1g</li>
+<li>MapJoin:在Map端缓存多张表，提前处理业务逻辑，这样增加Map端业务，减少Reduce端数据的压力，尽可能的减少数据倾斜。mapjoin适合一张表很大，一张表很小的场景。将小表缓存<ul>
+<li>在Mapper的setup阶段(重写setup方法)，将文件读取到缓存集合中</li>
+<li>在驱动函数中加载缓存，缓存普通文件到Task运行节点</li>
+<li>job.addCacheFile(new URL(“file://e:/cache/xxx.txt”))</li>
+</ul>
+</li>
+</ul>
+<h3 id="YARN"><a href="#YARN" class="headerlink" title="YARN"></a>YARN</h3><ul>
+<li><p>yarn工作调度流程(8步)</p>
+<ul>
+<li><p>客户端执行job.waitForCompletion</p>
+</li>
+<li><p>客户端向RM申请运行一个Application</p>
+</li>
+<li><p>RM向client 返回Application的资源提交路径和job_id</p>
+</li>
+<li><p>client将资源(切片信息，配置信息，所需jar包)提交到HDFS上</p>
+</li>
+<li><p>资源提交完成，申请运行AppMaster</p>
+</li>
+<li><p>AppMaster下载Client提交的资源到本地</p>
+</li>
+<li><p>APPMaster向RM申请多个任务资源，运行MapReduce程序</p>
+</li>
+<li><p>运行完成后，MR会向RM申请注销自己。</p>
+</li>
+</ul>
+</li>
+<li><p>yarn资源调度器</p>
+<ul>
+<li>FIFO<ul>
+<li>队列形式，先进先出</li>
+</ul>
+</li>
+<li>容量调度器(默认的资源调度器)<ul>
+<li>几个并行的FIFO，当资源不紧张时，采用此方式</li>
+<li>优先满足先进入的任务</li>
+</ul>
+</li>
+<li>公平调度器 （能最大限度的利用集群资源）<ul>
+<li>最大限度的利用集群资源</li>
+<li>每个任务都公平的享有资源，并发度高</li>
+<li>同一队列的作业按照其优先级分享整个队列的资源，并发执行</li>
+<li>每个作业可以设置最小资源值，调度器会保证作业获得其以上的资源</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="优化问题"><a href="#优化问题" class="headerlink" title="优化问题"></a>优化问题</h3><ul>
+<li>优化问题<ul>
+<li>小文件问题<ul>
+<li>har归档</li>
+<li>使用CombineTextInputformat</li>
+<li>JVM重用</li>
+</ul>
+</li>
+<li>数据倾斜问题<ul>
+<li>启用combiner ,减少数据的传输量</li>
+<li>根据数据分布情况，自定义分区，将key 均匀分配到Reducer</li>
+<li>重新设计key，有一种方案是在map阶段时给key加上一个随机数,有了随机数的key就不会被大量的分配到同一节点(小几率),待到reduce后再把随机数去掉即可。</li>
+<li>增加Reducer，提升并行度</li>
+<li>增加JVM内存</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Zookeeper"><a href="#Zookeeper" class="headerlink" title="Zookeeper"></a>Zookeeper</h2><ul>
+<li><p>Zookeeper从设计模式的角度理解，是一个基于观察者模式设计的分布式服务管理框架，<font color=red>它负责存储和管理大家都关心的数据，然后接受观察者的注册，一旦这些数据的状态发生变化，Zookeeper就将负责通知已经在Zookeeper上注册的那些观察者做出相应的反应</font></p>
+</li>
+<li><p>Zookeeper=文件系统+通知机制</p>
+</li>
+<li><p>选举机制</p>
+<ul>
+<li><p>奇数台</p>
+<p>10台服务器：3台</p>
+<p>20台服务器：5台</p>
+<p>100台服务器：11台</p>
+</li>
+<li><p>台数不是越多越好，太多选举时间过长影响性能。</p>
+</li>
+<li><p>zk半数以上可以正常运行</p>
+</li>
+<li><p>ZooKeeper是一个开源的分布式的，为分布式应用提供协调服务的Apache项目</p>
+</li>
+</ul>
+</li>
+<li><p>常用命令</p>
+<ul>
+<li>ls path 查看当前znode中所包含的内容</li>
+<li>create 普通创建 -s含有序列  -e 临时（重启或超时消失）</li>
+<li>get path 获得节点的值</li>
+<li>set 设置节点的具体值</li>
+<li>stat 查看节点状态</li>
+</ul>
+</li>
+<li><p>HA</p>
+<p><a href="https://imgtu.com/i/2lA1SS"><img src="https://z3.ax1x.com/2021/06/02/2lA1SS.png" alt="2lA1SS.png"></a></p>
+</li>
+</ul>
+<h2 id="Flume"><a href="#Flume" class="headerlink" title="Flume"></a>Flume</h2><ul>
+<li><p>架构</p>
+<ul>
+<li><p>flume是一个分布式的海量日志采集，聚合，和传输的系统</p>
+</li>
+<li><p>Flume agent 内部原理</p>
+<ul>
+<li><p>source接收数据，数据以event的形式传给ChannelProcessor</p>
+</li>
+<li><p>ChannelProcessor将事件传递给拦截器，在拦截器中可以对event数据进行更改</p>
+</li>
+<li><p>经过拦截器后，数据返回到ChannelProcessor，ChannelProcessor将每个event交给ChannelSelector，ChannelSelector的作用就是选出Event将要发往哪个Channel，有两种选择：分别是Replicating(复制)和Multiplexing（多路复用）</p>
+</li>
+<li><p>数据再返回到ChannelProcessor，根据选择器的选择，进入不同的Channel</p>
+</li>
+<li><p>SinkProcessor再决定channel中的event 的走向</p>
+<ul>
+<li><p>SinkProcessor共有三种类型，分别是DefaultSinkProcessor、LoadBalancingSinkProcessor和FailoverSinkProcessor</p>
+<p>DefaultSinkProcessor对应的是单个的Sink，LoadBalancingSinkProcessor和FailoverSinkProcessor对应的是Sink Group，LoadBalancingSinkProcessor可以实现负载均衡的功能，FailoverSinkProcessor可以错误恢复的功能（故障转移）。</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>event:flume传输数据的基本单位，由Header和Body组成，Header用来存放该event的一些属性，为K，V结构（Header不设置的话为空）；Body用来存放该条数据，形式为字节数组。</p>
+</li>
+<li><p>source</p>
+<ul>
+<li>Taildir Source:适用于监听多个实时追加的文件，并且能够实现断点续传。（可能会出现数据重复）</li>
+<li>batchSize参数决定Source一次批量运输到Channel的event条数，适当调大这个参数可以提高Source搬运Event到Channel时的性能。</li>
+</ul>
+</li>
+<li><p>channel</p>
+<ul>
+<li>File Channel  基于磁盘  可以存100万个event</li>
+<li>Memory Channel 基于内存  可以存100个event</li>
+<li>KafkaChannel  数据存储在Kafka里面 基于磁盘的  KafkaChannel传输性能大于MemoryChannel+KafkaSink</li>
+</ul>
+</li>
+<li><p>sink</p>
+<ul>
+<li>hdfs sink<ul>
+<li>针对小文件 hdfs sink 有优化的参数</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>拦截器</p>
+<ul>
+<li>自定义拦截器<ul>
+<li>定义类实现Interceptor接口，重写四个方法（初始化，单event修改，多event修改，关闭资源） 还需要一个Builder静态内部类，实现Interceptor.Builder,在里面new一个自定义的拦截器返回。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>选择器(Channel Selector)</p>
+<ul>
+<li>Multiplexing（多路复用）可以选择传到指定的Channel 上</li>
+<li>Replicating(复制) event传到每个Channel上</li>
+</ul>
+</li>
+<li><p>监控器</p>
+<ul>
+<li>监控资源的读写情况</li>
+</ul>
+</li>
+<li><p>调优</p>
+<ul>
+<li>filechannel  能多磁盘就配置多磁盘（数据保存到不同磁盘） 能提高吞吐量</li>
+<li>hdfs sink 小文件问题        设置  每个文件的滚动大小（128m）多久创建一个新的文件（1-2小时） event个数（0）设置为0表示文件的滚动与event 数量无关</li>
+</ul>
+</li>
+</ul>
+<h2 id="Kafka"><a href="#Kafka" class="headerlink" title="Kafka"></a>Kafka</h2><ul>
+<li><p>基本信息</p>
+<ul>
+<li><p>Kafka是一个分布式的基于发布/订阅模式的消息队列</p>
+</li>
+<li><p>架构</p>
+<ul>
+<li>producer:  消息生产者,向Kafak集群发消息的客户端</li>
+<li>Kafka Cluster：Kafka集群</li>
+<li>consumer: 消息消费者，向Kafka Broker取消息的客户端</li>
+<li>consumer group:消费者组，每个消费者组由多个consumer组成。消费者组内每个消费者负责消费不同分区的数据，一个分区只能由一个消费者消费。消费者组之间互不影响，所有消费者都属于某个消费者组，即消费者组是逻辑上的一个订阅者。</li>
+<li>broker ：Kafka集群中的每一台机器就是一个broker ，一个Kafka集群由多个broker 组成。</li>
+<li>topic: 可以理解为一个消息队列，生产者和消费者面向的都是一个个topic。一台broker 可以容纳多个topic</li>
+<li>partition：一个topic可以分为多个partition，每个partition都是一个有序的队列。可以实现很好的扩展性，一个非常大的topic可以分布到多个broker上。</li>
+<li>replica：副本，保证数据的可靠性。即当集群中的某个节点发生故障时，为保证数据的完整性，kfak提供了副本机制，一个topic的每个partition都有若干个副本，一个leader和若干个follower</li>
+<li>leader:副本的”主“，生产者发送数据的对象，以及消费者消费数据的对象都是leader </li>
+<li>follower: 副本中的”从“，实时从leader中同步数据，保持和leader数据的同步，leader发生故障时，会选出某个follower成为新的leader</li>
+</ul>
+</li>
+<li><p>分区策略</p>
+<ul>
+<li>分区原因（为什么将一个topic分为多个partition）：1. 方便在集群中扩展。2. 以partition为单位进行读写，可以提高并发。</li>
+</ul>
+</li>
+<li><p>分区分配策略</p>
+<ul>
+<li>确定哪个partition由哪个consumer来消费</li>
+<li>round-robin：当分区数大于consumer数量时，轮询分配，类似于斗地主一张一张的发牌。</li>
+<li>range:类似于斗地主一次性发几张牌</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>挂了</p>
+<ul>
+<li>短时间  会存储在flume channel里</li>
+<li>长时间  日志服务器有30天数据</li>
+</ul>
+</li>
+<li><p>丢了</p>
+<ul>
+<li>ack  的几种情况（三种）</li>
+<li>producer向Kafka集群发送信息是异步通信，为保证数据的可靠性，需要向producer发送ACK（acknowledgement 回信），如果producer收到ack，就进行下一轮的发送，否则重新发送数据。此时会出现三种情况</li>
+<li>0  收到后还没开始写就发送，最不安全</li>
+<li>1 leader写完后发送</li>
+<li>all(-1) ISR中所有副本都写完后发送ack </li>
+<li>ISR队列（在第三中情况下，为了防止某个follower长时间未向leader同步数据，该follower会被踢出ISR，leader故障则会重选leader）<ul>
+<li>和leader保持同步的follower在ISR中,一定时间不同步会被提出ISR，时间阈值由replica.lag.time.max.ms参数设定，leader故障则重新选举leader。（Leader选举由Zookeeper来完成）</li>
+<li><a href="https://imgtu.com/i/RgXWRJ"><img src="https://z3.ax1x.com/2021/07/03/RgXWRJ.png" alt="RgXWRJ.png"></a></li>
+<li>当follower故障时会被临时踢出ISR，待待该follower恢复后，follower会读取本地磁盘记录的上次的HW，并将log文件高于HW的部分截取掉，从HW开始向leader进行同步。等该<em><strong>follower的LEO大于等于该Partition的HW</strong></em>，即follower追上leader之后，就可以重新加入ISR了。</li>
+<li>leader发生故障之后，会从ISR中选出一个新的leader，之后，为保证多个副本之间的数据一致性，其余的follower会先将各自的log文件高于HW的部分截掉，然后从新的leader同步数据。</li>
+<li>这只能保证副本之间的数据一致性，并不能保证数据不丢失或者不重复</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>重复了</p>
+<ul>
+<li>（自己解决）幂等性，事务，ack=-1</li>
+<li>（其它框架帮忙解决）数仓里面处理，</li>
+</ul>
+</li>
+<li><p>积压了</p>
+<ul>
+<li>如果是Kafka消费能力不足，则可以考虑增加Topic的分区数，并且同时提升消费者组的消费者数量，消费者数=分区数。</li>
+<li>增加下一级的消费速度</li>
+</ul>
+</li>
+<li><p>优化</p>
+<ul>
+<li>由于consumer在消费过程中可能会出现断电宕机等故障，consumer恢复后，需要从故障前的位置的继续消费，所以consumer需要实时记录自己消费到了哪个offset，以便故障恢复后继续消费。</li>
+<li>将offset放在Kafka内置的一个topic中，__consumer_offsets。由50个分区。</li>
+<li>Broker 参数配置，保留三天，也可以更短</li>
+<li>Replica相关配置 ，默认副本一个</li>
+<li>网络不稳定时，可以将网络通信延时</li>
+<li>producer优化 采用压缩</li>
+<li>增加kafka内存 生产环境下尽量不要超过6G</li>
+</ul>
+</li>
+<li><p>其它</p>
+<ul>
+<li><p>Exactly once语义：At Least Once + 幂等性 = Exactly Once。</p>
+</li>
+<li><p>幂等性就是指Producer不论向Server发送多少次重复数据，Server端都只会持久化一条。</p>
+</li>
+<li><p>将服务器的ACK级别设置为-1，可以保证Producer到Server之间不会丢失数据，即At Least Once语义。</p>
+</li>
+<li><p>要启用幂等性，只需要将Producer的参数中enable.idompotence设置为true即可。Kafka的幂等性实现其实就是将原来下游需要做的去重放在了数据上游。开启幂等性的Producer在初始化的时候会被分配一个PID，发往同一Partition的消息会附带Sequence Number。而Broker端会对&lt;PID, Partition, SeqNumber&gt;做缓存，当具有相同主键的消息提交时，Broker只会持久化一条。</p>
+</li>
+<li><p>局限性：但是PID重启就会变化，同时不同的Partition也具有不同主键，所以幂等性无法保证跨分区跨会话的Exactly Once。</p>
+</li>
+<li><p>Kafka高效读写的原因</p>
+<ul>
+<li><p>Kafka是分布式，还可以设置分区，并发度高</p>
+</li>
+<li><p>采用顺序读写，topic在磁盘中顺序存储</p>
+</li>
+<li><p>零拷贝技术</p>
+<p><a href="https://imgtu.com/i/4fbbm8"><img src="https://z3.ax1x.com/2021/09/28/4fbbm8.png" alt="4fbbm8.png"></a></p>
+</li>
+<li><p>直接将文件从内核层拷贝到目标地址。速度更快</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Zookeeper在Kafka中的作用</p>
+<ul>
+<li>Kafka集群中有一个broker会被选举为Controller，<font color=red>负责管理集群broker的上下线，所有topic的分区副本分配和leader选举等工作。</font>Controller的管理工作是依赖于Zookeeper的。</li>
+</ul>
+</li>
+</ul>
+<h2 id="Hive"><a href="#Hive" class="headerlink" title="Hive"></a>Hive</h2><ul>
+<li><p>组成</p>
+</li>
+<li><p>与Mysql的区别</p>
+<ul>
+<li>数据量   hive擅长大数据场景     mysql擅长小数据场景（数据超过一千万条后速度就不行了）</li>
+<li>速度      大数据场景下 hive快       小数据场景下  mysql 快</li>
+</ul>
+</li>
+<li><p>内部表和外部表的区别</p>
+<ul>
+<li>内部表  删除后，元数据和表中的数据（原始数据）都删除了</li>
+<li>外部表  删除后，只删除了元数据</li>
+</ul>
+</li>
+<li><p>插入数据</p>
+<ul>
+<li>insert into :以追加数据的方式插入到表或分区，原有数据不会删除</li>
+<li>insert overwrite:会覆盖表或分区中已经存在的数据</li>
+</ul>
+</li>
+<li><p>4个by</p>
+<ul>
+<li>order by  全局排序（都会进入一个Reduce）很容易造成数据倾斜</li>
+<li>sort by   局部排序（对每个reduce排序）</li>
+<li>distribute  by   分区，按照分区进入不同的reduce</li>
+<li>cluster by  当sort by 和distribute by  排序的字段相同时可以使用 cluster by 代替（默认只能是升序）</li>
+</ul>
+</li>
+<li><p>系统函数</p>
+<ul>
+<li><p>常用内置函数</p>
+</li>
+<li><p>date_add</p>
+<ul>
+<li>返回日期的后n天的日期</li>
+<li>select date_sub(‘2015-04-09’,4)；输出2015-04-13</li>
+</ul>
+</li>
+<li><p>date_sub  </p>
+<ul>
+<li>返回日期前n天的日期</li>
+<li>select date_sub(‘2015-04-09’,4);输出：2015-04-05；</li>
+</ul>
+</li>
+<li><p>next_day </p>
+<ul>
+<li>返回当前时间的下一个星期几对应的日期</li>
+<li>select next_day(‘2018-02-27 10:03:01’, ‘TU’); –2018-03-06</li>
+<li>说明，输入日期为2-27，下个星期的周二为03-06，如果想要知道下周一的日期就是MO，周日就是SU，以此类推。</li>
+<li>注意：西方都是任务周日是每周的第一天</li>
+</ul>
+</li>
+<li><p>date_format</p>
+<ul>
+<li><p>‘yyyy-MM-dd HH:mm:ss’ 日期格式：年月日 时分秒</p>
+</li>
+<li><p>日期格式化，把字符串或者日期转成指定格式的日期</p>
+</li>
+<li><p>date_format(“2016-06-22”,”yyyy-MM-dd”)=2016-06-22</p>
+</li>
+</ul>
+</li>
+<li><p>last_day</p>
+<ul>
+<li>返回这个月的最后一天的日期</li>
+<li>select last_day(“2021-10-04”);=2021-10-31</li>
+</ul>
+</li>
+<li><p>解析json(get_json_object)</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> get_json_object(<span class="hljs-string">&#x27;[&#123;&quot;name&quot;:&quot;大郎&quot;,&quot;sex&quot;:&quot;男&quot;,&quot;age&quot;:&quot;25&quot;&#125;,&#123;&quot;name&quot;:&quot;西门庆&quot;,&quot;sex&quot;:&quot;男&quot;,&quot;age&quot;:&quot;47&quot;&#125;]&#x27;</span>,<span class="hljs-string">&quot;$[0].age&quot;</span>);<br><br>- 结果：25<br><span class="hljs-keyword">select</span> get_json_object(<span class="hljs-string">&#x27;[&#123;&quot;name&quot;:&quot;大郎&quot;,&quot;sex&quot;:&quot;男&quot;,&quot;age&quot;:&quot;25&quot;&#125;,&#123;&quot;name&quot;:&quot;西门庆&quot;,&quot;sex&quot;:&quot;男&quot;,&quot;age&quot;:&quot;47&quot;&#125;]&#x27;</span>,<span class="hljs-string">&#x27;$[0]&#x27;</span>);<br><br>- 结果：&#123;&quot;name&quot;:&quot;大郎&quot;,&quot;sex&quot;:&quot;男&quot;,&quot;age&quot;:&quot;25&quot;&#125;<br><br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>自定义函数</p>
+<ul>
+<li>UDF  解析公共字段（定义类  继承UDF，重写evaluate 方法）</li>
+<li>UDTF  解析事件字段  （定义类  继承UDTF，重写3个方法，分别是初始化（定义返回值的名称和类型），process,关闭）</li>
+</ul>
+</li>
+<li><p>窗口函数</p>
+<ul>
+<li>窗口函数：指定分析函数工作的数据窗口大小，这个数据窗口大小可能会随着行的变化变化。（查询的数据会随着where,gruopby,having等条件的加入过滤掉一些数据）</li>
+<li>rank()排名会重复，重复数据的话，排名数不会连续，排名数和总数一样，dense_rank() 相同的排名一样，数据重复的话排名数会比总数少。row_number() 直接排名，相同排名也不一样，排名数和总数一样。</li>
+<li>over((partition by xxx order by xxx)</li>
+<li>手写topn</li>
+</ul>
+</li>
+<li><p>优化</p>
+<ul>
+<li>mapjoin  默认打开 ，不要关闭</li>
+<li>先执行where再执行join,可以通过先where过滤一部分数据，再进行连接</li>
+<li>创建分区表（天）</li>
+<li>小文件相关处理<ul>
+<li>CombinehiveInputformat ===&gt;减少切片个数，减少maptask个数</li>
+<li>JVM重用</li>
+</ul>
+</li>
+<li>不影响业务逻辑的情况下可以开启map端combiner</li>
+</ul>
+</li>
+</ul>
+<h2 id="Java-SE"><a href="#Java-SE" class="headerlink" title="Java SE"></a>Java SE</h2><ul>
+<li><p>HashMap的底层源码，数据结构</p>
+<ul>
+<li>在JDK1.8中，HashMap由数组+链表+红黑树实现</li>
+<li>链表长度大于8，且表的长度大于64的时候将链表转化为红黑树</li>
+<li><a href="https://imgtu.com/i/4b4dAK"><img src="https://z3.ax1x.com/2021/10/02/4b4dAK.png" alt="4b4dAK.png"></a></li>
+<li>红黑树其实就是一种<strong>自平衡</strong>的二叉查找树。</li>
+</ul>
+</li>
+<li><p>HashMap和HashTable</p>
+<ul>
+<li>线程安全性不同<ul>
+<li>HashMap是线程不安全的，HashTable是线程安全的，其中的方法是Synchronize的，在多线程并发的情况下，可以直接使用HashTable，但是使用HashMap是必须自己增加同步处理。</li>
+</ul>
+</li>
+<li>key和value是否允许null值<ul>
+<li>HashTable中，key和value都不允许出现null值。HashMap中，null可以作为键，这样的键只有一个，可以有一个或多个value值为null。</li>
+</ul>
+</li>
+<li>数组初始化和扩容机制<ul>
+<li>HashTable在不指定容量的情况下默认容量为11，而HashMap为16。</li>
+<li>HashTable扩容时，将容量变为原来的2倍加1，而HashMap扩容时，将容量变为原来的两倍。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>StringBuffer和StingBuilder的区别</p>
+<ul>
+<li>StringBuffer是线程安全的，而StringBuilder是线程不安全的</li>
+<li>单线程程序下，StringBuilder效率更快，因为它不需要加锁，而StringBuffer则每次都需要判断锁，效率相对更低。</li>
+</ul>
+</li>
+<li><p>String和StringBuffer的区别</p>
+<ul>
+<li>String类是final修饰的，它是一个字符串常量，因此它一旦创建，其内容和长度不可改变，StringBuffer类它的内容和长度都是可变的。</li>
+<li>String类重写了equals()方法，StringBuffer没有</li>
+<li>String类对象之间可以用“+”号连接，StringBuffer对象之间不能。</li>
+</ul>
+</li>
+<li><p>Final，Finally，Finalize</p>
+<ul>
+<li>final：修饰符（关键字）有三种用法：修饰类，变量和方法。修饰类时，意味着它不能被继承。修饰变量时，该变量使用中不被改变，必须在声明时给定初值。修饰方法时，同样只能使用，不能在子类中被重写。</li>
+<li>finally：通常放在try{}catch 的后面构造最终的执行代码块。这就意味着程序无论正常执行还是发生异常，这里的代码只要JVM不关闭都能执行。</li>
+<li>finalize：Object类中定义的方法，Java中允许使用finalize()方法在垃圾收集器将对象从内存中清除出去之前做必要的清理工作。这个方法是由垃圾收集器在销毁对象时调用的，通过重写finalize()方法可以整理系统资源或者执行其它清理工作。</li>
+</ul>
+</li>
+<li><p>==和equals的区别</p>
+<ul>
+<li>==：如果是比较基本数据类型，那么比较的是变量的值。如果比较的是引用数据类型，那么比较的是地址值（两个对象是否指向同一块内存）</li>
+<li>equals：如果类没重写equals方法比较的是两个对象的地址值，如果类重写了equals方法后我们往往比较的是对象中属性的内容。</li>
+<li>equals方法是从Object类中继承的，默认的实现就是使用==</li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>大数据</category>
+      </categories>
+      <tags>
+        <tag>Hadoop</tag>
+        <tag>Flume</tag>
+        <tag>Kafka</tag>
+        <tag>Hive</tag>
       </tags>
   </entry>
   <entry>
@@ -4184,6 +4976,530 @@
       </categories>
       <tags>
         <tag>数据库</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>warehouse-project</title>
+    <url>/2021/07/29/warehouse-project/</url>
+    <content><![CDATA[<h1 id="离线数仓项目"><a href="#离线数仓项目" class="headerlink" title="离线数仓项目"></a>离线数仓项目</h1><h2 id="数仓分层"><a href="#数仓分层" class="headerlink" title="数仓分层"></a>数仓分层</h2><ul>
+<li><p>为什么要分层</p>
+<p><a href="https://imgtu.com/i/WHSDoQ"><img src="https://z3.ax1x.com/2021/07/29/WHSDoQ.png" alt="WHSDoQ.png"></a></p>
+<ul>
+<li>ODS层（Operation Data Store）原始数据层，将前端日志数据，后端业务数据直接导入，不做处理</li>
+<li>DWD层 (Data Warehouse Detail) 明细数据层，对ODS层数据进行数据清洗，维度退化，脱敏等。</li>
+<li>DWS层 （Data Warehouse Service）服务数据层，以DWD层为基础，按天进行轻度汇总。</li>
+<li>DWT层 （Data Warehouse Topic）主题数据层，以DWS层为基础，按主题进行汇总。</li>
+<li>ADS层 （Application Data Store）应用数据层，为各种统计报表提供数据。</li>
+</ul>
+</li>
+<li><p>为什么要分层：</p>
+<ul>
+<li>把复杂问题简单化：将复杂的任务分解成多层来完成，每一层只处理简单的任务，方便定位问题。</li>
+<li>减少重复开发：规范数据分层，通过中间数据层，能够减少极大的重复计算，增加一次计算结果的复用性。</li>
+<li>隔离原始数据：不论是数据的异常还是数据的敏感性，使真实数据与统计数据解耦开。</li>
+</ul>
+</li>
+</ul>
+<h2 id="数仓理论"><a href="#数仓理论" class="headerlink" title="数仓理论"></a>数仓理论</h2><h3 id="范式概念"><a href="#范式概念" class="headerlink" title="范式概念"></a>范式概念</h3><ul>
+<li>范式可以理解为设计一张数据表的表结构应符合的标准级别。</li>
+<li>按照范式理论建表目的在于<font color=red>降低数据的冗余性</font></li>
+<li>范式的缺点是查询数据时需要进行大量的join操作。</li>
+</ul>
+<h4 id="函数依赖"><a href="#函数依赖" class="headerlink" title="函数依赖"></a>函数依赖</h4><ul>
+<li>完全函数依赖：简单来说：就是AB能推出C，但是AB单独时不能推出C，那么说C完全依赖于AB。</li>
+<li>部分函数依赖：AB能推出C,AB单独也能推出C，即C部分依赖于AB。</li>
+<li>传递函数依赖：通过A推出B，通过B推出C，但是C推不出A，但是A能推出C，那么C传递函数依赖于A。</li>
+</ul>
+<h4 id="范式区别"><a href="#范式区别" class="headerlink" title="范式区别"></a>范式区别</h4><ul>
+<li>第一范式：属性不可切割</li>
+<li>第二范式：不能存在部分函数依赖</li>
+<li>第三范式：不能存在传递函数依赖</li>
+</ul>
+<h3 id="关系建模和维度建模"><a href="#关系建模和维度建模" class="headerlink" title="关系建模和维度建模"></a>关系建模和维度建模</h3><ul>
+<li><p>当今的数据处理大致可以分成两大类：联机事务处理OLTP（on-line transaction processing）、联机分析处理OLAP（On-Line Analytical Processing）。OLTP是传统的关系型数据库的主要应用，主要是基本的、日常的事务处理，例如银行交易。OLAP是数据仓库系统的主要应用，支持复杂的分析操作，侧重决策支持，并且提供直观易懂的查询结果。</p>
+</li>
+<li><table>
+<thead>
+<tr>
+<th><em><strong>对比属性</strong></em></th>
+<th><em><strong>OLTP</strong></em></th>
+<th><em><strong>OLAP</strong></em></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><em><strong>读特性</strong></em></td>
+<td>每次查询只返回少量记录</td>
+<td>对大量记录进行汇总</td>
+</tr>
+<tr>
+<td><em><strong>写特性</strong></em></td>
+<td>随机、低延时写入用户的输入</td>
+<td>批量导入</td>
+</tr>
+<tr>
+<td><em><strong>使用场景</strong></em></td>
+<td>用户，Java EE项目</td>
+<td>内部分析师，为决策提供支持</td>
+</tr>
+<tr>
+<td><em><strong>数据表征</strong></em></td>
+<td>最新数据状态</td>
+<td>随时间变化的历史状态</td>
+</tr>
+<tr>
+<td><em><strong>数据规模</strong></em></td>
+<td>GB</td>
+<td>TB到PB</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<h4 id="关系建模"><a href="#关系建模" class="headerlink" title="关系建模"></a>关系建模</h4><ul>
+<li>关系建模，严格遵循第三范式。表较为松散，零碎，物理表数量多，而数据冗余程度低。由于数据分布于众多的表中，这些数据可以更为灵活地被应用，功能性较强。</li>
+</ul>
+<h4 id="维度建模"><a href="#维度建模" class="headerlink" title="维度建模"></a>维度建模</h4><ul>
+<li><p>维度模型主要应用在OLAP系统中，通常以某一个事实表为中心进行表的组织，主要面向业务。特征可能是存在数据的冗余，但是能方便得到数据。</p>
+</li>
+<li><p>关系模型虽然冗余少，但是在大规模数据，跨表分析统计查询过程中，会造成多表关联，这会大大降低执行效率。所以通常我们采用维度模型建模，把相关各种表整理成两种：事实表和维度表两种。</p>
+</li>
+<li><p>维度建模分成三种模型：</p>
+<ul>
+<li>星型模型<ul>
+<li>标准的星型模型维度只有一层</li>
+</ul>
+</li>
+<li>雪花模型<ul>
+<li>比较靠近3NF，但是无法完全遵循，雪花模型的维度会设计多层。</li>
+</ul>
+</li>
+<li>雪花模型和星型模型的主要区别在于维度的层级。</li>
+<li>选择星型模型还是雪花模型，取决于性能优先还是灵活更优先。在实际开发中，不会绝对选择一种，会根据情况灵活组合甚至并存，但是从整体上看<font color=red>更倾向与维度更少的星型模型,尤其对于Hadoop 体系，减少join就是减少Shuffle，性能差距很大</font>.星型模型性能更高一些，减少了join过程。雪花模型维度表表设计多层，更加灵活。</li>
+<li><a href="https://imgtu.com/i/WzGEEd"><img src="https://z3.ax1x.com/2021/08/01/WzGEEd.png" alt="WzGEEd.png"></a></li>
+<li>星座模型</li>
+<li>星座模型与星型模型和雪花模型的区别是<font color=red>事实表的数量，星座模型是基于多个事实表。</font></li>
+<li>星座模型基本上是很多数据仓库的常态，因为很多数据仓库都是多个事实表的，所以看是否为星座模型要看是否有多个事实表，他们之间是否共享一些维度表。</li>
+<li><img src="C:\Users\Hasee\AppData\Roaming\Typora\typora-user-images\image-20210801175519654.png" alt="image-20210801175519654"></li>
+</ul>
+</li>
+</ul>
+<h3 id="维度表与事实表（重点）"><a href="#维度表与事实表（重点）" class="headerlink" title="维度表与事实表（重点）"></a>维度表与事实表（重点）</h3><h4 id="维度表"><a href="#维度表" class="headerlink" title="维度表"></a>维度表</h4><ul>
+<li>维度表：一般是对事实的<font color=red>描述信息</font>。每一张维度表对应现实世界中的一个对象或者概念。例如：用户，商品，时间，地区等。就像是对事物描述的一个角度。</li>
+<li>维度表的特征：<ul>
+<li>维度表范围很宽（具有多个属性，列比较多）</li>
+<li>与事实表相比，行数相对较小。</li>
+<li>内容相对固定：编码表，地区表</li>
+</ul>
+</li>
+</ul>
+<h4 id="事实表"><a href="#事实表" class="headerlink" title="事实表"></a>事实表</h4><ul>
+<li><p>事实表中的每行数据代表一个业务事件（下单，支付，退款等），事实这个术语表示的是业务事件的<font color=red>度量值（可以统计次数，个数，金额等）</font></p>
+</li>
+<li><p>事实表的行包括：</p>
+<ul>
+<li>具有可加性的数值型的度量值</li>
+<li>与维度表相连接的外键（通常具有两个和两个以上的外键，外键之间表示维度表之间多对多的关系）</li>
+</ul>
+</li>
+<li><p>事实表的特征：</p>
+<ul>
+<li>非常大</li>
+<li>列数较少</li>
+<li>经常变化，每天会新增很多</li>
+</ul>
+</li>
+<li><p>事实表分类：</p>
+<ul>
+<li>事务型事实表：以每个<font color=red>事务或事件为单位</font>，例如一个销售订单记录，一比支付数据，作为事实表里一行数据。<font color=red>一旦事务被提交，事实表数据被插入，数据就不再进行更改，其更新方式为增量更新</font></li>
+<li>周期型快照事实表：周期型快照事实表中<font color=red>不会保留所有数据，只保留固定时间间隔的数据</font>，例如月销售，加购物车事实表，收藏事实表额等。</li>
+<li>累积型快照事实表：<font color=red>累积型快照事实表用于跟踪业务事实的变化</font>。例如，数据仓库中可能需要累积或存储订单从下订单开始，到订单商品被打包、运输、和签收的各个业务阶段的时间点数据来跟踪订单声明周期的进展情况。当这个业务过程进行时，事实表的记录也要不断更新。</li>
+</ul>
+</li>
+</ul>
+<h3 id="数据仓库建模"><a href="#数据仓库建模" class="headerlink" title="数据仓库建模"></a>数据仓库建模</h3><h4 id="ODS层"><a href="#ODS层" class="headerlink" title="ODS层"></a>ODS层</h4><ul>
+<li>保持数据原貌不做任何修改，起到数据备份的作用</li>
+<li>数据进行压缩，减少磁盘存储空间</li>
+<li>创建分区表（按照天进行分区），避免全表扫描</li>
+</ul>
+<h4 id="DWD层"><a href="#DWD层" class="headerlink" title="DWD层"></a>DWD层</h4><ul>
+<li><p>DWD层采用维度建模，采用星型模型，有多个事实表，事实表之间共享一些维度表。构成星座模型</p>
+</li>
+<li><p>维度建模步骤：<font color=red>选择业务过程–&gt;声明粒度–&gt;确认维度–&gt;确认事实</font></p>
+<ul>
+<li>选择业务过程：一条业务线对应一张事实表。比如下单业务，支付业务，退款业务，物流业务，一条业务线对应一张事实表。</li>
+<li>声明粒度：声明粒度指数据仓库中<font color=red>保存数据的细化程度或综合程度的级别。</font>声明粒度意味着精确定义事实表中的一行数据表示什么，应该尽可能选择最小粒度，以此来应对各种各样的需求。<ul>
+<li>典型的粒度声明：<ul>
+<li>订单中，每个商品项作为下单事实表中的一行</li>
+<li>每周的订单次数作为一行，粒度就是每周下单</li>
+<li>每月的订单次数作为一行，粒度就是每月下单</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>确定维度：维度的主要作用是描述业务事实。会将业务系统中的表进行一些合并，即维度退化。</li>
+<li>确定事实：此处事实指业务中的度量值（事实表中数值型的度量值）。在DWD层中，以业务过程为建模驱动，基于每个具体以业务过程的特点，构建最细粒度的明细层事实表。</li>
+</ul>
+</li>
+<li><p><a href="https://imgtu.com/i/fpvuSf"><img src="https://z3.ax1x.com/2021/08/02/fpvuSf.png" alt="fpvuSf.png"></a></p>
+</li>
+</ul>
+<ul>
+<li><table>
+<thead>
+<tr>
+<th></th>
+<th><em><strong>时间</strong></em></th>
+<th><em><strong>用户</strong></em></th>
+<th><em><strong>地区</strong></em></th>
+<th><em><strong>商品</strong></em></th>
+<th><em><strong>优惠券</strong></em></th>
+<th><em><strong>活动</strong></em></th>
+<th><em><strong>编码</strong></em></th>
+<th><em><strong>度量值</strong></em></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><em><strong>订单</strong></em></td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td></td>
+<td></td>
+<td>√</td>
+<td></td>
+<td>件数/金额</td>
+</tr>
+<tr>
+<td><em><strong>订单详情</strong></em></td>
+<td>√</td>
+<td></td>
+<td>√</td>
+<td>√</td>
+<td></td>
+<td></td>
+<td></td>
+<td>件数/金额</td>
+</tr>
+<tr>
+<td><em><strong>支付</strong></em></td>
+<td>√</td>
+<td></td>
+<td>√</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>金额</td>
+</tr>
+<tr>
+<td><em><strong>加购</strong></em></td>
+<td>√</td>
+<td>√</td>
+<td></td>
+<td>√</td>
+<td></td>
+<td></td>
+<td></td>
+<td>件数/金额</td>
+</tr>
+<tr>
+<td><em><strong>收藏</strong></em></td>
+<td>√</td>
+<td>√</td>
+<td></td>
+<td>√</td>
+<td></td>
+<td></td>
+<td></td>
+<td>个数</td>
+</tr>
+<tr>
+<td><em><strong>评价</strong></em></td>
+<td>√</td>
+<td>√</td>
+<td></td>
+<td>√</td>
+<td></td>
+<td></td>
+<td></td>
+<td>个数</td>
+</tr>
+<tr>
+<td><em><strong>退款</strong></em></td>
+<td>√</td>
+<td>√</td>
+<td></td>
+<td>√</td>
+<td></td>
+<td></td>
+<td></td>
+<td>件数/金额</td>
+</tr>
+<tr>
+<td><em><strong>优惠券领用</strong></em></td>
+<td>√</td>
+<td>√</td>
+<td></td>
+<td></td>
+<td>√</td>
+<td></td>
+<td></td>
+<td>个数</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>至此，数仓的维度建模完成。DWS，DWT和ADS层和维度建模已经没有关系了。DWS和DWT都是建宽表，宽表(通常是指业务主题相关的指标、维度、属性关联在一起的一张数据库表。由于把不同的内容都放在同一张表存储，宽表已经不符合三范式的模型设计规范，随之带来的主要坏处就是数据的大量冗余，与之相对应的好处就是查询性能的提高与便捷。)都是按照主题去建。主题相当于观察问题得到角度。对应着维度表。</p>
+</li>
+</ul>
+<h4 id="DWS层，DWT层"><a href="#DWS层，DWT层" class="headerlink" title="DWS层，DWT层"></a>DWS层，DWT层</h4><ul>
+<li>DWS层统计各个主题对象的当天行为，服务于DWT层的主题宽表。<ul>
+<li>每日设备行为</li>
+<li>每日会员行为</li>
+<li>每日商品行为</li>
+<li>每日地区统计</li>
+<li>每日活动统计</li>
+</ul>
+</li>
+<li>DWT层：以分析的主题对象为建模驱动，基于上层的应用和产品的指标需求，构建主题对象的全量宽表。<ul>
+<li>设备主题</li>
+<li>用户主题</li>
+<li>商品主题</li>
+<li>地区主题</li>
+<li>营销活动主题</li>
+</ul>
+</li>
+</ul>
+<h4 id="ADS"><a href="#ADS" class="headerlink" title="ADS"></a>ADS</h4><ul>
+<li>对电商系统各大主题指标分别进行分析。</li>
+</ul>
+<h3 id="Hive环境准备"><a href="#Hive环境准备" class="headerlink" title="Hive环境准备"></a>Hive环境准备</h3><ul>
+<li>安装配置Spark<ul>
+<li>spark需要重新编译（spark本身就有hive依赖，不需要hive的相关依赖，防止与hive冲突）</li>
+</ul>
+</li>
+<li>Hive on spark</li>
+<li>配置多队列，yarn默认容量调度器且默认只有一个default队列，再配置一个hive队列。在capacity-scheduler.xml中进行配置。</li>
+<li>set mapreduce.job.queuename=hive;</li>
+</ul>
+<h2 id="数仓搭建"><a href="#数仓搭建" class="headerlink" title="数仓搭建"></a>数仓搭建</h2><h3 id="ODS层-1"><a href="#ODS层-1" class="headerlink" title="ODS层"></a>ODS层</h3><ul>
+<li>业务数据根据不同的数据同步策略，通过脚本将数据写入到ODS层。</li>
+</ul>
+<ul>
+<li>保持数据源码不做修改，起到备份数据的作用，采用LZO压缩。</li>
+<li>创建分区表，防止全表扫描</li>
+<li>创建外部表</li>
+</ul>
+<h3 id="DWD层（重点）"><a href="#DWD层（重点）" class="headerlink" title="DWD层（重点）"></a>DWD层（重点）</h3><ul>
+<li>列式存储。优点：查询速度快，占用磁盘空间少（压缩比非常高）</li>
+<li>LZO压缩</li>
+<li>分区表，外部表</li>
+<li>主要操作<ul>
+<li>ETL(数据清洗，启动日志，事件日志的解析)</li>
+<li>维度建模（维度退化）</li>
+</ul>
+</li>
+</ul>
+<h4 id="日志数据"><a href="#日志数据" class="headerlink" title="日志数据"></a>日志数据</h4><ul>
+<li>启动日志解析<ul>
+<li>get_json_object函数使用，使用get_json_object函数将启动日志的字段解析出来</li>
+</ul>
+</li>
+<li>事件日志解析<ul>
+<li><p><a href="https://imgtu.com/i/4oW8YR"><img src="https://z3.ax1x.com/2021/09/30/4oW8YR.png" alt="4oW8YR.png"></a></p>
+</li>
+<li><p>自定义UDF函数，解析公共字段(一进一出)</p>
+<ul>
+<li><p>定义类继承UDF，重写evaluate() 方法</p>
+</li>
+<li><p>UDF函数的返回值是什么evaluate()方法的返回值就是什么</p>
+</li>
+<li><p>函数的输入参数是什么evaluate()方法的参数就是什么</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.zt.gmall.hive;<br><br><span class="hljs-keyword">import</span> org.apache.commons.lang.StringUtils;<br><span class="hljs-keyword">import</span> org.apache.hadoop.hive.ql.exec.UDF;<br><span class="hljs-keyword">import</span> org.json.JSONObject;<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">LogUDF</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">UDF</span> </span>&#123;<br>    <span class="hljs-comment">//UDF函数的返回值与evaluate方法的返回值类型相同</span><br>    <span class="hljs-comment">//UDF函数的参数和evaluat方法的参数相同</span><br>    <span class="hljs-comment">//line指事件日志，key指需要的数据，</span><br>    <span class="hljs-comment">// 如果是&quot;st&quot;，返回servertime;</span><br>    <span class="hljs-comment">//如果是&quot;et&quot;,返回事件数组</span><br>    <span class="hljs-comment">//如果是公共字段的值,返回各个公共字段的值</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">evaluate</span><span class="hljs-params">(String line, String key)</span> </span>&#123;<br>        <span class="hljs-keyword">if</span> (StringUtils.isBlank(line)) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;&quot;</span>;<br>        &#125;<br>        <span class="hljs-comment">//split中的参数为一个正则表达式，</span><br>        <span class="hljs-comment">// 而|在正则表示中有含义需要\转义，</span><br>        <span class="hljs-comment">// 而\在java中也有特殊含义，所以又需要转义</span><br>        String[] split = line.split(<span class="hljs-string">&quot;\\|&quot;</span>);<br>        <span class="hljs-keyword">if</span> (split.length != <span class="hljs-number">2</span>) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;&quot;</span>;<br>        &#125;<br>        String serverTime = split[<span class="hljs-number">0</span>];<br>        String jsonStr = split[<span class="hljs-number">1</span>];<br>        JSONObject jsonObject = <span class="hljs-keyword">new</span> JSONObject(jsonStr);<br>        <span class="hljs-keyword">if</span>(<span class="hljs-string">&quot;st&quot;</span>.equals(key))&#123;<br>            <span class="hljs-keyword">return</span> serverTime;<br>        &#125;<br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(<span class="hljs-string">&quot;et&quot;</span>.equals(key))&#123;<br>            <span class="hljs-keyword">if</span>(jsonObject.has(<span class="hljs-string">&quot;et&quot;</span>)) &#123;<br>                <span class="hljs-keyword">return</span> jsonObject.getString(<span class="hljs-string">&quot;et&quot;</span>);<br>            &#125;<br>        &#125;<span class="hljs-keyword">else</span> &#123;<br>            <span class="hljs-comment">//获取到cm子JSON对象</span><br>            JSONObject cm = jsonObject.getJSONObject(<span class="hljs-string">&quot;cm&quot;</span>);<br>            <span class="hljs-keyword">if</span>(cm.has(key))&#123;<br>                <span class="hljs-keyword">return</span> cm.getString(key);<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;&quot;</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>自定义UDTF函数解析具体事件（解析json数组）</p>
+<ul>
+<li><p>定义类继承c抽象类GenericUDTF，实现initialize()（自定义输出的列名和类型）；process() （将结果返回forward(result)）；close()</p>
+</li>
+<li><p>输出事件名和事件json 对象</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.zt.gmall.hive;<br><br><span class="hljs-keyword">import</span> org.apache.hadoop.hive.ql.exec.UDFArgumentException;<br><span class="hljs-keyword">import</span> org.apache.hadoop.hive.ql.metadata.HiveException;<br><span class="hljs-keyword">import</span> org.apache.hadoop.hive.ql.udf.generic.GenericUDTF;<br><span class="hljs-keyword">import</span> org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;<br><span class="hljs-keyword">import</span> org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorFactory;<br><span class="hljs-keyword">import</span> org.apache.hadoop.hive.serde2.objectinspector.StructField;<br><span class="hljs-keyword">import</span> org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;<br><span class="hljs-keyword">import</span> org.apache.hadoop.hive.serde2.objectinspector.primitive.PrimitiveObjectInspectorFactory;<br><span class="hljs-keyword">import</span> org.json.JSONArray;<br><br><span class="hljs-keyword">import</span> java.util.ArrayList;<br><span class="hljs-keyword">import</span> java.util.List;<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">LogUDTF</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">GenericUDTF</span> </span>&#123;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">close</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> HiveException </span>&#123;<br>    &#125;<br>    <span class="hljs-comment">//initialize方法可以校验传入参数类型是否合法</span><br>    <span class="hljs-comment">//ObjectInspector对象检查器  封装了数据类型（封装了输出类型）</span><br>    <span class="hljs-comment">//处理时间数组</span><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> StructObjectInspector <span class="hljs-title">initialize</span><span class="hljs-params">(StructObjectInspector argOIs)</span> <span class="hljs-keyword">throws</span> UDFArgumentException </span>&#123;<br>        List&lt;? extends StructField&gt; allStructFieldRefs = argOIs.getAllStructFieldRefs();<br>        <span class="hljs-comment">//入参的校验</span><br>        <span class="hljs-keyword">if</span>(allStructFieldRefs.size()!=<span class="hljs-number">1</span>)&#123;<br>            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> UDFArgumentException(<span class="hljs-string">&quot;参数个数只能为1&quot;</span>);<br>        &#125;<br>        <span class="hljs-comment">//这里返回的类型是hive的数据类型</span><br>        <span class="hljs-keyword">if</span>(!<span class="hljs-string">&quot;string&quot;</span>.equals(allStructFieldRefs.get(<span class="hljs-number">0</span>).getFieldObjectInspector().getTypeName()))&#123;<br>            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> UDFArgumentException(<span class="hljs-string">&quot;参数类型只能为string&quot;</span>);<br>        &#125;<br>        ArrayList&lt;String&gt; fieldNames = <span class="hljs-keyword">new</span> ArrayList&lt;String&gt;();<br>        ArrayList&lt;ObjectInspector&gt; fieldOIs = <span class="hljs-keyword">new</span> ArrayList&lt;ObjectInspector&gt;();<br>        <span class="hljs-comment">//返回回去的两个列</span><br>        fieldNames.add(<span class="hljs-string">&quot;event_name&quot;</span>);<br>        fieldNames.add(<span class="hljs-string">&quot;event_json&quot;</span>);<br>        fieldOIs.add(PrimitiveObjectInspectorFactory.javaStringObjectInspector);<br>        fieldOIs.add(PrimitiveObjectInspectorFactory.javaStringObjectInspector);<br>        <span class="hljs-keyword">return</span> ObjectInspectorFactory.getStandardStructObjectInspector(fieldNames,<br>                fieldOIs);<br>    &#125;<br>    <span class="hljs-comment">//完成initialize方法后，将每一行交给process()方法，每一行经过处理变成多行，传递给forward()，forward将结果带出</span><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">process</span><span class="hljs-params">(Object[] args)</span> <span class="hljs-keyword">throws</span> HiveException </span>&#123;<br>        String eventArray = args[<span class="hljs-number">0</span>].toString();<br>        JSONArray jsonArray = <span class="hljs-keyword">new</span> JSONArray(eventArray);<br>        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt;jsonArray.length() ; i++) &#123;<br>            String[] result=<span class="hljs-keyword">new</span> String[<span class="hljs-number">2</span>];<br>            result[<span class="hljs-number">0</span>]=jsonArray.getJSONObject(i).getString(<span class="hljs-string">&quot;en&quot;</span>);<br>            result[<span class="hljs-number">1</span>]=jsonArray.getString(i);<br>            forward(result);<br>        &#125;<br>    &#125;<br>    <br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>把jar包打包上传到HDFS上的user/hive/jars路径下，创建永久函数与开发好的Java class关联</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">create</span> <span class="hljs-keyword">function</span> base_analizer <span class="hljs-keyword">as</span> <span class="hljs-string">&#x27;com.zt.udf.BaseFieldUDF&#x27;</span> <span class="hljs-keyword">using</span> jar <span class="hljs-string">&#x27;hdfs://hadoop100:9000/user/hive/jars/hivefunction-1.0-SNAPSHOT.jar&#x27;</span>;<br><br><span class="hljs-keyword">create</span> <span class="hljs-keyword">function</span> flat_analizer <span class="hljs-keyword">as</span> <span class="hljs-string">&#x27;com.zt.udtf.EventJsonUDTF&#x27;</span> <span class="hljs-keyword">using</span> jar <span class="hljs-string">&#x27;hdfs://hadoop100:9000/user/hive/jars/hivefunction-1.0-SNAPSHOT.jar&#x27;</span>; <br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<h4 id="业务数据"><a href="#业务数据" class="headerlink" title="业务数据"></a>业务数据</h4><ul>
+<li><p>事实表分类</p>
+<ul>
+<li><p>事务型事实表（增量同步）</p>
+<ul>
+<li>订单详情事实表<ul>
+<li>以订单业务作为具体的业务过程，以<font color=red>商品数量，商品金额</font>作为度量值。与<font color=red>时间，地区，商品</font>维度表相关联。</li>
+</ul>
+</li>
+<li>支付事实表<ul>
+<li>以支付业务为具体的业务过程，以<font color=red>支付金额</font>作为度量值，与<font color=red>时间，地区</font>维度表关联。</li>
+</ul>
+</li>
+<li>退款事实表<ul>
+<li>以退款业务为具体的业务过程，以<font color=red>退款数量，退款金额</font>作为度量值，与<font color=red>时间，用户，商品</font>维度表关联。</li>
+</ul>
+</li>
+<li>评价事实表<ul>
+<li>以评价业务为具体的业务过程，以<font color=red>数量</font>作为度量值，与<font color=red>时间，用户，商品</font>维度表关联。</li>
+</ul>
+</li>
+<li>只会新增，不会修改</li>
+</ul>
+</li>
+<li><p>周期型快照事实表（全量同步）</p>
+<ul>
+<li><p>周期型快照事实表的劣势：存储的数据量会比较大。解决办法：周期型快照事实表存储的数据比较讲究时效性，时间太久了的意义不大，可以删除以前的数据。</p>
+</li>
+<li><p>加购事实表</p>
+<ul>
+<li>由于购物车的数量会发生变化，不适合导入增量。每天做一次快照，全量导入</li>
+<li>以加购物车为具体的业务过程，以<font color=red>数量，金额</font>作为度量值，与<font color=red>时间，用户，商品</font>维度表关联。</li>
+</ul>
+</li>
+<li><p>收藏事实表</p>
+<ul>
+<li>以收藏为具体业务过程，以<font color=red>数量</font>作为度量值，与<font color=red>时间，用户，商品</font>维度表关联。</li>
+</ul>
+</li>
+<li><p>数据周期性变化，可能增加，也可能删除（但是并不关心变化的过程，只关心周期性的一个数据结果）。所以选择全量同步。</p>
+</li>
+</ul>
+</li>
+<li><p>累积型快照事实表（新增及变化同步）</p>
+<ul>
+<li>优惠卷领用事实表<ul>
+<li>优惠卷的生命周期：领取优惠卷–&gt;使用优惠卷下端–&gt;优惠卷参与支付</li>
+<li>累积型快照事实表的使用：统计优惠卷领取次数，优惠卷下单次数，优惠卷参与支付次数。</li>
+<li>以优惠卷为具体业务过程，以<font color=red>数量</font>为度量值，与<font color=red>时间，用户，优惠卷</font>维度表关联。</li>
+</ul>
+</li>
+<li>订单事实表<ul>
+<li>订单生命周期：创建时间–&gt;支付时间–&gt;取消时间–&gt;完成时间–&gt;退款时间–&gt;退款完成时间</li>
+<li>以订单业务为具体的业务过程，以<font color=red>数量，金额</font>为度量值，与<font color=red>时间，用户，地区，活动</font>维度表关联。</li>
+</ul>
+</li>
+<li>数据是会累积的，适用于随时间变化的。适用于周期性的业务。比如优惠卷领取时间，使用时间（下单），使用时间（支付）。如订单事实表中的创建时间，支付时间，取消时间，完成时间，退款时间，退款完成时间。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>维度表</p>
+<ul>
+<li>全量同步<ul>
+<li>商品维度表<ul>
+<li>维度退化：以SKU表为主体，与商品三级，二级，一级分类表和SPU表，品牌表连接选择相应字段加入SKU表中，形成商品维度表</li>
+</ul>
+</li>
+<li>优惠卷维度表<ul>
+<li>以优惠卷表为主体建立优惠卷维度表</li>
+</ul>
+</li>
+<li>活动维度表<ul>
+<li>维度退化：以活动表为主体，与活动规则表连接选择相应字段建立活动维度表。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>特殊同步（导一次）<ul>
+<li>地区维度表<ul>
+<li>一般不会更改，将数据一次导入</li>
+<li>维度退化：将省份表和地区表合并作为地区维度表</li>
+</ul>
+</li>
+<li>时间维度表<ul>
+<li>可以设计将时间数据一次性导入（将很多年的时间都导入，后续就不用再导表了）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>拉链表<ul>
+<li>用户维度表<ul>
+<li>以用户表为主体，<font color= red>最好有”有效开始日期“，”有效结束日期”</font>,拉链表根据这两个日期判断更新，用户最新状态等信息。</li>
+</ul>
+</li>
+<li>用户表中的数据每日既有可能新增，也有可能修改，但修改频率并不高，属于缓慢变化维度，此处采用拉链表存储用户维度数据。</li>
+<li>拉链表，记录每条信息的生命周期，一旦一条记录的生命周期结束，就重新开始一条新的记录，并把当前日期放入生效开始日期，结束日期设为最大值，再将上一条修改的结束日期改为当前日期-1。</li>
+<li>拉链表适合于数据会发生变化，但是大部分是不变的。（即缓慢变化）</li>
+<li>拉链表的更新：用户当天全部数据和MySQL中每天变化的数据拼接在一起，然后insert overwrite回旧的拉链表。insert overwrite会形成一个临时的拉链表。用临时的拉链表覆盖旧的拉链表数据。</li>
+<li><a href="https://imgtu.com/i/4TkIpj"><img src="https://z3.ax1x.com/2021/09/30/4TkIpj.png" alt="4TkIpj.png"></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><a href="https://imgtu.com/i/fpvuSf"><img src="https://z3.ax1x.com/2021/08/02/fpvuSf.png" alt="fpvuSf.png"></a></p>
+</li>
+</ul>
+<h3 id="DWS层"><a href="#DWS层" class="headerlink" title="DWS层"></a>DWS层</h3><ul>
+<li>列式存储</li>
+<li>宽表：字面意思就是说字段比较多的数据库表，通常是指业务主题的指标，维度，属性关联在一起的一张数据库表。由于把不同的内容都放在同一张表存储，宽表已经不符合三范式的模式设计规范，随之带来的坏处就是大量冗余，与之相应的好处就是查询性能的提高与便捷。</li>
+<li>DWS层的宽表字段，是站在不同维度的视角去看事实表。重点关注事实表的度量值。</li>
+<li>业务<ul>
+<li>每日会员行为</li>
+<li>每日商品行为</li>
+<li>每日活动统计</li>
+<li>每日地区统计</li>
+</ul>
+</li>
+<li>用户行为<ul>
+<li>每日设备行为</li>
+</ul>
+</li>
+</ul>
+<h3 id="DWT层"><a href="#DWT层" class="headerlink" title="DWT层"></a>DWT层</h3><ul>
+<li>列式存储</li>
+</ul>
+<ul>
+<li>设备主题宽表</li>
+<li>会员主题宽表</li>
+<li>商品主题宽表</li>
+<li>活动主题宽表</li>
+<li>地区主题宽表</li>
+</ul>
+<h3 id="ADS层"><a href="#ADS层" class="headerlink" title="ADS层"></a>ADS层</h3><ul>
+<li>对电商系统各大主题指标分别进行分析。</li>
+<li>设备主题：<ul>
+<li>活跃设备数（日，周，月）</li>
+<li>每日新增设备</li>
+<li>流失用户数</li>
+<li>留存率</li>
+<li>最近连续三周活跃用户数</li>
+<li>最近七天内连续三天活跃用户数</li>
+</ul>
+</li>
+<li>会员主题<ul>
+<li>会员主题信息</li>
+</ul>
+</li>
+<li>商品主题<ul>
+<li>商品销量排行</li>
+<li>商品差评率</li>
+<li>商品退款率排名（最近30天）</li>
+</ul>
+</li>
+<li>营销主题（活动主题）<ul>
+<li>下单数目统计</li>
+<li>支付信息统计</li>
+</ul>
+</li>
+<li>地区主题<ul>
+<li>地区主题信息</li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>项目</category>
+        <category>离线数仓搭建</category>
+      </categories>
+      <tags>
+        <tag>数据仓库</tag>
       </tags>
   </entry>
   <entry>

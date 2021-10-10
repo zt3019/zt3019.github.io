@@ -185,7 +185,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      5.1k 字
+      5.2k 字
     </span>
   
 
@@ -195,7 +195,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      56
+      57
        分钟
     </span>
   
@@ -229,7 +229,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2021年10月7日 下午
+                  本文最后更新于：2021年10月10日 晚上
                 
               </p>
             
@@ -326,7 +326,7 @@
 </ul>
 </li>
 <li>雪花模型和星型模型的主要区别在于维度的层级。</li>
-<li>选择星型模型还是雪花模型，取决于性能优先还是灵活更优先。在实际开发中，不会绝对选择一种，会根据情况灵活组合甚至并存，但是从整体上看<font color=red>更倾向与维度更少的星型模型,尤其对于Hadoop 体系，减少join就是减少Shuffle，性能差距很大</font></li>
+<li>选择星型模型还是雪花模型，取决于性能优先还是灵活更优先。在实际开发中，不会绝对选择一种，会根据情况灵活组合甚至并存，但是从整体上看<font color=red>更倾向与维度更少的星型模型,尤其对于Hadoop 体系，减少join就是减少Shuffle，性能差距很大</font>.星型模型性能更高一些，减少了join过程。雪花模型维度表表设计多层，更加灵活。</li>
 <li><a target="_blank" rel="noopener" href="https://imgtu.com/i/WzGEEd"><img src="https://z3.ax1x.com/2021/08/01/WzGEEd.png" srcset="/img/loading.gif" lazyload alt="WzGEEd.png"></a></li>
 <li>星座模型</li>
 <li>星座模型与星型模型和雪花模型的区别是<font color=red>事实表的数量，星座模型是基于多个事实表。</font></li>
@@ -363,8 +363,8 @@
 <li><p>事实表分类：</p>
 <ul>
 <li>事务型事实表：以每个<font color=red>事务或事件为单位</font>，例如一个销售订单记录，一比支付数据，作为事实表里一行数据。<font color=red>一旦事务被提交，事实表数据被插入，数据就不再进行更改，其更新方式为增量更新</font></li>
-<li>周期型快照事实表：周期型快照事实表中<font color=red>不会保留所有数据，只保留固定时间间隔的数据</font>，例如月销售额等。</li>
-<li>累积型快照事实表：<font color=red>累积快照事实表用于跟踪业务事实的变化</font>。例如，数据仓库中可能需要累积或存储订单从下订单开始，到订单商品被打包、运输、和签收的各个业务阶段的时间点数据来跟踪订单声明周期的进展情况。当这个业务过程进行时，事实表的记录也要不断更新。</li>
+<li>周期型快照事实表：周期型快照事实表中<font color=red>不会保留所有数据，只保留固定时间间隔的数据</font>，例如月销售，加购物车事实表，收藏事实表额等。</li>
+<li>累积型快照事实表：<font color=red>累积型快照事实表用于跟踪业务事实的变化</font>。例如，数据仓库中可能需要累积或存储订单从下订单开始，到订单商品被打包、运输、和签收的各个业务阶段的时间点数据来跟踪订单声明周期的进展情况。当这个业务过程进行时，事实表的记录也要不断更新。</li>
 </ul>
 </li>
 </ul>
@@ -374,7 +374,7 @@
 <li>创建分区表（按照天进行分区），避免全表扫描</li>
 </ul>
 <h4 id="DWD层"><a href="#DWD层" class="headerlink" title="DWD层"></a>DWD层</h4><ul>
-<li><p>DWD层采用维度建模，采用星型模型</p>
+<li><p>DWD层采用维度建模，采用星型模型，有多个事实表，事实表之间共享一些维度表。构成星座模型</p>
 </li>
 <li><p>维度建模步骤：<font color=red>选择业务过程–&gt;声明粒度–&gt;确认维度–&gt;确认事实</font></p>
 <ul>
@@ -635,7 +635,7 @@
 </li>
 <li>订单事实表<ul>
 <li>订单生命周期：创建时间–&gt;支付时间–&gt;取消时间–&gt;完成时间–&gt;退款时间–&gt;退款完成时间</li>
-<li>以订单业务为具体的业务过程，以<font color=red>数量，金额</font>为度量值，与<font color=red>时间，用户，读取，活动</font>维度表关联。</li>
+<li>以订单业务为具体的业务过程，以<font color=red>数量，金额</font>为度量值，与<font color=red>时间，用户，地区，活动</font>维度表关联。</li>
 </ul>
 </li>
 <li>数据是会累积的，适用于随时间变化的。适用于周期性的业务。比如优惠卷领取时间，使用时间（下单），使用时间（支付）。如订单事实表中的创建时间，支付时间，取消时间，完成时间，退款时间，退款完成时间。</li>
@@ -678,7 +678,7 @@
 </ul>
 </li>
 <li>用户表中的数据每日既有可能新增，也有可能修改，但修改频率并不高，属于缓慢变化维度，此处采用拉链表存储用户维度数据。</li>
-<li>拉链表，记录每条信息的声明周期，一旦一天记录的生命周期结束，就重新开始一天新的记录，并把当前日期放入生效开始日期。</li>
+<li>拉链表，记录每条信息的生命周期，一旦一条记录的生命周期结束，就重新开始一条新的记录，并把当前日期放入生效开始日期，结束日期设为最大值，再将上一条修改的结束日期改为当前日期-1。</li>
 <li>拉链表适合于数据会发生变化，但是大部分是不变的。（即缓慢变化）</li>
 <li>拉链表的更新：用户当天全部数据和MySQL中每天变化的数据拼接在一起，然后insert overwrite回旧的拉链表。insert overwrite会形成一个临时的拉链表。用临时的拉链表覆盖旧的拉链表数据。</li>
 <li><a target="_blank" rel="noopener" href="https://imgtu.com/i/4TkIpj"><img src="https://z3.ax1x.com/2021/09/30/4TkIpj.png" srcset="/img/loading.gif" lazyload alt="4TkIpj.png"></a></li>
@@ -777,6 +777,29 @@
                   
                 </p>
               
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/08/10/Scala/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Scala</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/06/27/hbase/">
+                        <span class="hidden-mobile">hbase</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
               
             </div>
 
