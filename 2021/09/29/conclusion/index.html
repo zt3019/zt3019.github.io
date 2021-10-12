@@ -185,7 +185,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      5.6k 字
+      8.1k 字
     </span>
   
 
@@ -195,7 +195,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      63
+      90
        分钟
     </span>
   
@@ -229,7 +229,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2021年10月10日 晚上
+                  本文最后更新于：2021年10月11日 中午
                 
               </p>
             
@@ -813,6 +813,179 @@
 <li>==：如果是比较基本数据类型，那么比较的是变量的值。如果比较的是引用数据类型，那么比较的是地址值（两个对象是否指向同一块内存）</li>
 <li>equals：如果类没重写equals方法比较的是两个对象的地址值，如果类重写了equals方法后我们往往比较的是对象中属性的内容。</li>
 <li>equals方法是从Object类中继承的，默认的实现就是使用==</li>
+</ul>
+</li>
+</ul>
+<h2 id="Spark"><a href="#Spark" class="headerlink" title="Spark"></a>Spark</h2><ul>
+<li><p>Spark架构与作业提交流程</p>
+<ul>
+<li><p><a target="_blank" rel="noopener" href="https://imgtu.com/i/5EtOoR"><img src="https://z3.ax1x.com/2021/10/10/5EtOoR.png" srcset="/img/loading.gif" lazyload alt="5EtOoR.png"></a></p>
+</li>
+<li><p>Yarn Cluster模式</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/5ENNlT"><img src="https://z3.ax1x.com/2021/10/10/5ENNlT.png" srcset="/img/loading.gif" lazyload alt="5ENNlT.png"></a></p>
+<ul>
+<li>脚本启动执行</li>
+<li>调用Client类中的main方法并执行</li>
+<li>向RM申请资源运行ApplicationMaster</li>
+<li>选择一台NodeManager启动AM</li>
+<li>AM启动Driver线程执行用户的作业</li>
+<li>Driver向RM申请资源</li>
+<li>在NM中创建Excutor对象</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>常见算子</p>
+<ul>
+<li>ReduceByKey和GroupByKey的区别<ul>
+<li>ReduceByKey按照Key进行聚合，会在shuffle之前有combine（预聚合）操作，返回结果是RDD[k,v]</li>
+<li>GroupByKey：按照Key进行分组，直接进行shuffle</li>
+<li>ReduceByKey会有预聚合的操作，所以在不影响业务逻辑的情况下优先使用ReduceByKey。</li>
+</ul>
+</li>
+<li>Repartition和Coalesce的关系与区别<ul>
+<li>关系：两者都是用来改变RDD的partition数量的，Repartition底层调用coalesce((numPartitions, shuffle = true)</li>
+<li>区别：Repartition一定会发生shuffle，coalesce根据传入的参数来判断是否发生shuffle。</li>
+<li>一般增大RDD的partition数量时使用repartition，减少partition数量时使用coalesce</li>
+</ul>
+</li>
+</ul>
+<h3 id="Shuffle"><a href="#Shuffle" class="headerlink" title="Shuffle"></a>Shuffle</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://imgtu.com/i/5Eyca8"><img src="https://z3.ax1x.com/2021/10/10/5Eyca8.png" srcset="/img/loading.gif" lazyload alt="5Eyca8.png"></a></li>
+<li>在划分stage时，最后一个stage称为finalStage，它本质上是一个ResultStage对象，前面的所以stage被称为ShuffleMapStage。</li>
+<li>ShuffleMapStage的结束伴随着shuffle文件的写磁盘</li>
+<li>ResultStage基本上对应代码中的action算子，即将一个函数应用在RDD的各个partition的数据集上，意味着一个job的运行结束。</li>
+</ul>
+</li>
+<li><p>Task个数：</p>
+<ul>
+<li>map端的task个数等于分区数</li>
+<li>reduce端的stage默认取spark.default.parallelism这个配置项的值作为分区数，如果没有配置，则以map端的最后一个RDD的分区数作为其分区数（也就是N），那么分区数就决定了reduce端的task的个数。</li>
+</ul>
+</li>
+<li><p>Reduce端读取数据</p>
+<ol>
+<li><p>map task 执行完毕后会将计算状态以及磁盘小文件位置等信息封装到MapStatus对象中，然后由本进程中的MapOutPutTrackerWorker对象将mapStatus对象发送给Driver进程的MapOutPutTrackerMaster对象；</p>
+</li>
+<li><p><font color=red>在reduce task开始执行之前会先让本进程中的MapOutputTrackerWorker向Driver进程中的MapoutPutTrakcerMaster发动请求，请求磁盘小文件位置信息；</font></p>
+</li>
+<li><p><font color=red>当所有的Map task执行完毕后，Driver进程中的MapOutPutTrackerMaster就掌握了所有的磁盘小文件的位置信息。</font>此时MapOutPutTrackerMaster会告诉MapOutPutTrackerWorker磁盘小文件的位置信息；</p>
+</li>
+<li><p>完成之前的操作之后，由BlockTransforService去Executor0所在的节点拉数据，默认会启动五个子线程。每次拉取的数据量不能超过48M（reduce task每次最多拉取48M数据，将拉来的数据存储到Executor内存的20%内存中）。</p>
+</li>
+</ol>
+</li>
+<li><p>HashShuffle（已经弃用了）</p>
+<ul>
+<li>未经优化的HashShuffle<ul>
+<li>对相同的key执行hash算法，从而将相同的key写入同一个文件中，而每一个磁盘文件都只属于下游stage的一个task。在将数据写入磁盘之前，会先将数据写入内存缓冲中，当内存缓冲填满之后，再溢写到磁盘文件中去。</li>
+<li>下一个stage的task有多少个，当前stage的每个task就要创建多少份磁盘文件。如果分区数很多，则会造成大量的文件</li>
+<li><a target="_blank" rel="noopener" href="https://imgtu.com/i/5Ecfun"><img src="https://z3.ax1x.com/2021/10/10/5Ecfun.png" srcset="/img/loading.gif" lazyload alt="5Ecfun.png"></a></li>
+</ul>
+</li>
+<li>优化的HashShuffle<ul>
+<li><a target="_blank" rel="noopener" href="https://imgtu.com/i/5EgrrR"><img src="https://z3.ax1x.com/2021/10/10/5EgrrR.png" srcset="/img/loading.gif" lazyload alt="5EgrrR.png"></a></li>
+<li>优化后的HashShuffle，会将一个Excutor上所有task的文件都根据key分别写入到几个磁盘文件中。几个磁盘文件取决于下层task的数量。</li>
+<li>优化后的Hashshuffle减少了大量的磁盘文件。</li>
+</ul>
+</li>
+<li>不管是不是优化的hashShuffle都产生了大量的磁盘文件。所以在高版本的spark中已经被弃用。</li>
+</ul>
+</li>
+<li><p>SortShuffle</p>
+<ul>
+<li><p>SortShuffle</p>
+<ul>
+<li><p><a target="_blank" rel="noopener" href="https://imgtu.com/i/5EfCdI"><img src="https://z3.ax1x.com/2021/10/10/5EfCdI.png" srcset="/img/loading.gif" lazyload alt="5EfCdI.png"></a></p>
+</li>
+<li><p>在该模式下，<font color=red>数据会先写入一个内存数据结构中，</font>此时根据不同的shuffle算子，可能选用不同的数据结构。如果是reduceByKey这种聚合类的shuffle算子，那么会选用Map数据结构，一边通过Map进行聚合，一边写入内存；如果是join这种普通的shuffle算子，那么会选用Array数据结构，直接写入内存。接着，<font color=red>每写一条数据进入内存数据结构之后，就会判断一下，是否达到了某个临界阈值。如果达到临界阈值的话，那么就会尝试将内存数据结构中的数据溢写到磁盘，然后清空内存数据结构。</font></p>
+</li>
+<li><p><font color=red>在溢写到磁盘文件之前，会先根据key对内存数据结构中已有的数据进行排序。排序过后，会分批将数据写入磁盘文件。</font>默认的batch数量是10000条，也就是说，排序好的数据，会以每批1万条数据的形式分批写入磁盘文件。写入磁盘文件是通过Java的BufferedOutputStream实现的。BufferedOutputStream是Java的缓冲输出流，首先会将数据缓冲在内存中，当内存缓冲满溢之后再一次写入磁盘文件中，这样可以减少磁盘IO次数，提升性能。</p>
+</li>
+<li><p><font color=red>一个task将所有数据写入内存数据结构的过程中，会发生多次磁盘溢写操作，也就会产生多个临时文件。最后会将之前所有的临时磁盘文件都进行合并，这就是merge过程，此时会将之前所有临时磁盘文件中的数据读取出来，然后依次写入最终的磁盘文件之中。</font>此外，由于一个task就只对应一个磁盘文件，也就意味着该task为下游stage的task准备的数据都在这一个文件中，因此还会单独写一份索引文件，其中标识了下游各个task的数据在文件中的start offset与end offset。</p>
+</li>
+<li><p>SortShuffleManager由于有一个磁盘文件merge的过程，因此大大减少了文件数量。比如第一个stage有50个task，总共有10个Executor，每个Executor执行5个task，而第二个stage有100个task。由于每个task最终只有一个磁盘文件，因此此时每个Executor上只有5个磁盘文件，所有Executor只有50个磁盘文件</p>
+</li>
+</ul>
+</li>
+<li><p>ByPassSortShuffle</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://imgtu.com/i/5VFM7j"><img src="https://z3.ax1x.com/2021/10/11/5VFM7j.png" srcset="/img/loading.gif" lazyload alt="5VFM7j.png"></a></li>
+<li>ByPassSortShuffle运行机制的触发条件<ul>
+<li>map端没有预聚合（比如GroupByKey）</li>
+<li>shuffle上一个阶段的最后一个RDD的分区数小于参数spark.shuffle.sort.bypassMergeThreshold（默认为200）</li>
+</ul>
+</li>
+<li>此时，每个task会为每个下游task都创建一个临时磁盘文件，并将数据按key进行hash然后根据key的hash值，将key写入对应的磁盘文件中。写入磁盘文件也都是先写到内存缓存中，缓存写满后再溢写到磁盘文件中去。最后，会将所有的临时文件进行合并，合并成一个磁盘文件，并创建一个单独的索引文件。<font color=red>该过程的磁盘写机制其实跟未经优化的HashShuffleManager是一模一样的，因此都要创建数量惊人的磁盘文件，只是在最后会做一个磁盘文件的合并而已。</font>因此，该机制比未经优化的HashShuffle来说shuffle read的性能会更好。</li>
+<li>与普通的SortShuffle比较：<ul>
+<li>磁盘写机制不一样。ByPassSortShuffle每个Task会为下游都创建一个临时磁盘文件。普通的SortShuffle临时文件是溢写出来的，与下游task数量无关。</li>
+<li>不会进行排序。(因此，该机制的好处就是shuffle write过程中，不需要进行数据的排序的操作，也就节省掉了这部分的性能开销。)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="Spark优化"><a href="#Spark优化" class="headerlink" title="Spark优化"></a>Spark优化</h3><ul>
+<li>常规优化<ul>
+<li>增加资源。增加Excutor个数，增加每个Excutor的CPU core个数，增加每个Excutor的内存量。</li>
+<li>RDD持久化，RDD序列化。RDD尽可能早的filter操作。</li>
+<li>并行度的调节，Spark官方推荐，task数量应该设置为Spark作业总CPU core数量的2~3倍。</li>
+<li>使用广播变量，序列化</li>
+</ul>
+</li>
+<li>算子调优<ul>
+<li>mapPartitions算子对RDD中的每个分区进行操作。提高了并行度。</li>
+<li>在生产环境中，通常使用foreachPartition算子来完成数据库的写入，通过foreachPartition算子的特性，可以优化写数据库的性能。</li>
+<li>ReduceByKey算子map端预聚合</li>
+</ul>
+</li>
+<li>shuffle调优<ul>
+<li>调节map端内存缓冲区的大小</li>
+<li>调节Reduce端拉取数据内存缓冲区大小</li>
+<li>调节sortshuffle排序操作阈值，如果确定业务不需要进行排序操作，可以将此参数调大一些，大于shuffle read task的数量，那么此时map端就不会进行排序了。</li>
+</ul>
+</li>
+<li>故障排除<ul>
+<li>控制reduce端缓冲区大小避免OOM1,如果缓冲区过大，导致运算的内存不足，可能会出现OOM</li>
+<li>checkpoint+cache同时使用。</li>
+</ul>
+</li>
+</ul>
+<h3 id="数据倾斜"><a href="#数据倾斜" class="headerlink" title="数据倾斜"></a>数据倾斜</h3><ul>
+<li><p>定位数据倾斜问题：</p>
+<ul>
+<li>查看代码中的shuffle算子，例如：reduceByKey,countByKey,GroupByKey,join等算子，根据代码逻辑判断此处是否会出现数据倾斜。</li>
+<li>查看Spark作业的log文件</li>
+</ul>
+</li>
+<li><p>解决数据倾斜：</p>
+<ul>
+<li><p>聚合原数据</p>
+<ul>
+<li>避免shuffle过程，如果避免了shuffle过程，那么就从根本上消除了发生数据倾斜问题的可能。</li>
+<li>增大key粒度，比如，原来是统计每个区的一个统计量，现在将粒度增大，变成统计一个省的某些数据。</li>
+</ul>
+</li>
+<li><p>提高reduce的并行度</p>
+</li>
+<li><p>使用随机key实现双重聚合</p>
+<ul>
+<li>当使用了类似于groupByKey，reduceByKey这样的算子时，可以考虑使用随机key实现双重聚合。</li>
+<li>首先，<font color=red>通过map算子给每个数据的key添加随机前缀，对key进行打散，将原先一样的key变成不一样的key，然后进行第一次聚合，这样就可以让原本被一个task处理的数据分散到多个task上去做局部聚合，随后，去掉每个key的前缀，再次进行聚合。</font></li>
+<li>此方法仅适用于聚合类的shuffle操作</li>
+<li><a target="_blank" rel="noopener" href="https://imgtu.com/i/5V0IgI"><img src="https://z3.ax1x.com/2021/10/11/5V0IgI.png" srcset="/img/loading.gif" lazyload alt="5V0IgI.png"></a></li>
+</ul>
+</li>
+<li><p>将reduce join转换成map join</p>
+<ul>
+<li>采用广播小RDD全量数据+map算子。（RDD是不能进行广播的，只能将RDD内部的数据通过collect拉取到Driver内存然后再进行广播）</li>
+<li>核心思路：<font color=red>将较小RDD中的数据直接通过collect算子拉取到Driver端的内存中来，然后对其创建一个Broadcast变量；接着对另外一个RDD执行map类算子，在算子函数内，从Broadcast变量中获取较小RDD的全量数据，与当前RDD的每一条数据按照连接key比较，如果连接key相同，那么就将两个RDD根据需求连接起来。</font></li>
+<li><a target="_blank" rel="noopener" href="https://imgtu.com/i/5VrVj1"><img src="https://z3.ax1x.com/2021/10/11/5VrVj1.png" srcset="/img/loading.gif" lazyload alt="5VrVj1.png"></a></li>
+<li>此方法适合小RDD和大RDD之间的join操作。与MapReduce中的mapjoin操作类似。</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
