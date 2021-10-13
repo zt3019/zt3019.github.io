@@ -1,0 +1,643 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="	#87CEFA">
+  <meta name="description" content="Just Do it!">
+  <meta name="author" content="daxiazou">
+  <meta name="keywords" content="">
+  
+  <title>Computer_Fundamentals - Nevermind</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.6.0/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.10","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Nevermind</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Computer_Fundamentals">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-10-13 13:55" pubdate>
+        2021年10月13日 下午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      3.1k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      31
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Computer_Fundamentals</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：2021年10月13日 晚上
+                
+              </p>
+            
+            <div class="markdown-body">
+              <h1 id="计算机基础"><a href="#计算机基础" class="headerlink" title="计算机基础"></a>计算机基础</h1><h2 id="计算机网络"><a href="#计算机网络" class="headerlink" title="计算机网络"></a>计算机网络</h2><ul>
+<li>计算机网络体系结构<ul>
+<li><a target="_blank" rel="noopener" href="https://imgtu.com/i/5KpnqU"><img src="https://z3.ax1x.com/2021/10/13/5KpnqU.png" srcset="/img/loading.gif" lazyload alt="5KpnqU.png"></a></li>
+<li>应用层<ul>
+<li>应用层用来规定应用进程在通信时所遵循的协议，应用层的许多协议都是基于客户服务器方式。</li>
+<li>涉及到的协议：<ul>
+<li>域名系统DNS：将域名和IP地址相互映射的一个分布式数据库，能够使人更方便的访问互联网，而不用去记住能够被机器直接读取的IP数串。</li>
+<li>HTTP协议：超文本传输协议，所有的万维网文件都必须遵守这个标准。设计HTTP最初的目的是为了提供一种发布和接收HTML页面的方法。</li>
+<li>邮件传输协议：SMTP</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>运输层<ul>
+<li>只有位于网络边缘部分的主机的协议栈才有运输层，和网络层不同，网络层是为主机之间提供逻辑通信，<font color=red>而运输层为应用程序之间提供通用的数据传输服务（端到端服务）。运输层拥有流量控制（防止过载，即过多的数据注入到网络中），拥塞控制（抑制数据的传输速率）等功能。</font>为上层协议提供端到端的可靠和透明的数据传输服务，上层服务用户不必关心通信子网的实现细节。</li>
+<li>运输层主要使用以下两种协议<ul>
+<li>传输控制协议TCP：面向连接的协议，提供可靠的数据传输服务。</li>
+<li>用户数据报协议UDP：无连接的协议，不提供可靠交付。</li>
+</ul>
+</li>
+<li>运行在TCP上的协议<ul>
+<li>HTTP协议（超文本传输协议）：web服务器传输超文本到本地浏览器的传送协议。端口：80</li>
+<li>HTTPS（安全超文本传输协议），HTTP协议的安全版本。端口：443</li>
+<li>FTP（文件传输协议），用于文件传输，端口：21</li>
+<li>SMTP（简单邮件传输协议），用来发送电子邮件。端口：25</li>
+<li>SSH，用于加密安全登录用</li>
+</ul>
+</li>
+<li>运行在UDP上的协议<ul>
+<li>DNS（域名服务），用于完成地址查找，邮件转发等工作</li>
+<li>SNMP（简单网络管理协议），用于网络信息的收集和网络管理</li>
+<li>NTP（网络时间协议），用于网络同步。</li>
+<li>DHCP（动态主机配置协议），动态配置IP地址。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>网络层<ul>
+<li><font color=red>网络层采用了IP数据报服务：通过IP寻址来建立两个节点之间的连接，</font>之后把运输层产生的报文段或用户数据报封装成分组和包进行传送，在发送分组时不需要先建立连接，每一个分组独立发送，与其前后的分组无关，在这个过程中网络层不提供端到端的可靠传输服务，尽最大努力进行交付（由网络的主机中的运输层复杂可靠交付）</li>
+<li>相关协议：<ul>
+<li>与IP协议配套使用的<font color=red>地址解析协议ARP</font></li>
+<li>ARP协议完成了IP地址与物理地址的映射，用于动态解析以太网硬件的地址。（IP地址到MAC地址之间的映射）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>数据链路层<ul>
+<li><font color=red>数据链路层：两台设备之间的数据传输，可以看成是在一条管道上进行的，传送的数据单位是帧（每一帧包括数据和必要的控制信息），数据链路层保证传输数据的正确性。</font></li>
+</ul>
+</li>
+<li>物理层<ul>
+<li>物理层考虑的是怎样才能在连接各种计算机的传输媒体上传输数据比特流。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>TCP与UDP<ul>
+<li>TCP/IP即传输控制协议，是面向连接的协议，发送数据前要先建立连接，TCP提供可靠的服务，也就是说，通过TCP连接传输的数据不会丢失，没有重复，并且按顺序到达。<ul>
+<li>其传送的运输协议数据单元是TCP报文</li>
+<li>支持点对点单播，不支持多播。广播</li>
+<li>提供可靠服务</li>
+<li>复杂。用于大多数应用。如：万维网，电子邮件，文件传送等。</li>
+</ul>
+</li>
+<li>UDP它是属于TCP/IP协议族中的一种，是无连接的协议，发送数据之前不需要建立连接，是没有可靠性的协议，因为不需要建立连接所以可以在网络上以任何可能的路径传输，因此，能否到达目的地，到达目的地的时间以及内容的正确性都是不能被保证的。<ul>
+<li>无连接的协议，提供无连接服务</li>
+<li>其传送的运输协议数据单元TPDU是UDP报文或用户数据报</li>
+<li>支持单播，多播，广播</li>
+<li>不提供可靠交付</li>
+<li>简单，适用于很多应用。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>三次握手，四次挥手</strong><ul>
+<li><strong>三次握手：</strong>TCP建立连接的过程</li>
+<li>客户端向服务器发送SYN—》服务端返回SYN，ACK—》客户端发送ACK</li>
+<li>三次握手的目的是建立可靠的通信信道，主要目的就是双方确认自己于对方的发送于接收机能正常。</li>
+<li><strong>四次挥手：</strong>数据传输结束后，通信双方都可释放连接，我们将释放连接的过程称为四次挥手。<ul>
+<li>客户端对服务器发送关闭连接的请求</li>
+<li>服务器收到客户端的关闭连接请求后，回复一个确认收到的消息</li>
+<li>服务器确定不会再给客户发消息后，对客户端发送，准备关闭连接的消息</li>
+<li>客户端收到服务器要关闭连接的消息后，给服务器发送：已收到关闭连接的消息</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>HTTP协议</strong><ul>
+<li>HTTP是一个基于TCP/IP通信协议来传输数据的协议。HTTP协议工作于客户端-服务器端架构之上，实现可靠性的传输文字，图片，音频，视频等超文本数据的规范，格式简称为“超文本传输协议”。HTTP协议属于应用层，用户访问的第一层就是HTTP<ul>
+<li>简单快速：客户端向服务器发送请求时，只需要传送请求方法和路径即可。</li>
+<li>灵活：HTTP允许传输任意类型的数据对象。</li>
+<li>无连接：限制每次连接只处理一个请求。服务器处理完客户请求，并收到客户应答后，即断开连接。</li>
+<li>无状态：协议对于事务处理没有记忆能力。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>HTTPS于HTTP<ul>
+<li>端口不同，HTTP是80，HTTPS是443</li>
+<li>安全性：HTTP是超文本传输协议，信息是明文传输，HTTPS是通过SSL加密处理的传输协议，更加安全。</li>
+<li>HTTPS需要拿到CA证书，需要付费</li>
+</ul>
+</li>
+<li>一次完整的HTTP请求<ul>
+<li>HTTP协议采用请求/响应模型。客户端向服务器发送一个请求报文，请求报文包含请求方法，URL，协议版本，请求头部和请求数据。服务器以一个状态作为响应，响应内容包括协议版本，成功或者错误的代码，服务器信息，响应头部和响应数据。</li>
+<li>Web浏览器与Web服务器之间将完成下列7个步骤：<ul>
+<li>建立TCP连接，三次握手</li>
+<li>Web浏览器向Web服务器发送请求行</li>
+<li>Web浏览器发送请求头，浏览器发送请求命令之后，还要以头信息的形式向Web服务器发送一些别的信息，之后浏览器发送了一空白行来通知服务器，它已经结束了该头信息的发送。</li>
+<li>Web服务器应答：客户机向服务器发出请求后，服务器会向客户机回送应答，（HTTP/1.1 200 OK）应答的第一部分是协议的版本号和应答状态码</li>
+<li>Web服务器发送应答头：正如客户端会随同请求发送关于自身的信息一样，服务器也会随应答向用户发送关于它自己的数据及被请求的文档。</li>
+<li>Web服务器向浏览器发送数据：Web服务器向浏览器发送头信息后，它会发送一个空白行来表示头信息的发送到此为止，接着，它就以Content-Type应答头信息所描述的格式发送用户所请求的实际数据。</li>
+<li>Web服务器关闭TCP连接，四次挥手。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>输入网址到获取页面的过程<ul>
+<li>浏览器搜索自身的DNS缓存，搜索操作系统的DNS缓存，读取本地Host文件和向本地DNS服务器进行查询等。</li>
+<li>浏览器获得域名对应的IP地址之后，浏览器向服务器请求建立连接，发起三次握手</li>
+<li>TCP/IP链接建立起来后，浏览器向服务器发送HTTP请求</li>
+<li>服务器接收到这个请求，并根据路径参数映射到特定的请求处理器进行处理，并将处理结果以及相应的视图返回给浏览器</li>
+<li>浏览器解析并渲染视图，若遇到js文件，css文件等静态资源的引用，则重复上述步骤并向服务器请求这些资源。</li>
+<li>浏览器根据其请求到的资源，数据渲染页面，最终向用户呈现一个完整的页面。</li>
+</ul>
+</li>
+<li>HTTP版本对比<ul>
+<li>HTTP1.0<ul>
+<li>是一种无状态，无连接的应用层协议（短连接）</li>
+<li>浏览器的每次请求都需要与服务器建立一个TCP连接，服务器处理完成后立即断开TCP连接（无连接），服务器不跟踪每个客户端也不记录过去的请求（无状态）</li>
+</ul>
+</li>
+<li>HTTP1.1（长连接）<ul>
+<li>默认持久连接节省通信量，只要客户端服务端任意一端没有明确提出断开TCP连接，就一直保持连接。（长连接）.</li>
+</ul>
+</li>
+<li>HTTP2.0<ul>
+<li>服务器推送（就是服务器可以对一个客户端请求发送多个响应。服务器向客户端推送资源无需客户端明确的请求）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>GET方法和POST方法（HTTP协议中的请求方式）<ul>
+<li>GET:用于请求访问已经被URI（统一资源标识符）识别的资源，可以通过URL传参给服务器</li>
+<li>POST：用于传输信息给服务器，主要功能与GET方法类似，但一般推荐使用POST方式</li>
+<li>GET方法与POST方法的区别：<ul>
+<li>功能上：GET一般用来从服务器获取资源，POST一般用来更新服务器上的资源</li>
+<li>安全性：GET是不安全的，因为GET请求提交的数据将明文出现在URL上（请求头上），可能会泄露私密信息；POST请求参数则被包装到请求体中，相对更安全。</li>
+<li>数据量：GET传输的数据量小，因为受URL长度限制，但效率较高；POST可以传输大量数据，所以上传文件只能用POST方式。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Session和Cookie的对比<ul>
+<li><font color=red>Cookie是由Web服务器保存在用户浏览器上的文件（key-value格式），可以包含用户相关的信息。</font>客户端向服务器发起请求时，会携带服务器端之前创建的cookie，服务器端通过cookie中携带的数据区分不同的用户。</li>
+<li>Session：<font color=red>session是浏览器和服务器对话过程中，服务器会分配一块存储空间给session。</font>服务器默认会为客户浏览器的cookie中设置 sessionid，这个sessionid就和cookie对应，浏览器在向服务器请求过程中传输的cookie 包含 sessionid ，服务器根据传输cookie 中的 sessionid 获取出会话中存储的信息，然后确定会话的身份信息。</li>
+<li>区别：<ul>
+<li>安全性：cookie数据存放在客户端上，安全性较差，session数据放在服务器上，安全性相对更高</li>
+<li>大小限制：cookie有大小限制，单个cookie保存的数据不能超过4K,session无此限制，理论上只与服务器的内存大小有关</li>
+<li>服务器资源消耗：session是保存在服务器端上会存在一段时间才会消失，当访问增多，对服务器性能有影响。</li>
+<li>实现机制：session的实现常常依赖于Cookie机制，通过Cookie机制回传SessionID。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/">计算机基础</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">计算机网络</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/">计算机基础</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/10/04/algorithm/">
+                        <span class="hidden-mobile">algorithm</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.2/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js" ></script>
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      $('#local-search-input').on('click', function() {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      });
+      $('#modalSearch').on('shown.bs.modal', function() {
+        $('#local-search-input').focus();
+      });
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

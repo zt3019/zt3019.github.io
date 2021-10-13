@@ -1,62 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Hbase简介</title>
-    <url>/2020/11/17/HBase%20introduction/</url>
-    <content><![CDATA[<h1 id="分布式数据库HBase简介"><a href="#分布式数据库HBase简介" class="headerlink" title="分布式数据库HBase简介"></a>分布式数据库HBase简介</h1><ol>
-<li><p>概述    </p>
-<ul>
-<li>HBase是针对谷歌BigTable的开源实现，是一个高可靠，高性能，面向列，可伸缩的分布式数据库           </li>
-<li>可以用来存储非结构化和半结构化的松散数据</li>
-</ul>
-</li>
-<li><p>数据模型</p>
-<ul>
-<li>索引通过四个元素来定位：行键，列族，列限定符，时间戳</li>
-<li> 面向列的存储</li>
-</ul>
-</li>
-<li><p>实现原理 </p>
-<ul>
-<li>HBase的功能组件<blockquote>
-<p>库函数<br>Master服务器<br>Region服务器    </p>
-</blockquote>
-</li>
-<li>两个核心概念表和Region<blockquote>
-<p>一个HBase表被划分成多个Region<br>一个Region会分裂成多个新的Region</p>
-</blockquote>
-</li>
-<li>怎么实现Region定位<blockquote>
-<p>三层结构索引实现Region的定位<br>Zookeeper文件<br>-ROOT-表<br>.MEAT.表      </p>
-</blockquote>
-</li>
-</ul>
-</li>
-<li><p>运行机制</p>
-<ul>
-<li>HBase的系统架构<blockquote>
-<p><img src="https://img-blog.csdnimg.cn/2020070104123335.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTE1NDU1OQ==,size_16,color_FFFFFF,t_70#pic_center" title="系统架构图"><br>Zookeeper服务器（被大量用于分布式系统，提供配置维护，域名服务，分布式同步服务）实现协同管理服务，提供管家功能（维护和管理整个HBase集群）<br>Master服务器作用：1.对表增删改查。2.负责不同Region服务器的负载均衡。3.负责调整分裂合并后Region的分布。4.负责重新分配故障，失效的Region服务器</p>
-</blockquote>
-</li>
-<li>Region服务器（负责用户数据的存储和管理）的工作原理</li>
-<li>Store的工作原理</li>
-<li>HLog的工作原理</li>
-</ul>
-</li>
-<li><p>编程实践<br>HBase安装及实践，参考厦门大学数据库实验室博客<br><a href="http://dblab.xmu.edu.cn/blog/2442-2/">参考链接</a></p>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>大数据</category>
-        <category>老hadoop</category>
-      </categories>
-      <tags>
-        <tag>Hadoop</tag>
-        <tag>大数据</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>HA&amp;ZooKeeper</title>
     <url>/2021/06/02/HAHA-zk/</url>
     <content><![CDATA[<h1 id="HA-amp-ZooKeeper"><a href="#HA-amp-ZooKeeper" class="headerlink" title="HA&amp;ZooKeeper"></a>HA&amp;ZooKeeper</h1><h2 id="zookeeper"><a href="#zookeeper" class="headerlink" title="zookeeper"></a>zookeeper</h2><h3 id="zk概述"><a href="#zk概述" class="headerlink" title="zk概述"></a>zk概述</h3><ul>
@@ -196,6 +140,240 @@
       <tags>
         <tag>zookeeper</tag>
         <tag>HA</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Computer_Fundamentals</title>
+    <url>/2021/10/13/Computer-Fundamentals/</url>
+    <content><![CDATA[<h1 id="计算机基础"><a href="#计算机基础" class="headerlink" title="计算机基础"></a>计算机基础</h1><h2 id="计算机网络"><a href="#计算机网络" class="headerlink" title="计算机网络"></a>计算机网络</h2><ul>
+<li>计算机网络体系结构<ul>
+<li><a href="https://imgtu.com/i/5KpnqU"><img src="https://z3.ax1x.com/2021/10/13/5KpnqU.png" alt="5KpnqU.png"></a></li>
+<li>应用层<ul>
+<li>应用层用来规定应用进程在通信时所遵循的协议，应用层的许多协议都是基于客户服务器方式。</li>
+<li>涉及到的协议：<ul>
+<li>域名系统DNS：将域名和IP地址相互映射的一个分布式数据库，能够使人更方便的访问互联网，而不用去记住能够被机器直接读取的IP数串。</li>
+<li>HTTP协议：超文本传输协议，所有的万维网文件都必须遵守这个标准。设计HTTP最初的目的是为了提供一种发布和接收HTML页面的方法。</li>
+<li>邮件传输协议：SMTP</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>运输层<ul>
+<li>只有位于网络边缘部分的主机的协议栈才有运输层，和网络层不同，网络层是为主机之间提供逻辑通信，<font color=red>而运输层为应用程序之间提供通用的数据传输服务（端到端服务）。运输层拥有流量控制（防止过载，即过多的数据注入到网络中），拥塞控制（抑制数据的传输速率）等功能。</font>为上层协议提供端到端的可靠和透明的数据传输服务，上层服务用户不必关心通信子网的实现细节。</li>
+<li>运输层主要使用以下两种协议<ul>
+<li>传输控制协议TCP：面向连接的协议，提供可靠的数据传输服务。</li>
+<li>用户数据报协议UDP：无连接的协议，不提供可靠交付。</li>
+</ul>
+</li>
+<li>运行在TCP上的协议<ul>
+<li>HTTP协议（超文本传输协议）：web服务器传输超文本到本地浏览器的传送协议。端口：80</li>
+<li>HTTPS（安全超文本传输协议），HTTP协议的安全版本。端口：443</li>
+<li>FTP（文件传输协议），用于文件传输，端口：21</li>
+<li>SMTP（简单邮件传输协议），用来发送电子邮件。端口：25</li>
+<li>SSH，用于加密安全登录用</li>
+</ul>
+</li>
+<li>运行在UDP上的协议<ul>
+<li>DNS（域名服务），用于完成地址查找，邮件转发等工作</li>
+<li>SNMP（简单网络管理协议），用于网络信息的收集和网络管理</li>
+<li>NTP（网络时间协议），用于网络同步。</li>
+<li>DHCP（动态主机配置协议），动态配置IP地址。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>网络层<ul>
+<li><font color=red>网络层采用了IP数据报服务：通过IP寻址来建立两个节点之间的连接，</font>之后把运输层产生的报文段或用户数据报封装成分组和包进行传送，在发送分组时不需要先建立连接，每一个分组独立发送，与其前后的分组无关，在这个过程中网络层不提供端到端的可靠传输服务，尽最大努力进行交付（由网络的主机中的运输层复杂可靠交付）</li>
+<li>相关协议：<ul>
+<li>与IP协议配套使用的<font color=red>地址解析协议ARP</font></li>
+<li>ARP协议完成了IP地址与物理地址的映射，用于动态解析以太网硬件的地址。（IP地址到MAC地址之间的映射）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>数据链路层<ul>
+<li><font color=red>数据链路层：两台设备之间的数据传输，可以看成是在一条管道上进行的，传送的数据单位是帧（每一帧包括数据和必要的控制信息），数据链路层保证传输数据的正确性。</font></li>
+</ul>
+</li>
+<li>物理层<ul>
+<li>物理层考虑的是怎样才能在连接各种计算机的传输媒体上传输数据比特流。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>TCP与UDP<ul>
+<li>TCP/IP即传输控制协议，是面向连接的协议，发送数据前要先建立连接，TCP提供可靠的服务，也就是说，通过TCP连接传输的数据不会丢失，没有重复，并且按顺序到达。<ul>
+<li>其传送的运输协议数据单元是TCP报文</li>
+<li>支持点对点单播，不支持多播。广播</li>
+<li>提供可靠服务</li>
+<li>复杂。用于大多数应用。如：万维网，电子邮件，文件传送等。</li>
+</ul>
+</li>
+<li>UDP它是属于TCP/IP协议族中的一种，是无连接的协议，发送数据之前不需要建立连接，是没有可靠性的协议，因为不需要建立连接所以可以在网络上以任何可能的路径传输，因此，能否到达目的地，到达目的地的时间以及内容的正确性都是不能被保证的。<ul>
+<li>无连接的协议，提供无连接服务</li>
+<li>其传送的运输协议数据单元TPDU是UDP报文或用户数据报</li>
+<li>支持单播，多播，广播</li>
+<li>不提供可靠交付</li>
+<li>简单，适用于很多应用。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>三次握手，四次挥手</strong><ul>
+<li><strong>三次握手：</strong>TCP建立连接的过程</li>
+<li>客户端向服务器发送SYN—》服务端返回SYN，ACK—》客户端发送ACK</li>
+<li>三次握手的目的是建立可靠的通信信道，主要目的就是双方确认自己于对方的发送于接收机能正常。</li>
+<li><strong>四次挥手：</strong>数据传输结束后，通信双方都可释放连接，我们将释放连接的过程称为四次挥手。<ul>
+<li>客户端对服务器发送关闭连接的请求</li>
+<li>服务器收到客户端的关闭连接请求后，回复一个确认收到的消息</li>
+<li>服务器确定不会再给客户发消息后，对客户端发送，准备关闭连接的消息</li>
+<li>客户端收到服务器要关闭连接的消息后，给服务器发送：已收到关闭连接的消息</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>HTTP协议</strong><ul>
+<li>HTTP是一个基于TCP/IP通信协议来传输数据的协议。HTTP协议工作于客户端-服务器端架构之上，实现可靠性的传输文字，图片，音频，视频等超文本数据的规范，格式简称为“超文本传输协议”。HTTP协议属于应用层，用户访问的第一层就是HTTP<ul>
+<li>简单快速：客户端向服务器发送请求时，只需要传送请求方法和路径即可。</li>
+<li>灵活：HTTP允许传输任意类型的数据对象。</li>
+<li>无连接：限制每次连接只处理一个请求。服务器处理完客户请求，并收到客户应答后，即断开连接。</li>
+<li>无状态：协议对于事务处理没有记忆能力。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>HTTPS于HTTP<ul>
+<li>端口不同，HTTP是80，HTTPS是443</li>
+<li>安全性：HTTP是超文本传输协议，信息是明文传输，HTTPS是通过SSL加密处理的传输协议，更加安全。</li>
+<li>HTTPS需要拿到CA证书，需要付费</li>
+</ul>
+</li>
+<li>一次完整的HTTP请求<ul>
+<li>HTTP协议采用请求/响应模型。客户端向服务器发送一个请求报文，请求报文包含请求方法，URL，协议版本，请求头部和请求数据。服务器以一个状态作为响应，响应内容包括协议版本，成功或者错误的代码，服务器信息，响应头部和响应数据。</li>
+<li>Web浏览器与Web服务器之间将完成下列7个步骤：<ul>
+<li>建立TCP连接，三次握手</li>
+<li>Web浏览器向Web服务器发送请求行</li>
+<li>Web浏览器发送请求头，浏览器发送请求命令之后，还要以头信息的形式向Web服务器发送一些别的信息，之后浏览器发送了一空白行来通知服务器，它已经结束了该头信息的发送。</li>
+<li>Web服务器应答：客户机向服务器发出请求后，服务器会向客户机回送应答，（HTTP/1.1 200 OK）应答的第一部分是协议的版本号和应答状态码</li>
+<li>Web服务器发送应答头：正如客户端会随同请求发送关于自身的信息一样，服务器也会随应答向用户发送关于它自己的数据及被请求的文档。</li>
+<li>Web服务器向浏览器发送数据：Web服务器向浏览器发送头信息后，它会发送一个空白行来表示头信息的发送到此为止，接着，它就以Content-Type应答头信息所描述的格式发送用户所请求的实际数据。</li>
+<li>Web服务器关闭TCP连接，四次挥手。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>输入网址到获取页面的过程<ul>
+<li>浏览器搜索自身的DNS缓存，搜索操作系统的DNS缓存，读取本地Host文件和向本地DNS服务器进行查询等。</li>
+<li>浏览器获得域名对应的IP地址之后，浏览器向服务器请求建立连接，发起三次握手</li>
+<li>TCP/IP链接建立起来后，浏览器向服务器发送HTTP请求</li>
+<li>服务器接收到这个请求，并根据路径参数映射到特定的请求处理器进行处理，并将处理结果以及相应的视图返回给浏览器</li>
+<li>浏览器解析并渲染视图，若遇到js文件，css文件等静态资源的引用，则重复上述步骤并向服务器请求这些资源。</li>
+<li>浏览器根据其请求到的资源，数据渲染页面，最终向用户呈现一个完整的页面。</li>
+</ul>
+</li>
+<li>HTTP版本对比<ul>
+<li>HTTP1.0<ul>
+<li>是一种无状态，无连接的应用层协议（短连接）</li>
+<li>浏览器的每次请求都需要与服务器建立一个TCP连接，服务器处理完成后立即断开TCP连接（无连接），服务器不跟踪每个客户端也不记录过去的请求（无状态）</li>
+</ul>
+</li>
+<li>HTTP1.1（长连接）<ul>
+<li>默认持久连接节省通信量，只要客户端服务端任意一端没有明确提出断开TCP连接，就一直保持连接。（长连接）.</li>
+</ul>
+</li>
+<li>HTTP2.0<ul>
+<li>服务器推送（就是服务器可以对一个客户端请求发送多个响应。服务器向客户端推送资源无需客户端明确的请求）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>GET方法和POST方法（HTTP协议中的请求方式）<ul>
+<li>GET:用于请求访问已经被URI（统一资源标识符）识别的资源，可以通过URL传参给服务器</li>
+<li>POST：用于传输信息给服务器，主要功能与GET方法类似，但一般推荐使用POST方式</li>
+<li>GET方法与POST方法的区别：<ul>
+<li>功能上：GET一般用来从服务器获取资源，POST一般用来更新服务器上的资源</li>
+<li>安全性：GET是不安全的，因为GET请求提交的数据将明文出现在URL上（请求头上），可能会泄露私密信息；POST请求参数则被包装到请求体中，相对更安全。</li>
+<li>数据量：GET传输的数据量小，因为受URL长度限制，但效率较高；POST可以传输大量数据，所以上传文件只能用POST方式。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Session和Cookie的对比<ul>
+<li><font color=red>Cookie是由Web服务器保存在用户浏览器上的文件（key-value格式），可以包含用户相关的信息。</font>客户端向服务器发起请求时，会携带服务器端之前创建的cookie，服务器端通过cookie中携带的数据区分不同的用户。</li>
+<li>Session：<font color=red>session是浏览器和服务器对话过程中，服务器会分配一块存储空间给session。</font>服务器默认会为客户浏览器的cookie中设置 sessionid，这个sessionid就和cookie对应，浏览器在向服务器请求过程中传输的cookie 包含 sessionid ，服务器根据传输cookie 中的 sessionid 获取出会话中存储的信息，然后确定会话的身份信息。</li>
+<li>区别：<ul>
+<li>安全性：cookie数据存放在客户端上，安全性较差，session数据放在服务器上，安全性相对更高</li>
+<li>大小限制：cookie有大小限制，单个cookie保存的数据不能超过4K,session无此限制，理论上只与服务器的内存大小有关</li>
+<li>服务器资源消耗：session是保存在服务器端上会存在一段时间才会消失，当访问增多，对服务器性能有影响。</li>
+<li>实现机制：session的实现常常依赖于Cookie机制，通过Cookie机制回传SessionID。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>计算机基础</category>
+      </categories>
+      <tags>
+        <tag>计算机网络</tag>
+        <tag>计算机基础</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hbase简介</title>
+    <url>/2020/11/17/HBase%20introduction/</url>
+    <content><![CDATA[<h1 id="分布式数据库HBase简介"><a href="#分布式数据库HBase简介" class="headerlink" title="分布式数据库HBase简介"></a>分布式数据库HBase简介</h1><ol>
+<li><p>概述    </p>
+<ul>
+<li>HBase是针对谷歌BigTable的开源实现，是一个高可靠，高性能，面向列，可伸缩的分布式数据库           </li>
+<li>可以用来存储非结构化和半结构化的松散数据</li>
+</ul>
+</li>
+<li><p>数据模型</p>
+<ul>
+<li>索引通过四个元素来定位：行键，列族，列限定符，时间戳</li>
+<li> 面向列的存储</li>
+</ul>
+</li>
+<li><p>实现原理 </p>
+<ul>
+<li>HBase的功能组件<blockquote>
+<p>库函数<br>Master服务器<br>Region服务器    </p>
+</blockquote>
+</li>
+<li>两个核心概念表和Region<blockquote>
+<p>一个HBase表被划分成多个Region<br>一个Region会分裂成多个新的Region</p>
+</blockquote>
+</li>
+<li>怎么实现Region定位<blockquote>
+<p>三层结构索引实现Region的定位<br>Zookeeper文件<br>-ROOT-表<br>.MEAT.表      </p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>运行机制</p>
+<ul>
+<li>HBase的系统架构<blockquote>
+<p><img src="https://img-blog.csdnimg.cn/2020070104123335.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTE1NDU1OQ==,size_16,color_FFFFFF,t_70#pic_center" title="系统架构图"><br>Zookeeper服务器（被大量用于分布式系统，提供配置维护，域名服务，分布式同步服务）实现协同管理服务，提供管家功能（维护和管理整个HBase集群）<br>Master服务器作用：1.对表增删改查。2.负责不同Region服务器的负载均衡。3.负责调整分裂合并后Region的分布。4.负责重新分配故障，失效的Region服务器</p>
+</blockquote>
+</li>
+<li>Region服务器（负责用户数据的存储和管理）的工作原理</li>
+<li>Store的工作原理</li>
+<li>HLog的工作原理</li>
+</ul>
+</li>
+<li><p>编程实践<br>HBase安装及实践，参考厦门大学数据库实验室博客<br><a href="http://dblab.xmu.edu.cn/blog/2442-2/">参考链接</a></p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>大数据</category>
+        <category>老hadoop</category>
+      </categories>
+      <tags>
+        <tag>Hadoop</tag>
+        <tag>大数据</tag>
       </tags>
   </entry>
   <entry>
@@ -635,6 +813,26 @@
 </ul>
 </li>
 </ul>
+<h2 id="排序算法"><a href="#排序算法" class="headerlink" title="排序算法"></a>排序算法</h2><ul>
+<li>常见排序算法的时间复杂度，稳定性<ul>
+<li><a href="https://imgtu.com/i/5KSEnO"><img src="https://z3.ax1x.com/2021/10/13/5KSEnO.png" alt="5KSEnO.png"></a></li>
+</ul>
+</li>
+</ul>
+<h2 id="大数取余算法"><a href="#大数取余算法" class="headerlink" title="大数取余算法"></a>大数取余算法</h2><ul>
+<li>场景：当一个数很大时，大到基本类型都放不下，这时我们需要用String来存储数字。那么怎么进行取余操作呢？</li>
+<li>我们根据一个例子来看看：<ul>
+<li><a href="https://imgtu.com/i/5KlnOS"><img src="https://z3.ax1x.com/2021/10/13/5KlnOS.png" alt="5KlnOS.png"></a></li>
+<li>计算过程<ul>
+<li>第一位数字4： 4%3=1；</li>
+<li>第二位数字4：（1*10+4）%3=2</li>
+<li>第三位数字3：（2*10+3）%3=2</li>
+</ul>
+</li>
+<li>最终的结果是最后一步计算得到的余数2.</li>
+</ul>
+</li>
+</ul>
 ]]></content>
       <categories>
         <category>算法</category>
@@ -741,24 +939,6 @@
         <tag>大数据</tag>
         <tag>flume</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>Hello World</title>
-    <url>/2020/09/22/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo new <span class="hljs-string">&quot;My New Post&quot;</span><br></code></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo server<br></code></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo generate<br></code></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo deploy<br></code></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-]]></content>
   </entry>
   <entry>
     <title>Hadoop简介</title>
@@ -928,6 +1108,24 @@
       </tags>
   </entry>
   <entry>
+    <title>Hello World</title>
+    <url>/2020/09/22/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo new <span class="hljs-string">&quot;My New Post&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo server<br></code></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo generate<br></code></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo deploy<br></code></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
+  </entry>
+  <entry>
     <title>kafka</title>
     <url>/2021/06/24/kafka/</url>
     <content><![CDATA[<h1 id="kafka"><a href="#kafka" class="headerlink" title="kafka"></a>kafka</h1><h2 id="Kafka概述"><a href="#Kafka概述" class="headerlink" title="Kafka概述"></a>Kafka概述</h2><ul>
@@ -1062,6 +1260,138 @@
       <tags>
         <tag>大数据</tag>
         <tag>kafka</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Java多线程基础</title>
+    <url>/2021/04/20/multithreading/</url>
+    <content><![CDATA[<h1 id="Java多线程"><a href="#Java多线程" class="headerlink" title="Java多线程"></a>Java多线程</h1><h2 id="1-程序，进程，线程"><a href="#1-程序，进程，线程" class="headerlink" title="1.程序，进程，线程"></a>1.程序，进程，线程</h2><blockquote>
+<ul>
+<li>程序：（可以执行的静态代码，是保存在硬盘上的一个文件）是为完成特定任务，用某种语言编写的一组指令的集合。即<em><strong>一段静态的代码</strong></em>，静态对象.</li>
+<li>进程：（正在执行中的一个程序，在内存中处于激活状态，有生命周期）是程序的一次执行过程，或是<em><strong>正在运行的一个程序</strong></em>。动态过程：有它自身的产生、存在和消亡的过程</li>
+<li>线程：（进程中的子任务）进程可以进一步细化为线程，是一个程序内部的一条执行路径</li>
+</ul>
+</blockquote>
+<h2 id="2-Java中多线程的创建和使用"><a href="#2-Java中多线程的创建和使用" class="headerlink" title="2.Java中多线程的创建和使用"></a>2.Java中多线程的创建和使用</h2><blockquote>
+<ul>
+<li>实现Runnable接口与继承Thread类</li>
+<li><h3 id="Thread类的主要方法"><a href="#Thread类的主要方法" class="headerlink" title="Thread类的主要方法"></a>Thread类的主要方法</h3><blockquote>
+<ul>
+<li>每个线程都是通过某个特定Thread对象的run()方法来完成操作的，经常把run()方法的主题称为线程体</li>
+<li>通过该Thread对象的start()方法来调用这个线程</li>
+<li>static Thread currentThread(),返回当前方法正在执行此方法所压入的栈的线程对象</li>
+<li>void join()它的作用是调用此方法的另一个线程阻塞，当前线程执行完再执行另一个线程</li>
+<li>static void sleep(long millis)作用是让当前线程（正在执行此方法的栈的线程）进入睡眠状态<blockquote>
+<ul>
+<li>两种方式结束sleep状态：1.时间到了。2.被其他进程打断 interrupt() 方法</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</blockquote>
+<h3 id="创建并启动线程的方式"><a href="#创建并启动线程的方式" class="headerlink" title="创建并启动线程的方式"></a>创建并启动线程的方式</h3><h4 id="实现Runnable的方式"><a href="#实现Runnable的方式" class="headerlink" title="实现Runnable的方式"></a>实现Runnable的方式</h4><blockquote>
+<blockquote>
+<ol>
+<li>写一个具体类，实现Runnable接口，并实现接口中的抽象方法run(),这个run方法就是线程体</li>
+<li>创建这个具体类对象，并把这个对象作为实参，创建Thread线程对象</li>
+<li>调用Thread线程对象的start方法</li>
+</ol>
+<ul>
+<li>代码示例</li>
+</ul>
+</blockquote>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs Java"><span class="hljs-keyword">package</span> multi_thread;<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Counter</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Runnable</span> </span>&#123;<br>	<span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> cnt = <span class="hljs-number">200</span>;<br><br>	<span class="hljs-meta">@Override</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">run</span><span class="hljs-params">()</span> </span>&#123;<br>		System.out.println(cnt);<br>		<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">50</span>; i++) &#123;<br>			<span class="hljs-keyword">synchronized</span> (<span class="hljs-string">&quot;&quot;</span>) &#123;<span class="hljs-comment">// ()中是一个锁对象，任意对象都可以做锁，称为互斥锁，作用是只允许一个线程进入执行，其他线程等待</span><br><br>				cnt -= <span class="hljs-number">2</span>;<br>				<span class="hljs-keyword">try</span> &#123;<br>					Thread.sleep(<span class="hljs-number">10</span>);<br>				&#125; <span class="hljs-keyword">catch</span> (InterruptedException e) &#123;<br>					<span class="hljs-comment">// TODO Auto-generated catch block</span><br>					e.printStackTrace();<br>				&#125;<br>				System.out.println(Thread.currentThread().getName() + <span class="hljs-string">&quot;: &quot;</span> + cnt);<br>			&#125;<br>		&#125;<br>	&#125;<br><br>&#125;<br><br></code></pre></td></tr></table></figure>
+<hr>
+<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs Java"><span class="hljs-keyword">package</span> multi_thread;<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">CounterTest</span> </span>&#123;<br><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;<br>		Runnable counter = <span class="hljs-keyword">new</span> Counter();<br>		Thread thread1 = <span class="hljs-keyword">new</span> Thread(counter);<br>		Thread thread2 = <span class="hljs-keyword">new</span> Thread(counter);<br>		thread1.start();<br>		thread2.start();<br>	&#125;<br><br>&#125;<br><br></code></pre></td></tr></table></figure>
+<h4 id="继承Thread的方式"><a href="#继承Thread的方式" class="headerlink" title="继承Thread的方式"></a>继承Thread的方式</h4><blockquote>
+<blockquote>
+<ol>
+<li>写一个类，继承Thread,并重写run方法，此方法就是线程体</li>
+<li>创建这个类的对象，相当于创建了线程对象</li>
+<li>调用这个线程对象的start方法</li>
+</ol>
+<ul>
+<li>代码示例</li>
+</ul>
+</blockquote>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs Java"><span class="hljs-keyword">package</span> multi_thread;<br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyThread</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Thread</span></span>&#123;<br>	<span class="hljs-meta">@Override</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">run</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>;i&lt;<span class="hljs-number">100</span>;i++) &#123;<br>			System.out.println(currentThread().getName()+<span class="hljs-string">&quot; &quot;</span>+i);<br>		&#125;<br>	&#125;<br>&#125;<br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ThreadTest2</span> </span>&#123;<br><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;<br>		Thread myThread1 = <span class="hljs-keyword">new</span> MyThread();<br>		myThread1.start();<br>		<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>;i&lt;<span class="hljs-number">100</span>;i++) &#123;<br>			System.out.println(<span class="hljs-string">&quot;-----main &quot;</span>+i);<br>		&#125;<br>	&#125;<br><br>&#125;<br><br></code></pre></td></tr></table></figure>
+<h4 id="使用callable接口创建多线程"><a href="#使用callable接口创建多线程" class="headerlink" title="使用callable接口创建多线程"></a>使用callable接口创建多线程</h4><blockquote>
+<ul>
+<li>落地方法call()</li>
+<li>Callable接口作为JDK1.5新增的接口，与使用Runnable相比其功能更强大些。</li>
+<li>相比run()方法，可以有返回值</li>
+<li>方法可以抛出异常</li>
+<li>支持泛型的返回值</li>
+<li>需要借助FutureTask类，比如获取返回结果。</li>
+<li>Callable接口一般用于配合ExecutorService使用</li>
+</ul>
+</blockquote>
+<h5 id="Feture接口"><a href="#Feture接口" class="headerlink" title="Feture接口"></a>Feture接口</h5><blockquote>
+<ul>
+<li>可以对具体Runnable、Callable任务的执行结果进行取消、查询是否完成、获取结果等。</li>
+<li>FutrueTask是Futrue接口的实现类</li>
+<li>FutureTask 同时实现了Runnable, Future接口。它既可以作为Runnable被线程执行，又可以作为Future得到Callable的返回值。</li>
+<li>多个线程同时执行一个FutureTask，只要一个线程执行完毕，其他线程不会再执行其call()方法。</li>
+<li>get()方法会阻塞当前线程！<br>实例代码:</li>
+</ul>
+</blockquote>
+<figure class="highlight pgsql"><table><tr><td class="code"><pre><code class="hljs pgsql"><span class="hljs-keyword">class</span> MyThread implements Callable&lt;<span class="hljs-type">Integer</span>&gt; &#123;<br>	@Override<br>	<span class="hljs-built_in">public</span> <span class="hljs-type">Integer</span> <span class="hljs-keyword">call</span>() throws <span class="hljs-keyword">Exception</span> &#123;<br>		<span class="hljs-keyword">System</span>.<span class="hljs-keyword">out</span>.println(Thread.currentThread().getName()+&quot; Come in call&quot;);<br>		//睡<span class="hljs-number">5</span>秒<br>		TimeUnit.SECONDS.sleep(<span class="hljs-number">5</span>);<br>		//返回<span class="hljs-number">200</span>的状态码<br>		<span class="hljs-keyword">return</span> <span class="hljs-number">200</span>;<br>		<br>	&#125;<br>&#125;<br><br><span class="hljs-built_in">public</span> <span class="hljs-keyword">class</span> CallableTest &#123;<br>	<span class="hljs-built_in">public</span> static <span class="hljs-type">void</span> main(String[] args) throws InterruptedException, ExecutionException &#123;<br>		MyThread myThread = <span class="hljs-built_in">new</span> MyThread();<br>		FutureTask&lt;<span class="hljs-type">Integer</span>&gt; futureTask = <span class="hljs-built_in">new</span> FutureTask&lt;&gt;(myThread);<br>		<span class="hljs-built_in">new</span> Thread(futureTask, &quot;未来任务&quot;).<span class="hljs-keyword">start</span>();<br>        <span class="hljs-keyword">System</span>.<span class="hljs-keyword">out</span>.println(&quot;主线程结束！&quot;);<br>		<span class="hljs-type">Integer</span> <span class="hljs-type">integer</span> = futureTask.<span class="hljs-keyword">get</span>();<br>		<span class="hljs-keyword">System</span>.<span class="hljs-keyword">out</span>.println(<span class="hljs-type">integer</span>);<br>		<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h4 id="线程池创建多线程"><a href="#线程池创建多线程" class="headerlink" title="线程池创建多线程"></a>线程池创建多线程</h4><blockquote>
+<ul>
+<li>线程池：经常创建和销毁、使用量特别大的资源，比如并发情况下的线程，对性能影响很大。因此提前创建好多个线程，放入线程池中，使用时直接获取，使用完放回池中。可以避免频繁创建销毁、实现重复利用。</li>
+<li>优点<blockquote>
+<ol>
+<li>提高响应速度（减少了创建新线程的时间）</li>
+<li>降低资源消耗（重复利用线程池中线程，不需要每次都创建）</li>
+<li>便于线程管理    </li>
+</ol>
+</blockquote>
+</li>
+<li>ExecutorService：真正的线程池接口。常见子类ThreadPoolExecutor。</li>
+<li>void execute(Runnable command) ：执行任务/命令，没有返回值，一般用来执行Runnable</li>
+<li><T> Future<T> submit(Callable<T> task)：执行任务，有返回值，一般用来执行Callable</li>
+<li>void shutdown() ：关闭连接池</li>
+<li>创建线程池的方式：<blockquote>
+<ol>
+<li>直接通过ThreadPoolExecutor实现类new</li>
+<li>通过工厂类Executors的静态方法创建，本质上也是通过1)创建的线程池</li>
+</ol>
+</blockquote>
+</li>
+</ul>
+</blockquote>
+<figure class="highlight reasonml"><table><tr><td class="code"><pre><code class="hljs reasonml">public static void main(String<span class="hljs-literal">[]</span> args) &#123;<br>		<span class="hljs-comment">//创建一个包含10个线程的线程池</span><br>		ExecutorService executorService = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Executors</span>.</span></span><span class="hljs-keyword">new</span><span class="hljs-constructor">FixedThreadPool(10)</span>;<br><span class="hljs-comment">//		ExecutorService executorService = Executors.newSingleThreadExecutor();</span><br>		<span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">12</span>; i++) &#123;<br>			executorService.execute(<span class="hljs-literal">()</span>-&gt;&#123;<br>				<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">System</span>.</span></span>out.println(<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Thread</span>.</span></span>current<span class="hljs-constructor">Thread()</span>.get<span class="hljs-constructor">Name()</span>);<br>			&#125;);<br>		&#125;<br>		executorService.shutdown<span class="hljs-literal">()</span>;<br>	&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="3-线程的同步"><a href="#3-线程的同步" class="headerlink" title="3.线程的同步"></a>3.线程的同步</h2><blockquote>
+<ul>
+<li>synchronized (lock){}</li>
+<li>()中是一个锁对象，任意对象都可以做锁，称为互斥锁，作用是只允许一个线程进入执行，其他线程等待</li>
+<li>具有原子性，不可分割</li>
+<li>synchronized()可重入锁（同一个线程可以无限次获取同一个锁）</li>
+<li>避免死锁：不要嵌套synchronized，即使有嵌套，锁对象尽量少</li>
+</ul>
+</blockquote>
+<h3 id="synchronized和Lock的区别"><a href="#synchronized和Lock的区别" class="headerlink" title="synchronized和Lock的区别"></a>synchronized和Lock的区别</h3><blockquote>
+<ul>
+<li>synchronized不需要手动上锁和解锁，lock需要手动上锁和解锁</li>
+<li>synchronized能实现的功能lock都可以实现，且lock更加强大</li>
+</ul>
+</blockquote>
+<h2 id="JUC工具类"><a href="#JUC工具类" class="headerlink" title="JUC工具类"></a>JUC工具类</h2><h3 id="ReentrantReadWriteLock"><a href="#ReentrantReadWriteLock" class="headerlink" title="ReentrantReadWriteLock"></a>ReentrantReadWriteLock</h3><figure class="highlight reasonml"><table><tr><td class="code"><pre><code class="hljs reasonml">package com.atguigu.juc;<br><br>import java.util.concurrent.ExecutorService;<br>import java.util.concurrent.Executors;<br>import java.util.concurrent.locks.ReadWriteLock;<br>import java.util.concurrent.locks.ReentrantReadWriteLock;<br><br><span class="hljs-keyword">class</span> MyQueue &#123;<br>	<span class="hljs-comment">// 创建读写锁</span><br>	ReadWriteLock rwl = <span class="hljs-keyword">new</span> <span class="hljs-constructor">ReentrantReadWriteLock()</span>;<br><br>	<span class="hljs-keyword">private</span> Object obj;<br><br>	public void read<span class="hljs-constructor">Obj()</span> &#123;<br>		<span class="hljs-comment">// 上读锁</span><br>		rwl.read<span class="hljs-constructor">Lock()</span>.lock<span class="hljs-literal">()</span>;<br>		<span class="hljs-keyword">try</span> &#123;<br>			<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">System</span>.</span></span>out.println(<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Thread</span>.</span></span>current<span class="hljs-constructor">Thread()</span>.get<span class="hljs-constructor">Name()</span> + <span class="hljs-string">&quot;当前线程读到的内容是：&quot;</span> + obj);<br><br>		&#125; finally &#123;<br>			<span class="hljs-comment">// 解读锁</span><br>			rwl.read<span class="hljs-constructor">Lock()</span>.unlock<span class="hljs-literal">()</span>;<br>		&#125;<br>	&#125;<br><br>	public void write<span class="hljs-constructor">Obj(Object <span class="hljs-params">obj</span>)</span> &#123;<br>		<span class="hljs-comment">// 上写锁</span><br>		rwl.write<span class="hljs-constructor">Lock()</span>.lock<span class="hljs-literal">()</span>;<br>		<span class="hljs-keyword">try</span> &#123;<br>			this.obj = obj;<br>			<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">System</span>.</span></span>out.println(<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Thread</span>.</span></span>current<span class="hljs-constructor">Thread()</span>.get<span class="hljs-constructor">Name()</span> + <span class="hljs-string">&quot;当前线程写入的内容是：&quot;</span> + obj);<br>		&#125; finally &#123;<br>			<span class="hljs-comment">// 解写锁</span><br>			rwl.write<span class="hljs-constructor">Lock()</span>.unlock<span class="hljs-literal">()</span>;<br>		&#125;<br>	&#125;<br><br>&#125;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> * @Description: 一个线程写入,100个线程读取</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> */</span><br>public <span class="hljs-keyword">class</span> ReadWriteLockDemo &#123;<br>	public static void main(String<span class="hljs-literal">[]</span> args) throws InterruptedException &#123;<br>		<span class="hljs-comment">// 创建资源对象</span><br>		MyQueue mq = <span class="hljs-keyword">new</span> <span class="hljs-constructor">MyQueue()</span>;<br>		<span class="hljs-comment">// 一个线程写入</span><br>		<span class="hljs-keyword">new</span> <span class="hljs-constructor">Thread(()</span> -&gt; &#123;<br>			mq.write<span class="hljs-constructor">Obj(<span class="hljs-string">&quot;写入的内容&quot;</span>)</span>;<br>		&#125;, <span class="hljs-string">&quot;AA&quot;</span>).start<span class="hljs-literal">()</span>;<br>		<span class="hljs-comment">// 100个线程读取</span><br>		ExecutorService executorService = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Executors</span>.</span></span><span class="hljs-keyword">new</span><span class="hljs-constructor">FixedThreadPool(100)</span>;<br>		<span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">100</span>; i++) &#123;<br>			executorService.execute(<span class="hljs-literal">()</span> -&gt; &#123;<br>				mq.read<span class="hljs-constructor">Obj()</span>;<br>			&#125;);<br>		&#125;<br>		executorService.shutdown<span class="hljs-literal">()</span>;<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="CountDownLatch"><a href="#CountDownLatch" class="headerlink" title="CountDownLatch"></a>CountDownLatch</h3><figure class="highlight reasonml"><table><tr><td class="code"><pre><code class="hljs reasonml">package com.atguigu.juc;<br><br>import java.util.concurrent.CountDownLatch;<br><br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> * @Description:</span><br><span class="hljs-comment"> *  *让一些线程阻塞直到另一些线程完成一系列操作后才被唤醒。</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> * 解释：6个同学陆续离开教室后值班同学才可以关门。</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> * main主线程必须要等前面6个线程完成全部工作后，自己才能开干 </span><br><span class="hljs-comment"> */</span><br>public <span class="hljs-keyword">class</span> CountDownLatchDemo<br>&#123;<br>	public static void main(String<span class="hljs-literal">[]</span> args) throws InterruptedException<br>	&#123;<br>		CountDownLatch cd = <span class="hljs-keyword">new</span> <span class="hljs-constructor">CountDownLatch(6)</span>;<br>		<span class="hljs-comment">//6个同学离开教室</span><br>		<span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> i = <span class="hljs-number">1</span>; i &lt;= <span class="hljs-number">6</span>; i++) &#123;<br>			<span class="hljs-keyword">new</span> <span class="hljs-constructor">Thread(()</span>-&gt;&#123;<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">System</span>.</span></span>out.println(<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Thread</span>.</span></span>current<span class="hljs-constructor">Thread()</span>.get<span class="hljs-constructor">Name()</span>+<span class="hljs-string">&quot;号同学离开教室&quot;</span>);&#125;, <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">String</span>.</span></span>value<span class="hljs-constructor">Of(<span class="hljs-params">i</span>)</span>).start<span class="hljs-literal">()</span>;<br>		<span class="hljs-comment">//减少计数</span><br>			cd.count<span class="hljs-constructor">Down()</span>;<br>		&#125;<br>		<span class="hljs-comment">//等待		</span><br>		cd.await<span class="hljs-literal">()</span>;<br>		<span class="hljs-comment">//班长锁门</span><br>		<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">System</span>.</span></span>out.println(<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Thread</span>.</span></span>current<span class="hljs-constructor">Thread()</span>.get<span class="hljs-constructor">Name()</span>+<span class="hljs-string">&quot;班长锁门&quot;</span>);<br>	&#125;<br><br><br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="CyclicBarrier"><a href="#CyclicBarrier" class="headerlink" title="CyclicBarrier"></a>CyclicBarrier</h3><figure class="highlight arduino"><table><tr><td class="code"><pre><code class="hljs arduino">package com.atguigu.juc;<br><br><span class="hljs-keyword">import</span> java.util.concurrent.BrokenBarrierException;<br><span class="hljs-keyword">import</span> java.util.concurrent.CyclicBarrier;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> * @Description: TODO(这里用一句话描述这个类的作用)  </span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> * CyclicBarrier</span><br><span class="hljs-comment"> * 的字面意思是可循环（Cyclic）使用的屏障（Barrier）。它要做的事情是，</span><br><span class="hljs-comment"> * 让一组线程到达一个屏障（也可以叫同步点）时被阻塞，</span><br><span class="hljs-comment"> * 直到最后一个线程到达屏障时，屏障才会开门，所有</span><br><span class="hljs-comment"> * 被屏障拦截的线程才会继续干活。</span><br><span class="hljs-comment"> * 线程进入屏障通过CyclicBarrier的await()方法。</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> * 集齐7颗龙珠就可以召唤神龙</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">CyclicBarrierDemo</span></span><br><span class="hljs-class">&#123;</span><br>	<span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">int</span> NUMBER = <span class="hljs-number">7</span>;<br>	<br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">String</span>[] args)</span></span><br><span class="hljs-function">	</span>&#123;<br>		<span class="hljs-comment">//CyclicBarrier(int parties, Runnable barrierAction) </span><br>		CyclicBarrier cb = <span class="hljs-keyword">new</span> CyclicBarrier(NUMBER, ()-&gt; &#123;System.out.<span class="hljs-built_in">println</span>(<span class="hljs-string">&quot;可以召唤神龙了&quot;</span>);&#125;);<br>		<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">1</span>;i&lt;=NUMBER;i++) &#123;<br>			<span class="hljs-keyword">new</span> Thread(()-&gt;&#123;System.out.<span class="hljs-built_in">println</span>(Thread.currentThread().getName()+<span class="hljs-string">&quot;号被收集&quot;</span>);<br>			<span class="hljs-keyword">try</span> &#123;<br>				cb.await();<br>			&#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>				e.printStackTrace();<br>			&#125; <br>			&#125;,<span class="hljs-keyword">String</span>.valueOf(i) ).start();<br>		&#125;<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="Semaphore"><a href="#Semaphore" class="headerlink" title="Semaphore"></a>Semaphore</h3><figure class="highlight reasonml"><table><tr><td class="code"><pre><code class="hljs reasonml">package com.atguigu.juc;<br><br>import java.util.Random;<br>import java.util.concurrent.Semaphore;<br>import java.util.concurrent.TimeUnit;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> * @Description: TODO(这里用一句话描述这个类的作用)</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> *               在信号量上我们定义两种操作： acquire（获取）</span><br><span class="hljs-comment"> *               当一个线程调用acquire操作时，它要么通过成功获取信号量（信号量减1）， 要么一直等下去，直到有线程释放信号量，或超时。</span><br><span class="hljs-comment"> *               release（释放）实际上会将信号量的值加1，然后唤醒等待的线程。</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> *               信号量主要用于两个目的，一个是用于多个共享资源的互斥使用，另一个用于并发线程数的控制。</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> *               情景：3个停车位，6部汽车争抢车位</span><br><span class="hljs-comment"> */</span><br>public <span class="hljs-keyword">class</span> SemaphoreDemo &#123;<br>	public static void main(String<span class="hljs-literal">[]</span> args) &#123;<br>		<span class="hljs-comment">// 3个停车位</span><br>		Semaphore semaphore = <span class="hljs-keyword">new</span> <span class="hljs-constructor">Semaphore(3)</span>;<br>		<span class="hljs-comment">// 6部汽车抢车位</span><br>		<span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> i = <span class="hljs-number">1</span>; i &lt;= <span class="hljs-number">6</span>; i++) &#123;<br>			<span class="hljs-keyword">new</span> <span class="hljs-constructor">Thread(()</span> -&gt; &#123;<br>				<span class="hljs-comment">// 获取资源</span><br>				<span class="hljs-keyword">try</span> &#123;<br>					semaphore.acquire<span class="hljs-literal">()</span>;<br>					<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">System</span>.</span></span>out.println(<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Thread</span>.</span></span>current<span class="hljs-constructor">Thread()</span>.get<span class="hljs-constructor">Name()</span> + <span class="hljs-string">&quot;号驶入停车位&quot;</span>);<br>					<span class="hljs-comment">// 停车3秒</span><br>					<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">TimeUnit</span>.</span><span class="hljs-module"><span class="hljs-identifier">SECONDS</span>.</span></span>sleep(<span class="hljs-number">3</span>);<br>					<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">System</span>.</span></span>out.println(<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Thread</span>.</span></span>current<span class="hljs-constructor">Thread()</span>.get<span class="hljs-constructor">Name()</span> + <span class="hljs-string">&quot;号驶出停车位&quot;</span>);<br>					<span class="hljs-comment">// 释放资源</span><br>					semaphore.release<span class="hljs-literal">()</span>;<br>				&#125; catch (Exception e) &#123;<br>					e.print<span class="hljs-constructor">StackTrace()</span>;<br>				&#125;<br>			&#125;, <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">String</span>.</span></span>value<span class="hljs-constructor">Of(<span class="hljs-params">i</span>)</span>).start<span class="hljs-literal">()</span>;<br>		&#125;<br>	&#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>多线程</tag>
       </tags>
   </entry>
   <entry>
@@ -1233,138 +1563,6 @@
       </categories>
       <tags>
         <tag>项目</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Java多线程基础</title>
-    <url>/2021/04/20/multithreading/</url>
-    <content><![CDATA[<h1 id="Java多线程"><a href="#Java多线程" class="headerlink" title="Java多线程"></a>Java多线程</h1><h2 id="1-程序，进程，线程"><a href="#1-程序，进程，线程" class="headerlink" title="1.程序，进程，线程"></a>1.程序，进程，线程</h2><blockquote>
-<ul>
-<li>程序：（可以执行的静态代码，是保存在硬盘上的一个文件）是为完成特定任务，用某种语言编写的一组指令的集合。即<em><strong>一段静态的代码</strong></em>，静态对象.</li>
-<li>进程：（正在执行中的一个程序，在内存中处于激活状态，有生命周期）是程序的一次执行过程，或是<em><strong>正在运行的一个程序</strong></em>。动态过程：有它自身的产生、存在和消亡的过程</li>
-<li>线程：（进程中的子任务）进程可以进一步细化为线程，是一个程序内部的一条执行路径</li>
-</ul>
-</blockquote>
-<h2 id="2-Java中多线程的创建和使用"><a href="#2-Java中多线程的创建和使用" class="headerlink" title="2.Java中多线程的创建和使用"></a>2.Java中多线程的创建和使用</h2><blockquote>
-<ul>
-<li>实现Runnable接口与继承Thread类</li>
-<li><h3 id="Thread类的主要方法"><a href="#Thread类的主要方法" class="headerlink" title="Thread类的主要方法"></a>Thread类的主要方法</h3><blockquote>
-<ul>
-<li>每个线程都是通过某个特定Thread对象的run()方法来完成操作的，经常把run()方法的主题称为线程体</li>
-<li>通过该Thread对象的start()方法来调用这个线程</li>
-<li>static Thread currentThread(),返回当前方法正在执行此方法所压入的栈的线程对象</li>
-<li>void join()它的作用是调用此方法的另一个线程阻塞，当前线程执行完再执行另一个线程</li>
-<li>static void sleep(long millis)作用是让当前线程（正在执行此方法的栈的线程）进入睡眠状态<blockquote>
-<ul>
-<li>两种方式结束sleep状态：1.时间到了。2.被其他进程打断 interrupt() 方法</li>
-</ul>
-</blockquote>
-</li>
-</ul>
-</blockquote>
-</li>
-</ul>
-</blockquote>
-<h3 id="创建并启动线程的方式"><a href="#创建并启动线程的方式" class="headerlink" title="创建并启动线程的方式"></a>创建并启动线程的方式</h3><h4 id="实现Runnable的方式"><a href="#实现Runnable的方式" class="headerlink" title="实现Runnable的方式"></a>实现Runnable的方式</h4><blockquote>
-<blockquote>
-<ol>
-<li>写一个具体类，实现Runnable接口，并实现接口中的抽象方法run(),这个run方法就是线程体</li>
-<li>创建这个具体类对象，并把这个对象作为实参，创建Thread线程对象</li>
-<li>调用Thread线程对象的start方法</li>
-</ol>
-<ul>
-<li>代码示例</li>
-</ul>
-</blockquote>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs Java"><span class="hljs-keyword">package</span> multi_thread;<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Counter</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Runnable</span> </span>&#123;<br>	<span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> cnt = <span class="hljs-number">200</span>;<br><br>	<span class="hljs-meta">@Override</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">run</span><span class="hljs-params">()</span> </span>&#123;<br>		System.out.println(cnt);<br>		<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">50</span>; i++) &#123;<br>			<span class="hljs-keyword">synchronized</span> (<span class="hljs-string">&quot;&quot;</span>) &#123;<span class="hljs-comment">// ()中是一个锁对象，任意对象都可以做锁，称为互斥锁，作用是只允许一个线程进入执行，其他线程等待</span><br><br>				cnt -= <span class="hljs-number">2</span>;<br>				<span class="hljs-keyword">try</span> &#123;<br>					Thread.sleep(<span class="hljs-number">10</span>);<br>				&#125; <span class="hljs-keyword">catch</span> (InterruptedException e) &#123;<br>					<span class="hljs-comment">// TODO Auto-generated catch block</span><br>					e.printStackTrace();<br>				&#125;<br>				System.out.println(Thread.currentThread().getName() + <span class="hljs-string">&quot;: &quot;</span> + cnt);<br>			&#125;<br>		&#125;<br>	&#125;<br><br>&#125;<br><br></code></pre></td></tr></table></figure>
-<hr>
-<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs Java"><span class="hljs-keyword">package</span> multi_thread;<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">CounterTest</span> </span>&#123;<br><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;<br>		Runnable counter = <span class="hljs-keyword">new</span> Counter();<br>		Thread thread1 = <span class="hljs-keyword">new</span> Thread(counter);<br>		Thread thread2 = <span class="hljs-keyword">new</span> Thread(counter);<br>		thread1.start();<br>		thread2.start();<br>	&#125;<br><br>&#125;<br><br></code></pre></td></tr></table></figure>
-<h4 id="继承Thread的方式"><a href="#继承Thread的方式" class="headerlink" title="继承Thread的方式"></a>继承Thread的方式</h4><blockquote>
-<blockquote>
-<ol>
-<li>写一个类，继承Thread,并重写run方法，此方法就是线程体</li>
-<li>创建这个类的对象，相当于创建了线程对象</li>
-<li>调用这个线程对象的start方法</li>
-</ol>
-<ul>
-<li>代码示例</li>
-</ul>
-</blockquote>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs Java"><span class="hljs-keyword">package</span> multi_thread;<br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyThread</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Thread</span></span>&#123;<br>	<span class="hljs-meta">@Override</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">run</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>;i&lt;<span class="hljs-number">100</span>;i++) &#123;<br>			System.out.println(currentThread().getName()+<span class="hljs-string">&quot; &quot;</span>+i);<br>		&#125;<br>	&#125;<br>&#125;<br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ThreadTest2</span> </span>&#123;<br><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;<br>		Thread myThread1 = <span class="hljs-keyword">new</span> MyThread();<br>		myThread1.start();<br>		<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>;i&lt;<span class="hljs-number">100</span>;i++) &#123;<br>			System.out.println(<span class="hljs-string">&quot;-----main &quot;</span>+i);<br>		&#125;<br>	&#125;<br><br>&#125;<br><br></code></pre></td></tr></table></figure>
-<h4 id="使用callable接口创建多线程"><a href="#使用callable接口创建多线程" class="headerlink" title="使用callable接口创建多线程"></a>使用callable接口创建多线程</h4><blockquote>
-<ul>
-<li>落地方法call()</li>
-<li>Callable接口作为JDK1.5新增的接口，与使用Runnable相比其功能更强大些。</li>
-<li>相比run()方法，可以有返回值</li>
-<li>方法可以抛出异常</li>
-<li>支持泛型的返回值</li>
-<li>需要借助FutureTask类，比如获取返回结果。</li>
-<li>Callable接口一般用于配合ExecutorService使用</li>
-</ul>
-</blockquote>
-<h5 id="Feture接口"><a href="#Feture接口" class="headerlink" title="Feture接口"></a>Feture接口</h5><blockquote>
-<ul>
-<li>可以对具体Runnable、Callable任务的执行结果进行取消、查询是否完成、获取结果等。</li>
-<li>FutrueTask是Futrue接口的实现类</li>
-<li>FutureTask 同时实现了Runnable, Future接口。它既可以作为Runnable被线程执行，又可以作为Future得到Callable的返回值。</li>
-<li>多个线程同时执行一个FutureTask，只要一个线程执行完毕，其他线程不会再执行其call()方法。</li>
-<li>get()方法会阻塞当前线程！<br>实例代码:</li>
-</ul>
-</blockquote>
-<figure class="highlight pgsql"><table><tr><td class="code"><pre><code class="hljs pgsql"><span class="hljs-keyword">class</span> MyThread implements Callable&lt;<span class="hljs-type">Integer</span>&gt; &#123;<br>	@Override<br>	<span class="hljs-built_in">public</span> <span class="hljs-type">Integer</span> <span class="hljs-keyword">call</span>() throws <span class="hljs-keyword">Exception</span> &#123;<br>		<span class="hljs-keyword">System</span>.<span class="hljs-keyword">out</span>.println(Thread.currentThread().getName()+&quot; Come in call&quot;);<br>		//睡<span class="hljs-number">5</span>秒<br>		TimeUnit.SECONDS.sleep(<span class="hljs-number">5</span>);<br>		//返回<span class="hljs-number">200</span>的状态码<br>		<span class="hljs-keyword">return</span> <span class="hljs-number">200</span>;<br>		<br>	&#125;<br>&#125;<br><br><span class="hljs-built_in">public</span> <span class="hljs-keyword">class</span> CallableTest &#123;<br>	<span class="hljs-built_in">public</span> static <span class="hljs-type">void</span> main(String[] args) throws InterruptedException, ExecutionException &#123;<br>		MyThread myThread = <span class="hljs-built_in">new</span> MyThread();<br>		FutureTask&lt;<span class="hljs-type">Integer</span>&gt; futureTask = <span class="hljs-built_in">new</span> FutureTask&lt;&gt;(myThread);<br>		<span class="hljs-built_in">new</span> Thread(futureTask, &quot;未来任务&quot;).<span class="hljs-keyword">start</span>();<br>        <span class="hljs-keyword">System</span>.<span class="hljs-keyword">out</span>.println(&quot;主线程结束！&quot;);<br>		<span class="hljs-type">Integer</span> <span class="hljs-type">integer</span> = futureTask.<span class="hljs-keyword">get</span>();<br>		<span class="hljs-keyword">System</span>.<span class="hljs-keyword">out</span>.println(<span class="hljs-type">integer</span>);<br>		<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
-<h4 id="线程池创建多线程"><a href="#线程池创建多线程" class="headerlink" title="线程池创建多线程"></a>线程池创建多线程</h4><blockquote>
-<ul>
-<li>线程池：经常创建和销毁、使用量特别大的资源，比如并发情况下的线程，对性能影响很大。因此提前创建好多个线程，放入线程池中，使用时直接获取，使用完放回池中。可以避免频繁创建销毁、实现重复利用。</li>
-<li>优点<blockquote>
-<ol>
-<li>提高响应速度（减少了创建新线程的时间）</li>
-<li>降低资源消耗（重复利用线程池中线程，不需要每次都创建）</li>
-<li>便于线程管理    </li>
-</ol>
-</blockquote>
-</li>
-<li>ExecutorService：真正的线程池接口。常见子类ThreadPoolExecutor。</li>
-<li>void execute(Runnable command) ：执行任务/命令，没有返回值，一般用来执行Runnable</li>
-<li><T> Future<T> submit(Callable<T> task)：执行任务，有返回值，一般用来执行Callable</li>
-<li>void shutdown() ：关闭连接池</li>
-<li>创建线程池的方式：<blockquote>
-<ol>
-<li>直接通过ThreadPoolExecutor实现类new</li>
-<li>通过工厂类Executors的静态方法创建，本质上也是通过1)创建的线程池</li>
-</ol>
-</blockquote>
-</li>
-</ul>
-</blockquote>
-<figure class="highlight reasonml"><table><tr><td class="code"><pre><code class="hljs reasonml">public static void main(String<span class="hljs-literal">[]</span> args) &#123;<br>		<span class="hljs-comment">//创建一个包含10个线程的线程池</span><br>		ExecutorService executorService = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Executors</span>.</span></span><span class="hljs-keyword">new</span><span class="hljs-constructor">FixedThreadPool(10)</span>;<br><span class="hljs-comment">//		ExecutorService executorService = Executors.newSingleThreadExecutor();</span><br>		<span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">12</span>; i++) &#123;<br>			executorService.execute(<span class="hljs-literal">()</span>-&gt;&#123;<br>				<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">System</span>.</span></span>out.println(<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Thread</span>.</span></span>current<span class="hljs-constructor">Thread()</span>.get<span class="hljs-constructor">Name()</span>);<br>			&#125;);<br>		&#125;<br>		executorService.shutdown<span class="hljs-literal">()</span>;<br>	&#125;<br></code></pre></td></tr></table></figure>
-<h2 id="3-线程的同步"><a href="#3-线程的同步" class="headerlink" title="3.线程的同步"></a>3.线程的同步</h2><blockquote>
-<ul>
-<li>synchronized (lock){}</li>
-<li>()中是一个锁对象，任意对象都可以做锁，称为互斥锁，作用是只允许一个线程进入执行，其他线程等待</li>
-<li>具有原子性，不可分割</li>
-<li>synchronized()可重入锁（同一个线程可以无限次获取同一个锁）</li>
-<li>避免死锁：不要嵌套synchronized，即使有嵌套，锁对象尽量少</li>
-</ul>
-</blockquote>
-<h3 id="synchronized和Lock的区别"><a href="#synchronized和Lock的区别" class="headerlink" title="synchronized和Lock的区别"></a>synchronized和Lock的区别</h3><blockquote>
-<ul>
-<li>synchronized不需要手动上锁和解锁，lock需要手动上锁和解锁</li>
-<li>synchronized能实现的功能lock都可以实现，且lock更加强大</li>
-</ul>
-</blockquote>
-<h2 id="JUC工具类"><a href="#JUC工具类" class="headerlink" title="JUC工具类"></a>JUC工具类</h2><h3 id="ReentrantReadWriteLock"><a href="#ReentrantReadWriteLock" class="headerlink" title="ReentrantReadWriteLock"></a>ReentrantReadWriteLock</h3><figure class="highlight reasonml"><table><tr><td class="code"><pre><code class="hljs reasonml">package com.atguigu.juc;<br><br>import java.util.concurrent.ExecutorService;<br>import java.util.concurrent.Executors;<br>import java.util.concurrent.locks.ReadWriteLock;<br>import java.util.concurrent.locks.ReentrantReadWriteLock;<br><br><span class="hljs-keyword">class</span> MyQueue &#123;<br>	<span class="hljs-comment">// 创建读写锁</span><br>	ReadWriteLock rwl = <span class="hljs-keyword">new</span> <span class="hljs-constructor">ReentrantReadWriteLock()</span>;<br><br>	<span class="hljs-keyword">private</span> Object obj;<br><br>	public void read<span class="hljs-constructor">Obj()</span> &#123;<br>		<span class="hljs-comment">// 上读锁</span><br>		rwl.read<span class="hljs-constructor">Lock()</span>.lock<span class="hljs-literal">()</span>;<br>		<span class="hljs-keyword">try</span> &#123;<br>			<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">System</span>.</span></span>out.println(<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Thread</span>.</span></span>current<span class="hljs-constructor">Thread()</span>.get<span class="hljs-constructor">Name()</span> + <span class="hljs-string">&quot;当前线程读到的内容是：&quot;</span> + obj);<br><br>		&#125; finally &#123;<br>			<span class="hljs-comment">// 解读锁</span><br>			rwl.read<span class="hljs-constructor">Lock()</span>.unlock<span class="hljs-literal">()</span>;<br>		&#125;<br>	&#125;<br><br>	public void write<span class="hljs-constructor">Obj(Object <span class="hljs-params">obj</span>)</span> &#123;<br>		<span class="hljs-comment">// 上写锁</span><br>		rwl.write<span class="hljs-constructor">Lock()</span>.lock<span class="hljs-literal">()</span>;<br>		<span class="hljs-keyword">try</span> &#123;<br>			this.obj = obj;<br>			<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">System</span>.</span></span>out.println(<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Thread</span>.</span></span>current<span class="hljs-constructor">Thread()</span>.get<span class="hljs-constructor">Name()</span> + <span class="hljs-string">&quot;当前线程写入的内容是：&quot;</span> + obj);<br>		&#125; finally &#123;<br>			<span class="hljs-comment">// 解写锁</span><br>			rwl.write<span class="hljs-constructor">Lock()</span>.unlock<span class="hljs-literal">()</span>;<br>		&#125;<br>	&#125;<br><br>&#125;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> * @Description: 一个线程写入,100个线程读取</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> */</span><br>public <span class="hljs-keyword">class</span> ReadWriteLockDemo &#123;<br>	public static void main(String<span class="hljs-literal">[]</span> args) throws InterruptedException &#123;<br>		<span class="hljs-comment">// 创建资源对象</span><br>		MyQueue mq = <span class="hljs-keyword">new</span> <span class="hljs-constructor">MyQueue()</span>;<br>		<span class="hljs-comment">// 一个线程写入</span><br>		<span class="hljs-keyword">new</span> <span class="hljs-constructor">Thread(()</span> -&gt; &#123;<br>			mq.write<span class="hljs-constructor">Obj(<span class="hljs-string">&quot;写入的内容&quot;</span>)</span>;<br>		&#125;, <span class="hljs-string">&quot;AA&quot;</span>).start<span class="hljs-literal">()</span>;<br>		<span class="hljs-comment">// 100个线程读取</span><br>		ExecutorService executorService = <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Executors</span>.</span></span><span class="hljs-keyword">new</span><span class="hljs-constructor">FixedThreadPool(100)</span>;<br>		<span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">100</span>; i++) &#123;<br>			executorService.execute(<span class="hljs-literal">()</span> -&gt; &#123;<br>				mq.read<span class="hljs-constructor">Obj()</span>;<br>			&#125;);<br>		&#125;<br>		executorService.shutdown<span class="hljs-literal">()</span>;<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
-<h3 id="CountDownLatch"><a href="#CountDownLatch" class="headerlink" title="CountDownLatch"></a>CountDownLatch</h3><figure class="highlight reasonml"><table><tr><td class="code"><pre><code class="hljs reasonml">package com.atguigu.juc;<br><br>import java.util.concurrent.CountDownLatch;<br><br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> * @Description:</span><br><span class="hljs-comment"> *  *让一些线程阻塞直到另一些线程完成一系列操作后才被唤醒。</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> * 解释：6个同学陆续离开教室后值班同学才可以关门。</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> * main主线程必须要等前面6个线程完成全部工作后，自己才能开干 </span><br><span class="hljs-comment"> */</span><br>public <span class="hljs-keyword">class</span> CountDownLatchDemo<br>&#123;<br>	public static void main(String<span class="hljs-literal">[]</span> args) throws InterruptedException<br>	&#123;<br>		CountDownLatch cd = <span class="hljs-keyword">new</span> <span class="hljs-constructor">CountDownLatch(6)</span>;<br>		<span class="hljs-comment">//6个同学离开教室</span><br>		<span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> i = <span class="hljs-number">1</span>; i &lt;= <span class="hljs-number">6</span>; i++) &#123;<br>			<span class="hljs-keyword">new</span> <span class="hljs-constructor">Thread(()</span>-&gt;&#123;<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">System</span>.</span></span>out.println(<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Thread</span>.</span></span>current<span class="hljs-constructor">Thread()</span>.get<span class="hljs-constructor">Name()</span>+<span class="hljs-string">&quot;号同学离开教室&quot;</span>);&#125;, <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">String</span>.</span></span>value<span class="hljs-constructor">Of(<span class="hljs-params">i</span>)</span>).start<span class="hljs-literal">()</span>;<br>		<span class="hljs-comment">//减少计数</span><br>			cd.count<span class="hljs-constructor">Down()</span>;<br>		&#125;<br>		<span class="hljs-comment">//等待		</span><br>		cd.await<span class="hljs-literal">()</span>;<br>		<span class="hljs-comment">//班长锁门</span><br>		<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">System</span>.</span></span>out.println(<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Thread</span>.</span></span>current<span class="hljs-constructor">Thread()</span>.get<span class="hljs-constructor">Name()</span>+<span class="hljs-string">&quot;班长锁门&quot;</span>);<br>	&#125;<br><br><br>&#125;<br></code></pre></td></tr></table></figure>
-<h3 id="CyclicBarrier"><a href="#CyclicBarrier" class="headerlink" title="CyclicBarrier"></a>CyclicBarrier</h3><figure class="highlight arduino"><table><tr><td class="code"><pre><code class="hljs arduino">package com.atguigu.juc;<br><br><span class="hljs-keyword">import</span> java.util.concurrent.BrokenBarrierException;<br><span class="hljs-keyword">import</span> java.util.concurrent.CyclicBarrier;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> * @Description: TODO(这里用一句话描述这个类的作用)  </span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> * CyclicBarrier</span><br><span class="hljs-comment"> * 的字面意思是可循环（Cyclic）使用的屏障（Barrier）。它要做的事情是，</span><br><span class="hljs-comment"> * 让一组线程到达一个屏障（也可以叫同步点）时被阻塞，</span><br><span class="hljs-comment"> * 直到最后一个线程到达屏障时，屏障才会开门，所有</span><br><span class="hljs-comment"> * 被屏障拦截的线程才会继续干活。</span><br><span class="hljs-comment"> * 线程进入屏障通过CyclicBarrier的await()方法。</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> * 集齐7颗龙珠就可以召唤神龙</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">CyclicBarrierDemo</span></span><br><span class="hljs-class">&#123;</span><br>	<span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">int</span> NUMBER = <span class="hljs-number">7</span>;<br>	<br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">String</span>[] args)</span></span><br><span class="hljs-function">	</span>&#123;<br>		<span class="hljs-comment">//CyclicBarrier(int parties, Runnable barrierAction) </span><br>		CyclicBarrier cb = <span class="hljs-keyword">new</span> CyclicBarrier(NUMBER, ()-&gt; &#123;System.out.<span class="hljs-built_in">println</span>(<span class="hljs-string">&quot;可以召唤神龙了&quot;</span>);&#125;);<br>		<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">1</span>;i&lt;=NUMBER;i++) &#123;<br>			<span class="hljs-keyword">new</span> Thread(()-&gt;&#123;System.out.<span class="hljs-built_in">println</span>(Thread.currentThread().getName()+<span class="hljs-string">&quot;号被收集&quot;</span>);<br>			<span class="hljs-keyword">try</span> &#123;<br>				cb.await();<br>			&#125; <span class="hljs-keyword">catch</span> (Exception e) &#123;<br>				e.printStackTrace();<br>			&#125; <br>			&#125;,<span class="hljs-keyword">String</span>.valueOf(i) ).start();<br>		&#125;<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
-<h3 id="Semaphore"><a href="#Semaphore" class="headerlink" title="Semaphore"></a>Semaphore</h3><figure class="highlight reasonml"><table><tr><td class="code"><pre><code class="hljs reasonml">package com.atguigu.juc;<br><br>import java.util.Random;<br>import java.util.concurrent.Semaphore;<br>import java.util.concurrent.TimeUnit;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> * @Description: TODO(这里用一句话描述这个类的作用)</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> *               在信号量上我们定义两种操作： acquire（获取）</span><br><span class="hljs-comment"> *               当一个线程调用acquire操作时，它要么通过成功获取信号量（信号量减1）， 要么一直等下去，直到有线程释放信号量，或超时。</span><br><span class="hljs-comment"> *               release（释放）实际上会将信号量的值加1，然后唤醒等待的线程。</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> *               信号量主要用于两个目的，一个是用于多个共享资源的互斥使用，另一个用于并发线程数的控制。</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> *               情景：3个停车位，6部汽车争抢车位</span><br><span class="hljs-comment"> */</span><br>public <span class="hljs-keyword">class</span> SemaphoreDemo &#123;<br>	public static void main(String<span class="hljs-literal">[]</span> args) &#123;<br>		<span class="hljs-comment">// 3个停车位</span><br>		Semaphore semaphore = <span class="hljs-keyword">new</span> <span class="hljs-constructor">Semaphore(3)</span>;<br>		<span class="hljs-comment">// 6部汽车抢车位</span><br>		<span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> i = <span class="hljs-number">1</span>; i &lt;= <span class="hljs-number">6</span>; i++) &#123;<br>			<span class="hljs-keyword">new</span> <span class="hljs-constructor">Thread(()</span> -&gt; &#123;<br>				<span class="hljs-comment">// 获取资源</span><br>				<span class="hljs-keyword">try</span> &#123;<br>					semaphore.acquire<span class="hljs-literal">()</span>;<br>					<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">System</span>.</span></span>out.println(<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Thread</span>.</span></span>current<span class="hljs-constructor">Thread()</span>.get<span class="hljs-constructor">Name()</span> + <span class="hljs-string">&quot;号驶入停车位&quot;</span>);<br>					<span class="hljs-comment">// 停车3秒</span><br>					<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">TimeUnit</span>.</span><span class="hljs-module"><span class="hljs-identifier">SECONDS</span>.</span></span>sleep(<span class="hljs-number">3</span>);<br>					<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">System</span>.</span></span>out.println(<span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">Thread</span>.</span></span>current<span class="hljs-constructor">Thread()</span>.get<span class="hljs-constructor">Name()</span> + <span class="hljs-string">&quot;号驶出停车位&quot;</span>);<br>					<span class="hljs-comment">// 释放资源</span><br>					semaphore.release<span class="hljs-literal">()</span>;<br>				&#125; catch (Exception e) &#123;<br>					e.print<span class="hljs-constructor">StackTrace()</span>;<br>				&#125;<br>			&#125;, <span class="hljs-module-access"><span class="hljs-module"><span class="hljs-identifier">String</span>.</span></span>value<span class="hljs-constructor">Of(<span class="hljs-params">i</span>)</span>).start<span class="hljs-literal">()</span>;<br>		&#125;<br>	&#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>Java</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-        <tag>多线程</tag>
       </tags>
   </entry>
   <entry>
@@ -1698,7 +1896,7 @@
 <li>在物理上划分，堆被划分成两个不同的区域：新生代 ( Young )、老年代 ( Old )。新生代 ( Young ) 又被划分为三个区域：Eden、From Survivor、To Survivor</li>
 <li>创建对象的过程<blockquote>
 <ul>
-<li>新new的对象会放在伊甸园区（大对象直接进入老年代），伊甸园区的对象存活率非常低，当伊甸园区快满时会触发轻量级的垃圾回收机制（MinorGC）MinorGC会回收伊甸园区和幸存from区，会将伊甸园的幸存者标记复制到幸存to区，from区中的幸存者会根据它的年龄判断它的去向：默认情况下，如果年龄小于15则被标记到to区，如果年龄大于15则被标记复制到养老区，然后from区和to区交换角色</li>
+<li>新new的对象会放在伊甸园区（大对象直接进入老年代），伊甸园区的对象存活率非常低，当伊甸园区快满时会触发轻量级的垃圾回收机制（MinorGC）MinorGC会回收伊甸园区和幸存from区，会将伊甸园的幸存者标记复制到幸存to区，from区中的幸存者会根据它的年龄判断它的去向：默认情况下，如果年龄小于15则被标记到to区，如果年龄大于15则被标记复制到养老区，然后from区和to区交换角色（to区又为空了，下次又是回收from区的)</li>
 <li>当养老区内存不足时会触发重量级垃圾回收机制（MajorGC/fullGC），如果养老区无法回收内存则会出现OOM异常</li>
 </ul>
 </blockquote>
@@ -5975,16 +6173,14 @@ copyToLocal#与get完全一样
 </li>
 </ul>
 <h2 id="Java-SE"><a href="#Java-SE" class="headerlink" title="Java SE"></a>Java SE</h2><ul>
-<li><p>HashMap的底层源码，数据结构</p>
-<ul>
+<li>HashMap的底层源码，数据结构<ul>
 <li>在JDK1.8中，HashMap由数组+链表+红黑树实现</li>
 <li>链表长度大于8，且表的长度大于64的时候将链表转化为红黑树</li>
 <li><a href="https://imgtu.com/i/4b4dAK"><img src="https://z3.ax1x.com/2021/10/02/4b4dAK.png" alt="4b4dAK.png"></a></li>
 <li>红黑树其实就是一种<strong>自平衡</strong>的二叉查找树。</li>
 </ul>
 </li>
-<li><p>HashMap和HashTable</p>
-<ul>
+<li>HashMap和HashTable<ul>
 <li>线程安全性不同<ul>
 <li>HashMap是线程不安全的，HashTable是线程安全的，其中的方法是Synchronize的，在多线程并发的情况下，可以直接使用HashTable，但是使用HashMap是必须自己增加同步处理。</li>
 </ul>
@@ -6000,31 +6196,39 @@ copyToLocal#与get完全一样
 </li>
 </ul>
 </li>
-<li><p>StringBuffer和StingBuilder的区别</p>
-<ul>
+<li>StringBuffer和StingBuilder的区别<ul>
 <li>StringBuffer是线程安全的，而StringBuilder是线程不安全的</li>
 <li>单线程程序下，StringBuilder效率更快，因为它不需要加锁，而StringBuffer则每次都需要判断锁，效率相对更低。</li>
 </ul>
 </li>
-<li><p>String和StringBuffer的区别</p>
-<ul>
+<li>String和StringBuffer的区别<ul>
 <li>String类是final修饰的，它是一个字符串常量，因此它一旦创建，其内容和长度不可改变，StringBuffer类它的内容和长度都是可变的。</li>
 <li>String类重写了equals()方法，StringBuffer没有</li>
 <li>String类对象之间可以用“+”号连接，StringBuffer对象之间不能。</li>
 </ul>
 </li>
-<li><p>Final，Finally，Finalize</p>
-<ul>
+<li>Final，Finally，Finalize<ul>
 <li>final：修饰符（关键字）有三种用法：修饰类，变量和方法。修饰类时，意味着它不能被继承。修饰变量时，该变量使用中不被改变，必须在声明时给定初值。修饰方法时，同样只能使用，不能在子类中被重写。</li>
 <li>finally：通常放在try{}catch 的后面构造最终的执行代码块。这就意味着程序无论正常执行还是发生异常，这里的代码只要JVM不关闭都能执行。</li>
 <li>finalize：Object类中定义的方法，Java中允许使用finalize()方法在垃圾收集器将对象从内存中清除出去之前做必要的清理工作。这个方法是由垃圾收集器在销毁对象时调用的，通过重写finalize()方法可以整理系统资源或者执行其它清理工作。</li>
 </ul>
 </li>
-<li><p>==和equals的区别</p>
-<ul>
+<li>==和equals的区别<ul>
 <li>==：如果是比较基本数据类型，那么比较的是变量的值。如果比较的是引用数据类型，那么比较的是地址值（两个对象是否指向同一块内存）</li>
 <li>equals：如果类没重写equals方法比较的是两个对象的地址值，如果类重写了equals方法后我们往往比较的是对象中属性的内容。</li>
 <li>equals方法是从Object类中继承的，默认的实现就是使用==</li>
+</ul>
+</li>
+<li>常见执行顺序<ul>
+<li>父类静态代码块——&gt;子类静态代码块——&gt;父类代码块——&gt;父类构造方法——&gt;子类代码块——&gt;子类构造方法</li>
+</ul>
+</li>
+<li>ArrayList,HashMap扩容机制<ul>
+<li>ArrayList初始化大小为0（第一次调用add 方法后长度变为10），当节点不够用时，就会扩容。扩容后的大小=原始大小*1.5</li>
+<li>HashMap:初始化大小是16，扩容因子默认为0.75（可以指定初始化大小，和扩容因子）<ul>
+<li>扩容机制：当前大小和当前容量的比例超过了扩容因子，就会扩容，扩容大小增大一倍。</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

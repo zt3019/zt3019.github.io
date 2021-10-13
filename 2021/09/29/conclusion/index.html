@@ -185,7 +185,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      8.1k 字
+      8.3k 字
     </span>
   
 
@@ -195,7 +195,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      90
+      92
        分钟
     </span>
   
@@ -229,7 +229,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2021年10月11日 中午
+                  本文最后更新于：2021年10月13日 下午
                 
               </p>
             
@@ -763,16 +763,14 @@
 </li>
 </ul>
 <h2 id="Java-SE"><a href="#Java-SE" class="headerlink" title="Java SE"></a>Java SE</h2><ul>
-<li><p>HashMap的底层源码，数据结构</p>
-<ul>
+<li>HashMap的底层源码，数据结构<ul>
 <li>在JDK1.8中，HashMap由数组+链表+红黑树实现</li>
 <li>链表长度大于8，且表的长度大于64的时候将链表转化为红黑树</li>
 <li><a target="_blank" rel="noopener" href="https://imgtu.com/i/4b4dAK"><img src="https://z3.ax1x.com/2021/10/02/4b4dAK.png" srcset="/img/loading.gif" lazyload alt="4b4dAK.png"></a></li>
 <li>红黑树其实就是一种<strong>自平衡</strong>的二叉查找树。</li>
 </ul>
 </li>
-<li><p>HashMap和HashTable</p>
-<ul>
+<li>HashMap和HashTable<ul>
 <li>线程安全性不同<ul>
 <li>HashMap是线程不安全的，HashTable是线程安全的，其中的方法是Synchronize的，在多线程并发的情况下，可以直接使用HashTable，但是使用HashMap是必须自己增加同步处理。</li>
 </ul>
@@ -788,31 +786,39 @@
 </li>
 </ul>
 </li>
-<li><p>StringBuffer和StingBuilder的区别</p>
-<ul>
+<li>StringBuffer和StingBuilder的区别<ul>
 <li>StringBuffer是线程安全的，而StringBuilder是线程不安全的</li>
 <li>单线程程序下，StringBuilder效率更快，因为它不需要加锁，而StringBuffer则每次都需要判断锁，效率相对更低。</li>
 </ul>
 </li>
-<li><p>String和StringBuffer的区别</p>
-<ul>
+<li>String和StringBuffer的区别<ul>
 <li>String类是final修饰的，它是一个字符串常量，因此它一旦创建，其内容和长度不可改变，StringBuffer类它的内容和长度都是可变的。</li>
 <li>String类重写了equals()方法，StringBuffer没有</li>
 <li>String类对象之间可以用“+”号连接，StringBuffer对象之间不能。</li>
 </ul>
 </li>
-<li><p>Final，Finally，Finalize</p>
-<ul>
+<li>Final，Finally，Finalize<ul>
 <li>final：修饰符（关键字）有三种用法：修饰类，变量和方法。修饰类时，意味着它不能被继承。修饰变量时，该变量使用中不被改变，必须在声明时给定初值。修饰方法时，同样只能使用，不能在子类中被重写。</li>
 <li>finally：通常放在try{}catch 的后面构造最终的执行代码块。这就意味着程序无论正常执行还是发生异常，这里的代码只要JVM不关闭都能执行。</li>
 <li>finalize：Object类中定义的方法，Java中允许使用finalize()方法在垃圾收集器将对象从内存中清除出去之前做必要的清理工作。这个方法是由垃圾收集器在销毁对象时调用的，通过重写finalize()方法可以整理系统资源或者执行其它清理工作。</li>
 </ul>
 </li>
-<li><p>==和equals的区别</p>
-<ul>
+<li>==和equals的区别<ul>
 <li>==：如果是比较基本数据类型，那么比较的是变量的值。如果比较的是引用数据类型，那么比较的是地址值（两个对象是否指向同一块内存）</li>
 <li>equals：如果类没重写equals方法比较的是两个对象的地址值，如果类重写了equals方法后我们往往比较的是对象中属性的内容。</li>
 <li>equals方法是从Object类中继承的，默认的实现就是使用==</li>
+</ul>
+</li>
+<li>常见执行顺序<ul>
+<li>父类静态代码块——&gt;子类静态代码块——&gt;父类代码块——&gt;父类构造方法——&gt;子类代码块——&gt;子类构造方法</li>
+</ul>
+</li>
+<li>ArrayList,HashMap扩容机制<ul>
+<li>ArrayList初始化大小为0（第一次调用add 方法后长度变为10），当节点不够用时，就会扩容。扩容后的大小=原始大小*1.5</li>
+<li>HashMap:初始化大小是16，扩容因子默认为0.75（可以指定初始化大小，和扩容因子）<ul>
+<li>扩容机制：当前大小和当前容量的比例超过了扩容因子，就会扩容，扩容大小增大一倍。</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
