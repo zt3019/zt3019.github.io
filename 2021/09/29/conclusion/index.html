@@ -185,7 +185,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      8.3k 字
+      8.5k 字
     </span>
   
 
@@ -195,7 +195,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      92
+      94
        分钟
     </span>
   
@@ -229,7 +229,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2021年10月13日 下午
+                  本文最后更新于：2021年10月20日 下午
                 
               </p>
             
@@ -349,11 +349,11 @@
 <li>map方法之后，redece方法之前的数据处理过程</li>
 <li>大致流程<ul>
 <li>MapTask收集map()方法的K,V对，并将这些数据放入环形缓冲区中</li>
-<li>当环形缓冲区(默认100m）达到80%后，会进行溢写操作，将数据溢写到磁盘。在环形缓冲区中会进行快速排序</li>
-<li>会将溢写到磁盘的文件进行归并排序，在溢写和归并的过程中，都要调用Partitioner进行分区和针对key进行排序</li>
+<li>当环形缓冲区(默认100m）达到80%后，会进行溢写操作，将数据反向溢写到磁盘。在环形缓冲区中会进行快速排序。如果数据阻塞了，会暂停向环形缓冲区写数据。</li>
+<li>会将溢写到磁盘的文件进行归并排序，在溢写和归并的过程中，都要调用Partitioner进行分区和针对key进行排序。框架调用Partitioner分区器分区（指定分区规则），WritableComparable排序器排序（指定排序规则）。</li>
 <li>ReduceTask 会根据分区号，去各个MapTask上取相应的结果分区数据。将数据写入内存</li>
 <li>ReduceTask会取到同一分区来自不同MapTask的结果文件，内存不够时，也会触发溢写操作，将数据写入磁盘。</li>
-<li>ReduceTask会将这些文件进行合并（归并排序）还可以将归并完成的文件看需求是否进行分组操作，合并成大文件后，shuffle过程结束。之后将数据按reduce 方法去处理。</li>
+<li>ReduceTask会将这些文件进行合并（归并排序）还可以将归并完成的文件看需求是否进行分组操作（GroupingComparator分组），合并成大文件后，shuffle过程结束。之后将数据按reduce 方法去处理。</li>
 </ul>
 </li>
 <li>优化：<ul>
@@ -381,6 +381,8 @@
 </li>
 </ul>
 <h3 id="YARN"><a href="#YARN" class="headerlink" title="YARN"></a>YARN</h3><ul>
+<li><p>Yarn是一个资源调度平台，负责为运算程序提供服务运算资源，相当于一个<font color=red>分布式的操作系统平台，</font>而MapReduce等运算则相当于运行于操作系统之上的程序。</p>
+</li>
 <li><p>yarn工作调度流程(8步)</p>
 <ul>
 <li><p>客户端执行job.waitForCompletion</p>
@@ -391,7 +393,7 @@
 </li>
 <li><p>client将资源(切片信息，配置信息，所需jar包)提交到HDFS上</p>
 </li>
-<li><p>资源提交完成，申请运行AppMaster</p>
+<li><p>资源提交完成，Application向RM申请运行AppMaster</p>
 </li>
 <li><p>AppMaster下载Client提交的资源到本地</p>
 </li>
@@ -750,15 +752,28 @@
 </li>
 <li><p>优化</p>
 <ul>
-<li>mapjoin  默认打开 ，不要关闭</li>
-<li>先执行where再执行join,可以通过先where过滤一部分数据，再进行连接</li>
-<li>创建分区表（天）</li>
-<li>小文件相关处理<ul>
+<li><p>mapjoin  默认打开 ，不要关闭</p>
+</li>
+<li><p>先执行where再执行join,可以通过先where过滤一部分数据，再进行连接</p>
+</li>
+<li><p>创建分区表（天）</p>
+</li>
+<li><p>小文件相关处理</p>
+<ul>
 <li>CombinehiveInputformat ===&gt;减少切片个数，减少maptask个数</li>
 <li>JVM重用</li>
 </ul>
 </li>
-<li>不影响业务逻辑的情况下可以开启map端combiner</li>
+<li><p>不影响业务逻辑的情况下可以开启map端combiner</p>
+</li>
+<li><p>hive数据倾斜</p>
+<ul>
+<li><pre><code class="kotlin">set hive.groupby.skewindata=true
+生成两个MRJOB，第一个MR，先随机打散key，减少数据倾斜。第二个MR，再根据预处理的数据结果按照Group By Key分布到reduce中，最终完成z
+</code></pre>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -858,7 +873,7 @@
 </ul>
 <h3 id="Shuffle"><a href="#Shuffle" class="headerlink" title="Shuffle"></a>Shuffle</h3><ul>
 <li><a target="_blank" rel="noopener" href="https://imgtu.com/i/5Eyca8"><img src="https://z3.ax1x.com/2021/10/10/5Eyca8.png" srcset="/img/loading.gif" lazyload alt="5Eyca8.png"></a></li>
-<li>在划分stage时，最后一个stage称为finalStage，它本质上是一个ResultStage对象，前面的所以stage被称为ShuffleMapStage。</li>
+<li>在划分stage时，最后一个stage称为finalStage，它本质上是一个ResultStage对象，前面的所有stage被称为ShuffleMapStage。</li>
 <li>ShuffleMapStage的结束伴随着shuffle文件的写磁盘</li>
 <li>ResultStage基本上对应代码中的action算子，即将一个函数应用在RDD的各个partition的数据集上，意味着一个job的运行结束。</li>
 </ul>
@@ -885,7 +900,7 @@
 <ul>
 <li>未经优化的HashShuffle<ul>
 <li>对相同的key执行hash算法，从而将相同的key写入同一个文件中，而每一个磁盘文件都只属于下游stage的一个task。在将数据写入磁盘之前，会先将数据写入内存缓冲中，当内存缓冲填满之后，再溢写到磁盘文件中去。</li>
-<li>下一个stage的task有多少个，当前stage的每个task就要创建多少份磁盘文件。如果分区数很多，则会造成大量的文件</li>
+<li>下一个stage的task有多少个，当前Excutor的每个task就要创建多少份磁盘文件。如果分区数很多，则会造成大量的文件</li>
 <li><a target="_blank" rel="noopener" href="https://imgtu.com/i/5Ecfun"><img src="https://z3.ax1x.com/2021/10/10/5Ecfun.png" srcset="/img/loading.gif" lazyload alt="5Ecfun.png"></a></li>
 </ul>
 </li>
@@ -954,7 +969,7 @@
 </ul>
 </li>
 <li>故障排除<ul>
-<li>控制reduce端缓冲区大小避免OOM1,如果缓冲区过大，导致运算的内存不足，可能会出现OOM</li>
+<li>控制reduce端缓冲区大小避免OOM,如果缓冲区过大，导致运算的内存不足，可能会出现OOM</li>
 <li>checkpoint+cache同时使用。</li>
 </ul>
 </li>
@@ -962,7 +977,7 @@
 <h3 id="数据倾斜"><a href="#数据倾斜" class="headerlink" title="数据倾斜"></a>数据倾斜</h3><ul>
 <li><p>定位数据倾斜问题：</p>
 <ul>
-<li>查看代码中的shuffle算子，例如：reduceByKey,countByKey,GroupByKey,join等算子，根据代码逻辑判断此处是否会出现数据倾斜。</li>
+<li>查看代码中的shuffle算子，例如：distinct，reparation, reduceByKey,countByKey,GroupByKey,join等算子，根据代码逻辑判断此处是否会出现数据倾斜。</li>
 <li>查看Spark作业的log文件</li>
 </ul>
 </li>

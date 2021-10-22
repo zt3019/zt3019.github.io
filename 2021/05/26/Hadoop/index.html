@@ -185,7 +185,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      7.5k 字
+      7.6k 字
     </span>
   
 
@@ -195,7 +195,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      88
+      89
        分钟
     </span>
   
@@ -229,7 +229,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2021年8月28日 下午
+                  本文最后更新于：2021年10月18日 上午
                 
               </p>
             
@@ -422,6 +422,61 @@ copyToLocal#与get完全一样
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.zt3019.wordcount;<br><br><span class="hljs-keyword">import</span> org.apache.hadoop.conf.Configuration;<br><span class="hljs-keyword">import</span> org.apache.hadoop.fs.Path;<br><span class="hljs-keyword">import</span> org.apache.hadoop.io.IntWritable;<br><span class="hljs-keyword">import</span> org.apache.hadoop.io.Text;<br><span class="hljs-keyword">import</span> org.apache.hadoop.mapreduce.Job;<br><span class="hljs-keyword">import</span> org.apache.hadoop.mapreduce.lib.input.FileInputFormat;<br><span class="hljs-keyword">import</span> org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;<br><br><span class="hljs-keyword">import</span> java.io.IOException;<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">WordCountDriver</span></span>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> IOException, ClassNotFoundException, InterruptedException </span>&#123;<br>        Configuration configuration = <span class="hljs-keyword">new</span> Configuration();<br>        <span class="hljs-comment">//配置yarn集群运行</span><br>        <span class="hljs-comment">//core-site.xml配置文件</span><br>        configuration.set(<span class="hljs-string">&quot;fs.defaultFS&quot;</span>, <span class="hljs-string">&quot;hdfs://hadoop100:8020&quot;</span>);<br>        <span class="hljs-comment">//MapRedece-site.xml配置文件</span><br>        configuration.set(<span class="hljs-string">&quot;mapreduce.framework.name&quot;</span>,<span class="hljs-string">&quot;yarn&quot;</span>);<br>        <span class="hljs-comment">//是否允许向linux提交任务</span><br>        configuration.set(<span class="hljs-string">&quot;mapreduce.app-submission.cross-platform&quot;</span>,<span class="hljs-string">&quot;true&quot;</span>);<br>        configuration.set(<span class="hljs-string">&quot;yarn.resourcemanager.hostname&quot;</span>,<span class="hljs-string">&quot;hadoop102&quot;</span>);<br>        <span class="hljs-comment">//1.获取job实例</span><br>        Job job= Job.getInstance(configuration);<br>        <span class="hljs-comment">//2.设置jar包</span><br>        job.setJarByClass(WordCountDriver.class);<br>        <span class="hljs-comment">//3.设置Mapper和Reducer</span><br>        job.setMapperClass(WordCountMapper.class);<br>        job.setReducerClass(WordCountReducer.class);<br>        <span class="hljs-comment">//4.设置Map和Reduce的输出类型</span><br>        <span class="hljs-comment">//设置Map的输出类型</span><br>        job.setMapOutputKeyClass(Text.class);<br>        job.setMapOutputValueClass(IntWritable.class);<br>        <span class="hljs-comment">//设置Reduce的输出类型</span><br>        job.setOutputKeyClass(Text.class);<br>        job.setOutputValueClass(IntWritable.class);<br>        <span class="hljs-comment">//5.设置输入输出文件</span><br>        FileInputFormat.setInputPaths(job,<span class="hljs-keyword">new</span> Path(args[<span class="hljs-number">0</span>]));<br>        FileOutputFormat.setOutputPath(job,<span class="hljs-keyword">new</span> Path(args[<span class="hljs-number">1</span>]));<br>        <span class="hljs-comment">//6.提交job</span><br>        <span class="hljs-comment">//提交任务得到运行结果，成功或者失败</span><br>        <span class="hljs-comment">//提交流程都在这个方法中，一些job的配置都可以在上面设置。</span><br>        <span class="hljs-keyword">boolean</span> b = job.waitForCompletion(<span class="hljs-keyword">true</span>);<br>        System.exit(b ? <span class="hljs-number">0</span>:<span class="hljs-number">1</span>);<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure></li>
 <li><p>提交到集群上运行，先maven打包，</p>
 <figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs markdown">yarn jar 包名 主类引用(reference) args[<span class="hljs-string">0</span>](<span class="hljs-link">输入路径</span>) args[<span class="hljs-string">1</span>](<span class="hljs-link">s</span>)<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="Hadoop压缩"><a href="#Hadoop压缩" class="headerlink" title="Hadoop压缩"></a>Hadoop压缩</h3><ul>
+<li><table>
+<thead>
+<tr>
+<th>压缩格式</th>
+<th>hadoop自带？</th>
+<th>算法</th>
+<th>文件扩展名</th>
+<th>是否可切分</th>
+<th>换成压缩格式后，原来的程序是否需要修改</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>DEFLATE</td>
+<td>是，直接使用</td>
+<td>DEFLATE</td>
+<td>.deflate</td>
+<td>否</td>
+<td>和文本处理一样，不需要修改</td>
+</tr>
+<tr>
+<td>Gzip</td>
+<td>是，直接使用</td>
+<td>DEFLATE</td>
+<td>.gz</td>
+<td>否</td>
+<td>和文本处理一样，不需要修改</td>
+</tr>
+<tr>
+<td>bzip2</td>
+<td>是，直接使用</td>
+<td>bzip2</td>
+<td>.bz2</td>
+<td>是</td>
+<td>和文本处理一样，不需要修改</td>
+</tr>
+<tr>
+<td>LZO</td>
+<td>否，需要安装</td>
+<td>LZO</td>
+<td>.lzo</td>
+<td>是</td>
+<td>需要建索引，还需要指定输入格式</td>
+</tr>
+<tr>
+<td>Snappy</td>
+<td>否，需要安装</td>
+<td>Snappy</td>
+<td>.snappy</td>
+<td>否</td>
+<td>和文本处理一样，不需要修改</td>
+</tr>
+</tbody></table>
+</li>
 </ul>
 <h3 id="Hadoop序列化"><a href="#Hadoop序列化" class="headerlink" title="Hadoop序列化"></a>Hadoop序列化</h3><ul>
 <li><p>序列化就是把内存中的对象，转换成字节序列（或其它数据传输协议）以便于存储到磁盘（持久化）和网络传输。</p>

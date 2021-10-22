@@ -185,7 +185,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      5.2k 字
+      5.4k 字
     </span>
   
 
@@ -195,7 +195,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      57
+      60
        分钟
     </span>
   
@@ -229,7 +229,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2021年10月15日 下午
+                  本文最后更新于：2021年10月17日 下午
                 
               </p>
             
@@ -339,7 +339,7 @@
 <li>维度表：一般是对事实的<font color=red>描述信息</font>。每一张维度表对应现实世界中的一个对象或者概念。例如：用户，商品，时间，地区等。就像是对事物描述的一个角度。</li>
 <li>维度表的特征：<ul>
 <li>维度表范围很宽（具有多个属性，列比较多）</li>
-<li>与事实表相比，行数相对较小。</li>
+<li>与事实表相比，行数相对较小</li>
 <li>内容相对固定：编码表，地区表</li>
 </ul>
 </li>
@@ -537,15 +537,24 @@
 <li>业务数据根据不同的数据同步策略，通过脚本将数据写入到ODS层。</li>
 </ul>
 <ul>
-<li>保持数据源码不做修改，起到备份数据的作用，采用LZO压缩。</li>
-<li>创建分区表，防止全表扫描</li>
-<li>创建外部表</li>
+<li><p>保持数据源码不做修改，起到备份数据的作用，采用LZO压缩。</p>
+</li>
+<li><p>创建分区表，防止全表扫描</p>
+</li>
+<li><p>创建外部表</p>
+<figure class="highlight delphi"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs delphi"><span class="hljs-keyword">STORED</span> <span class="hljs-keyword">AS</span><br>  INPUTFORMAT <span class="hljs-string">&#x27;com.hadoop.mapred.DeprecatedLzoTextInputFormat&#x27;</span><br>  OUTPUTFORMAT <span class="hljs-string">&#x27;org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat&#x27;</span><br></code></pre></td></tr></table></figure></li>
+<li><p>创建输入数据是LZO输出是text，支持json解析的分区表。采用LZO压缩的外部表</p>
+</li>
 </ul>
 <h3 id="DWD层（重点）"><a href="#DWD层（重点）" class="headerlink" title="DWD层（重点）"></a>DWD层（重点）</h3><ul>
-<li>列式存储。优点：查询速度快，占用磁盘空间少（压缩比非常高）</li>
-<li>LZO压缩</li>
-<li>分区表，外部表</li>
-<li>主要操作<ul>
+<li><p>列式压缩存储。有些表指定采用LZO压缩。优点：查询速度快，占用磁盘空间少（压缩比非常高）</p>
+</li>
+<li><p>采用列式存储后会有默认的压缩方式。</p>
+<figure class="highlight delphi"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs delphi">PARTITIONED BY (dt <span class="hljs-keyword">string</span>)<br><span class="hljs-keyword">stored</span> <span class="hljs-keyword">as</span> parquet<br>location <span class="hljs-string">&#x27;/warehouse/gmall/dwd/dwd_start_log/&#x27;</span><br>TBLPROPERTIES(<span class="hljs-string">&#x27;parquet.compression&#x27;</span>=<span class="hljs-string">&#x27;lzo&#x27;</span>);<br></code></pre></td></tr></table></figure></li>
+<li><p>分区表，外部表</p>
+<figure class="highlight delphi"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs delphi">PARTITIONED BY (dt <span class="hljs-keyword">string</span>)<br><span class="hljs-keyword">stored</span> <span class="hljs-keyword">as</span> parquet<br>location <span class="hljs-string">&#x27;/warehouse/gmall/dwd/dwd_start_log/&#x27;</span><br>TBLPROPERTIES(<span class="hljs-string">&#x27;parquet.compression&#x27;</span>=<span class="hljs-string">&#x27;lzo&#x27;</span>);<br></code></pre></td></tr></table></figure></li>
+<li><p>主要操作</p>
+<ul>
 <li>ETL(数据清洗，启动日志，事件日志的解析)</li>
 <li>维度建模（维度退化）</li>
 </ul>
@@ -571,7 +580,7 @@
 </li>
 <li><p>自定义UDTF函数解析具体事件（解析json数组）</p>
 <ul>
-<li><p>定义类继承c抽象类GenericUDTF，实现initialize()（自定义输出的列名和类型）；process() （将结果返回forward(result)）；close()</p>
+<li><p>定义类继承抽象类GenericUDTF，实现initialize()（自定义输出的列名和类型）；process() （具体的处理，将结果返回forward(result)）；close()</p>
 </li>
 <li><p>输出事件名和事件json 对象</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.zt.gmall.hive;<br><br><span class="hljs-keyword">import</span> org.apache.hadoop.hive.ql.exec.UDFArgumentException;<br><span class="hljs-keyword">import</span> org.apache.hadoop.hive.ql.metadata.HiveException;<br><span class="hljs-keyword">import</span> org.apache.hadoop.hive.ql.udf.generic.GenericUDTF;<br><span class="hljs-keyword">import</span> org.apache.hadoop.hive.serde2.objectinspector.ObjectInspector;<br><span class="hljs-keyword">import</span> org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorFactory;<br><span class="hljs-keyword">import</span> org.apache.hadoop.hive.serde2.objectinspector.StructField;<br><span class="hljs-keyword">import</span> org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;<br><span class="hljs-keyword">import</span> org.apache.hadoop.hive.serde2.objectinspector.primitive.PrimitiveObjectInspectorFactory;<br><span class="hljs-keyword">import</span> org.json.JSONArray;<br><br><span class="hljs-keyword">import</span> java.util.ArrayList;<br><span class="hljs-keyword">import</span> java.util.List;<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">LogUDTF</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">GenericUDTF</span> </span>&#123;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">close</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> HiveException </span>&#123;<br>    &#125;<br>    <span class="hljs-comment">//initialize方法可以校验传入参数类型是否合法</span><br>    <span class="hljs-comment">//ObjectInspector对象检查器  封装了数据类型（封装了输出类型）</span><br>    <span class="hljs-comment">//处理时间数组</span><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> StructObjectInspector <span class="hljs-title">initialize</span><span class="hljs-params">(StructObjectInspector argOIs)</span> <span class="hljs-keyword">throws</span> UDFArgumentException </span>&#123;<br>        List&lt;? extends StructField&gt; allStructFieldRefs = argOIs.getAllStructFieldRefs();<br>        <span class="hljs-comment">//入参的校验</span><br>        <span class="hljs-keyword">if</span>(allStructFieldRefs.size()!=<span class="hljs-number">1</span>)&#123;<br>            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> UDFArgumentException(<span class="hljs-string">&quot;参数个数只能为1&quot;</span>);<br>        &#125;<br>        <span class="hljs-comment">//这里返回的类型是hive的数据类型</span><br>        <span class="hljs-keyword">if</span>(!<span class="hljs-string">&quot;string&quot;</span>.equals(allStructFieldRefs.get(<span class="hljs-number">0</span>).getFieldObjectInspector().getTypeName()))&#123;<br>            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> UDFArgumentException(<span class="hljs-string">&quot;参数类型只能为string&quot;</span>);<br>        &#125;<br>        ArrayList&lt;String&gt; fieldNames = <span class="hljs-keyword">new</span> ArrayList&lt;String&gt;();<br>        ArrayList&lt;ObjectInspector&gt; fieldOIs = <span class="hljs-keyword">new</span> ArrayList&lt;ObjectInspector&gt;();<br>        <span class="hljs-comment">//返回回去的两个列</span><br>        fieldNames.add(<span class="hljs-string">&quot;event_name&quot;</span>);<br>        fieldNames.add(<span class="hljs-string">&quot;event_json&quot;</span>);<br>        fieldOIs.add(PrimitiveObjectInspectorFactory.javaStringObjectInspector);<br>        fieldOIs.add(PrimitiveObjectInspectorFactory.javaStringObjectInspector);<br>        <span class="hljs-keyword">return</span> ObjectInspectorFactory.getStandardStructObjectInspector(fieldNames,<br>                fieldOIs);<br>    &#125;<br>    <span class="hljs-comment">//完成initialize方法后，将每一行交给process()方法，每一行经过处理变成多行，传递给forward()，forward将结果带出</span><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">process</span><span class="hljs-params">(Object[] args)</span> <span class="hljs-keyword">throws</span> HiveException </span>&#123;<br>        String eventArray = args[<span class="hljs-number">0</span>].toString();<br>        JSONArray jsonArray = <span class="hljs-keyword">new</span> JSONArray(eventArray);<br>        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt;jsonArray.length() ; i++) &#123;<br>            String[] result=<span class="hljs-keyword">new</span> String[<span class="hljs-number">2</span>];<br>            result[<span class="hljs-number">0</span>]=jsonArray.getJSONObject(i).getString(<span class="hljs-string">&quot;en&quot;</span>);<br>            result[<span class="hljs-number">1</span>]=jsonArray.getString(i);<br>            forward(result);<br>        &#125;<br>    &#125;<br>    <br>&#125;<br></code></pre></td></tr></table></figure></li>
@@ -579,28 +588,32 @@
 </li>
 <li><p>把jar包打包上传到HDFS上的user/hive/jars路径下，创建永久函数与开发好的Java class关联</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">create</span> <span class="hljs-keyword">function</span> base_analizer <span class="hljs-keyword">as</span> <span class="hljs-string">&#x27;com.zt.udf.BaseFieldUDF&#x27;</span> <span class="hljs-keyword">using</span> jar <span class="hljs-string">&#x27;hdfs://hadoop100:9000/user/hive/jars/hivefunction-1.0-SNAPSHOT.jar&#x27;</span>;<br><br><span class="hljs-keyword">create</span> <span class="hljs-keyword">function</span> flat_analizer <span class="hljs-keyword">as</span> <span class="hljs-string">&#x27;com.zt.udtf.EventJsonUDTF&#x27;</span> <span class="hljs-keyword">using</span> jar <span class="hljs-string">&#x27;hdfs://hadoop100:9000/user/hive/jars/hivefunction-1.0-SNAPSHOT.jar&#x27;</span>; <br></code></pre></td></tr></table></figure></li>
+<li><p>通过处理得到事件解析日志基础表，再在事件日志解析基础表的基础上，创建具体的事件日志表。</p>
+</li>
 </ul>
 </li>
 </ul>
 <h4 id="业务数据"><a href="#业务数据" class="headerlink" title="业务数据"></a>业务数据</h4><ul>
 <li><p>事实表分类</p>
 <ul>
+<li><p>事实表也可以做适当的宽表化处理。</p>
+</li>
 <li><p>事务型事实表（增量同步）</p>
 <ul>
 <li>订单详情事实表<ul>
-<li>以订单业务作为具体的业务过程，以<font color=red>商品数量，商品金额</font>作为度量值。与<font color=red>时间，地区，商品</font>维度表相关联。</li>
+<li>以订单业务作为具体的业务过程（订单详情表与订单表（提供省份ID字段）连接），与<font color=red>时间，地区，商品</font>维度表相关联。以<font color=red>商品数量，商品金额</font>作为度量值。</li>
 </ul>
 </li>
 <li>支付事实表<ul>
-<li>以支付业务为具体的业务过程，以<font color=red>支付金额</font>作为度量值，与<font color=red>时间，地区</font>维度表关联。</li>
+<li>以支付业务为具体的业务过程（支付流水表与订单表（提供省份ID字段）连接），与<font color=red>时间，地区</font>维度表关联，以<font color=red>支付金额</font>作为度量值。</li>
 </ul>
 </li>
 <li>退款事实表<ul>
-<li>以退款业务为具体的业务过程，以<font color=red>退款数量，退款金额</font>作为度量值，与<font color=red>时间，用户，商品</font>维度表关联。</li>
+<li>以退款业务为具体的业务过程（退款表），与<font color=red>时间，用户，商品</font>维度表关联，以<font color=red>退款数量，退款金额</font>作为度量值。</li>
 </ul>
 </li>
 <li>评价事实表<ul>
-<li>以评价业务为具体的业务过程，以<font color=red>数量</font>作为度量值，与<font color=red>时间，用户，商品</font>维度表关联。</li>
+<li>以评价业务为具体的业务过程（商品评论表），与<font color=red>时间，用户，商品</font>维度表关联，以<font color=red>数量</font>作为度量值</li>
 </ul>
 </li>
 <li>只会新增，不会修改</li>
@@ -613,12 +626,12 @@
 <li><p>加购事实表</p>
 <ul>
 <li>由于购物车的数量会发生变化，不适合导入增量。每天做一次快照，全量导入</li>
-<li>以加购物车为具体的业务过程，以<font color=red>数量，金额</font>作为度量值，与<font color=red>时间，用户，商品</font>维度表关联。</li>
+<li>以加购物车为具体的业务过程（商品加购物车表），与<font color=red>时间，用户，商品</font>维度表关联，以<font color=red>数量，金额</font>作为度量值，。</li>
 </ul>
 </li>
 <li><p>收藏事实表</p>
 <ul>
-<li>以收藏为具体业务过程，以<font color=red>数量</font>作为度量值，与<font color=red>时间，用户，商品</font>维度表关联。</li>
+<li>以收藏为具体业务过程（商品收藏表），与<font color=red>时间，用户，商品</font>维度表关联。以<font color=red>数量</font>作为度量值。</li>
 </ul>
 </li>
 <li><p>数据周期性变化，可能增加，也可能删除（但是并不关心变化的过程，只关心周期性的一个数据结果）。所以选择全量同步。</p>
@@ -630,12 +643,12 @@
 <li>优惠卷领用事实表<ul>
 <li>优惠卷的生命周期：领取优惠卷–&gt;使用优惠卷下端–&gt;优惠卷参与支付</li>
 <li>累积型快照事实表的使用：统计优惠卷领取次数，优惠卷下单次数，优惠卷参与支付次数。</li>
-<li>以优惠卷为具体业务过程，以<font color=red>数量</font>为度量值，与<font color=red>时间，用户，优惠卷</font>维度表关联。</li>
+<li>以优惠卷为具体业务过程，与<font color=red>时间，用户，优惠卷</font>维度表关联，以<font color=red>数量</font>为度量值。</li>
 </ul>
 </li>
 <li>订单事实表<ul>
 <li>订单生命周期：创建时间–&gt;支付时间–&gt;取消时间–&gt;完成时间–&gt;退款时间–&gt;退款完成时间</li>
-<li>以订单业务为具体的业务过程，以<font color=red>数量，金额</font>为度量值，与<font color=red>时间，用户，地区，活动</font>维度表关联。</li>
+<li>以订单业务为具体的业务过程，与<font color=red>时间，用户，地区，活动</font>维度表关联，以<font color=red>数量，金额</font>为度量值。</li>
 </ul>
 </li>
 <li>数据是会累积的，适用于随时间变化的。适用于周期性的业务。比如优惠卷领取时间，使用时间（下单），使用时间（支付）。如订单事实表中的创建时间，支付时间，取消时间，完成时间，退款时间，退款完成时间。</li>
