@@ -185,7 +185,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      5.4k 字
+      5.5k 字
     </span>
   
 
@@ -195,7 +195,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      60
+      61
        分钟
     </span>
   
@@ -229,7 +229,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2021年10月17日 下午
+                  本文最后更新于：2021年10月26日 下午
                 
               </p>
             
@@ -534,7 +534,7 @@
 <li>set mapreduce.job.queuename=hive;</li>
 </ul>
 <h2 id="数仓搭建"><a href="#数仓搭建" class="headerlink" title="数仓搭建"></a>数仓搭建</h2><h3 id="ODS层-1"><a href="#ODS层-1" class="headerlink" title="ODS层"></a>ODS层</h3><ul>
-<li>业务数据根据不同的数据同步策略，通过脚本将数据写入到ODS层。</li>
+<li>业务数据根据不同的数据同步策略，通过脚本将数据写入到ODS层。日志数据先按字符串处理，再到DWD层将数据解析出来。</li>
 </ul>
 <ul>
 <li><p>保持数据源码不做修改，起到备份数据的作用，采用LZO压缩。</p>
@@ -555,7 +555,7 @@
 <figure class="highlight delphi"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs delphi">PARTITIONED BY (dt <span class="hljs-keyword">string</span>)<br><span class="hljs-keyword">stored</span> <span class="hljs-keyword">as</span> parquet<br>location <span class="hljs-string">&#x27;/warehouse/gmall/dwd/dwd_start_log/&#x27;</span><br>TBLPROPERTIES(<span class="hljs-string">&#x27;parquet.compression&#x27;</span>=<span class="hljs-string">&#x27;lzo&#x27;</span>);<br></code></pre></td></tr></table></figure></li>
 <li><p>主要操作</p>
 <ul>
-<li>ETL(数据清洗，启动日志，事件日志的解析)</li>
+<li>对用户行为数据进行解析，对核心数据进行判空过滤</li>
 <li>维度建模（维度退化）</li>
 </ul>
 </li>
@@ -566,6 +566,8 @@
 </ul>
 </li>
 <li>事件日志解析<ul>
+<li><p>先创建事件日志基础明细表</p>
+</li>
 <li><p><a target="_blank" rel="noopener" href="https://imgtu.com/i/4oW8YR"><img src="https://z3.ax1x.com/2021/09/30/4oW8YR.png" srcset="/img/loading.gif" lazyload alt="4oW8YR.png"></a></p>
 </li>
 <li><p>自定义UDF函数，解析公共字段(一进一出)</p>
@@ -575,7 +577,7 @@
 <li><p>UDF函数的返回值是什么evaluate()方法的返回值就是什么</p>
 </li>
 <li><p>函数的输入参数是什么evaluate()方法的参数就是什么</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.zt.gmall.hive;<br><br><span class="hljs-keyword">import</span> org.apache.commons.lang.StringUtils;<br><span class="hljs-keyword">import</span> org.apache.hadoop.hive.ql.exec.UDF;<br><span class="hljs-keyword">import</span> org.json.JSONObject;<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">LogUDF</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">UDF</span> </span>&#123;<br>    <span class="hljs-comment">//UDF函数的返回值与evaluate方法的返回值类型相同</span><br>    <span class="hljs-comment">//UDF函数的参数和evaluat方法的参数相同</span><br>    <span class="hljs-comment">//line指事件日志，key指需要的数据，</span><br>    <span class="hljs-comment">// 如果是&quot;st&quot;，返回servertime;</span><br>    <span class="hljs-comment">//如果是&quot;et&quot;,返回事件数组</span><br>    <span class="hljs-comment">//如果是公共字段的值,返回各个公共字段的值</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">evaluate</span><span class="hljs-params">(String line, String key)</span> </span>&#123;<br>        <span class="hljs-keyword">if</span> (StringUtils.isBlank(line)) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;&quot;</span>;<br>        &#125;<br>        <span class="hljs-comment">//split中的参数为一个正则表达式，</span><br>        <span class="hljs-comment">// 而|在正则表示中有含义需要\转义，</span><br>        <span class="hljs-comment">// 而\在java中也有特殊含义，所以又需要转义</span><br>        String[] split = line.split(<span class="hljs-string">&quot;\\|&quot;</span>);<br>        <span class="hljs-keyword">if</span> (split.length != <span class="hljs-number">2</span>) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;&quot;</span>;<br>        &#125;<br>        String serverTime = split[<span class="hljs-number">0</span>];<br>        String jsonStr = split[<span class="hljs-number">1</span>];<br>        JSONObject jsonObject = <span class="hljs-keyword">new</span> JSONObject(jsonStr);<br>        <span class="hljs-keyword">if</span>(<span class="hljs-string">&quot;st&quot;</span>.equals(key))&#123;<br>            <span class="hljs-keyword">return</span> serverTime;<br>        &#125;<br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(<span class="hljs-string">&quot;et&quot;</span>.equals(key))&#123;<br>            <span class="hljs-keyword">if</span>(jsonObject.has(<span class="hljs-string">&quot;et&quot;</span>)) &#123;<br>                <span class="hljs-keyword">return</span> jsonObject.getString(<span class="hljs-string">&quot;et&quot;</span>);<br>            &#125;<br>        &#125;<span class="hljs-keyword">else</span> &#123;<br>            <span class="hljs-comment">//获取到cm子JSON对象</span><br>            JSONObject cm = jsonObject.getJSONObject(<span class="hljs-string">&quot;cm&quot;</span>);<br>            <span class="hljs-keyword">if</span>(cm.has(key))&#123;<br>                <span class="hljs-keyword">return</span> cm.getString(key);<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;&quot;</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.zt.gmall.hive;<br><br><span class="hljs-keyword">import</span> org.apache.commons.lang.StringUtils;<br><span class="hljs-keyword">import</span> org.apache.hadoop.hive.ql.exec.UDF;<br><span class="hljs-keyword">import</span> org.json.JSONObject;<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">LogUDF</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">UDF</span> </span>&#123;<br>    <span class="hljs-comment">//UDF函数的返回值与evaluate方法的返回值类型相同</span><br>    <span class="hljs-comment">//UDF函数的参数和evaluat方法的参数相同</span><br>    <span class="hljs-comment">//line指事件日志，key指需要的数据，</span><br>    <span class="hljs-comment">// 如果是&quot;st&quot;，返回servertime;</span><br>    <span class="hljs-comment">//如果是&quot;et&quot;,返回事件数组</span><br>    <span class="hljs-comment">//如果是公共字段的值,返回各个公共字段的值</span><br>    <span class="hljs-comment">//去除空数据</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">evaluate</span><span class="hljs-params">(String line, String key)</span> </span>&#123;<br>        <span class="hljs-keyword">if</span> (StringUtils.isBlank(line)) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;&quot;</span>;<br>        &#125;<br>        <span class="hljs-comment">//split中的参数为一个正则表达式，</span><br>        <span class="hljs-comment">// 而|在正则表示中有含义需要\转义，</span><br>        <span class="hljs-comment">// 而\在java中也有特殊含义，所以又需要转义</span><br>        String[] split = line.split(<span class="hljs-string">&quot;\\|&quot;</span>);<br>        <span class="hljs-keyword">if</span> (split.length != <span class="hljs-number">2</span>) &#123;<br>            <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;&quot;</span>;<br>        &#125;<br>        String serverTime = split[<span class="hljs-number">0</span>];<br>        String jsonStr = split[<span class="hljs-number">1</span>];<br>        JSONObject jsonObject = <span class="hljs-keyword">new</span> JSONObject(jsonStr);<br>        <span class="hljs-keyword">if</span>(<span class="hljs-string">&quot;st&quot;</span>.equals(key))&#123;<br>            <span class="hljs-keyword">return</span> serverTime;<br>        &#125;<br>        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(<span class="hljs-string">&quot;et&quot;</span>.equals(key))&#123;<br>            <span class="hljs-keyword">if</span>(jsonObject.has(<span class="hljs-string">&quot;et&quot;</span>)) &#123;<br>                <span class="hljs-keyword">return</span> jsonObject.getString(<span class="hljs-string">&quot;et&quot;</span>);<br>            &#125;<br>        &#125;<span class="hljs-keyword">else</span> &#123;<br>            <span class="hljs-comment">//获取到cm子JSON对象，公共字段解析</span><br>            JSONObject cm = jsonObject.getJSONObject(<span class="hljs-string">&quot;cm&quot;</span>);<br>            <span class="hljs-keyword">if</span>(cm.has(key))&#123;<br>                <span class="hljs-keyword">return</span> cm.getString(key);<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> <span class="hljs-string">&quot;&quot;</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
 </ul>
 </li>
 <li><p>自定义UDTF函数解析具体事件（解析json数组）</p>
@@ -588,7 +590,7 @@
 </li>
 <li><p>把jar包打包上传到HDFS上的user/hive/jars路径下，创建永久函数与开发好的Java class关联</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">create</span> <span class="hljs-keyword">function</span> base_analizer <span class="hljs-keyword">as</span> <span class="hljs-string">&#x27;com.zt.udf.BaseFieldUDF&#x27;</span> <span class="hljs-keyword">using</span> jar <span class="hljs-string">&#x27;hdfs://hadoop100:9000/user/hive/jars/hivefunction-1.0-SNAPSHOT.jar&#x27;</span>;<br><br><span class="hljs-keyword">create</span> <span class="hljs-keyword">function</span> flat_analizer <span class="hljs-keyword">as</span> <span class="hljs-string">&#x27;com.zt.udtf.EventJsonUDTF&#x27;</span> <span class="hljs-keyword">using</span> jar <span class="hljs-string">&#x27;hdfs://hadoop100:9000/user/hive/jars/hivefunction-1.0-SNAPSHOT.jar&#x27;</span>; <br></code></pre></td></tr></table></figure></li>
-<li><p>通过处理得到事件解析日志基础表，再在事件日志解析基础表的基础上，创建具体的事件日志表。</p>
+<li><p>通过处理得到事件解析日志基础表，再在事件日志解析基础表的基础上，创建具体的事件日志表。用get_json_object获取数据。</p>
 </li>
 </ul>
 </li>
@@ -641,7 +643,7 @@
 <li><p>累积型快照事实表（新增及变化同步）</p>
 <ul>
 <li>优惠卷领用事实表<ul>
-<li>优惠卷的生命周期：领取优惠卷–&gt;使用优惠卷下端–&gt;优惠卷参与支付</li>
+<li>优惠卷的生命周期：领取优惠卷–&gt;使用优惠卷下单–&gt;优惠卷参与支付</li>
 <li>累积型快照事实表的使用：统计优惠卷领取次数，优惠卷下单次数，优惠卷参与支付次数。</li>
 <li>以优惠卷为具体业务过程，与<font color=red>时间，用户，优惠卷</font>维度表关联，以<font color=red>数量</font>为度量值。</li>
 </ul>

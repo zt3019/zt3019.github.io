@@ -185,7 +185,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      1.4k 字
+      2.3k 字
     </span>
   
 
@@ -195,7 +195,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      17
+      26
        分钟
     </span>
   
@@ -229,7 +229,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2021年10月22日 下午
+                  本文最后更新于：2021年10月29日 下午
                 
               </p>
             
@@ -259,7 +259,19 @@
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs sql">1.添加字段<br><br>　　<span class="hljs-keyword">alter</span>  <span class="hljs-keyword">table</span>  &lt;基本表名&gt;  <span class="hljs-keyword">add</span>  &lt;列名&gt;  &lt;类型&gt;<br><br>　　<span class="hljs-keyword">alter</span>  <span class="hljs-keyword">table</span>  s  <span class="hljs-keyword">add</span>  age  <span class="hljs-built_in">varchar</span>(<span class="hljs-number">30</span>)<br><br><span class="hljs-number">2.</span>删除字段<br><br>　　<span class="hljs-keyword">alter</span>  <span class="hljs-keyword">table</span>  &lt;基本表名&gt;  <span class="hljs-keyword">drop</span>  &lt;列名&gt;  [<span class="hljs-keyword">cascade</span>|restrict]<br><br>　　<span class="hljs-keyword">alter</span>  <span class="hljs-keyword">table</span>  s  <span class="hljs-keyword">drop</span>  age  <span class="hljs-keyword">cascade</span><br><br><span class="hljs-number">3.</span>修改字段<br><br>　　<span class="hljs-keyword">alter</span>  <span class="hljs-keyword">table</span>  &lt;基本表名&gt;  <span class="hljs-keyword">modify</span>  &lt;列名&gt;  &lt;类型&gt;、<br><br>　　<span class="hljs-keyword">alter</span>  <span class="hljs-keyword">table</span>  s  <span class="hljs-keyword">modify</span>  age  <span class="hljs-built_in">char</span>(<span class="hljs-number">6</span>)<br><br><span class="hljs-number">4.</span>索引的创建<br><br>　　<span class="hljs-number">4</span><span class="hljs-number">-1</span>&gt;唯一索引（<span class="hljs-keyword">asc</span>或<span class="hljs-keyword">desc</span>指定升序或降序的索引值存储）<br><br>　　　　<span class="hljs-keyword">create</span>  [<span class="hljs-keyword">unique</span>]  <span class="hljs-keyword">index</span>  &lt;索引名&gt;  <span class="hljs-keyword">on</span>  &lt;基本表名&gt;  (&lt;列名序列&gt;)                //<span class="hljs-keyword">unique</span>  唯一的<br><br>　　　　carate  <span class="hljs-keyword">unique</span>  <span class="hljs-keyword">index</span>  s_index  <span class="hljs-keyword">on</span>  s  (<span class="hljs-keyword">sid</span>  <span class="hljs-keyword">asc</span>,cid  <span class="hljs-keyword">desc</span>);<br><br>　　4-2&gt;  普通索引<br><br>　　　　<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">INDEX</span> &lt;索引的名字&gt; <span class="hljs-keyword">ON</span> tablename (列的列表)；　<br><br> <br><br><span class="hljs-number">5.</span>索引的撤消<br><br>　　<span class="hljs-keyword">drop</span>  <span class="hljs-keyword">index</span>  &lt;索引名&gt;<br><br>　　<span class="hljs-keyword">drop</span>  <span class="hljs-keyword">index</span>  s_index,sc_index           <br>　　<br><span class="hljs-keyword">with</span> 语句<br><span class="hljs-number">1.</span>使用<span class="hljs-keyword">with</span>子句可以让子查询重用相同的<span class="hljs-keyword">with</span>查询块,通过<span class="hljs-keyword">select</span>调用（<span class="hljs-keyword">with</span>子句只能被<span class="hljs-keyword">select</span>查询块引用），一般在<span class="hljs-keyword">with</span>查询用到多次情况下。在引用的<span class="hljs-keyword">select</span>语句之前定义,同级只能定义<span class="hljs-keyword">with</span>关键字只能使用一次,多个用逗号分割。<br><span class="hljs-number">2.</span> <span class="hljs-keyword">with</span>子句的返回结果存到用户的临时表空间中，只做一次查询，反复使用,提高效率<br>例子<br><span class="hljs-keyword">with</span> test_with <span class="hljs-keyword">as</span>(<span class="hljs-keyword">select</span> * <span class="hljs-keyword">from</span> A) <span class="hljs-keyword">select</span> * <span class="hljs-keyword">from</span> B <span class="hljs-keyword">where</span> B.id <span class="hljs-keyword">in</span>(<span class="hljs-keyword">select</span> <span class="hljs-keyword">id</span> <span class="hljs-keyword">from</span> test_with)<br></code></pre></td></tr></table></figure></li>
 <li><p>off-heap堆外内存，on-heap堆内存</p>
 </li>
-<li></li>
+<li><p>抽象类和接口的区别：</p>
+<ul>
+<li>抽象类要被子类继承，接口要被实现</li>
+<li>接口只能做方法声明，抽象类中可以做方法声明，也可以做方法实现</li>
+<li>接口里定义的变量只能是公共的静态的常量，抽象类中的变量是普通变量</li>
+</ul>
+</li>
+<li><p>hdfs 删除文件为什么没有立马释放磁盘空间</p>
+<ul>
+<li>有个文件系统垃圾间隔机制，默认设置一天，也就是说删除的文件需要一天才能被删除。可以通过下面参数设置：fs.trash.interval</li>
+<li>文件也可以自己手动删掉，找到垃圾文件存储的位置，直接删除就能马上释放磁盘空间了。</li>
+</ul>
+</li>
 </ul>
 <h2 id="面试复盘"><a href="#面试复盘" class="headerlink" title="面试复盘"></a>面试复盘</h2><h3 id="迅雷（数据开发工程师）"><a href="#迅雷（数据开发工程师）" class="headerlink" title="迅雷（数据开发工程师）"></a>迅雷（数据开发工程师）</h3><ul>
 <li><p>一面（60min）</p>
@@ -267,6 +279,9 @@
 <li><p>自我介绍</p>
 </li>
 <li><p>说项目，问项目（问细节，问架构）</p>
+<ul>
+<li>DWS,DWT层都是建宽表，宽表都是按照主题去建，主题相当于观察问题的角度，对应着维度表</li>
+</ul>
 </li>
 <li><p>MapReduce 流程</p>
 </li>
@@ -290,27 +305,100 @@
 </li>
 </ul>
 <h3 id="袋鼠云（大数据开发）"><a href="#袋鼠云（大数据开发）" class="headerlink" title="袋鼠云（大数据开发）"></a>袋鼠云（大数据开发）</h3><ul>
-<li><p>一面25min</p>
-</li>
-<li><p>自我介绍</p>
-</li>
-<li><p>项目介绍（具体的技术点）</p>
-</li>
-<li><p>写的shell脚本</p>
-</li>
-<li><p>数据仓库某张表的每一层的操作具体流程</p>
-</li>
-<li><p>数据更新的HQL怎么写，具体实现</p>
-</li>
-<li><p>数据错误怎么重新导入。</p>
-<ul>
+<li>一面25min   10.19</li>
+<li>自我介绍</li>
+<li>项目介绍（具体的技术点）</li>
+<li>写的shell脚本</li>
+<li>数据仓库某张表的每一层的操作具体流程</li>
+<li>数据更新的HQL怎么写，具体实现</li>
+<li>数据错误怎么重新导入。<ul>
 <li>外部表数据不指定的话存储在/user/hive/warehouse</li>
 </ul>
 </li>
-<li><p>说一说拉链表</p>
+<li>说一说拉链表</li>
+<li>印象最深的课程，未来的规划</li>
+</ul>
+<ul>
+<li>二面（20min）   10.29</li>
+<li>自我介绍</li>
+<li>学习路线</li>
+<li>flume的一个配置</li>
+<li>namenode压力太大怎么处理<ul>
+<li>不知道怎么说，就说了增大内存</li>
+<li>难道是加堆内存，2nn只负责以镜像文件的一个维护呀，不知道考察的点在哪里 </li>
+</ul>
 </li>
-<li><p>印象最深的课程，未来的规划</p>
+<li>学校里做的项目</li>
+<li>和同学发生矛盾怎么处理</li>
+<li>凉凉，都没怎么问技术问题。寄！！！！！</li>
+</ul>
+<h3 id="深演智能"><a href="#深演智能" class="headerlink" title="深演智能"></a>深演智能</h3><ul>
+<li><p>一面（30min）10.28 10：15</p>
 </li>
+<li><p>自我介绍</p>
+</li>
+<li><p>比赛介绍（蓝桥杯）</p>
+</li>
+<li><p>介绍毕业设计的设计思路</p>
+</li>
+<li><p>flume Taildirsource</p>
+</li>
+<li><p>hive 窗口函数 三个排序</p>
+</li>
+<li><p>MR过程 重点说shuffle过程</p>
+</li>
+<li><p>Kafka exactly once语义</p>
+<ul>
+<li><p>At Least once+幂等性</p>
+</li>
+<li><p>Transaction Coordinator，用于管理Produce发送的消息的事务性。</p>
+</li>
+<li><p>该<code>Transaction Coordinator</code>维护<code>Transaction Log</code>，该log存于一个内部的Topic内。由于Topic数据具有持久性，因此事务的状态也具有持久性。</p>
+</li>
+</ul>
+</li>
+<li><p>spark shuffle过程</p>
+</li>
+<li><p>反问</p>
+</li>
+</ul>
+<ul>
+<li>二面(25min)   10.28  16：30 </li>
+<li>自我介绍</li>
+<li>计算机基础<ul>
+<li>网络的五层模型，都干了什么</li>
+<li>网关，路由器，网桥<ul>
+<li>路由器：连接不同IP子网的设备，负责寻径和转发，工作在OSI的网络层。</li>
+<li>网桥：工作在数据链路层，网桥也叫桥接器，是连接两个局域网的一种存储/转发设备，它能将一个大的LAN分割成多个网段，或将两个以上的LAN互联为一个逻辑LAN，使LAN上所有用户都可以访问路由器。</li>
+<li>网关：工作在应用层，不同子网间的翻译器，对收到的信息进行重新打包。</li>
+</ul>
+</li>
+<li>进程线程，线程切换，进程间的通信<ul>
+<li>进程间的通信：文件和记录锁定，管道，信号量，共享内存，套接字</li>
+</ul>
+</li>
+<li>Java 锁</li>
+</ul>
+</li>
+<li>JVM<ul>
+<li>双亲委派机制 </li>
+<li>自定义类加载器</li>
+</ul>
+</li>
+<li>Scala  伴生对象<ul>
+<li>object Test ,从语法的角度来讲，上面的语法表示声明了一个伴生对象，但是还是会生成一个伴生类。Scala是纯面向对象的，去除了Java中的static关键字，通过伴生对象模拟static效果。伴生对象是伴随类产生的一个对象。</li>
+<li>对Scala源文件进行编译后，默认产生两个字节码文件，一个是伴生类另一个是伴生对象所属类。真正的伴生对象是伴生对象所属类中创建的单例对象。</li>
+</ul>
+</li>
+<li>HadoopHA</li>
+<li>yarn调度机制</li>
+<li>建模理论<ul>
+<li>维度建模，星型模型，雪花模型区别，优劣。</li>
+<li>范式建模</li>
+</ul>
+</li>
+<li>拉链表</li>
+<li>反问</li>
 </ul>
 
             </div>
