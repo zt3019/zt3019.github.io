@@ -185,7 +185,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      2.3k 字
+      2.5k 字
     </span>
   
 
@@ -195,7 +195,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      26
+      29
        分钟
     </span>
   
@@ -229,7 +229,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2021年10月29日 下午
+                  本文最后更新于：2021年11月2日 晚上
                 
               </p>
             
@@ -324,8 +324,19 @@
 <li>学习路线</li>
 <li>flume的一个配置</li>
 <li>namenode压力太大怎么处理<ul>
-<li>不知道怎么说，就说了增大内存</li>
-<li>难道是加堆内存，2nn只负责以镜像文件的一个维护呀，不知道考察的点在哪里 </li>
+<li><p>不知道怎么说，就说了增大内存</p>
+</li>
+<li><p>联邦机制 Federation (元数据切片)    多NN，分别管理不同的元数据</p>
+<ul>
+<li><p>为了水平扩展名称服务，Federation使用多组独立的Namenodes/Namespaces。所有的Namenodes是联邦的，也就是说，他们之间相互独立且不需要互相协调，各自分工，管理自己的区域。Datanode被用作通用的数据块存储设备，每个DataNode要向集群中所有的Namenode注册，且周期性的向所有Namenode发送心跳和块报告，并执行来自所有Namenode的命令。</p>
+</li>
+<li><p>1、由于单组Namenode在大规模集群中存在较大的局限性，Hadoop开源社区提供了Federation的方案，由多组Namenode在一个集群中共同提供服务，每个Namenode拥有一部分Namespace，工作互相独立，互不影响。</p>
+<p>2、在Federation中，Datanode被用作通用的数据块存储设备，每个DataNode要向集群中所有的Namenode注册，且周期性的向所有Namenode发送心跳和块报告，并执行来自所有Namenode的命令。</p>
+</li>
+<li><p>Namespace（命名空间）：由目录、文件和块组成，它支持所有命名空间相关的文件操作，如创建、删除、修改，查看所有文件和目录。</p>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 <li>学校里做的项目</li>

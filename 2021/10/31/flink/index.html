@@ -185,7 +185,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      3 字
+      3.4k 字
     </span>
   
 
@@ -195,7 +195,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      1
+      42
        分钟
     </span>
   
@@ -229,15 +229,213 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2021年10月31日 中午
+                  本文最后更新于：2021年11月4日 上午
                 
               </p>
             
             <div class="markdown-body">
               <h1 id="Flink"><a href="#Flink" class="headerlink" title="Flink"></a>Flink</h1><h2 id="Flink简介"><a href="#Flink简介" class="headerlink" title="Flink简介"></a>Flink简介</h2><ul>
-<li></li>
+<li><p>Apache Flink是为分布式，高性能，随时可用以及准确的流处理应用程序打造的开源流处理框架。</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IEp9K0"><img src="https://z3.ax1x.com/2021/11/03/IEp9K0.png" srcset="/img/loading.gif" lazyload alt="IEp9K0.png"></a></p>
+</li>
 </ul>
-
+<h3 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h3><ul>
+<li><p>Flink的重要特点：</p>
+<ul>
+<li>事件型驱动（Event-driven）事件驱动型应用是一类具有状态的应用，它从一个或多个事件流提取数据，并根据到来的事件触发计算，状态更新或其他外部动作。比较典型的就是以Kafka为代表的消息队列几乎都是事件驱动型应用。</li>
+</ul>
+</li>
+<li><p>与Spark对比：</p>
+<ul>
+<li>在spark的世界观中，一切都是由批次组成的，离线数据是一个大批次，而实时数据是由一个个无限的小批次组成的，最本质上来说还是批处理的。</li>
+<li>在Flink的世界观中，一切都是由流组成的，离线数据是有界限的流，实时数据是一个没有界限的流，这就是所谓的有界流和无界流。</li>
+</ul>
+</li>
+<li><p>分层API</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IEiil9"><img src="https://z3.ax1x.com/2021/11/03/IEiil9.png" srcset="/img/loading.gif" lazyload alt="IEiil9.png"></a></p>
+<ul>
+<li>最底层的抽象仅仅提供了有状态流，它将通过过程函数（Process Function）被嵌入到DataStream API中，底层过程函数（Process Function）与DataStream API相集成，使其可以对某些特定的操作进行底层的抽象，它允许用户可以自由地处理来自一个或多个数据流的事件，并使用一致的容错的状态。</li>
+<li>目前Flink作为批处理还不是主流，不如Spark成熟，所以DataSet使用的并不是很多。Flink Table API和Flink SQL也并不完善，大多都由各大厂商自己定制。所以我们主要学习DataStream API的使用。实际上Flink作为最接近Google DataFlow模型的实现，是流批统一的观点，所以基本上使用DataStream就可以了。</li>
+</ul>
+</li>
+</ul>
+<h2 id="快速上手"><a href="#快速上手" class="headerlink" title="快速上手"></a>快速上手</h2><ul>
+<li><p>搭建maven工程，添加Scala框架</p>
+<ul>
+<li><p>参考pom文件</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">project</span> <span class="hljs-attr">xmlns</span>=<span class="hljs-string">&quot;http://maven.apache.org/POM/4.0.0&quot;</span></span><br><span class="hljs-tag">         <span class="hljs-attr">xmlns:xsi</span>=<span class="hljs-string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span><br><span class="hljs-tag">         <span class="hljs-attr">xsi:schemaLocation</span>=<span class="hljs-string">&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">modelVersion</span>&gt;</span>4.0.0<span class="hljs-tag">&lt;/<span class="hljs-name">modelVersion</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.zt.flink<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>Flink<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>1.0<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br><br>    <span class="hljs-tag">&lt;<span class="hljs-name">dependencies</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.apache.flink<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>flink-scala_2.11<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>1.10.0<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br>        <span class="hljs-comment">&lt;!-- https://mvnrepository.com/artifact/org.apache.flink/flink-streaming-scala --&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.apache.flink<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>flink-streaming-scala_2.11<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>1.10.0<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">dependencies</span>&gt;</span><br><br><span class="hljs-tag">&lt;<span class="hljs-name">build</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">plugins</span>&gt;</span><br>    <span class="hljs-comment">&lt;!-- 该插件用于将Scala代码编译成class文件 --&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">plugin</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>net.alchim31.maven<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>scala-maven-plugin<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>3.4.6<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">executions</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">execution</span>&gt;</span><br>                <span class="hljs-comment">&lt;!-- 声明绑定到maven的compile阶段 --&gt;</span><br>                <span class="hljs-tag">&lt;<span class="hljs-name">goals</span>&gt;</span><br>                    <span class="hljs-tag">&lt;<span class="hljs-name">goal</span>&gt;</span>compile<span class="hljs-tag">&lt;/<span class="hljs-name">goal</span>&gt;</span><br>                <span class="hljs-tag">&lt;/<span class="hljs-name">goals</span>&gt;</span><br>            <span class="hljs-tag">&lt;/<span class="hljs-name">execution</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">executions</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">plugin</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">plugin</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.apache.maven.plugins<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>maven-assembly-plugin<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>3.0.0<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">configuration</span>&gt;</span><br>                <span class="hljs-tag">&lt;<span class="hljs-name">descriptorRefs</span>&gt;</span><br>                    <span class="hljs-tag">&lt;<span class="hljs-name">descriptorRef</span>&gt;</span>jar-with-dependencies<span class="hljs-tag">&lt;/<span class="hljs-name">descriptorRef</span>&gt;</span><br>                <span class="hljs-tag">&lt;/<span class="hljs-name">descriptorRefs</span>&gt;</span><br>            <span class="hljs-tag">&lt;/<span class="hljs-name">configuration</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">executions</span>&gt;</span><br>                <span class="hljs-tag">&lt;<span class="hljs-name">execution</span>&gt;</span><br>                    <span class="hljs-tag">&lt;<span class="hljs-name">id</span>&gt;</span>make-assembly<span class="hljs-tag">&lt;/<span class="hljs-name">id</span>&gt;</span><br>                    <span class="hljs-tag">&lt;<span class="hljs-name">phase</span>&gt;</span>package<span class="hljs-tag">&lt;/<span class="hljs-name">phase</span>&gt;</span><br>                    <span class="hljs-tag">&lt;<span class="hljs-name">goals</span>&gt;</span><br>                        <span class="hljs-tag">&lt;<span class="hljs-name">goal</span>&gt;</span>single<span class="hljs-tag">&lt;/<span class="hljs-name">goal</span>&gt;</span><br>                    <span class="hljs-tag">&lt;/<span class="hljs-name">goals</span>&gt;</span><br>                <span class="hljs-tag">&lt;/<span class="hljs-name">execution</span>&gt;</span><br>            <span class="hljs-tag">&lt;/<span class="hljs-name">executions</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">plugin</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">plugins</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">build</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">project</span>&gt;</span><br><br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>批处理wordcount。记得导包：import org.apache.flink.api.scala._  否则会报错no implicits found for parameter evidence</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs scala"><br><span class="hljs-keyword">import</span> org.apache.flink.api.scala._<br><span class="hljs-class"><span class="hljs-keyword">object</span> <span class="hljs-title">PiChuLiWordCount</span> </span>&#123;<br>  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">main</span></span>(args: <span class="hljs-type">Array</span>[<span class="hljs-type">String</span>]): <span class="hljs-type">Unit</span> = &#123;<br>    <span class="hljs-comment">// 创建执行环境</span><br>    <span class="hljs-keyword">val</span> env = <span class="hljs-type">ExecutionEnvironment</span>.getExecutionEnvironment<br>    <span class="hljs-comment">// 从文件中读取数据</span><br>    <span class="hljs-keyword">val</span> inputPath = <span class="hljs-string">&quot;E:\\idea\\flink\\src\\main\\Scala\\word.txt&quot;</span><br>    <span class="hljs-keyword">val</span> inputDS: <span class="hljs-type">DataSet</span>[<span class="hljs-type">String</span>] = env.readTextFile(inputPath)<br>    <span class="hljs-comment">// 分词之后，对单词进行groupby分组，然后用sum进行聚合</span><br>    <span class="hljs-keyword">val</span> wordCountDS: <span class="hljs-type">AggregateDataSet</span>[(<span class="hljs-type">String</span>, <span class="hljs-type">Int</span>)] =<br>      inputDS.flatMap(_.split(<span class="hljs-string">&quot; &quot;</span>))<br>          .map((_,<span class="hljs-number">1</span>))<br>          .groupBy(<span class="hljs-number">0</span>)<br>          .sum(<span class="hljs-number">1</span>)<br><br>    <span class="hljs-comment">// 打印输出</span><br>    wordCountDS.print()<br><br>  &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure></li>
+<li><p>流处理的wordcount</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs scala"><span class="hljs-keyword">import</span> org.apache.flink.streaming.api.scala._<br><br><span class="hljs-class"><span class="hljs-keyword">object</span> <span class="hljs-title">StreamWordCount</span> </span>&#123;<br>  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">main</span></span>(args: <span class="hljs-type">Array</span>[<span class="hljs-type">String</span>]): <span class="hljs-type">Unit</span> = &#123;<br>    <span class="hljs-comment">//创建流处理环境</span><br>    <span class="hljs-keyword">val</span> env: <span class="hljs-type">StreamExecutionEnvironment</span> = <span class="hljs-type">StreamExecutionEnvironment</span>.getExecutionEnvironment<br>    <span class="hljs-comment">//接收socket 文本流</span><br>    <span class="hljs-keyword">val</span> textDstream: <span class="hljs-type">DataStream</span>[<span class="hljs-type">String</span>] = env.socketTextStream(<span class="hljs-string">&quot;hadoop100&quot;</span>, <span class="hljs-number">7777</span>)<br><br>    <span class="hljs-keyword">import</span> org.apache.flink.api.scala._<br>    <span class="hljs-keyword">val</span> dataStream: <span class="hljs-type">DataStream</span>[(<span class="hljs-type">String</span>, <span class="hljs-type">Int</span>)] = textDstream.flatMap(_.split(<span class="hljs-string">&quot;\\s&quot;</span>))<br>      .filter(_.nonEmpty)<br>      .map((_, <span class="hljs-number">1</span>))<br>      .keyBy(<span class="hljs-number">0</span>)<br>      .sum(<span class="hljs-number">1</span>)<br>    dataStream.print().setParallelism(<span class="hljs-number">1</span>);<br><br>    <span class="hljs-comment">//启动excutor ,执行任务</span><br>    env.execute(<span class="hljs-string">&quot;Socket stream word count&quot;</span>)<br><br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="Flink部署"><a href="#Flink部署" class="headerlink" title="Flink部署"></a>Flink部署</h3><ul>
+<li>standalone模式<ul>
+<li>解压缩,修改flink/conf/flink-conf.yaml文件，jobmanager.rpc.address:hadoop100</li>
+<li>修改flink/conf/slaves文件  加上从机器的机器名hadoop101,hadoop102</li>
+<li>分发flink文件</li>
+</ul>
+</li>
+<li>Yarn模式<ul>
+<li>Session-Cluster<ul>
+<li><a target="_blank" rel="noopener" href="https://imgtu.com/i/IEGJHK"><img src="https://z3.ax1x.com/2021/11/03/IEGJHK.png" srcset="/img/loading.gif" lazyload alt="IEGJHK.png"></a></li>
+</ul>
+</li>
+<li>Per-Job-Cluster<ul>
+<li><a target="_blank" rel="noopener" href="https://imgtu.com/i/IEJSDx"><img src="https://z3.ax1x.com/2021/11/03/IEJSDx.png" srcset="/img/loading.gif" lazyload alt="IEJSDx.png"></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Kubernetes部署<ul>
+<li>容器化部署是是目前业界很流行的一项技术，基于Docker镜像运行能够让用户更加方便地对应用进行管理和运维。现在最流行地就是K8s了，flink也支持k8s部署模式</li>
+</ul>
+</li>
+</ul>
+<h2 id="运行架构"><a href="#运行架构" class="headerlink" title="运行架构"></a>运行架构</h2><h3 id="运行时的组件"><a href="#运行时的组件" class="headerlink" title="运行时的组件"></a>运行时的组件</h3><ul>
+<li>Flink运行时架构主要包括四个不同的组件，它们会在运行流处理应用程序时协同工作:作业管理器（JobManager），资源管理器（ResourceManager）,任务管理器（TaskManager）,以及分发器（Dispatcher）。Flink是由Java和Scala实现的，因此所有的组件都会运行在Java虚拟机中。</li>
+<li>作业管理器（JobManager）<ul>
+<li>控制一个应用程序执行的主进程，也就是说，每个应用程序都会被一个不同的JobManager 所控制执行。JobManager会先接收到要执行的应用程序，这个应用程序包括：作业图（JobGraph）,逻辑数据流图（logical dataflow graph）和打包了所有的类，库和其他资源的JAR包。JobManager会把作业图转换成一个物理层面的数据流图，这个图被叫做”执行图“（ExecutionGraph），包含了所有可以并发执行的任务。作业管理器会向资源管理器请求执行任务必要的资源，也就是任务管理器（TaskManager）上的插槽（slot）。一旦作业管理器获取到了足够的资源，就会将执行图分发到真正运行他们的任务管理器（TaskManager）上。而在运行过程中，JobManager会负责所有需要中央协调的操作，比如检查点（checkpoint）的协调。</li>
+</ul>
+</li>
+<li>资源管理器(ResourceManager)<ul>
+<li>主要负责管理任务管理器（TaskManager）的插槽（slot），TaskManager插槽是Flink中定义的处理资源单位。Flink为不同的环境和资源管理工具提供了不同的资源管理器，比如Yarn，K8s,standalone。当JobManager申请插槽资源时，ResourceManager会将有空闲插槽的TaskManager分配给JobManager 。如果ResourceManager没有足够的插槽来满足JobManager的请求，它还可以向资源提供平台发起会话，以提供启动TaskManager进程的容器，另外，ResourceManager还负责终止空闲的TaskManager,释放计算资源。</li>
+</ul>
+</li>
+<li>任务管理器（TaskManager）<ul>
+<li>通常一个Flink中会有多个TaskManager运行，每一个TaskManager都包含了一定数量的插槽（slots）。插槽的数量限制了TaskManager能执行的任务数量。任务管理器启动之后回向资源管理器注册它的插槽；收到资源管理器的指令后，TaskManager就会将一个或者多个插槽提供给任务管理器（JobManager）调用。任务管理器就可以向插槽分配任务（tasks）来执行。在执行过程中，一个任务管理器可以跟其它运行同一应用程序的TaskManager交换数据。</li>
+</ul>
+</li>
+<li>分发器（Dispatcher）<ul>
+<li>可以跨作业运行，它为应用提交提供了REST接口。当一个应用被提交执行时，分发器就会启动并将应用移交给一个JobManager。由于是REST接口，所以Dispatcher可以作为集群的一个HTTP接入点，这样就能够不受防火墙阻挡。Dispatcher也会启动一个Web UI，用来方便的展示和监控作业执行的信息。Dispatcher 在架构中可能并不是必须的，这取决于应用提交运行的方式。</li>
+<li>REST接口：REST 用来规范应用如何在 HTTP 层与 API 提供方进行数据交互 。REST 描述了 HTTP 层里客户端和服务器端的数据交互规则；客户端通过向服务器端发送 HTTP（s）请求，接收服务器的响应，完成一次 HTTP 交互。这个交互过程中，REST 架构约定两个重要方面就是 HTTP 请求所采用的方法，以及请求的链接。</li>
+</ul>
+</li>
+</ul>
+<h3 id="任务提交流程"><a href="#任务提交流程" class="headerlink" title="任务提交流程"></a>任务提交流程</h3><ul>
+<li>Yarn环境下任务的提交流程<ul>
+<li><a target="_blank" rel="noopener" href="https://imgtu.com/i/IEOkxf"><img src="https://z3.ax1x.com/2021/11/03/IEOkxf.png" srcset="/img/loading.gif" lazyload alt="IEOkxf.png"></a></li>
+<li>Client向HDFS上传Flink的Jar包和配置</li>
+<li>Client向ResourceManager提交任务</li>
+<li>ResourceManager分配Container资源并通知对应的NodeManager启动ApplicationMaster</li>
+<li>ApplicationMaster启动后下载Client提交的资源和配置构建环境，启动JobManager</li>
+<li>ApplicationMaster向ResourceManager申请Container资源启动TaskManager。（NodeManager加载flink的jar包和配置构建环境并启动TaskManager）</li>
+<li>TaskManager启动后向JobManager发送心跳包，并等待JobManager向其分配任务</li>
+</ul>
+</li>
+</ul>
+<h3 id="任务调度原理"><a href="#任务调度原理" class="headerlink" title="任务调度原理"></a>任务调度原理</h3><ul>
+<li><p>客户端（Client）不是运行时和程序执行的一部分，但它用于准备并发送dataflow(JobGraph)给Master（JobManager），然后，客户端断开连接或者维持连接以等待接收计算结果。</p>
+</li>
+<li><p>Client,JobManager,TaskManager三者均为独立的JVM进程。</p>
+</li>
+<li><p>TaskManager与Slots</p>
+<ul>
+<li>TaskManager是一个<strong>JVM进程</strong>，它可能会在<strong>独立的线程</strong>上执行一个或多个subtask。为了控制一个TaskManager能接收多少个task，Task Manager通过task slot来进行控制。（一个Task Manager至少有一个task slot）</li>
+<li>每一个task slot表示TaskManager拥有资源的<strong>一个固定大小的子集</strong>。假如一个TaskManager有三个slot，那么他会将其管理的内存分成三份给各个slot。</li>
+<li>一个TaskManager多个slot意味着更多的subtask可以共享一个JVM。</li>
+<li><strong>Task Slot是静态的概念，是指TaskManager具有的并发执行的能力</strong>，可以通过参数配置，而<strong>并行度parallelism是动态概念</strong>，即TaskManager运行程序时实际使用的并发能力。可以通过参数配置</li>
+</ul>
+</li>
+<li><p>程序与数据流</p>
+<ul>
+<li><p>所有flink都是由三部分组成的</p>
+</li>
+<li><p>Source</p>
+<ul>
+<li>负责读取数据源</li>
+</ul>
+</li>
+<li><p>Transformation</p>
+<ul>
+<li>利用各种算子进行处理加工</li>
+</ul>
+</li>
+<li><p>Sink</p>
+<ul>
+<li>负责进行输出</li>
+</ul>
+</li>
+<li><p>在运行时，Flink 上运行的程序会被映射成”逻辑数据流“（dataflows），它包含了这三部分，<strong>每一个dataflow以一个或多个source开始以一个或多个sinks结束</strong>dataflow类似于任意的有向无环图（DAG）</p>
+</li>
+</ul>
+</li>
+<li><p>执行图</p>
+<ul>
+<li>由Flink程序直接映射成的数据流图是StreamGraph，也被称为逻辑流图，因为它们表示的是计算逻辑的高级视图。为了执行一个流处理程序，Flink需要将逻辑流图转换为物理数据流图（也叫执行图），详细说明程序的执行方式。</li>
+<li><strong>StreamGraph</strong>：是根据用户通过 Stream API 编写的代码生成的最初的图。用来表示程序的拓扑结构。</li>
+<li><strong>JobGraph</strong>：StreamGraph经过优化后生成了 JobGraph，提交给 JobManager 的数据结构。主要的优化为，将多个符合条件的节点 chain 在一起作为一个节点，这样可以减少数据在节点之间流动所需要的序列化/反序列化/传输消耗。</li>
+<li><strong>ExecutionGraph</strong>：JobManager 根据 JobGraph 生成ExecutionGraph。ExecutionGraph是JobGraph的并行化版本，是调度层最核心的数据结构。</li>
+<li><strong>物理执行图</strong>：JobManager 根据 ExecutionGraph 对 Job 进行调度后，在各个TaskManager 上部署 Task 后形成的“图”，并不是一个具体的数据结构。</li>
+</ul>
+</li>
+<li><p>并行度</p>
+<ul>
+<li><p>在flink程序执行过程中，一个流（stream）包含一个或多个分区（stream partition），而每个算子（operator）可以包含一个或多个子任务（operator subtask）</p>
+</li>
+<li><p>一个特定算子的子任务（subtask）的个数称作它的并行度</p>
+</li>
+<li><p>stream算子之间传输数据的形式可以是one-to-one(forwarding)的模式也可以是redistributing的模式</p>
+</li>
+<li><p><strong>One-to-one</strong>：stream(比如在source和map operator之间)维护着分区以及元素的顺序。那意味着map 算子的子任务看到的元素的个数以及顺序跟source 算子的子任务生产的元素的个数、顺序相同，map、fliter、flatMap等算子都是one-to-one的对应关系。类似于spark中的窄依赖</p>
+</li>
+<li><p><strong>Redistributing</strong>：stream(map()跟keyBy/window之间或者keyBy/window跟sink之间)的分区会发生改变。每一个算子的子任务依据所选择的transformation发送数据到不同的目标任务。例如，keyBy() 基于hashCode重分区、broadcast和rebalance会随机重新分区，这些算子都会引起redistribute过程，而redistribute过程就类似于Spark中的shuffle过程。类似于spark中的宽依赖。</p>
+</li>
+</ul>
+</li>
+<li><p>任务链</p>
+<ul>
+<li>相同并行度的one to one操作，Flink这样相连的算子链接在一起形成一个task，原来的算子成为里面的一部分。将算子链接成task是非常有效的优化，它能减少线程之间的切换和基于缓存区的数据交换，在减少时延的同时提升吞吐量。</li>
+</ul>
+</li>
+</ul>
+<h2 id="Flink-流处理API"><a href="#Flink-流处理API" class="headerlink" title="Flink 流处理API"></a>Flink 流处理API</h2><h3 id="Environment"><a href="#Environment" class="headerlink" title="Environment"></a>Environment</h3><ul>
+<li>ExcutionEnvironment.getExcutionEnvironment</li>
+<li>val env = StreamExecutionEnvironment.createLocalEnvironment(1)</li>
+<li>val env = ExecutionEnvironment.createRemoteEnvironment(“jobmanage-hostname”, 6123,”YOURPATH//wordcount.jar”)</li>
+</ul>
+<h3 id="Source"><a href="#Source" class="headerlink" title="Source"></a>Source</h3><ul>
+<li>从集合读取数据</li>
+<li>从文件读取数据</li>
+<li>以Kafka消息队列的数据作为来源</li>
+<li>自定义Source</li>
+</ul>
+<h3 id="Transform"><a href="#Transform" class="headerlink" title="Transform"></a>Transform</h3><ul>
+<li>map</li>
+<li>flatMap</li>
+<li>Filter</li>
+<li>KeyBy</li>
+<li>滚动聚合算子</li>
+<li>Reduce</li>
+<li>Split和Select</li>
+<li>Connect和CoMap</li>
+<li>Union</li>
+</ul>
+<h3 id="支持的数据类型"><a href="#支持的数据类型" class="headerlink" title="支持的数据类型"></a>支持的数据类型</h3><ul>
+<li>基础数据类型</li>
+<li>Java和Scala元组</li>
+<li>Scala样例类</li>
+<li>Java简单对象</li>
+<li>Flink对Java和Scala中的一些特殊目的的类型也都是支持的，比如Java的ArrayList，HashMap，Enum等等。</li>
+</ul>
+<h3 id="实现UDF函数"><a href="#实现UDF函数" class="headerlink" title="实现UDF函数"></a>实现UDF函数</h3><ul>
+<li>函数类（Function Classes）</li>
+<li>匿名函数（Lambda Functions）</li>
+<li>富函数（Rich Functions）<ul>
+<li>富函数是DataStream API提供的一个函数类接口，所有Flink函数类都有其Rich版本</li>
+<li>富函数与常规函数的不同在于，可以获取运行环境的上下文，并拥有一些生命周期方法，所以可以实现更复杂的功能。</li>
+</ul>
+</li>
+</ul>
+<h3 id="Sink"><a href="#Sink" class="headerlink" title="Sink"></a>Sink</h3><ul>
+<li>Kafka</li>
+<li>Redis</li>
+<li>Elasticsearch</li>
+<li>JDBC自定义sink</li>
+</ul>
+<h2 id="Flink中的Window"><a href="#Flink中的Window" class="headerlink" title="Flink中的Window"></a>Flink中的Window</h2>
             </div>
             <hr>
             <div>
