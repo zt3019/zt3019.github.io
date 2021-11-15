@@ -185,7 +185,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      8.6k 字
+      9k 字
     </span>
   
 
@@ -195,7 +195,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      95
+      100
        分钟
     </span>
   
@@ -229,7 +229,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2021年11月1日 晚上
+                  本文最后更新于：2021年11月9日 下午
                 
               </p>
             
@@ -359,7 +359,7 @@
 <li>优化：<ul>
 <li>自定义分区（减少数据倾斜）</li>
 <li>可以设置环形缓冲区到90%，95%之后再进行溢写，减少溢写文件，提升速度</li>
-<li>再不影响业务逻辑的（如求和），可以进行Combiner操作。对MapTask的输出进行一个局部汇总</li>
+<li>再不影响业务逻辑的情况下（如求和），可以进行Combiner操作。对MapTask的输出进行一个局部汇总</li>
 <li>在MapTask中，默认一次归并10个文件，可以设置更多提高性能</li>
 <li>MapTask输出可以进行压缩（snappy ,lzo），减少数据传输量,提升速度</li>
 <li>ReduceTask一次默认拉取5个MapTask同一分区的数据，可以根据集群性能调整</li>
@@ -603,6 +603,7 @@
 <li>当follower故障时会被临时踢出ISR，待待该follower恢复后，follower会读取本地磁盘记录的上次的HW，并将log文件高于HW的部分截取掉，从HW开始向leader进行同步。等该<em><strong>follower的LEO大于等于该Partition的HW</strong></em>，即follower追上leader之后，就可以重新加入ISR了。</li>
 <li>leader发生故障之后，会从ISR中选出一个新的leader，之后，为保证多个副本之间的数据一致性，其余的follower会先将各自的log文件高于HW的部分截掉，然后从新的leader同步数据。</li>
 <li>这只能保证副本之间的数据一致性，并不能保证数据不丢失或者不重复</li>
+<li>At Least Once可以保证数据不丢失，但是不能保证数据不重复</li>
 </ul>
 </li>
 </ul>
@@ -642,6 +643,17 @@
 </li>
 <li><p>局限性：但是PID重启就会变化，同时不同的Partition也具有不同主键，所以幂等性无法保证跨分区跨会话的Exactly Once。</p>
 </li>
+<li><p>要实现跨分区的Exactly Once，需要Transaction Coordinator，用于管理produce发送的信息的事务型。</p>
+<ul>
+<li>该<code>Transaction Coordinator</code>维护<code>Transaction Log</code>，该log存于一个内部的Topic内。由于Topic数据具有持久性，因此事务的状态也具有持久性。</li>
+<li>应用程序必须提供一个稳定的（重启后不变）唯一的ID，也即<code>Transaction ID</code>。<code>Transactin ID</code>与<code>PID</code>可能一一对应。区别在于<code>Transaction ID</code>由用户提供，而<code>PID</code>是内部的实现对用户透明。</li>
+<li>有了<code>Transaction ID</code>后，Kafka可保证：<ul>
+<li>跨Session的数据幂等发送。当具有相同<code>Transaction ID</code>的新的Producer实例被创建且工作时，旧的且拥有相同<code>Transaction ID</code>的Producer将不再工作。</li>
+<li>跨Session的事务恢复。如果某个应用实例宕机，新的实例可以保证任何未完成的旧的事务要么Commit要么Abort，使得新实例从一个正常状态开始工作。</li>
+</ul>
+</li>
+</ul>
+</li>
 <li><p>Kafka高效读写的原因</p>
 <ul>
 <li><p>Kafka是分布式，还可以设置分区，并发度高</p>
@@ -665,6 +677,18 @@
 </ul>
 <h2 id="Hive"><a href="#Hive" class="headerlink" title="Hive"></a>Hive</h2><ul>
 <li><p>组成</p>
+</li>
+<li><p>数据类型转换</p>
+<ul>
+<li><p>CAST： CAST ( expression AS data_type )</p>
+</li>
+<li><p>````sqlite<br>select</p>
+<pre><code>cast(1000 as varchar(10))
+cast(1000 as varchar)
+cast(&#39;1000&#39; as int)
+</code></pre>
+<figure class="highlight mel"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs mel"><br>- CONVERT： CONVERT (data_type[(length)], <span class="hljs-keyword">expression</span> [, style])<br><br>  <span class="hljs-string">``</span><span class="hljs-string">``</span>sqlite<br>  <span class="hljs-keyword">select</span> convert(datetime,<span class="hljs-string">&#x27;2017-01-01&#x27;</span>)<br></code></pre></td></tr></table></figure></li>
+</ul>
 </li>
 <li><p>与Mysql的区别</p>
 <ul>
@@ -839,6 +863,11 @@
 <li>Java接口和抽象类<ul>
 <li>含有抽象方法的类必须定义为抽象类，但抽象类中可以不包含任何抽象方法。抽象类不能被实例化，只能通过子类来实现。</li>
 <li>接口将抽象进行的更加彻底，在JDK1.8中，接口中除了可以有抽象方法外，还可以有常量，默认方法和静态方法（类方法），默认方法用default修饰，静态方法用static修饰，且这两种方法都允许有方法体。</li>
+</ul>
+</li>
+<li>volatile关键字能否保证线程安全<ul>
+<li>单纯使用volatile关键字是不能保证线程安全的</li>
+<li>volatile只提供了一种弱的同步机制，用来确保将变量的更新操作通知到其他线程</li>
 </ul>
 </li>
 </ul>

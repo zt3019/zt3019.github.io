@@ -229,7 +229,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2021年10月26日 下午
+                  本文最后更新于：2021年11月10日 下午
                 
               </p>
             
@@ -326,7 +326,7 @@
 </ul>
 </li>
 <li>雪花模型和星型模型的主要区别在于维度的层级。</li>
-<li>选择星型模型还是雪花模型，取决于性能优先还是灵活更优先。在实际开发中，不会绝对选择一种，会根据情况灵活组合甚至并存，但是从整体上看<font color=red>更倾向与维度更少的星型模型,尤其对于Hadoop 体系，减少join就是减少Shuffle，性能差距很大</font>.星型模型性能更高一些，减少了join过程。雪花模型维度表表设计多层，更加灵活。</li>
+<li>选择星型模型还是雪花模型，取决于性能优先还是灵活更优先。在实际开发中，不会绝对选择一种，会根据情况灵活组合甚至并存，但是从整体上看<font color=red>更倾向与维度更少的星型模型,尤其对于Hadoop 体系，减少join就是减少Shuffle，性能差距很大</font>.星型模型性能更高一些，减少了join过程。雪花模型维度表表设计多层，更加灵活,减少了数据冗余，时间换空间。</li>
 <li><a target="_blank" rel="noopener" href="https://imgtu.com/i/WzGEEd"><img src="https://z3.ax1x.com/2021/08/01/WzGEEd.png" srcset="/img/loading.gif" lazyload alt="WzGEEd.png"></a></li>
 <li>星座模型</li>
 <li>星座模型与星型模型和雪花模型的区别是<font color=red>事实表的数量，星座模型是基于多个事实表。</font></li>
@@ -695,7 +695,7 @@
 <li>用户表中的数据每日既有可能新增，也有可能修改，但修改频率并不高，属于缓慢变化维度，此处采用拉链表存储用户维度数据。</li>
 <li>拉链表，记录每条信息的生命周期，一旦一条记录的生命周期结束，就重新开始一条新的记录，并把当前日期放入生效开始日期，结束日期设为最大值，再将上一条修改的结束日期改为当前日期-1。</li>
 <li>拉链表适合于数据会发生变化，但是大部分是不变的。（即缓慢变化）</li>
-<li>拉链表的更新：用户当天全部数据和MySQL中每天变化的数据拼接在一起，然后insert overwrite回旧的拉链表。insert overwrite会形成一个临时的拉链表。用临时的拉链表覆盖旧的拉链表数据。</li>
+<li>拉链表的更新：用户<strong>当天</strong>全部数据和MySQL中每天变化的数据拼接在一起，然后insert overwrite回旧的拉链表。insert overwrite会形成一个临时的拉链表。用临时的拉链表覆盖旧的拉链表数据。</li>
 <li><a target="_blank" rel="noopener" href="https://imgtu.com/i/4TkIpj"><img src="https://z3.ax1x.com/2021/09/30/4TkIpj.png" srcset="/img/loading.gif" lazyload alt="4TkIpj.png"></a></li>
 </ul>
 </li>
