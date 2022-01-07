@@ -185,7 +185,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      8.3k 字
+      10.1k 字
     </span>
   
 
@@ -195,7 +195,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      108
+      128
        分钟
     </span>
   
@@ -229,7 +229,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2021年11月13日 晚上
+                  本文最后更新于：2021年12月29日 晚上
                 
               </p>
             
@@ -481,7 +481,7 @@
 </li>
 <li>为了保证事件时间的正确性：Flink有三重保障<ul>
 <li>watermark</li>
-<li>允许处理迟到的数据  allowedLateness()</li>
+<li>允许迟到时间  allowedLateness()</li>
 <li>侧输出流  sideOutputLateData()</li>
 </ul>
 </li>
@@ -582,7 +582,7 @@
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><code class="hljs scala"><span class="hljs-keyword">import</span> org.apache.flink.api.common.state.&#123;<span class="hljs-type">ListStateDescriptor</span>, <span class="hljs-type">ValueStateDescriptor</span>&#125;<br><span class="hljs-keyword">import</span> org.apache.flink.api.scala.typeutils.<span class="hljs-type">Types</span><br><span class="hljs-keyword">import</span> org.apache.flink.streaming.api.functions.<span class="hljs-type">KeyedProcessFunction</span><br><span class="hljs-keyword">import</span> org.apache.flink.streaming.api.scala._<br><span class="hljs-keyword">import</span> org.apache.flink.util.<span class="hljs-type">Collector</span><br><br><span class="hljs-keyword">import</span> scala.collection.mutable.<span class="hljs-type">ListBuffer</span><br><br><span class="hljs-class"><span class="hljs-keyword">object</span> <span class="hljs-title">ListStateExample</span> </span>&#123;<br>  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">main</span></span>(args: <span class="hljs-type">Array</span>[<span class="hljs-type">String</span>]): <span class="hljs-type">Unit</span> = &#123;<br>    <span class="hljs-keyword">val</span> env = <span class="hljs-type">StreamExecutionEnvironment</span>.getExecutionEnvironment<br>    env.setParallelism(<span class="hljs-number">1</span>)<br>    <span class="hljs-keyword">val</span> stream = env<br>      .addSource(<span class="hljs-keyword">new</span> <span class="hljs-type">SensorSource</span>)<br>      .filter(_.id.equals(<span class="hljs-string">&quot;Sensor_1&quot;</span>))<br>      .keyBy(_.id)<br>      .process(<span class="hljs-keyword">new</span> <span class="hljs-type">Keyed</span>)<br><br>    stream.print()<br><br>    env.execute()<br>  &#125;<br><br>  <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Keyed</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">KeyedProcessFunction</span>[<span class="hljs-type">String</span>, <span class="hljs-type">SensorReading</span>, <span class="hljs-type">String</span>] </span>&#123;<br>    <span class="hljs-keyword">lazy</span> <span class="hljs-keyword">val</span> listState = getRuntimeContext.getListState(<br>      <span class="hljs-keyword">new</span> <span class="hljs-type">ListStateDescriptor</span>[<span class="hljs-type">SensorReading</span>](<span class="hljs-string">&quot;list-state&quot;</span>, <span class="hljs-type">Types</span>.of[<span class="hljs-type">SensorReading</span>])<br>    )<br>    <span class="hljs-keyword">lazy</span> <span class="hljs-keyword">val</span> timer = getRuntimeContext.getState(<br>      <span class="hljs-keyword">new</span> <span class="hljs-type">ValueStateDescriptor</span>[<span class="hljs-type">Long</span>](<span class="hljs-string">&quot;timer&quot;</span>, <span class="hljs-type">Types</span>.of[<span class="hljs-type">Long</span>])<br>    )<br><br>    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">processElement</span></span>(value: <span class="hljs-type">SensorReading</span>, ctx: <span class="hljs-type">KeyedProcessFunction</span>[<span class="hljs-type">String</span>, <span class="hljs-type">SensorReading</span>, <span class="hljs-type">String</span>]#<span class="hljs-type">Context</span>, out: <span class="hljs-type">Collector</span>[<span class="hljs-type">String</span>]): <span class="hljs-type">Unit</span> = &#123;<br>      listState.add(value) <span class="hljs-comment">//添加value到列表状态变量中</span><br>      <span class="hljs-keyword">if</span> (timer.value() == <span class="hljs-number">0</span>L) &#123;<br>        <span class="hljs-keyword">val</span> ts = ctx.timerService().currentProcessingTime() + <span class="hljs-number">10</span> * <span class="hljs-number">1000</span>L<br>        ctx.timerService().registerProcessingTimeTimer(ts)<br>        timer.update(ts)<br>      &#125;<br>    &#125;<br><br>    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">onTimer</span></span>(timestamp: <span class="hljs-type">Long</span>, ctx: <span class="hljs-type">KeyedProcessFunction</span>[<span class="hljs-type">String</span>, <span class="hljs-type">SensorReading</span>, <span class="hljs-type">String</span>]#<span class="hljs-type">OnTimerContext</span>, out: <span class="hljs-type">Collector</span>[<span class="hljs-type">String</span>]): <span class="hljs-type">Unit</span> = &#123;<br>      <span class="hljs-comment">//不能直接对列表状态变量进行计数</span><br>      <span class="hljs-keyword">val</span> readings: <span class="hljs-type">ListBuffer</span>[<span class="hljs-type">SensorReading</span>] = <span class="hljs-keyword">new</span> <span class="hljs-type">ListBuffer</span>()<br>      <span class="hljs-comment">//隐式类型转换必须导入</span><br>      <span class="hljs-keyword">import</span> scala.collection.<span class="hljs-type">JavaConversions</span>._<br>      <span class="hljs-keyword">for</span> (r &lt;- listState.get()) &#123;<br>        readings += r;<br>      &#125;<br>      out.collect(<span class="hljs-string">&quot;当前时刻列表状态变量里面共有&quot;</span> + readings.size + <span class="hljs-string">&quot;条数据&quot;</span>)<br>      timer.clear() <span class="hljs-comment">//清空定时器</span><br>    &#125;<br>  &#125;<br><br>&#125;<br><br></code></pre></td></tr></table></figure></li>
 <li><p>状态后端(State Backends)</p>
 <ul>
-<li>每传入一条数据，由状态的算子任务都会读取和更新状态</li>
+<li>每传入一条数据，有状态的算子任务都会读取和更新状态</li>
 <li>由于有效的状态访问对于处理数据的低延迟至关重要，因此每个并行任务都会在本地维护其状态，以确保快速的状态访问。</li>
 <li>状态的存储，访问以及维护，由一个可插入的组件决定这个组件就叫做状态后端。</li>
 <li>状态后端主要负责两件事情，本地状态管理，以及将检查点（checkpoint）状态写入远程存储（HDFS）。</li>
@@ -619,6 +619,112 @@
 </ul>
 </li>
 <li>这种检查点的保存和恢复机制可以为应用程序提供“精确一次”（exactly-once）的一致性，因为所有算子都会保存检查点并恢复其所有状态，这样一来所有的输入流都会被重置到检查点完成时的位置。</li>
+</ul>
+<h4 id="状态一致性"><a href="#状态一致性" class="headerlink" title="状态一致性"></a>状态一致性</h4><ul>
+<li>状态一致性级别</li>
+<li>flink 端到端（end-to-end）状态一致性<ul>
+<li>内部保证 checkpoint</li>
+<li>source端  可重设数据的读取位置</li>
+<li>sink 端      从故障恢复时，数据不会重复写入外部系统<ul>
+<li>幂等写入</li>
+<li>事物写入</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Flink-SQL"><a href="#Flink-SQL" class="headerlink" title="Flink SQL"></a>Flink SQL</h2><ul>
+<li>SQL的几个优点<ul>
+<li>声明式（Declarative）</li>
+<li>自动调优（Optimized）</li>
+<li>易于理解（Understandable）</li>
+<li>稳定（Stable）</li>
+<li>流与批的统一（Unify）</li>
+</ul>
+</li>
+<li>Flink SQL的流与批统一总结起来就一句话：One Query，One Result</li>
+</ul>
+<h3 id="Flink-SQL核心概念"><a href="#Flink-SQL核心概念" class="headerlink" title="Flink SQL核心概念"></a>Flink SQL核心概念</h3><ul>
+<li>动态表&amp;流表二像性<ul>
+<li>传统的SQL是定义在表上的，为了能在流上定义SQL，我们也需要一个表的概念。这里就需要引入一个非常重要的概念：动态表（Dynamic Table）。所谓动态表，就是数据会随着时间变化的表，可以想象成就是数据库中一张被不断更新的表。我们发现流与表有非常紧密的关系，流表可以看作动态表，动态表可以看做流。我们称之为流表二象性。<ul>
+<li><a target="_blank" rel="noopener" href="https://imgtu.com/i/TrLqK0"><img src="https://s4.ax1x.com/2021/12/28/TrLqK0.png" srcset="/img/loading.gif" lazyload alt="TrLqK0.png"></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>连续查询<ul>
+<li>动态表是流的另一种表现形式，有了动态表后，我们就可以在流上定义SQL了，流式SQL可以想象成连续查询（Continous Query）。传统的查询是只运行一次的SQL，产生一个结果表就结束了。连续查询会一直运行在那里，当每个数据到来，都会持续增量地更新计算结果，从而产生另一个动态表。而这个结果动态表（也就是流）会作为另一个SQL（连续查询）的输入接着计算，从而串起整个数据流图。</li>
+<li><a target="_blank" rel="noopener" href="https://imgtu.com/i/TrOOSA"><img src="https://s4.ax1x.com/2021/12/28/TrOOSA.png" srcset="/img/loading.gif" lazyload alt="TrOOSA.png"></a></li>
+</ul>
+</li>
+</ul>
+<h3 id="Flink-SQL核心功能"><a href="#Flink-SQL核心功能" class="headerlink" title="Flink SQL核心功能"></a>Flink SQL核心功能</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://imgtu.com/i/TrXKkF"><img src="https://s4.ax1x.com/2021/12/28/TrXKkF.png" srcset="/img/loading.gif" lazyload alt="TrXKkF.png"></a></li>
+<li>高级功能<ul>
+<li>双流join<ul>
+<li>双流join功能是将两条流进行关联，用来补齐流上的字段。双流join又分为无限流的双流JOIN和带窗口的双流JOIN</li>
+</ul>
+</li>
+<li>维表join<ul>
+<li>维表JOIN功能是流与表的关联，也是用来为数据流补齐字段，只是补齐的维表字段是在外部存储的维表中的。</li>
+</ul>
+</li>
+<li>TopN<ul>
+<li>全局TopN，分组TopN</li>
+</ul>
+</li>
+<li>Window<ul>
+<li>支持滚动窗口，滑动窗口，会话窗口，以及传统数据库中的OVER窗口</li>
+</ul>
+</li>
+<li>多路输入，多路输出</li>
+<li>MiniBatch 优化<ul>
+<li>对于有状态的算子，每个进入算子的元素都需要对状态做序列化/反序列化的操作，频繁的状态序列化/反序列化操作占了性能开销的大半。MiniBatch的核心思想是，对进入算子的元素进行攒批，一批数据只需要对状态序列化/反序列化一次即可，极大地提升了性能。</li>
+</ul>
+</li>
+<li>Retraction 撤回机制<ul>
+<li>撤回机制是Flink SQL中一个非常重要地基石，它解决了early-fire导致的结果正确性问题（所有的GroupBy都是early-fire的）。而利用好撤回机制有时候能够很巧妙地帮助业务解决一些特殊需求。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="Flink-SQL-维表JOIN与异步优化"><a href="#Flink-SQL-维表JOIN与异步优化" class="headerlink" title="Flink SQL 维表JOIN与异步优化"></a>Flink SQL 维表JOIN与异步优化</h3><ul>
+<li><p>维表JOIN语法</p>
+<ul>
+<li>假设我们有一个Orders订单数据流，希望根据产品ID补全流上地产品维度信息，所以需要跟Products维度表进行关联。Orders 和 Products的DDL声明语句如下：</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> Orders (<br>  orderId <span class="hljs-built_in">VARCHAR</span>,          <span class="hljs-comment">-- 订单 id</span><br>  productId <span class="hljs-built_in">VARCHAR</span>,        <span class="hljs-comment">-- 产品 id</span><br>  units <span class="hljs-built_in">INT</span>,                <span class="hljs-comment">-- 购买数量</span><br>  orderTime <span class="hljs-built_in">TIMESTAMP</span>       <span class="hljs-comment">-- 下单时间</span><br>) <span class="hljs-keyword">with</span> (<br>  <span class="hljs-keyword">type</span> = <span class="hljs-string">&#x27;tt&#x27;</span>,              <span class="hljs-comment">-- tt 日志流</span><br>  ...<br>)<br><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> Products (<br>  productId <span class="hljs-built_in">VARCHAR</span>,        <span class="hljs-comment">-- 产品 id</span><br>  <span class="hljs-keyword">name</span> <span class="hljs-built_in">VARCHAR</span>,             <span class="hljs-comment">-- 产品名称</span><br>  unitPrice <span class="hljs-keyword">DOUBLE</span>          <span class="hljs-comment">-- 单价</span><br>  <span class="hljs-keyword">PERIOD</span> <span class="hljs-keyword">FOR</span> SYSTEM_TIME,   <span class="hljs-comment">-- 这是一张随系统时间而变化的表，用来声明维表</span><br>  PRIMARY <span class="hljs-keyword">KEY</span> (productId)   <span class="hljs-comment">-- 维表必须声明主键</span><br>) <span class="hljs-keyword">with</span> (<br>  <span class="hljs-keyword">type</span> = <span class="hljs-string">&#x27;alihbase&#x27;</span>,        <span class="hljs-comment">-- HBase 数据源</span><br>  ...<br>)<br><br><span class="hljs-comment">-- JOIN当前维表</span><br><span class="hljs-keyword">SELECT</span> *<br><span class="hljs-keyword">FROM</span> Orders <span class="hljs-keyword">AS</span> o<br>[<span class="hljs-keyword">LEFT</span>] <span class="hljs-keyword">JOIN</span> Products <span class="hljs-keyword">FOR</span> SYSTEM_TIME <span class="hljs-keyword">AS</span> <span class="hljs-keyword">OF</span> PROCTIME() <span class="hljs-keyword">AS</span> p<br><span class="hljs-keyword">ON</span> o.productId = p.productId<br><br><br><span class="hljs-comment">-- Flink SQL支持LEFT JOIN和INNER JOIN的维表关联。只是Products维表后面需要跟上FOR SYSTEM_TIME AS OF PROCTIME()的关键字，其含义是每条到达的数据所关联上的是到达时刻的维表快照，也就是说，当数据到达时，我们会根据数据上的Key去查询远程数据库，拿到匹配的结果后关联输出。这里的PROCTIME()即processing time。使用JOIN当前维表功能需要注意的是，如果维表插入了一条数据能匹配上之前左表的数据时，JOIN的结果流，不会发出更新的数据以弥补之前的未匹配。JOIN行为只发生在处理时间（processing time）,即使维表中的数据都被删了，之前JOIN流已经发出的关联上的数据也不会被撤回或改变。</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+<ul>
+<li><p>JOIN当前维表</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> *<br><span class="hljs-keyword">FROM</span> Orders <span class="hljs-keyword">AS</span> o<br>[<span class="hljs-keyword">LEFT</span>] <span class="hljs-keyword">JOIN</span> Products <span class="hljs-keyword">FOR</span> SYSTEM_TIME <span class="hljs-keyword">AS</span> <span class="hljs-keyword">OF</span> PROCTIME() <span class="hljs-keyword">AS</span> p<br><span class="hljs-keyword">ON</span> o.productId = p.productId<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>Flink SQL支持LEFT JOIN和INNER JOIN的维表关联。只是Products维表后面需要跟上<strong>FOR SYSTEM_TIME AS OF PROCTIME()<strong>的关键字，其含义是每条到达的数据所关联上的是到达时刻的维表快照，也就是说，当数据到达时，我们会根据数据上的Key去查询远程数据库，拿到匹配的结果后关联输出。这里的</strong>PROCTIME()<strong>即</strong>processing time</strong>。使用JOIN当前维表功能需要注意的是，如果维表插入了一条数据能匹配上之前左表的数据时，JOIN的结果流，不会发出更新的数据以弥补之前的未匹配。JOIN行为只发生在处理时间（processing time）,即使维表中的数据都被删了，之前JOIN流已经发出的关联上的数据也不会被撤回或改变。</li>
+</ul>
+</li>
+<li><p>JOIN历史维表</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> *<br><span class="hljs-keyword">FROM</span> Orders <span class="hljs-keyword">AS</span> o<br>[<span class="hljs-keyword">LEFT</span>] <span class="hljs-keyword">JOIN</span> Products <span class="hljs-keyword">FOR</span> SYSTEM_TIME <span class="hljs-keyword">AS</span> <span class="hljs-keyword">OF</span> o.orderTime <span class="hljs-keyword">AS</span> p<br><span class="hljs-keyword">ON</span> o.productId = p.productId<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>有时候想关联上的维度数据，并不是当前时刻的值，而是某个时刻的值。比如，产品的价格一直在发生变化，订单流希望补全的是下单时的价格，而不是当前的价格，那就是JOIN历史维表。语法上只需要将上文的PROCTIME()改成o.orderTime即可。</li>
+</ul>
+</li>
+<li><p>Flink 在获取维度数据时，会根据左流的时间去查对应时刻的快照数据。因此JOIN历史维表需要外部存储支持多版本存储，如HBase，或者存储的数据中带有多版本信息。</p>
+</li>
+<li><p>维表优化</p>
+<ul>
+<li>提高吞吐。维表的IO请求严重阻塞了数据流的计算处理。解决办法：异步IO，原始的维表JOIN是同步访问的方式，来一条数据，去数据库查询一次，等待返回后输出关联结果。可以发现网络等待时间极大地阻碍了吞吐和延迟。为了解决同步访问地问题，异步模式可以并发地处理多个请求和回复，从而连续地请求之间不需要阻塞等待。</li>
+<li>降低维表数据库读压力。如HBase也只能承受单机每秒20万的读请求。解决办法：进行缓存，LRU和ALL（维表较小，可以将整个维表缓存到本地）</li>
+<li>通过 <code>cache=&#39;LRU&#39;</code>参数可以开启 LRU 缓存优化</li>
+<li>ALL cache 可以通过 <code>cache=&#39;ALL&#39;</code>参数开启</li>
+<li>通过<code>cacheTTLMs</code>控制缓存的刷新间隔。</li>
+</ul>
+</li>
+</ul>
+<h3 id="流式TopN"><a href="#流式TopN" class="headerlink" title="流式TopN"></a>流式TopN</h3><ul>
+<li></li>
 </ul>
 
             </div>

@@ -185,7 +185,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      7.6k 字
+      7.7k 字
     </span>
   
 
@@ -229,7 +229,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2021年10月18日 上午
+                  本文最后更新于：2021年12月20日 下午
                 
               </p>
             
@@ -244,7 +244,7 @@
 <li><p>Common(辅助工具，包含一些依赖，jar包)</p>
 </li>
 <li><p>常用端口号</p>
-<p>分类                             应用                                   端口<br>namenode                rpc-address          8020<br>namenode                http-address        9870<br>namenode                https-address      9871<br>datanode                  address                 9866<br>datanode                  http-address        9864<br>datanode                   https-address     9865<br>resourcemanager    http-address       8088</p>
+<p>分类                             应用                                   端口<br>namenode                rpc-address                    8020<br>namenode                http-address                  9870<br>namenode                https-address                9871<br>datanode                  address                           9866<br>datanode                  http-address                  9864<br>datanode                   https-address               9865<br>resourcemanager    http-address                 8088</p>
 </li>
 </ul>
 <h2 id="HDFS"><a href="#HDFS" class="headerlink" title="HDFS"></a>HDFS</h2><ul>
@@ -315,8 +315,8 @@ copyToLocal#与get完全一样
 </ul>
 <ul>
 <li>步骤：<ol>
-<li>客户端通过DistributedFileSystem模块向NameNode请求上传文件，NameNode检查目标文件是否已经存在，父目录是否存在.</li>
-<li>NameNode返回是否可以上传的一个响应</li>
+<li>客户端通过DistributedFileSystem模块向NameNode请求上传文件，NameNode检查目标文件是否已经存在，父目录是否存在。</li>
+<li>NameNode返回是否可以上传的一个响应。</li>
 <li>客户端向NameNode请求第一个BLock应该上传到那几个DataNode节点上</li>
 <li>NameNode返回副本个数个DataNode节点，例如dn1,dn2,dn3</li>
 <li>客户端通过FSDataOutputStream模块请求建立Block传输通道</li>
@@ -386,6 +386,12 @@ copyToLocal#与get完全一样
 <li><p>集群在安全模式下，不能执行写操作，读操作会被延迟</p>
 </li>
 <li><p>在集群刚刚启动，或者集群的存储快要到达上限时会进入集群安全模式。</p>
+</li>
+<li><p>HDFS架构-联邦架构</p>
+<ul>
+<li><img src="C:\Users\Hasee\AppData\Roaming\Typora\typora-user-images\image-20211220153640114.png" srcset="/img/loading.gif" lazyload alt="image-20211220153640114"></li>
+<li>解决namenode的压力过大的问题。</li>
+</ul>
 </li>
 </ul>
 <h2 id="DataNode"><a href="#DataNode" class="headerlink" title="DataNode"></a>DataNode</h2><ul>
