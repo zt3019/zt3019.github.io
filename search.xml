@@ -1,62 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Hbase简介</title>
-    <url>/2020/11/17/HBase%20introduction/</url>
-    <content><![CDATA[<h1 id="分布式数据库HBase简介"><a href="#分布式数据库HBase简介" class="headerlink" title="分布式数据库HBase简介"></a>分布式数据库HBase简介</h1><ol>
-<li><p>概述    </p>
-<ul>
-<li>HBase是针对谷歌BigTable的开源实现，是一个高可靠，高性能，面向列，可伸缩的分布式数据库           </li>
-<li>可以用来存储非结构化和半结构化的松散数据</li>
-</ul>
-</li>
-<li><p>数据模型</p>
-<ul>
-<li>索引通过四个元素来定位：行键，列族，列限定符，时间戳</li>
-<li> 面向列的存储</li>
-</ul>
-</li>
-<li><p>实现原理 </p>
-<ul>
-<li>HBase的功能组件<blockquote>
-<p>库函数<br>Master服务器<br>Region服务器    </p>
-</blockquote>
-</li>
-<li>两个核心概念表和Region<blockquote>
-<p>一个HBase表被划分成多个Region<br>一个Region会分裂成多个新的Region</p>
-</blockquote>
-</li>
-<li>怎么实现Region定位<blockquote>
-<p>三层结构索引实现Region的定位<br>Zookeeper文件<br>-ROOT-表<br>.MEAT.表      </p>
-</blockquote>
-</li>
-</ul>
-</li>
-<li><p>运行机制</p>
-<ul>
-<li>HBase的系统架构<blockquote>
-<p><img src="https://img-blog.csdnimg.cn/2020070104123335.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTE1NDU1OQ==,size_16,color_FFFFFF,t_70#pic_center" title="系统架构图"><br>Zookeeper服务器（被大量用于分布式系统，提供配置维护，域名服务，分布式同步服务）实现协同管理服务，提供管家功能（维护和管理整个HBase集群）<br>Master服务器作用：1.对表增删改查。2.负责不同Region服务器的负载均衡。3.负责调整分裂合并后Region的分布。4.负责重新分配故障，失效的Region服务器</p>
-</blockquote>
-</li>
-<li>Region服务器（负责用户数据的存储和管理）的工作原理</li>
-<li>Store的工作原理</li>
-<li>HLog的工作原理</li>
-</ul>
-</li>
-<li><p>编程实践<br>HBase安装及实践，参考厦门大学数据库实验室博客<br><a href="http://dblab.xmu.edu.cn/blog/2442-2/">参考链接</a></p>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>大数据</category>
-        <category>老hadoop</category>
-      </categories>
-      <tags>
-        <tag>Hadoop</tag>
-        <tag>大数据</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Computer_Fundamentals</title>
     <url>/2021/10/13/Computer-Fundamentals/</url>
     <content><![CDATA[<h1 id="计算机基础"><a href="#计算机基础" class="headerlink" title="计算机基础"></a>计算机基础</h1><h2 id="计算机网络"><a href="#计算机网络" class="headerlink" title="计算机网络"></a>计算机网络</h2><ul>
@@ -443,6 +387,62 @@
       <tags>
         <tag>zookeeper</tag>
         <tag>HA</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hbase简介</title>
+    <url>/2020/11/17/HBase%20introduction/</url>
+    <content><![CDATA[<h1 id="分布式数据库HBase简介"><a href="#分布式数据库HBase简介" class="headerlink" title="分布式数据库HBase简介"></a>分布式数据库HBase简介</h1><ol>
+<li><p>概述    </p>
+<ul>
+<li>HBase是针对谷歌BigTable的开源实现，是一个高可靠，高性能，面向列，可伸缩的分布式数据库           </li>
+<li>可以用来存储非结构化和半结构化的松散数据</li>
+</ul>
+</li>
+<li><p>数据模型</p>
+<ul>
+<li>索引通过四个元素来定位：行键，列族，列限定符，时间戳</li>
+<li> 面向列的存储</li>
+</ul>
+</li>
+<li><p>实现原理 </p>
+<ul>
+<li>HBase的功能组件<blockquote>
+<p>库函数<br>Master服务器<br>Region服务器    </p>
+</blockquote>
+</li>
+<li>两个核心概念表和Region<blockquote>
+<p>一个HBase表被划分成多个Region<br>一个Region会分裂成多个新的Region</p>
+</blockquote>
+</li>
+<li>怎么实现Region定位<blockquote>
+<p>三层结构索引实现Region的定位<br>Zookeeper文件<br>-ROOT-表<br>.MEAT.表      </p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>运行机制</p>
+<ul>
+<li>HBase的系统架构<blockquote>
+<p><img src="https://img-blog.csdnimg.cn/2020070104123335.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTE1NDU1OQ==,size_16,color_FFFFFF,t_70#pic_center" title="系统架构图"><br>Zookeeper服务器（被大量用于分布式系统，提供配置维护，域名服务，分布式同步服务）实现协同管理服务，提供管家功能（维护和管理整个HBase集群）<br>Master服务器作用：1.对表增删改查。2.负责不同Region服务器的负载均衡。3.负责调整分裂合并后Region的分布。4.负责重新分配故障，失效的Region服务器</p>
+</blockquote>
+</li>
+<li>Region服务器（负责用户数据的存储和管理）的工作原理</li>
+<li>Store的工作原理</li>
+<li>HLog的工作原理</li>
+</ul>
+</li>
+<li><p>编程实践<br>HBase安装及实践，参考厦门大学数据库实验室博客<br><a href="http://dblab.xmu.edu.cn/blog/2442-2/">参考链接</a></p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>大数据</category>
+        <category>老hadoop</category>
+      </categories>
+      <tags>
+        <tag>Hadoop</tag>
+        <tag>大数据</tag>
       </tags>
   </entry>
   <entry>
@@ -1010,56 +1010,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Hadoop简介</title>
-    <url>/2020/10/21/hadoop-introduction/</url>
-    <content><![CDATA[<h1 id="hadoop简介"><a href="#hadoop简介" class="headerlink" title="hadoop简介"></a>hadoop简介</h1><p>1.定义：<br>hadoop是一个开源分布式计算平台，为用户提供了底层细节透明的分布式基础框架。<br>2.特性：    </p>
-<ul>
-<li>高可靠性    </li>
-<li>高效性</li>
-<li>高可扩展性</li>
-<li>高容错性</li>
-<li>成本低</li>
-<li>运行在linux中</li>
-<li>支持多种编程语言</li>
-</ul>
-<p>3.版本</p>
-<ul>
-<li>1.0</li>
-<li>2.0</li>
-</ul>
-<p>4.hadoop结构</p>
-<ul>
-<li><img src="https://img-blog.csdnimg.cn/20191024090622860.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2ZtMzQ1Njg5,size_16,color_FFFFFF,t_70" alt="图片展示" title="Hadoop项目结构图"></li>
-<li>参考别人博客的<a href="https://blog.csdn.net/fm345689/article/details/102715230">文字记录</a></li>
-</ul>
-<p>5.Hadoop项目核心模块</p>
-<ul>
-<li>Hadoop Common：为Hadoop其他模块提供支持实用程序。</li>
-<li>HDFS：提供对应用程序数据的高吞吐量访问</li>
-<li>Hadoop YARN：作业调度和集群资源管理的框架</li>
-<li>MapReduce：YARN系统的大型数据集并行处理技术</li>
-</ul>
-<p>6.Hadoop RPC工作原理</p>
-<p>7.MapReduce工作原理</p>
-<blockquote>
-<ul>
-<li>策略：分而治之</li>
-<li>计算向数据靠拢而不是数据向计算靠拢</li>
-</ul>
-</blockquote>
-<p>8.HDFS工作原理</p>
-<p>9.YARN工作原理</p>
-]]></content>
-      <categories>
-        <category>大数据</category>
-        <category>老hadoop</category>
-      </categories>
-      <tags>
-        <tag>Hadoop</tag>
-        <tag>大数据</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>hbase</title>
     <url>/2021/06/27/hbase/</url>
     <content><![CDATA[<h1 id="HBase"><a href="#HBase" class="headerlink" title="HBase"></a>HBase</h1><h2 id="HBbse概述"><a href="#HBbse概述" class="headerlink" title="HBbse概述"></a>HBbse概述</h2><ul>
@@ -1174,6 +1124,56 @@
       <tags>
         <tag>大数据</tag>
         <tag>flume</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hadoop简介</title>
+    <url>/2020/10/21/hadoop-introduction/</url>
+    <content><![CDATA[<h1 id="hadoop简介"><a href="#hadoop简介" class="headerlink" title="hadoop简介"></a>hadoop简介</h1><p>1.定义：<br>hadoop是一个开源分布式计算平台，为用户提供了底层细节透明的分布式基础框架。<br>2.特性：    </p>
+<ul>
+<li>高可靠性    </li>
+<li>高效性</li>
+<li>高可扩展性</li>
+<li>高容错性</li>
+<li>成本低</li>
+<li>运行在linux中</li>
+<li>支持多种编程语言</li>
+</ul>
+<p>3.版本</p>
+<ul>
+<li>1.0</li>
+<li>2.0</li>
+</ul>
+<p>4.hadoop结构</p>
+<ul>
+<li><img src="https://img-blog.csdnimg.cn/20191024090622860.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2ZtMzQ1Njg5,size_16,color_FFFFFF,t_70" alt="图片展示" title="Hadoop项目结构图"></li>
+<li>参考别人博客的<a href="https://blog.csdn.net/fm345689/article/details/102715230">文字记录</a></li>
+</ul>
+<p>5.Hadoop项目核心模块</p>
+<ul>
+<li>Hadoop Common：为Hadoop其他模块提供支持实用程序。</li>
+<li>HDFS：提供对应用程序数据的高吞吐量访问</li>
+<li>Hadoop YARN：作业调度和集群资源管理的框架</li>
+<li>MapReduce：YARN系统的大型数据集并行处理技术</li>
+</ul>
+<p>6.Hadoop RPC工作原理</p>
+<p>7.MapReduce工作原理</p>
+<blockquote>
+<ul>
+<li>策略：分而治之</li>
+<li>计算向数据靠拢而不是数据向计算靠拢</li>
+</ul>
+</blockquote>
+<p>8.HDFS工作原理</p>
+<p>9.YARN工作原理</p>
+]]></content>
+      <categories>
+        <category>大数据</category>
+        <category>老hadoop</category>
+      </categories>
+      <tags>
+        <tag>Hadoop</tag>
+        <tag>大数据</tag>
       </tags>
   </entry>
   <entry>
@@ -2511,389 +2511,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Scala</title>
-    <url>/2021/08/10/Scala/</url>
-    <content><![CDATA[<h1 id="Scala"><a href="#Scala" class="headerlink" title="Scala"></a>Scala</h1><h2 id="Scala简介"><a href="#Scala简介" class="headerlink" title="Scala简介"></a>Scala简介</h2><ul>
-<li>Scala是一门多范式的编程语言，Scala支持面向对象和函数式编程。（多范式，就是多种编程方法的意思。有面向过程，面向对象，泛型，函数式四种程序设计方式。）</li>
-</ul>
-<h3 id="class和object说明"><a href="#class和object说明" class="headerlink" title="class和object说明"></a>class和object说明</h3><ul>
-<li>object：从语法的角度上讲，上面的语法表示声明了一个伴生对象，但是还会生成一个伴生类。Scala是纯面向对象的，去除了java中的static关键字，通过伴生对象模拟static效果</li>
-<li>伴生对象：伴随类产生的一个对象</li>
-<li>对scala源文件进行编译后，默认会生成两个字节码文件，一个是伴生类另一个是伴生对象所属类（类名+一个$符号）</li>
-<li>真正的伴生对象是伴生对象所属类中创建的单例对象</li>
-<li>如果不想生成伴生类，可以手动生成，要求伴生类名称和伴生对象名称一致。</li>
-<li>运行原理：<ul>
-<li>java运行原理：先编译，再解释。.java源文件—&gt;编译器(javac)—&gt;.class字节码文件—&gt;JVM(java 不同平台)—&gt;机器指令</li>
-<li>scala运行原理：先编译，再解释。.scala源文件—&gt;编译器(scalac)—&gt;.class字节码文件—&gt;JVM(scala 不同平台)—&gt;机器指令</li>
-</ul>
-</li>
-</ul>
-<h2 id="变量和数据类型"><a href="#变量和数据类型" class="headerlink" title="变量和数据类型"></a>变量和数据类型</h2><ul>
-<li><p>注释和java规则一样。</p>
-</li>
-<li><p>变量 var 变量名[:变量类型]=初始值</p>
-</li>
-<li><p>常量 val 变量名[:变量类型]=初始值</p>
-</li>
-<li><p>声明变量时必须要有初始指</p>
-</li>
-<li><p>标识符业余java基本一致。特殊情况：（1）以字母或者下划线开头，后接字母、数字、下划线</p>
-<p>（2）以操作符开头，且只包含操作符（+ - * / # !等）</p>
-<p>（3）用反引号<code>....</code>包括的任意字符串，即使是Scala关键字（39个）也可以</p>
-</li>
-<li><p>键盘输入输出：</p>
-</li>
-<li><p>输出：（1）字符串，通过+号连接</p>
-<p>（2）printf用法：字符串，通过%传值。</p>
-<p>（3）字符串模板（插值字符串）：通过”$”获取变量值。</p>
-<p>${}</p>
-</li>
-<li><p>输入：StdIn.readLine()、StdIn.readShort()、StdIn.readDouble()</p>
-</li>
-</ul>
-<h3 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h3><ul>
-<li>Any：所有类的父类</li>
-<li>AnyVal:(值类型)<ul>
-<li>Byte,Short,Int,Long,Float,Double,Boolean,Char</li>
-<li>Unit:表示返回值类型为空，相当于Java中的 void  关键字</li>
-<li>StringOps:对自负床功能的 增强</li>
-</ul>
-</li>
-<li>AnyRef（引用类型 ）<ul>
-<li>所有java语言中的类</li>
-<li>Scala  语言中的类</li>
-<li>集合</li>
-<li>Null：表示变量声明后，没有指向任何对象，相当于java中的null关键字</li>
-</ul>
-</li>
-<li>Nothing :所有类的子类</li>
-</ul>
-<h3 id="类型转换"><a href="#类型转换" class="headerlink" title="类型转换"></a>类型转换</h3><ul>
-<li>char在java中是没有符号位的。char占两个字节。</li>
-</ul>
-<h3 id="函数式编程"><a href="#函数式编程" class="headerlink" title="函数式编程"></a>函数式编程</h3><ul>
-<li><p>面向对象编程：</p>
-<ul>
-<li>Scala是一个完全面向对象的编程语言，万物皆对象。</li>
-<li>对象的本质：对数据和行为的一个封装。</li>
-</ul>
-</li>
-<li><p>函数式编程：</p>
-<ul>
-<li>将问题分解成一个一个的步骤，将每一个步骤进行封装，通调用这些封装好的步骤。</li>
-<li>Scala是一个完全函数式编程语言，万物皆函数。</li>
-</ul>
-</li>
-<li><p>函数的本质：函数可以当做一个值进行传递。</p>
-</li>
-</ul>
-<h4 id="函数基础"><a href="#函数基础" class="headerlink" title="函数基础"></a>函数基础</h4><ul>
-<li><p>函数与方法的区别</p>
-<ul>
-<li>为完成某一功能的程序语句的集合，称为函数。</li>
-<li>类中的函数称为方法</li>
-<li>函数没有重载和重写的概念；方法可以进行重载和重写</li>
-<li>Scala中函数可以嵌套定义</li>
-</ul>
-<figure class="highlight scala"><table><tr><td class="code"><pre><code class="hljs scala"><span class="hljs-class"><span class="hljs-keyword">object</span> <span class="hljs-title">TestFunction</span> </span>&#123;<br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">main</span></span>(args: <span class="hljs-type">Array</span>[<span class="hljs-type">String</span>]): <span class="hljs-type">Unit</span> = &#123;<br>        <span class="hljs-comment">// （1）函数定义</span><br>        <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">f</span></span>(arg: <span class="hljs-type">String</span>): <span class="hljs-type">Unit</span> = &#123;<br>            println(arg)<br>        &#125;<br>        <span class="hljs-comment">// （2）函数调用</span><br>        <span class="hljs-comment">// 函数名（参数）</span><br>        f(<span class="hljs-string">&quot;hello world&quot;</span>)<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
-<li><p>函数至简原则</p>
-<ul>
-<li><p>（1）return可以省略，Scala会使用函数体的最后一行代码作为返回值</p>
-<p>（2）如果函数体只有一行代码，可以省略花括号</p>
-<p>（3）返回值类型如果能够推断出来，那么可以省略（:和返回值类型一起省略）</p>
-<p>（4）如果有return，则不能省略返回值类型，必须指定</p>
-<p>（5）如果函数明确声明unit，那么即使函数体中使用return关键字也不起作用</p>
-<p>（6）Scala如果期望是无返回值类型，可以省略等号</p>
-<p>（7）如果函数无参，但是声明了参数列表，那么调用时，小括号，可加可不加</p>
-<p>（8）如果函数没有参数列表，那么小括号可以省略，调用时小括号必须省略</p>
-<p>（9）如果不关心名称，只关心逻辑处理，那么函数名（def）可以省略</p>
-</li>
-</ul>
-<figure class="highlight scala"><table><tr><td class="code"><pre><code class="hljs scala"><span class="hljs-keyword">package</span> com.zt.spark.day01<br><br><span class="hljs-class"><span class="hljs-keyword">object</span> <span class="hljs-title">FunctionTest</span> </span>&#123;<br>  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">main</span></span>(args: <span class="hljs-type">Array</span>[<span class="hljs-type">String</span>]): <span class="hljs-type">Unit</span> = &#123;<br>    <span class="hljs-comment">//(0)函数标准写法</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">f</span></span>(s:<span class="hljs-type">String</span>): <span class="hljs-type">String</span>=&#123;<br>      <span class="hljs-keyword">return</span> s+<span class="hljs-string">&quot;hello world&quot;</span><br>    &#125;<br>    println(f(<span class="hljs-string">&quot;hi,&quot;</span>))<br>    <span class="hljs-comment">//至简原则</span><br>    <span class="hljs-comment">//(1)return可以省略，Scala会使用函数体的最后一行代码作为返回值</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">f1</span></span>(s:<span class="hljs-type">String</span>):<span class="hljs-type">String</span>=&#123;<br>      s+<span class="hljs-string">&quot;hello&quot;</span><br>    &#125;<br>    println(f1(<span class="hljs-string">&quot;world &quot;</span>))<br>    <span class="hljs-comment">//(2)如果函数只有一行代码，可以省略花括号</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">f2</span></span>(s:<span class="hljs-type">String</span>):<span class="hljs-type">String</span>=s+<span class="hljs-string">&quot; hello&quot;</span><br>    println(f2(<span class="hljs-string">&quot;world&quot;</span>))<br>    <span class="hljs-comment">//(3)返回值类型如果能推断出来，那么可以省略（：和返回值类型一起省略）</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">f3</span></span>(s:<span class="hljs-type">String</span>)=s+<span class="hljs-string">&quot; wocao&quot;</span><br>    println(f3(<span class="hljs-string">&quot;aaaa&quot;</span>))<br>    <span class="hljs-comment">//(4)如果return,则不能省略返回值类型，必须指定。</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">f4</span></span>():<span class="hljs-type">String</span>=<span class="hljs-keyword">return</span> <span class="hljs-string">&quot;hello&quot;</span><br>    println(f4)<br>    <span class="hljs-comment">//(5)如果函数明确声明unit，那么即使函数体中使用return关键字也不起作用</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">f5</span></span>():<span class="hljs-type">Unit</span>=<span class="hljs-keyword">return</span> <span class="hljs-string">&quot;xxxx&quot;</span><br>    println(f5)<br>    <span class="hljs-comment">//(6)Scala如果期望是无返回值类型，可以省略等号</span><br>    <span class="hljs-comment">//将无返回值的函数称为&quot;过程&quot;</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">f6</span></span>() &#123;<br>      <span class="hljs-string">&quot;dadadada&quot;</span><br>    &#125;<br>    println(f6())<br>    <span class="hljs-comment">//(7)如果函数无参，但是声明了参数列表，那么调用时，小括号可加可不加</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">f7</span></span>()=<span class="hljs-string">&quot;xxx&quot;</span><br>    println(f7())<br>    println(f7)<br>    <span class="hljs-comment">//(8)如果函数没有参数列表，那么小括号可以省略，调用时小括号必须省略</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">f8</span> </span>=<span class="hljs-string">&quot;xxx&quot;</span><br>    println(f8)<br>    <span class="hljs-comment">//(9)如果不关心名称，只关心逻辑处理，那么函数名(def)可以省略</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">f9=</span></span>(x:<span class="hljs-type">String</span>)=&gt;&#123;println(<span class="hljs-string">&quot;wode&quot;</span>)&#125;<br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">f10</span></span>(f:<span class="hljs-type">String</span>=&gt;<span class="hljs-type">Unit</span>): <span class="hljs-type">Unit</span> =&#123;<br>      f(<span class="hljs-string">&quot;&quot;</span>)<br>    &#125;<br>    f10(f9)<br>    println(f10((x:<span class="hljs-type">String</span>)=&gt;&#123;println(<span class="hljs-string">&quot;dadada&quot;</span>)&#125;))<br>  &#125;<br><br>&#125;<br><br></code></pre></td></tr></table></figure></li>
-</ul>
-<h4 id="高阶函数"><a href="#高阶函数" class="headerlink" title="高阶函数"></a>高阶函数</h4><ul>
-<li><p>函数可以作为值进行传递</p>
-<ul>
-<li>var f = 函数名 _</li>
-<li>如果明确了变量的数据类型，那么下划线可以省略</li>
-</ul>
-</li>
-<li><p>函数可以作为参数进行传递</p>
-<ul>
-<li>通过匿名函数</li>
-<li>扩展函数的功能</li>
-<li>提高函数的灵活度</li>
-</ul>
-</li>
-<li><p>函数可以作为返回值进行传递</p>
-<ul>
-<li>函数的嵌套</li>
-<li>函数链式调用，通过参数传递数据，在执行过程中，函数始终占据栈内存，容易导致内存溢出</li>
-<li>闭包：内层函数访问外层函数的局部变量，会自动延长外层函数局部变量的生命周期，与内层函数形成一个闭合的效果，我们称之为闭包</li>
-<li>柯里化：将一个参数列表中的多个参数，拆分为多个参数列表</li>
-</ul>
-</li>
-<li><p>匿名函数：</p>
-<ul>
-<li><p>(x:Int)=&gt;{函数体}</p>
-</li>
-<li><p>x：表示输入参数类型；Int：表示输入参数类型；函数体：表示具体代码逻辑</p>
-</li>
-<li><p>参数的类型可以省略，会根据形参进行自动的推导</p>
-</li>
-<li><p>类型省略之后，发现只有一个参数，则圆括号可以省略；其他情况：没有参数和参数超过1的永远不能省略圆括号。</p>
-</li>
-<li><p>匿名函数如果只有一行，则大括号也可以省略</p>
-</li>
-<li><p>如果参数只出现一次，则参数省略且后面参数可以用_代替</p>
-</li>
-</ul>
-<figure class="highlight scala"><table><tr><td class="code"><pre><code class="hljs scala">    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">main</span></span>(args: <span class="hljs-type">Array</span>[<span class="hljs-type">String</span>]): <span class="hljs-type">Unit</span> = &#123;<br><br>        <span class="hljs-comment">// （1）定义一个函数：参数包含数据和逻辑函数</span><br>        <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">operation</span></span>(arr: <span class="hljs-type">Array</span>[<span class="hljs-type">Int</span>], op: <span class="hljs-type">Int</span> =&gt; <span class="hljs-type">Int</span>) = &#123;<br>            <span class="hljs-keyword">for</span> (elem &lt;- arr) <span class="hljs-keyword">yield</span> op(elem)<br>        &#125;<br><br>        <span class="hljs-comment">// （2）定义逻辑函数</span><br>        <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">op</span></span>(ele: <span class="hljs-type">Int</span>): <span class="hljs-type">Int</span> = &#123;<br>            ele + <span class="hljs-number">1</span><br>        &#125;<br><br>        <span class="hljs-comment">// （3）标准函数调用</span><br>        <span class="hljs-keyword">val</span> arr = operation(<span class="hljs-type">Array</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>), op)<br>        println(arr.mkString(<span class="hljs-string">&quot;,&quot;</span>))<br><br>        <span class="hljs-comment">// （4）采用匿名函数</span><br>        <span class="hljs-keyword">val</span> arr1 = operation(<span class="hljs-type">Array</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>), (ele: <span class="hljs-type">Int</span>) =&gt; &#123;<br>            ele + <span class="hljs-number">1</span><br>        &#125;)<br>        println(arr1.mkString(<span class="hljs-string">&quot;,&quot;</span>))<br><br>        <span class="hljs-comment">// （4.1）参数的类型可以省略，会根据形参进行自动的推导;</span><br>        <span class="hljs-keyword">val</span> arr2 = operation(<span class="hljs-type">Array</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>), (ele) =&gt; &#123;<br>            ele + <span class="hljs-number">1</span><br>        &#125;)<br>        println(arr2.mkString(<span class="hljs-string">&quot;,&quot;</span>))<br><br>        <span class="hljs-comment">// （4.2）类型省略之后，发现只有一个参数，则圆括号可以省略；其他情况：没有参数和参数超过1的永远不能省略圆括号。</span><br>        <span class="hljs-keyword">val</span> arr3 = operation(<span class="hljs-type">Array</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>), ele =&gt; &#123;<br>            ele + <span class="hljs-number">1</span><br>        &#125;)<br>        println(arr3.mkString(<span class="hljs-string">&quot;,&quot;</span>))<br><br>        <span class="hljs-comment">// (4.3) 匿名函数如果只有一行，则大括号也可以省略</span><br>        <span class="hljs-keyword">val</span> arr4 = operation(<span class="hljs-type">Array</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>), ele =&gt; ele + <span class="hljs-number">1</span>)<br>        println(arr4.mkString(<span class="hljs-string">&quot;,&quot;</span>))<br><br>        <span class="hljs-comment">//（4.4）如果参数只出现一次，则参数省略且后面参数可以用_代替</span><br>        <span class="hljs-keyword">val</span> arr5 = operation(<span class="hljs-type">Array</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>), _ + <span class="hljs-number">1</span>)<br>        println(arr5.mkString(<span class="hljs-string">&quot;,&quot;</span>))<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="面向对象"><a href="#面向对象" class="headerlink" title="面向对象"></a>面向对象</h2><h3 id="对象和类"><a href="#对象和类" class="headerlink" title="对象和类"></a>对象和类</h3><ul>
-<li><p>在自然界中，只要是客观存在的都是对象（万物皆对象）</p>
-</li>
-<li><p>对大量对象共性的抽象，抽取为类</p>
-<ul>
-<li>有什么         属性</li>
-<li>能做什么     方法</li>
-</ul>
-</li>
-<li><p>在面向对象语言中，类是创建对象的模板</p>
-</li>
-<li><p>类是客观事务在人脑中的主观反映</p>
-</li>
-<li><p>Scala的属性：</p>
-<ul>
-<li>在Scala语言中，类，方法，属性，默认修饰符都是public，但是没有public关键字</li>
-<li>对于Scala中的属性，底层会用private修饰，同时提供公开的设置以及获取属性的方法—-面向封装</li>
-<li>如果要生成满足JavaBean规范的get和set方法的话，需要在属性上加@BeanProperty注解</li>
-</ul>
-</li>
-<li><p>访问权限</p>
-<ul>
-<li><p>Java</p>
-<figure class="highlight routeros"><table><tr><td class="code"><pre><code class="hljs routeros">private		私有的，只能在本类中被访问<br>default		默认的，可以在本类以及同包的其它类中被访问<br>protected	受保护的，可以在本类、同包的其它类以及非同包的子类中被访问<br>public 		公开的，所有类<br></code></pre></td></tr></table></figure></li>
-<li><p>Scala</p>
-<figure class="highlight actionscript"><table><tr><td class="code"><pre><code class="hljs actionscript"><span class="hljs-keyword">private</span>		      私有的，只能在本类中被访问<br><span class="hljs-keyword">public</span>(默认)	     公开的，所有类<br><span class="hljs-keyword">protected</span>		  比Java设置的更严格，只能在本类以及子类中被访问，同包其他类访问不了<br><span class="hljs-keyword">private</span>[包名] 	 可以让指定的包进行访问<br></code></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ul>
-<h3 id="创建对象的方式"><a href="#创建对象的方式" class="headerlink" title="创建对象的方式"></a>创建对象的方式</h3><ul>
-<li><p>构造器</p>
-<ul>
-<li><p>主构造方法</p>
-<ul>
-<li>在声明类的同时，主构造方法也被声明</li>
-<li>主构造方法只能有一个</li>
-<li>如果主构造方法没有参数，那么声明以及调用的时候，小括号可以省略。</li>
-</ul>
-</li>
-<li><p>辅助构造方法</p>
-<ul>
-<li>方法名必修叫this</li>
-<li>辅助构造方法可以重载</li>
-<li>辅助构造方法中的第一行代码必须直接或者间接调用主构造方法</li>
-</ul>
-<figure class="highlight scala"><table><tr><td class="code"><pre><code class="hljs scala"><span class="hljs-comment">//（1）如果主构造器无参数，小括号可省略</span><br><span class="hljs-comment">//class Person ()&#123;</span><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Person</span> </span>&#123;<br><br>    <span class="hljs-keyword">var</span> name: <span class="hljs-type">String</span> = _<br><br>    <span class="hljs-keyword">var</span> age: <span class="hljs-type">Int</span> = _<br><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">this</span></span>(age: <span class="hljs-type">Int</span>) &#123;<br>        <span class="hljs-keyword">this</span>()<br>        <span class="hljs-keyword">this</span>.age = age<br>        println(<span class="hljs-string">&quot;辅助构造器&quot;</span>)<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">this</span></span>(age: <span class="hljs-type">Int</span>, name: <span class="hljs-type">String</span>) &#123;<br>        <span class="hljs-keyword">this</span>(age)<br>        <span class="hljs-keyword">this</span>.name = name<br>    &#125;<br><br>    println(<span class="hljs-string">&quot;主构造器&quot;</span>)<br>&#125;<br><br><span class="hljs-class"><span class="hljs-keyword">object</span> <span class="hljs-title">Person</span> </span>&#123;<br><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">main</span></span>(args: <span class="hljs-type">Array</span>[<span class="hljs-type">String</span>]): <span class="hljs-type">Unit</span> = &#123;<br><br>        <span class="hljs-keyword">val</span> person2 = <span class="hljs-keyword">new</span> <span class="hljs-type">Person</span>(<span class="hljs-number">18</span>)<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
-</ul>
-</li>
-<li><p>继承</p>
-<ul>
-<li>class 子类名 extends 父类名  { 类体 }</li>
-<li>Scala是单继承</li>
-</ul>
-</li>
-<li><p>创建对象的方式</p>
-<ul>
-<li><p>new   底层调用的是构造方法</p>
-</li>
-<li><p>类名()  底层调用的是伴生对象中apply方法</p>
-</li>
-<li><p>实现单例设计模式</p>
-<figure class="highlight scala"><table><tr><td class="code"><pre><code class="hljs scala"><span class="hljs-class"><span class="hljs-keyword">object</span> <span class="hljs-title">Test</span> </span>&#123;<br><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">main</span></span>(args: <span class="hljs-type">Array</span>[<span class="hljs-type">String</span>]): <span class="hljs-type">Unit</span> = &#123;<br><br>        <span class="hljs-comment">//（1）通过伴生对象的apply方法，实现不使用new关键字创建对象。</span><br>        <span class="hljs-keyword">val</span> p1 = <span class="hljs-type">Person</span>()<br>        println(<span class="hljs-string">&quot;p1.name=&quot;</span> + p1.name)<br><br>        <span class="hljs-keyword">val</span> p2 = <span class="hljs-type">Person</span>(<span class="hljs-string">&quot;bobo&quot;</span>)<br>        println(<span class="hljs-string">&quot;p2.name=&quot;</span> + p2.name)<br>    &#125;<br>&#125;<br><br><span class="hljs-comment">//（2）如果想让主构造器变成私有的，可以在()之前加上private</span><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Person</span> <span class="hljs-title">private</span>(<span class="hljs-params">cName: <span class="hljs-type">String</span></span>) </span>&#123;<br>    <span class="hljs-keyword">var</span> name: <span class="hljs-type">String</span> = cName<br>&#125;<br><br><span class="hljs-class"><span class="hljs-keyword">object</span> <span class="hljs-title">Person</span> </span>&#123;<br><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">apply</span></span>(): <span class="hljs-type">Person</span> = &#123;<br>        println(<span class="hljs-string">&quot;apply空参被调用&quot;</span>)<br>        <span class="hljs-keyword">new</span> <span class="hljs-type">Person</span>(<span class="hljs-string">&quot;xx&quot;</span>)<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">apply</span></span>(name: <span class="hljs-type">String</span>): <span class="hljs-type">Person</span> = &#123;<br>        println(<span class="hljs-string">&quot;apply有参被调用&quot;</span>)<br>        <span class="hljs-keyword">new</span> <span class="hljs-type">Person</span>(name)<br>&#125;<br><span class="hljs-comment">//注意：也可以创建其它类型对象，并不一定是伴生类对象</span><br>&#125;<br></code></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ul>
-<h3 id="特质和抽象类"><a href="#特质和抽象类" class="headerlink" title="特质和抽象类"></a>特质和抽象类</h3><ul>
-<li><p>使用abstract关键字定义抽象类</p>
-<ul>
-<li>定义抽象类：abstract class Person{} //通过abstract关键字标记抽象类</li>
-</ul>
-</li>
-<li><p>抽象类一般和抽象属性以及抽象方法配合使用</p>
-</li>
-<li><p>抽象属性</p>
-<ul>
-<li>属性只有声明，但是没有赋值</li>
-<li>定义抽象属性：val|var name:String //一个属性没有初始化，就是抽象属性</li>
-</ul>
-</li>
-<li><p>抽象方法</p>
-<ul>
-<li>方法只有声明，没有实现</li>
-<li>定义抽象方法：def hello():String //只声明而没有实现的方法，就是抽象方法</li>
-</ul>
-</li>
-<li><p>抽象类总结</p>
-<ul>
-<li>在一个类中，如果存在抽象属性或者抽象方法，那么这个类一定是抽象类</li>
-<li>如果一个类是抽象类，那么它不一定包含抽象属性和抽象方法</li>
-<li>如果一个类中存在抽象属性或者抽象方法，那么具体的实现应该交给子类完成</li>
-<li>如果子类也实现不了抽象内容，那么子类也应该声明为抽象类</li>
-<li>如果重写(实现)抽象属性或者方法，那么override关键字可以省略</li>
-<li>如果重写(覆盖)非抽象属性或者方法，那么override关键字不能省略，必须得加</li>
-<li>如果对非抽象属性进行覆盖，要求属性必须得用val修饰</li>
-<li>可以通过super关键字调用父类的方法，但是不能super调用父类的属性</li>
-</ul>
-</li>
-<li><p>在Scala中，属性和方法都是动态绑定</p>
-<ul>
-<li>静态绑定（编译器绑定）<ul>
-<li>在编译阶段，确定属性或者方法所属类型，多态的时候根据这个来看。（编译看左，运行看右）</li>
-</ul>
-</li>
-<li>动态绑定<ul>
-<li>在运行阶段，根据实际创建的对象类型来决定属性或者方法所属类型</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="特质（Trait）"><a href="#特质（Trait）" class="headerlink" title="特质（Trait）"></a>特质（Trait）</h4><ul>
-<li><p>Scala中采用特质trait来代替接口的概念。</p>
-</li>
-<li><p>Scala中的trait中即<strong>可以有抽象属性和方法，也可以有具体的属性和方法</strong>，<strong>一个类可以混入（mixin）多个特质</strong>。这种感觉类似于Java中的抽象类。</p>
-<figure class="highlight scala"><table><tr><td class="code"><pre><code class="hljs scala"><span class="hljs-class"><span class="hljs-keyword">trait</span> <span class="hljs-title">PersonTrait</span> </span>&#123;<br><br>    <span class="hljs-comment">// 声明属性</span><br>    <span class="hljs-keyword">var</span> name:<span class="hljs-type">String</span> = _<br><br>    <span class="hljs-comment">// 声明方法</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">eat</span></span>():<span class="hljs-type">Unit</span>=&#123;<br><br>    &#125;<br><br>    <span class="hljs-comment">// 抽象属性</span><br>    <span class="hljs-keyword">var</span> age:<span class="hljs-type">Int</span><br>    <br>    <span class="hljs-comment">// 抽象方法</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">say</span></span>():<span class="hljs-type">Unit</span><br>&#125;<br><span class="hljs-comment">//通过查看字节码，可以看到特质=抽象类+接口</span><br></code></pre></td></tr></table></figure></li>
-<li><p>基本语法</p>
-<ul>
-<li><strong>没有父类</strong>：class  类名 <em><strong>extends</strong></em> 特质1  <em><strong>with</strong></em>  特质2  <em><strong>with</strong></em>  特质3 …</li>
-<li><strong>有父类</strong>：class  类名  <em><strong>extends</strong></em> 父类  <em><strong>with</strong></em> 特质1  <em><strong>with</strong></em>  特质2  <em><strong>with</strong></em> 特质3…</li>
-</ul>
-</li>
-<li><p>特质（trait）叠加：</p>
-<ul>
-<li><p>由于一个类可以混入（mixin）多个trait，且trait中可以有具体的属性和方法，若混入的特质中具有相同的方法（方法名，参数列表，返回值均相同），必然会出现继承冲突问题。冲突分为以下两种：</p>
-<ul>
-<li>第一种，一个类（Sub）混入的两个trait（TraitA，TraitB）中具有相同的具体方法，且两个trait之间没有任何关系，解决这类冲突问题，直接在类（Sub）中重写冲突方法。</li>
-<li>第二种，一个类（Sub）混入的两个trait（TraitA，TraitB）中具有相同的具体方法，且两个trait继承自相同的trait（TraitC），及所谓的“钻石问题”，解决这类冲突问题，Scala采用了<em><strong>特质叠加</strong></em>的策略。</li>
-</ul>
-</li>
-<li><p>特质叠加顺序</p>
-<ul>
-<li>第一步：列出第一个混入特质的继承关系，作为临时叠加的顺序</li>
-<li>第二步：列出第二个混入特质的继承关系,并且该顺序放到临时叠加顺序的前面，已经出现的特质不在出现   </li>
-<li>第三步：将子类放到临时叠加顺序的第一个</li>
-</ul>
-<figure class="highlight scala"><table><tr><td class="code"><pre><code class="hljs scala"><span class="hljs-class"><span class="hljs-keyword">trait</span> <span class="hljs-title">Ball</span> </span>&#123;<br>   <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">describe</span></span>(): <span class="hljs-type">String</span> = &#123;<br>      <span class="hljs-string">&quot;ball&quot;</span><br>   &#125;<br>&#125;<br><br><span class="hljs-class"><span class="hljs-keyword">trait</span> <span class="hljs-title">Color</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Ball</span> </span>&#123;<br>   <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">describe</span></span>(): <span class="hljs-type">String</span> = &#123;<br>      <span class="hljs-string">&quot;blue-&quot;</span> + <span class="hljs-keyword">super</span>.describe()<br>   &#125;<br>&#125;<br><br><span class="hljs-class"><span class="hljs-keyword">trait</span> <span class="hljs-title">Category</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Ball</span> </span>&#123;<br>   <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">describe</span></span>(): <span class="hljs-type">String</span> = &#123;<br>      <span class="hljs-string">&quot;foot-&quot;</span> + <span class="hljs-keyword">super</span>.describe()<br>   &#125;<br>&#125;<br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyBall</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Category</span> <span class="hljs-keyword">with</span> <span class="hljs-title">Color</span> </span>&#123;<br>   <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">describe</span></span>(): <span class="hljs-type">String</span> = &#123;<br>      <span class="hljs-string">&quot;my ball is a &quot;</span> + <span class="hljs-keyword">super</span>.describe()<br>   &#125;<br>&#125;<br><br><span class="hljs-class"><span class="hljs-keyword">object</span> <span class="hljs-title">TestTrait</span> </span>&#123;<br>   <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">main</span></span>(args: <span class="hljs-type">Array</span>[<span class="hljs-type">String</span>]): <span class="hljs-type">Unit</span> = &#123;<br>      println(<span class="hljs-keyword">new</span> <span class="hljs-type">MyBall</span>().describe())<br>   &#125;<br>&#125;<br><span class="hljs-comment">//注意：这个时候super不是调用父类中的方法了，而是调用特质叠加顺序上下一个节点的方法</span><br><span class="hljs-comment">//运行结果：my ball is a blue-foot-ball</span><br></code></pre></td></tr></table></figure></li>
-</ul>
-</li>
-<li><p>特质和抽象类的区别</p>
-<ul>
-<li>优先使用特质。一个类扩展多个特质是很方便的，但却只能扩展一个抽象类。</li>
-<li>如果你需要构造函数参数，使用抽象类。因为抽象类可以定义带参数的构造函数，而特质不行（有无参构造）。</li>
-</ul>
-</li>
-<li><p>类型检查和转换</p>
-<ul>
-<li>obj.isInstanceOf[T]：判断obj是不是T类型。</li>
-<li>obj.asInstanceOf[T]：将obj强转成T类型。</li>
-<li>classOf获取对象的类名。</li>
-</ul>
-</li>
-</ul>
-<h2 id="集合"><a href="#集合" class="headerlink" title="集合"></a>集合</h2><h3 id="集合基本概述"><a href="#集合基本概述" class="headerlink" title="集合基本概述"></a>集合基本概述</h3><ul>
-<li><p>存放单值类型</p>
-<ul>
-<li>Seq   有序，可重复</li>
-<li>Set    无序，不能重复</li>
-</ul>
-</li>
-<li><p>存放键值对</p>
-<ul>
-<li>Map   以k-v键值对的形式存放数据，其中key无序不能重复</li>
-</ul>
-</li>
-<li><p>对于几乎所有的集合类，Scala都同时提供了可变和不可变的版本，分别位于以下两个包</p>
-<ul>
-<li>不可变集合：scala.collection.immutable<ul>
-<li>对集合进行添加或者删除操作的时候，会创建新的集合对象</li>
-</ul>
-</li>
-<li>可变集合：scala.collection.mutable<ul>
-<li>对集合进行添加或者删除操作的时候，直接在原来的集合上操作，不会创建新的集合对象</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>数组</p>
-<ul>
-<li><p>Array</p>
-<figure class="highlight scala"><table><tr><td class="code"><pre><code class="hljs scala"><span class="hljs-class"><span class="hljs-keyword">object</span> <span class="hljs-title">TestArray</span></span>&#123;<br><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">main</span></span>(args: <span class="hljs-type">Array</span>[<span class="hljs-type">String</span>]): <span class="hljs-type">Unit</span> = &#123;<br><br>        <span class="hljs-comment">//（1）数组定义</span><br>        <span class="hljs-keyword">val</span> arr01 = <span class="hljs-keyword">new</span> <span class="hljs-type">Array</span>[<span class="hljs-type">Int</span>](<span class="hljs-number">4</span>)<br>        println(arr01.length) <span class="hljs-comment">// 4</span><br>        <br>        <span class="hljs-keyword">var</span> arr02 = <span class="hljs-type">Array</span>(<span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-string">&quot;bobo&quot;</span>)<br>        println(arr02.length)<br>        <span class="hljs-keyword">for</span> (i &lt;- arr02) &#123;<br>            println(i)<br>        &#125;<br>        <span class="hljs-comment">//（2）数组赋值</span><br><br><br>        <span class="hljs-comment">//（2.1）修改某个元素的值</span><br>        arr01(<span class="hljs-number">3</span>) = <span class="hljs-number">10</span><br>        <span class="hljs-comment">//（2.2）采用方法的形式给数组赋值</span><br>        arr01.update(<span class="hljs-number">0</span>,<span class="hljs-number">1</span>)<br><br>        <span class="hljs-comment">//（3）遍历数组</span><br>        <span class="hljs-comment">//（3.1）查看数组</span><br>        println(arr01.mkString(<span class="hljs-string">&quot;,&quot;</span>))<br><br>        <span class="hljs-comment">//（3.2）普通遍历</span><br>        <span class="hljs-keyword">for</span> (i &lt;- arr01) &#123;<br>            println(i)<br>        &#125;<br><br>        <span class="hljs-comment">//（3.3）简化遍历</span><br>        <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">printx</span></span>(elem:<span class="hljs-type">Int</span>): <span class="hljs-type">Unit</span> = &#123;<br>            println(elem)<br>        &#125;<br>         arr01.foreach(printx)<br>        <span class="hljs-comment">// arr01.foreach((x)=&gt;&#123;println(x)&#125;)</span><br>        <span class="hljs-comment">// arr01.foreach(println(_))</span><br>        arr01.foreach(println)<br><br>        <span class="hljs-comment">//（4）增加元素（由于创建的是不可变数组，增加元素，其实是产生新的数组）</span><br>        println(arr01)<br>        <span class="hljs-keyword">val</span> ints: <span class="hljs-type">Array</span>[<span class="hljs-type">Int</span>] = arr01 :+ <span class="hljs-number">5</span><br>        println(ints)<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
-<li><p>ArrayBuffer</p>
-</li>
-<li><p>多维数组</p>
-<figure class="highlight scala"><table><tr><td class="code"><pre><code class="hljs scala"><span class="hljs-class"><span class="hljs-keyword">object</span> <span class="hljs-title">DimArray</span> </span>&#123;<br><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">main</span></span>(args: <span class="hljs-type">Array</span>[<span class="hljs-type">String</span>]): <span class="hljs-type">Unit</span> = &#123;<br>        <br>        <span class="hljs-comment">//（1）创建了一个二维数组, 有三个元素，每个元素是，含有4个元素一维数组()</span><br>        <span class="hljs-keyword">val</span> arr = <span class="hljs-type">Array</span>.ofDim[<span class="hljs-type">Int</span>](<span class="hljs-number">3</span>, <span class="hljs-number">4</span>)<br>        arr(<span class="hljs-number">1</span>)(<span class="hljs-number">2</span>) = <span class="hljs-number">88</span><br><br>        <span class="hljs-comment">//（2）遍历二维数组</span><br>        <span class="hljs-keyword">for</span> (i &lt;- arr) &#123; <span class="hljs-comment">//i 就是一维数组</span><br><br>            <span class="hljs-keyword">for</span> (j &lt;- i) &#123;<br>                print(j + <span class="hljs-string">&quot; &quot;</span>)<br>            &#125;<br><br>            println()<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
-</ul>
-</li>
-<li><p>Seq</p>
-<ul>
-<li><p>List</p>
-<figure class="highlight scala"><table><tr><td class="code"><pre><code class="hljs scala"><span class="hljs-class"><span class="hljs-keyword">object</span> <span class="hljs-title">TestList</span> </span>&#123;<br><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">main</span></span>(args: <span class="hljs-type">Array</span>[<span class="hljs-type">String</span>]): <span class="hljs-type">Unit</span> = &#123;<br><br>        <span class="hljs-comment">//（1）List默认为不可变集合</span><br>        <span class="hljs-comment">//（2）创建一个List（数据有顺序，可重复）</span><br>        <span class="hljs-keyword">val</span> list: <span class="hljs-type">List</span>[<span class="hljs-type">Int</span>] = <span class="hljs-type">List</span>(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">3</span>)<br>        <br>        <span class="hljs-comment">//（7）空集合Nil</span><br>        <span class="hljs-keyword">val</span> list5 = <span class="hljs-number">1</span>::<span class="hljs-number">2</span>::<span class="hljs-number">3</span>::<span class="hljs-number">4</span>::<span class="hljs-type">Nil</span><br><br>        <span class="hljs-comment">//（4）List增加数据</span><br>        <span class="hljs-comment">//（4.1）::的运算规则从右向左</span><br>        <span class="hljs-comment">//val list1 = 5::list</span><br>        <span class="hljs-keyword">val</span> list1 = <span class="hljs-number">7</span>::<span class="hljs-number">6</span>::<span class="hljs-number">5</span>::list<br>        <span class="hljs-comment">//（4.2）添加到第一个元素位置</span><br>        <span class="hljs-keyword">val</span> list2 = list.+:(<span class="hljs-number">5</span>)<br><br>        <span class="hljs-comment">//（5）集合间合并：将一个整体拆成一个一个的个体，称为扁平化</span><br>        <span class="hljs-keyword">val</span> list3 = <span class="hljs-type">List</span>(<span class="hljs-number">8</span>,<span class="hljs-number">9</span>)<br>        <span class="hljs-comment">//val list4 = list3::list1</span><br>        <span class="hljs-keyword">val</span> list4 = list3:::list1<br><br>        <span class="hljs-comment">//（6）取指定数据</span><br>        println(list(<span class="hljs-number">0</span>))<br><br>        <span class="hljs-comment">//（3）遍历List</span><br>        <span class="hljs-comment">//list.foreach(println)</span><br>        <span class="hljs-comment">//list1.foreach(println)</span><br>        <span class="hljs-comment">//list3.foreach(println)</span><br>        <span class="hljs-comment">//list4.foreach(println)</span><br>        list5.foreach(println)<br>    &#125;<br></code></pre></td></tr></table></figure></li>
-<li><p>ListBuffer</p>
-</li>
-</ul>
-</li>
-<li><p>Set</p>
-</li>
-<li><p>Map</p>
-<ul>
-<li><p>当调用map.get方法的时候，返回的Option类型数据,Option有两个子类型，一个Some，另一个None,可以帮我们避免对空值进行处理的情况，使用getOrElse函数，给空值赋默认值</p>
-<figure class="highlight scala"><table><tr><td class="code"><pre><code class="hljs scala"><span class="hljs-class"><span class="hljs-keyword">object</span> <span class="hljs-title">TestMap</span> </span>&#123;<br><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">main</span></span>(args: <span class="hljs-type">Array</span>[<span class="hljs-type">String</span>]): <span class="hljs-type">Unit</span> = &#123;<br>        <span class="hljs-comment">// Map</span><br>        <span class="hljs-comment">//（1）创建不可变集合Map</span><br>        <span class="hljs-keyword">val</span> map = <span class="hljs-type">Map</span>( <span class="hljs-string">&quot;a&quot;</span>-&gt;<span class="hljs-number">1</span>, <span class="hljs-string">&quot;b&quot;</span>-&gt;<span class="hljs-number">2</span>, <span class="hljs-string">&quot;c&quot;</span>-&gt;<span class="hljs-number">3</span> )<br><br>        <span class="hljs-comment">//（3）访问数据</span><br>        <span class="hljs-keyword">for</span> (elem &lt;- map.keys) &#123;<br>            <span class="hljs-comment">// 使用get访问map集合的数据，会返回特殊类型Option(选项):有值（Some），无值(None)</span><br>            println(elem + <span class="hljs-string">&quot;=&quot;</span> + map.get(elem).get)<br>        &#125;<br><br>        <span class="hljs-comment">//（4）如果key不存在，返回0</span><br>        println(map.get(<span class="hljs-string">&quot;d&quot;</span>).getOrElse(<span class="hljs-number">0</span>))<br>        println(map.getOrElse(<span class="hljs-string">&quot;d&quot;</span>, <span class="hljs-number">0</span>))<br><br>        <span class="hljs-comment">//（2）循环打印</span><br>        map.foreach((kv)=&gt;&#123;println(kv)&#125;)<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ul>
-<h3 id="集合函数"><a href="#集合函数" class="headerlink" title="集合函数"></a>集合函数</h3><ul>
-<li><p>基本属性和常用操作</p>
-<p>（1）获取集合长度          length</p>
-<p>（2）获取集合大小          size</p>
-<p>（3）循环遍历                  foreach</p>
-<p>（4）迭代器                      iterator</p>
-<p>（5）生成字符串              mkString</p>
-<p>（6）是否包含                  contains</p>
-</li>
-<li><p>衍生集合</p>
-<figure class="highlight angelscript"><table><tr><td class="code"><pre><code class="hljs angelscript">（<span class="hljs-number">1</span>）获取集合的头<br>	head<br>（<span class="hljs-number">2</span>）获取集合的尾（不是头的就是尾）<br>	tail<br>（<span class="hljs-number">3</span>）集合最后一个数据<br>	last<br>（<span class="hljs-number">4</span>）集合初始数据（不包含最后一个）<br>	init<br>（<span class="hljs-number">5</span>）反转<br>	reverse<br>（<span class="hljs-number">6</span>）取前（后）n个元素<br>	take|takeRight<br>（<span class="hljs-number">7</span>）去掉前（后）n个元素<br>	drop|dropRight<br>（<span class="hljs-number">8</span>）并集<br>	union<br>（<span class="hljs-number">9</span>）交集<br>	<span class="hljs-built_in">int</span>ersect<br>（<span class="hljs-number">10</span>）差集<br>	diff<br>（<span class="hljs-number">11</span>）拉链<br>	zip<br>（<span class="hljs-number">12</span>）滑窗<br>	sliding<br></code></pre></td></tr></table></figure></li>
-<li><p>集合计算初级，高级函数</p>
-<figure class="highlight angelscript"><table><tr><td class="code"><pre><code class="hljs angelscript">		（<span class="hljs-number">1</span>）求和<br>			sum<br>		（<span class="hljs-number">2</span>）求乘积<br>			product<br>		（<span class="hljs-number">3</span>）最大值<br>			max<br>		（<span class="hljs-number">4</span>）最小值<br>			min<br>		（<span class="hljs-number">5</span>）排序<br>			sorded|sortBy|sortWith<br>			<br>集合计算高级函数：<br>		（<span class="hljs-number">1</span>）过滤 filter(函数：指定过滤条件) <br>			 遍历一个集合并从中获取满足指定条件的元素组成一个新的集合<br><br>		（<span class="hljs-number">2</span>）转换/映射  map<br>				 	<br>		（<span class="hljs-number">3</span>）扁平化 flatten   :::<br>			将集合中元素由整体转换为个体的过程<br><br>		（<span class="hljs-number">4</span>）扁平映射  flatMap  <br>			先映射再进行扁平化处理<br><br>		（<span class="hljs-number">5</span>）分组	gruopBy<br>			按照一定的分组规则，将集合中的元素放到不同的组中<br><br>		（<span class="hljs-number">6</span>）简化|规约<br>			&gt;对集合内部元素之间进行聚合 <br>			&gt;reduce   聚合的数据类型一致<br>			&gt;reduceLeft|reduceRight 	聚合的数据类型可以不一致<br><br>		（<span class="hljs-number">7</span>）折叠<br>			&gt;对外部元素和集合内部元素之间进行聚合<br>			&gt;fold 	聚合的数据类型一致<br>			&gt;foldLeft|foldRight		聚合的数据类型可以不一致<br></code></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="下划线的用法"><a href="#下划线的用法" class="headerlink" title="下划线的用法"></a>下划线的用法</h2><ul>
-<li>标识符命名</li>
-<li>导包<ul>
-<li>导入某一个类下的”静态成员” ：import scala.util.control.Breaks._</li>
-<li>导入某一包下的所有类：import java.util._</li>
-<li>屏蔽类：import java.sql.{Date=&gt;<em>,Array=&gt;</em>,_}</li>
-</ul>
-</li>
-<li>匿名函数<ul>
-<li>如果在匿名函数中，参数只出现了一次，那么参数可以省略，在函数体使用参数的时候，用下划线代替</li>
-</ul>
-</li>
-<li>在类中声明属性，如果要给属性赋默认值</li>
-<li>在模式匹配中<ul>
-<li>case_  表示上面所有case都没有匹配成功的情况，相当于default</li>
-</ul>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Scala</category>
-      </categories>
-      <tags>
-        <tag>Scala</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Spark</title>
     <url>/2021/08/27/Spark/</url>
     <content><![CDATA[<h1 id="Spark"><a href="#Spark" class="headerlink" title="Spark"></a>Spark</h1><h2 id="Spark入门"><a href="#Spark入门" class="headerlink" title="Spark入门"></a>Spark入门</h2><ul>
@@ -3464,6 +3081,389 @@
       <tags>
         <tag>大数据</tag>
         <tag>spark</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Scala</title>
+    <url>/2021/08/10/Scala/</url>
+    <content><![CDATA[<h1 id="Scala"><a href="#Scala" class="headerlink" title="Scala"></a>Scala</h1><h2 id="Scala简介"><a href="#Scala简介" class="headerlink" title="Scala简介"></a>Scala简介</h2><ul>
+<li>Scala是一门多范式的编程语言，Scala支持面向对象和函数式编程。（多范式，就是多种编程方法的意思。有面向过程，面向对象，泛型，函数式四种程序设计方式。）</li>
+</ul>
+<h3 id="class和object说明"><a href="#class和object说明" class="headerlink" title="class和object说明"></a>class和object说明</h3><ul>
+<li>object：从语法的角度上讲，上面的语法表示声明了一个伴生对象，但是还会生成一个伴生类。Scala是纯面向对象的，去除了java中的static关键字，通过伴生对象模拟static效果</li>
+<li>伴生对象：伴随类产生的一个对象</li>
+<li>对scala源文件进行编译后，默认会生成两个字节码文件，一个是伴生类另一个是伴生对象所属类（类名+一个$符号）</li>
+<li>真正的伴生对象是伴生对象所属类中创建的单例对象</li>
+<li>如果不想生成伴生类，可以手动生成，要求伴生类名称和伴生对象名称一致。</li>
+<li>运行原理：<ul>
+<li>java运行原理：先编译，再解释。.java源文件—&gt;编译器(javac)—&gt;.class字节码文件—&gt;JVM(java 不同平台)—&gt;机器指令</li>
+<li>scala运行原理：先编译，再解释。.scala源文件—&gt;编译器(scalac)—&gt;.class字节码文件—&gt;JVM(scala 不同平台)—&gt;机器指令</li>
+</ul>
+</li>
+</ul>
+<h2 id="变量和数据类型"><a href="#变量和数据类型" class="headerlink" title="变量和数据类型"></a>变量和数据类型</h2><ul>
+<li><p>注释和java规则一样。</p>
+</li>
+<li><p>变量 var 变量名[:变量类型]=初始值</p>
+</li>
+<li><p>常量 val 变量名[:变量类型]=初始值</p>
+</li>
+<li><p>声明变量时必须要有初始指</p>
+</li>
+<li><p>标识符业余java基本一致。特殊情况：（1）以字母或者下划线开头，后接字母、数字、下划线</p>
+<p>（2）以操作符开头，且只包含操作符（+ - * / # !等）</p>
+<p>（3）用反引号<code>....</code>包括的任意字符串，即使是Scala关键字（39个）也可以</p>
+</li>
+<li><p>键盘输入输出：</p>
+</li>
+<li><p>输出：（1）字符串，通过+号连接</p>
+<p>（2）printf用法：字符串，通过%传值。</p>
+<p>（3）字符串模板（插值字符串）：通过”$”获取变量值。</p>
+<p>${}</p>
+</li>
+<li><p>输入：StdIn.readLine()、StdIn.readShort()、StdIn.readDouble()</p>
+</li>
+</ul>
+<h3 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h3><ul>
+<li>Any：所有类的父类</li>
+<li>AnyVal:(值类型)<ul>
+<li>Byte,Short,Int,Long,Float,Double,Boolean,Char</li>
+<li>Unit:表示返回值类型为空，相当于Java中的 void  关键字</li>
+<li>StringOps:对自负床功能的 增强</li>
+</ul>
+</li>
+<li>AnyRef（引用类型 ）<ul>
+<li>所有java语言中的类</li>
+<li>Scala  语言中的类</li>
+<li>集合</li>
+<li>Null：表示变量声明后，没有指向任何对象，相当于java中的null关键字</li>
+</ul>
+</li>
+<li>Nothing :所有类的子类</li>
+</ul>
+<h3 id="类型转换"><a href="#类型转换" class="headerlink" title="类型转换"></a>类型转换</h3><ul>
+<li>char在java中是没有符号位的。char占两个字节。</li>
+</ul>
+<h3 id="函数式编程"><a href="#函数式编程" class="headerlink" title="函数式编程"></a>函数式编程</h3><ul>
+<li><p>面向对象编程：</p>
+<ul>
+<li>Scala是一个完全面向对象的编程语言，万物皆对象。</li>
+<li>对象的本质：对数据和行为的一个封装。</li>
+</ul>
+</li>
+<li><p>函数式编程：</p>
+<ul>
+<li>将问题分解成一个一个的步骤，将每一个步骤进行封装，通调用这些封装好的步骤。</li>
+<li>Scala是一个完全函数式编程语言，万物皆函数。</li>
+</ul>
+</li>
+<li><p>函数的本质：函数可以当做一个值进行传递。</p>
+</li>
+</ul>
+<h4 id="函数基础"><a href="#函数基础" class="headerlink" title="函数基础"></a>函数基础</h4><ul>
+<li><p>函数与方法的区别</p>
+<ul>
+<li>为完成某一功能的程序语句的集合，称为函数。</li>
+<li>类中的函数称为方法</li>
+<li>函数没有重载和重写的概念；方法可以进行重载和重写</li>
+<li>Scala中函数可以嵌套定义</li>
+</ul>
+<figure class="highlight scala"><table><tr><td class="code"><pre><code class="hljs scala"><span class="hljs-class"><span class="hljs-keyword">object</span> <span class="hljs-title">TestFunction</span> </span>&#123;<br><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">main</span></span>(args: <span class="hljs-type">Array</span>[<span class="hljs-type">String</span>]): <span class="hljs-type">Unit</span> = &#123;<br>        <span class="hljs-comment">// （1）函数定义</span><br>        <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">f</span></span>(arg: <span class="hljs-type">String</span>): <span class="hljs-type">Unit</span> = &#123;<br>            println(arg)<br>        &#125;<br>        <span class="hljs-comment">// （2）函数调用</span><br>        <span class="hljs-comment">// 函数名（参数）</span><br>        f(<span class="hljs-string">&quot;hello world&quot;</span>)<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+<li><p>函数至简原则</p>
+<ul>
+<li><p>（1）return可以省略，Scala会使用函数体的最后一行代码作为返回值</p>
+<p>（2）如果函数体只有一行代码，可以省略花括号</p>
+<p>（3）返回值类型如果能够推断出来，那么可以省略（:和返回值类型一起省略）</p>
+<p>（4）如果有return，则不能省略返回值类型，必须指定</p>
+<p>（5）如果函数明确声明unit，那么即使函数体中使用return关键字也不起作用</p>
+<p>（6）Scala如果期望是无返回值类型，可以省略等号</p>
+<p>（7）如果函数无参，但是声明了参数列表，那么调用时，小括号，可加可不加</p>
+<p>（8）如果函数没有参数列表，那么小括号可以省略，调用时小括号必须省略</p>
+<p>（9）如果不关心名称，只关心逻辑处理，那么函数名（def）可以省略</p>
+</li>
+</ul>
+<figure class="highlight scala"><table><tr><td class="code"><pre><code class="hljs scala"><span class="hljs-keyword">package</span> com.zt.spark.day01<br><br><span class="hljs-class"><span class="hljs-keyword">object</span> <span class="hljs-title">FunctionTest</span> </span>&#123;<br>  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">main</span></span>(args: <span class="hljs-type">Array</span>[<span class="hljs-type">String</span>]): <span class="hljs-type">Unit</span> = &#123;<br>    <span class="hljs-comment">//(0)函数标准写法</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">f</span></span>(s:<span class="hljs-type">String</span>): <span class="hljs-type">String</span>=&#123;<br>      <span class="hljs-keyword">return</span> s+<span class="hljs-string">&quot;hello world&quot;</span><br>    &#125;<br>    println(f(<span class="hljs-string">&quot;hi,&quot;</span>))<br>    <span class="hljs-comment">//至简原则</span><br>    <span class="hljs-comment">//(1)return可以省略，Scala会使用函数体的最后一行代码作为返回值</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">f1</span></span>(s:<span class="hljs-type">String</span>):<span class="hljs-type">String</span>=&#123;<br>      s+<span class="hljs-string">&quot;hello&quot;</span><br>    &#125;<br>    println(f1(<span class="hljs-string">&quot;world &quot;</span>))<br>    <span class="hljs-comment">//(2)如果函数只有一行代码，可以省略花括号</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">f2</span></span>(s:<span class="hljs-type">String</span>):<span class="hljs-type">String</span>=s+<span class="hljs-string">&quot; hello&quot;</span><br>    println(f2(<span class="hljs-string">&quot;world&quot;</span>))<br>    <span class="hljs-comment">//(3)返回值类型如果能推断出来，那么可以省略（：和返回值类型一起省略）</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">f3</span></span>(s:<span class="hljs-type">String</span>)=s+<span class="hljs-string">&quot; wocao&quot;</span><br>    println(f3(<span class="hljs-string">&quot;aaaa&quot;</span>))<br>    <span class="hljs-comment">//(4)如果return,则不能省略返回值类型，必须指定。</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">f4</span></span>():<span class="hljs-type">String</span>=<span class="hljs-keyword">return</span> <span class="hljs-string">&quot;hello&quot;</span><br>    println(f4)<br>    <span class="hljs-comment">//(5)如果函数明确声明unit，那么即使函数体中使用return关键字也不起作用</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">f5</span></span>():<span class="hljs-type">Unit</span>=<span class="hljs-keyword">return</span> <span class="hljs-string">&quot;xxxx&quot;</span><br>    println(f5)<br>    <span class="hljs-comment">//(6)Scala如果期望是无返回值类型，可以省略等号</span><br>    <span class="hljs-comment">//将无返回值的函数称为&quot;过程&quot;</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">f6</span></span>() &#123;<br>      <span class="hljs-string">&quot;dadadada&quot;</span><br>    &#125;<br>    println(f6())<br>    <span class="hljs-comment">//(7)如果函数无参，但是声明了参数列表，那么调用时，小括号可加可不加</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">f7</span></span>()=<span class="hljs-string">&quot;xxx&quot;</span><br>    println(f7())<br>    println(f7)<br>    <span class="hljs-comment">//(8)如果函数没有参数列表，那么小括号可以省略，调用时小括号必须省略</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">f8</span> </span>=<span class="hljs-string">&quot;xxx&quot;</span><br>    println(f8)<br>    <span class="hljs-comment">//(9)如果不关心名称，只关心逻辑处理，那么函数名(def)可以省略</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">f9=</span></span>(x:<span class="hljs-type">String</span>)=&gt;&#123;println(<span class="hljs-string">&quot;wode&quot;</span>)&#125;<br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">f10</span></span>(f:<span class="hljs-type">String</span>=&gt;<span class="hljs-type">Unit</span>): <span class="hljs-type">Unit</span> =&#123;<br>      f(<span class="hljs-string">&quot;&quot;</span>)<br>    &#125;<br>    f10(f9)<br>    println(f10((x:<span class="hljs-type">String</span>)=&gt;&#123;println(<span class="hljs-string">&quot;dadada&quot;</span>)&#125;))<br>  &#125;<br><br>&#125;<br><br></code></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="高阶函数"><a href="#高阶函数" class="headerlink" title="高阶函数"></a>高阶函数</h4><ul>
+<li><p>函数可以作为值进行传递</p>
+<ul>
+<li>var f = 函数名 _</li>
+<li>如果明确了变量的数据类型，那么下划线可以省略</li>
+</ul>
+</li>
+<li><p>函数可以作为参数进行传递</p>
+<ul>
+<li>通过匿名函数</li>
+<li>扩展函数的功能</li>
+<li>提高函数的灵活度</li>
+</ul>
+</li>
+<li><p>函数可以作为返回值进行传递</p>
+<ul>
+<li>函数的嵌套</li>
+<li>函数链式调用，通过参数传递数据，在执行过程中，函数始终占据栈内存，容易导致内存溢出</li>
+<li>闭包：内层函数访问外层函数的局部变量，会自动延长外层函数局部变量的生命周期，与内层函数形成一个闭合的效果，我们称之为闭包</li>
+<li>柯里化：将一个参数列表中的多个参数，拆分为多个参数列表</li>
+</ul>
+</li>
+<li><p>匿名函数：</p>
+<ul>
+<li><p>(x:Int)=&gt;{函数体}</p>
+</li>
+<li><p>x：表示输入参数类型；Int：表示输入参数类型；函数体：表示具体代码逻辑</p>
+</li>
+<li><p>参数的类型可以省略，会根据形参进行自动的推导</p>
+</li>
+<li><p>类型省略之后，发现只有一个参数，则圆括号可以省略；其他情况：没有参数和参数超过1的永远不能省略圆括号。</p>
+</li>
+<li><p>匿名函数如果只有一行，则大括号也可以省略</p>
+</li>
+<li><p>如果参数只出现一次，则参数省略且后面参数可以用_代替</p>
+</li>
+</ul>
+<figure class="highlight scala"><table><tr><td class="code"><pre><code class="hljs scala">    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">main</span></span>(args: <span class="hljs-type">Array</span>[<span class="hljs-type">String</span>]): <span class="hljs-type">Unit</span> = &#123;<br><br>        <span class="hljs-comment">// （1）定义一个函数：参数包含数据和逻辑函数</span><br>        <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">operation</span></span>(arr: <span class="hljs-type">Array</span>[<span class="hljs-type">Int</span>], op: <span class="hljs-type">Int</span> =&gt; <span class="hljs-type">Int</span>) = &#123;<br>            <span class="hljs-keyword">for</span> (elem &lt;- arr) <span class="hljs-keyword">yield</span> op(elem)<br>        &#125;<br><br>        <span class="hljs-comment">// （2）定义逻辑函数</span><br>        <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">op</span></span>(ele: <span class="hljs-type">Int</span>): <span class="hljs-type">Int</span> = &#123;<br>            ele + <span class="hljs-number">1</span><br>        &#125;<br><br>        <span class="hljs-comment">// （3）标准函数调用</span><br>        <span class="hljs-keyword">val</span> arr = operation(<span class="hljs-type">Array</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>), op)<br>        println(arr.mkString(<span class="hljs-string">&quot;,&quot;</span>))<br><br>        <span class="hljs-comment">// （4）采用匿名函数</span><br>        <span class="hljs-keyword">val</span> arr1 = operation(<span class="hljs-type">Array</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>), (ele: <span class="hljs-type">Int</span>) =&gt; &#123;<br>            ele + <span class="hljs-number">1</span><br>        &#125;)<br>        println(arr1.mkString(<span class="hljs-string">&quot;,&quot;</span>))<br><br>        <span class="hljs-comment">// （4.1）参数的类型可以省略，会根据形参进行自动的推导;</span><br>        <span class="hljs-keyword">val</span> arr2 = operation(<span class="hljs-type">Array</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>), (ele) =&gt; &#123;<br>            ele + <span class="hljs-number">1</span><br>        &#125;)<br>        println(arr2.mkString(<span class="hljs-string">&quot;,&quot;</span>))<br><br>        <span class="hljs-comment">// （4.2）类型省略之后，发现只有一个参数，则圆括号可以省略；其他情况：没有参数和参数超过1的永远不能省略圆括号。</span><br>        <span class="hljs-keyword">val</span> arr3 = operation(<span class="hljs-type">Array</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>), ele =&gt; &#123;<br>            ele + <span class="hljs-number">1</span><br>        &#125;)<br>        println(arr3.mkString(<span class="hljs-string">&quot;,&quot;</span>))<br><br>        <span class="hljs-comment">// (4.3) 匿名函数如果只有一行，则大括号也可以省略</span><br>        <span class="hljs-keyword">val</span> arr4 = operation(<span class="hljs-type">Array</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>), ele =&gt; ele + <span class="hljs-number">1</span>)<br>        println(arr4.mkString(<span class="hljs-string">&quot;,&quot;</span>))<br><br>        <span class="hljs-comment">//（4.4）如果参数只出现一次，则参数省略且后面参数可以用_代替</span><br>        <span class="hljs-keyword">val</span> arr5 = operation(<span class="hljs-type">Array</span>(<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, <span class="hljs-number">4</span>), _ + <span class="hljs-number">1</span>)<br>        println(arr5.mkString(<span class="hljs-string">&quot;,&quot;</span>))<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="面向对象"><a href="#面向对象" class="headerlink" title="面向对象"></a>面向对象</h2><h3 id="对象和类"><a href="#对象和类" class="headerlink" title="对象和类"></a>对象和类</h3><ul>
+<li><p>在自然界中，只要是客观存在的都是对象（万物皆对象）</p>
+</li>
+<li><p>对大量对象共性的抽象，抽取为类</p>
+<ul>
+<li>有什么         属性</li>
+<li>能做什么     方法</li>
+</ul>
+</li>
+<li><p>在面向对象语言中，类是创建对象的模板</p>
+</li>
+<li><p>类是客观事务在人脑中的主观反映</p>
+</li>
+<li><p>Scala的属性：</p>
+<ul>
+<li>在Scala语言中，类，方法，属性，默认修饰符都是public，但是没有public关键字</li>
+<li>对于Scala中的属性，底层会用private修饰，同时提供公开的设置以及获取属性的方法—-面向封装</li>
+<li>如果要生成满足JavaBean规范的get和set方法的话，需要在属性上加@BeanProperty注解</li>
+</ul>
+</li>
+<li><p>访问权限</p>
+<ul>
+<li><p>Java</p>
+<figure class="highlight routeros"><table><tr><td class="code"><pre><code class="hljs routeros">private		私有的，只能在本类中被访问<br>default		默认的，可以在本类以及同包的其它类中被访问<br>protected	受保护的，可以在本类、同包的其它类以及非同包的子类中被访问<br>public 		公开的，所有类<br></code></pre></td></tr></table></figure></li>
+<li><p>Scala</p>
+<figure class="highlight actionscript"><table><tr><td class="code"><pre><code class="hljs actionscript"><span class="hljs-keyword">private</span>		      私有的，只能在本类中被访问<br><span class="hljs-keyword">public</span>(默认)	     公开的，所有类<br><span class="hljs-keyword">protected</span>		  比Java设置的更严格，只能在本类以及子类中被访问，同包其他类访问不了<br><span class="hljs-keyword">private</span>[包名] 	 可以让指定的包进行访问<br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<h3 id="创建对象的方式"><a href="#创建对象的方式" class="headerlink" title="创建对象的方式"></a>创建对象的方式</h3><ul>
+<li><p>构造器</p>
+<ul>
+<li><p>主构造方法</p>
+<ul>
+<li>在声明类的同时，主构造方法也被声明</li>
+<li>主构造方法只能有一个</li>
+<li>如果主构造方法没有参数，那么声明以及调用的时候，小括号可以省略。</li>
+</ul>
+</li>
+<li><p>辅助构造方法</p>
+<ul>
+<li>方法名必修叫this</li>
+<li>辅助构造方法可以重载</li>
+<li>辅助构造方法中的第一行代码必须直接或者间接调用主构造方法</li>
+</ul>
+<figure class="highlight scala"><table><tr><td class="code"><pre><code class="hljs scala"><span class="hljs-comment">//（1）如果主构造器无参数，小括号可省略</span><br><span class="hljs-comment">//class Person ()&#123;</span><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Person</span> </span>&#123;<br><br>    <span class="hljs-keyword">var</span> name: <span class="hljs-type">String</span> = _<br><br>    <span class="hljs-keyword">var</span> age: <span class="hljs-type">Int</span> = _<br><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">this</span></span>(age: <span class="hljs-type">Int</span>) &#123;<br>        <span class="hljs-keyword">this</span>()<br>        <span class="hljs-keyword">this</span>.age = age<br>        println(<span class="hljs-string">&quot;辅助构造器&quot;</span>)<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">this</span></span>(age: <span class="hljs-type">Int</span>, name: <span class="hljs-type">String</span>) &#123;<br>        <span class="hljs-keyword">this</span>(age)<br>        <span class="hljs-keyword">this</span>.name = name<br>    &#125;<br><br>    println(<span class="hljs-string">&quot;主构造器&quot;</span>)<br>&#125;<br><br><span class="hljs-class"><span class="hljs-keyword">object</span> <span class="hljs-title">Person</span> </span>&#123;<br><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">main</span></span>(args: <span class="hljs-type">Array</span>[<span class="hljs-type">String</span>]): <span class="hljs-type">Unit</span> = &#123;<br><br>        <span class="hljs-keyword">val</span> person2 = <span class="hljs-keyword">new</span> <span class="hljs-type">Person</span>(<span class="hljs-number">18</span>)<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>继承</p>
+<ul>
+<li>class 子类名 extends 父类名  { 类体 }</li>
+<li>Scala是单继承</li>
+</ul>
+</li>
+<li><p>创建对象的方式</p>
+<ul>
+<li><p>new   底层调用的是构造方法</p>
+</li>
+<li><p>类名()  底层调用的是伴生对象中apply方法</p>
+</li>
+<li><p>实现单例设计模式</p>
+<figure class="highlight scala"><table><tr><td class="code"><pre><code class="hljs scala"><span class="hljs-class"><span class="hljs-keyword">object</span> <span class="hljs-title">Test</span> </span>&#123;<br><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">main</span></span>(args: <span class="hljs-type">Array</span>[<span class="hljs-type">String</span>]): <span class="hljs-type">Unit</span> = &#123;<br><br>        <span class="hljs-comment">//（1）通过伴生对象的apply方法，实现不使用new关键字创建对象。</span><br>        <span class="hljs-keyword">val</span> p1 = <span class="hljs-type">Person</span>()<br>        println(<span class="hljs-string">&quot;p1.name=&quot;</span> + p1.name)<br><br>        <span class="hljs-keyword">val</span> p2 = <span class="hljs-type">Person</span>(<span class="hljs-string">&quot;bobo&quot;</span>)<br>        println(<span class="hljs-string">&quot;p2.name=&quot;</span> + p2.name)<br>    &#125;<br>&#125;<br><br><span class="hljs-comment">//（2）如果想让主构造器变成私有的，可以在()之前加上private</span><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Person</span> <span class="hljs-title">private</span>(<span class="hljs-params">cName: <span class="hljs-type">String</span></span>) </span>&#123;<br>    <span class="hljs-keyword">var</span> name: <span class="hljs-type">String</span> = cName<br>&#125;<br><br><span class="hljs-class"><span class="hljs-keyword">object</span> <span class="hljs-title">Person</span> </span>&#123;<br><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">apply</span></span>(): <span class="hljs-type">Person</span> = &#123;<br>        println(<span class="hljs-string">&quot;apply空参被调用&quot;</span>)<br>        <span class="hljs-keyword">new</span> <span class="hljs-type">Person</span>(<span class="hljs-string">&quot;xx&quot;</span>)<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">apply</span></span>(name: <span class="hljs-type">String</span>): <span class="hljs-type">Person</span> = &#123;<br>        println(<span class="hljs-string">&quot;apply有参被调用&quot;</span>)<br>        <span class="hljs-keyword">new</span> <span class="hljs-type">Person</span>(name)<br>&#125;<br><span class="hljs-comment">//注意：也可以创建其它类型对象，并不一定是伴生类对象</span><br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<h3 id="特质和抽象类"><a href="#特质和抽象类" class="headerlink" title="特质和抽象类"></a>特质和抽象类</h3><ul>
+<li><p>使用abstract关键字定义抽象类</p>
+<ul>
+<li>定义抽象类：abstract class Person{} //通过abstract关键字标记抽象类</li>
+</ul>
+</li>
+<li><p>抽象类一般和抽象属性以及抽象方法配合使用</p>
+</li>
+<li><p>抽象属性</p>
+<ul>
+<li>属性只有声明，但是没有赋值</li>
+<li>定义抽象属性：val|var name:String //一个属性没有初始化，就是抽象属性</li>
+</ul>
+</li>
+<li><p>抽象方法</p>
+<ul>
+<li>方法只有声明，没有实现</li>
+<li>定义抽象方法：def hello():String //只声明而没有实现的方法，就是抽象方法</li>
+</ul>
+</li>
+<li><p>抽象类总结</p>
+<ul>
+<li>在一个类中，如果存在抽象属性或者抽象方法，那么这个类一定是抽象类</li>
+<li>如果一个类是抽象类，那么它不一定包含抽象属性和抽象方法</li>
+<li>如果一个类中存在抽象属性或者抽象方法，那么具体的实现应该交给子类完成</li>
+<li>如果子类也实现不了抽象内容，那么子类也应该声明为抽象类</li>
+<li>如果重写(实现)抽象属性或者方法，那么override关键字可以省略</li>
+<li>如果重写(覆盖)非抽象属性或者方法，那么override关键字不能省略，必须得加</li>
+<li>如果对非抽象属性进行覆盖，要求属性必须得用val修饰</li>
+<li>可以通过super关键字调用父类的方法，但是不能super调用父类的属性</li>
+</ul>
+</li>
+<li><p>在Scala中，属性和方法都是动态绑定</p>
+<ul>
+<li>静态绑定（编译器绑定）<ul>
+<li>在编译阶段，确定属性或者方法所属类型，多态的时候根据这个来看。（编译看左，运行看右）</li>
+</ul>
+</li>
+<li>动态绑定<ul>
+<li>在运行阶段，根据实际创建的对象类型来决定属性或者方法所属类型</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="特质（Trait）"><a href="#特质（Trait）" class="headerlink" title="特质（Trait）"></a>特质（Trait）</h4><ul>
+<li><p>Scala中采用特质trait来代替接口的概念。</p>
+</li>
+<li><p>Scala中的trait中即<strong>可以有抽象属性和方法，也可以有具体的属性和方法</strong>，<strong>一个类可以混入（mixin）多个特质</strong>。这种感觉类似于Java中的抽象类。</p>
+<figure class="highlight scala"><table><tr><td class="code"><pre><code class="hljs scala"><span class="hljs-class"><span class="hljs-keyword">trait</span> <span class="hljs-title">PersonTrait</span> </span>&#123;<br><br>    <span class="hljs-comment">// 声明属性</span><br>    <span class="hljs-keyword">var</span> name:<span class="hljs-type">String</span> = _<br><br>    <span class="hljs-comment">// 声明方法</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">eat</span></span>():<span class="hljs-type">Unit</span>=&#123;<br><br>    &#125;<br><br>    <span class="hljs-comment">// 抽象属性</span><br>    <span class="hljs-keyword">var</span> age:<span class="hljs-type">Int</span><br>    <br>    <span class="hljs-comment">// 抽象方法</span><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">say</span></span>():<span class="hljs-type">Unit</span><br>&#125;<br><span class="hljs-comment">//通过查看字节码，可以看到特质=抽象类+接口</span><br></code></pre></td></tr></table></figure></li>
+<li><p>基本语法</p>
+<ul>
+<li><strong>没有父类</strong>：class  类名 <em><strong>extends</strong></em> 特质1  <em><strong>with</strong></em>  特质2  <em><strong>with</strong></em>  特质3 …</li>
+<li><strong>有父类</strong>：class  类名  <em><strong>extends</strong></em> 父类  <em><strong>with</strong></em> 特质1  <em><strong>with</strong></em>  特质2  <em><strong>with</strong></em> 特质3…</li>
+</ul>
+</li>
+<li><p>特质（trait）叠加：</p>
+<ul>
+<li><p>由于一个类可以混入（mixin）多个trait，且trait中可以有具体的属性和方法，若混入的特质中具有相同的方法（方法名，参数列表，返回值均相同），必然会出现继承冲突问题。冲突分为以下两种：</p>
+<ul>
+<li>第一种，一个类（Sub）混入的两个trait（TraitA，TraitB）中具有相同的具体方法，且两个trait之间没有任何关系，解决这类冲突问题，直接在类（Sub）中重写冲突方法。</li>
+<li>第二种，一个类（Sub）混入的两个trait（TraitA，TraitB）中具有相同的具体方法，且两个trait继承自相同的trait（TraitC），及所谓的“钻石问题”，解决这类冲突问题，Scala采用了<em><strong>特质叠加</strong></em>的策略。</li>
+</ul>
+</li>
+<li><p>特质叠加顺序</p>
+<ul>
+<li>第一步：列出第一个混入特质的继承关系，作为临时叠加的顺序</li>
+<li>第二步：列出第二个混入特质的继承关系,并且该顺序放到临时叠加顺序的前面，已经出现的特质不在出现   </li>
+<li>第三步：将子类放到临时叠加顺序的第一个</li>
+</ul>
+<figure class="highlight scala"><table><tr><td class="code"><pre><code class="hljs scala"><span class="hljs-class"><span class="hljs-keyword">trait</span> <span class="hljs-title">Ball</span> </span>&#123;<br>   <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">describe</span></span>(): <span class="hljs-type">String</span> = &#123;<br>      <span class="hljs-string">&quot;ball&quot;</span><br>   &#125;<br>&#125;<br><br><span class="hljs-class"><span class="hljs-keyword">trait</span> <span class="hljs-title">Color</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Ball</span> </span>&#123;<br>   <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">describe</span></span>(): <span class="hljs-type">String</span> = &#123;<br>      <span class="hljs-string">&quot;blue-&quot;</span> + <span class="hljs-keyword">super</span>.describe()<br>   &#125;<br>&#125;<br><br><span class="hljs-class"><span class="hljs-keyword">trait</span> <span class="hljs-title">Category</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Ball</span> </span>&#123;<br>   <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">describe</span></span>(): <span class="hljs-type">String</span> = &#123;<br>      <span class="hljs-string">&quot;foot-&quot;</span> + <span class="hljs-keyword">super</span>.describe()<br>   &#125;<br>&#125;<br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyBall</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Category</span> <span class="hljs-keyword">with</span> <span class="hljs-title">Color</span> </span>&#123;<br>   <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">describe</span></span>(): <span class="hljs-type">String</span> = &#123;<br>      <span class="hljs-string">&quot;my ball is a &quot;</span> + <span class="hljs-keyword">super</span>.describe()<br>   &#125;<br>&#125;<br><br><span class="hljs-class"><span class="hljs-keyword">object</span> <span class="hljs-title">TestTrait</span> </span>&#123;<br>   <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">main</span></span>(args: <span class="hljs-type">Array</span>[<span class="hljs-type">String</span>]): <span class="hljs-type">Unit</span> = &#123;<br>      println(<span class="hljs-keyword">new</span> <span class="hljs-type">MyBall</span>().describe())<br>   &#125;<br>&#125;<br><span class="hljs-comment">//注意：这个时候super不是调用父类中的方法了，而是调用特质叠加顺序上下一个节点的方法</span><br><span class="hljs-comment">//运行结果：my ball is a blue-foot-ball</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>特质和抽象类的区别</p>
+<ul>
+<li>优先使用特质。一个类扩展多个特质是很方便的，但却只能扩展一个抽象类。</li>
+<li>如果你需要构造函数参数，使用抽象类。因为抽象类可以定义带参数的构造函数，而特质不行（有无参构造）。</li>
+</ul>
+</li>
+<li><p>类型检查和转换</p>
+<ul>
+<li>obj.isInstanceOf[T]：判断obj是不是T类型。</li>
+<li>obj.asInstanceOf[T]：将obj强转成T类型。</li>
+<li>classOf获取对象的类名。</li>
+</ul>
+</li>
+</ul>
+<h2 id="集合"><a href="#集合" class="headerlink" title="集合"></a>集合</h2><h3 id="集合基本概述"><a href="#集合基本概述" class="headerlink" title="集合基本概述"></a>集合基本概述</h3><ul>
+<li><p>存放单值类型</p>
+<ul>
+<li>Seq   有序，可重复</li>
+<li>Set    无序，不能重复</li>
+</ul>
+</li>
+<li><p>存放键值对</p>
+<ul>
+<li>Map   以k-v键值对的形式存放数据，其中key无序不能重复</li>
+</ul>
+</li>
+<li><p>对于几乎所有的集合类，Scala都同时提供了可变和不可变的版本，分别位于以下两个包</p>
+<ul>
+<li>不可变集合：scala.collection.immutable<ul>
+<li>对集合进行添加或者删除操作的时候，会创建新的集合对象</li>
+</ul>
+</li>
+<li>可变集合：scala.collection.mutable<ul>
+<li>对集合进行添加或者删除操作的时候，直接在原来的集合上操作，不会创建新的集合对象</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>数组</p>
+<ul>
+<li><p>Array</p>
+<figure class="highlight scala"><table><tr><td class="code"><pre><code class="hljs scala"><span class="hljs-class"><span class="hljs-keyword">object</span> <span class="hljs-title">TestArray</span></span>&#123;<br><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">main</span></span>(args: <span class="hljs-type">Array</span>[<span class="hljs-type">String</span>]): <span class="hljs-type">Unit</span> = &#123;<br><br>        <span class="hljs-comment">//（1）数组定义</span><br>        <span class="hljs-keyword">val</span> arr01 = <span class="hljs-keyword">new</span> <span class="hljs-type">Array</span>[<span class="hljs-type">Int</span>](<span class="hljs-number">4</span>)<br>        println(arr01.length) <span class="hljs-comment">// 4</span><br>        <br>        <span class="hljs-keyword">var</span> arr02 = <span class="hljs-type">Array</span>(<span class="hljs-number">1</span>, <span class="hljs-number">3</span>, <span class="hljs-string">&quot;bobo&quot;</span>)<br>        println(arr02.length)<br>        <span class="hljs-keyword">for</span> (i &lt;- arr02) &#123;<br>            println(i)<br>        &#125;<br>        <span class="hljs-comment">//（2）数组赋值</span><br><br><br>        <span class="hljs-comment">//（2.1）修改某个元素的值</span><br>        arr01(<span class="hljs-number">3</span>) = <span class="hljs-number">10</span><br>        <span class="hljs-comment">//（2.2）采用方法的形式给数组赋值</span><br>        arr01.update(<span class="hljs-number">0</span>,<span class="hljs-number">1</span>)<br><br>        <span class="hljs-comment">//（3）遍历数组</span><br>        <span class="hljs-comment">//（3.1）查看数组</span><br>        println(arr01.mkString(<span class="hljs-string">&quot;,&quot;</span>))<br><br>        <span class="hljs-comment">//（3.2）普通遍历</span><br>        <span class="hljs-keyword">for</span> (i &lt;- arr01) &#123;<br>            println(i)<br>        &#125;<br><br>        <span class="hljs-comment">//（3.3）简化遍历</span><br>        <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">printx</span></span>(elem:<span class="hljs-type">Int</span>): <span class="hljs-type">Unit</span> = &#123;<br>            println(elem)<br>        &#125;<br>         arr01.foreach(printx)<br>        <span class="hljs-comment">// arr01.foreach((x)=&gt;&#123;println(x)&#125;)</span><br>        <span class="hljs-comment">// arr01.foreach(println(_))</span><br>        arr01.foreach(println)<br><br>        <span class="hljs-comment">//（4）增加元素（由于创建的是不可变数组，增加元素，其实是产生新的数组）</span><br>        println(arr01)<br>        <span class="hljs-keyword">val</span> ints: <span class="hljs-type">Array</span>[<span class="hljs-type">Int</span>] = arr01 :+ <span class="hljs-number">5</span><br>        println(ints)<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+<li><p>ArrayBuffer</p>
+</li>
+<li><p>多维数组</p>
+<figure class="highlight scala"><table><tr><td class="code"><pre><code class="hljs scala"><span class="hljs-class"><span class="hljs-keyword">object</span> <span class="hljs-title">DimArray</span> </span>&#123;<br><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">main</span></span>(args: <span class="hljs-type">Array</span>[<span class="hljs-type">String</span>]): <span class="hljs-type">Unit</span> = &#123;<br>        <br>        <span class="hljs-comment">//（1）创建了一个二维数组, 有三个元素，每个元素是，含有4个元素一维数组()</span><br>        <span class="hljs-keyword">val</span> arr = <span class="hljs-type">Array</span>.ofDim[<span class="hljs-type">Int</span>](<span class="hljs-number">3</span>, <span class="hljs-number">4</span>)<br>        arr(<span class="hljs-number">1</span>)(<span class="hljs-number">2</span>) = <span class="hljs-number">88</span><br><br>        <span class="hljs-comment">//（2）遍历二维数组</span><br>        <span class="hljs-keyword">for</span> (i &lt;- arr) &#123; <span class="hljs-comment">//i 就是一维数组</span><br><br>            <span class="hljs-keyword">for</span> (j &lt;- i) &#123;<br>                print(j + <span class="hljs-string">&quot; &quot;</span>)<br>            &#125;<br><br>            println()<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>Seq</p>
+<ul>
+<li><p>List</p>
+<figure class="highlight scala"><table><tr><td class="code"><pre><code class="hljs scala"><span class="hljs-class"><span class="hljs-keyword">object</span> <span class="hljs-title">TestList</span> </span>&#123;<br><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">main</span></span>(args: <span class="hljs-type">Array</span>[<span class="hljs-type">String</span>]): <span class="hljs-type">Unit</span> = &#123;<br><br>        <span class="hljs-comment">//（1）List默认为不可变集合</span><br>        <span class="hljs-comment">//（2）创建一个List（数据有顺序，可重复）</span><br>        <span class="hljs-keyword">val</span> list: <span class="hljs-type">List</span>[<span class="hljs-type">Int</span>] = <span class="hljs-type">List</span>(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>,<span class="hljs-number">4</span>,<span class="hljs-number">3</span>)<br>        <br>        <span class="hljs-comment">//（7）空集合Nil</span><br>        <span class="hljs-keyword">val</span> list5 = <span class="hljs-number">1</span>::<span class="hljs-number">2</span>::<span class="hljs-number">3</span>::<span class="hljs-number">4</span>::<span class="hljs-type">Nil</span><br><br>        <span class="hljs-comment">//（4）List增加数据</span><br>        <span class="hljs-comment">//（4.1）::的运算规则从右向左</span><br>        <span class="hljs-comment">//val list1 = 5::list</span><br>        <span class="hljs-keyword">val</span> list1 = <span class="hljs-number">7</span>::<span class="hljs-number">6</span>::<span class="hljs-number">5</span>::list<br>        <span class="hljs-comment">//（4.2）添加到第一个元素位置</span><br>        <span class="hljs-keyword">val</span> list2 = list.+:(<span class="hljs-number">5</span>)<br><br>        <span class="hljs-comment">//（5）集合间合并：将一个整体拆成一个一个的个体，称为扁平化</span><br>        <span class="hljs-keyword">val</span> list3 = <span class="hljs-type">List</span>(<span class="hljs-number">8</span>,<span class="hljs-number">9</span>)<br>        <span class="hljs-comment">//val list4 = list3::list1</span><br>        <span class="hljs-keyword">val</span> list4 = list3:::list1<br><br>        <span class="hljs-comment">//（6）取指定数据</span><br>        println(list(<span class="hljs-number">0</span>))<br><br>        <span class="hljs-comment">//（3）遍历List</span><br>        <span class="hljs-comment">//list.foreach(println)</span><br>        <span class="hljs-comment">//list1.foreach(println)</span><br>        <span class="hljs-comment">//list3.foreach(println)</span><br>        <span class="hljs-comment">//list4.foreach(println)</span><br>        list5.foreach(println)<br>    &#125;<br></code></pre></td></tr></table></figure></li>
+<li><p>ListBuffer</p>
+</li>
+</ul>
+</li>
+<li><p>Set</p>
+</li>
+<li><p>Map</p>
+<ul>
+<li><p>当调用map.get方法的时候，返回的Option类型数据,Option有两个子类型，一个Some，另一个None,可以帮我们避免对空值进行处理的情况，使用getOrElse函数，给空值赋默认值</p>
+<figure class="highlight scala"><table><tr><td class="code"><pre><code class="hljs scala"><span class="hljs-class"><span class="hljs-keyword">object</span> <span class="hljs-title">TestMap</span> </span>&#123;<br><br>    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">main</span></span>(args: <span class="hljs-type">Array</span>[<span class="hljs-type">String</span>]): <span class="hljs-type">Unit</span> = &#123;<br>        <span class="hljs-comment">// Map</span><br>        <span class="hljs-comment">//（1）创建不可变集合Map</span><br>        <span class="hljs-keyword">val</span> map = <span class="hljs-type">Map</span>( <span class="hljs-string">&quot;a&quot;</span>-&gt;<span class="hljs-number">1</span>, <span class="hljs-string">&quot;b&quot;</span>-&gt;<span class="hljs-number">2</span>, <span class="hljs-string">&quot;c&quot;</span>-&gt;<span class="hljs-number">3</span> )<br><br>        <span class="hljs-comment">//（3）访问数据</span><br>        <span class="hljs-keyword">for</span> (elem &lt;- map.keys) &#123;<br>            <span class="hljs-comment">// 使用get访问map集合的数据，会返回特殊类型Option(选项):有值（Some），无值(None)</span><br>            println(elem + <span class="hljs-string">&quot;=&quot;</span> + map.get(elem).get)<br>        &#125;<br><br>        <span class="hljs-comment">//（4）如果key不存在，返回0</span><br>        println(map.get(<span class="hljs-string">&quot;d&quot;</span>).getOrElse(<span class="hljs-number">0</span>))<br>        println(map.getOrElse(<span class="hljs-string">&quot;d&quot;</span>, <span class="hljs-number">0</span>))<br><br>        <span class="hljs-comment">//（2）循环打印</span><br>        map.foreach((kv)=&gt;&#123;println(kv)&#125;)<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<h3 id="集合函数"><a href="#集合函数" class="headerlink" title="集合函数"></a>集合函数</h3><ul>
+<li><p>基本属性和常用操作</p>
+<p>（1）获取集合长度          length</p>
+<p>（2）获取集合大小          size</p>
+<p>（3）循环遍历                  foreach</p>
+<p>（4）迭代器                      iterator</p>
+<p>（5）生成字符串              mkString</p>
+<p>（6）是否包含                  contains</p>
+</li>
+<li><p>衍生集合</p>
+<figure class="highlight angelscript"><table><tr><td class="code"><pre><code class="hljs angelscript">（<span class="hljs-number">1</span>）获取集合的头<br>	head<br>（<span class="hljs-number">2</span>）获取集合的尾（不是头的就是尾）<br>	tail<br>（<span class="hljs-number">3</span>）集合最后一个数据<br>	last<br>（<span class="hljs-number">4</span>）集合初始数据（不包含最后一个）<br>	init<br>（<span class="hljs-number">5</span>）反转<br>	reverse<br>（<span class="hljs-number">6</span>）取前（后）n个元素<br>	take|takeRight<br>（<span class="hljs-number">7</span>）去掉前（后）n个元素<br>	drop|dropRight<br>（<span class="hljs-number">8</span>）并集<br>	union<br>（<span class="hljs-number">9</span>）交集<br>	<span class="hljs-built_in">int</span>ersect<br>（<span class="hljs-number">10</span>）差集<br>	diff<br>（<span class="hljs-number">11</span>）拉链<br>	zip<br>（<span class="hljs-number">12</span>）滑窗<br>	sliding<br></code></pre></td></tr></table></figure></li>
+<li><p>集合计算初级，高级函数</p>
+<figure class="highlight angelscript"><table><tr><td class="code"><pre><code class="hljs angelscript">		（<span class="hljs-number">1</span>）求和<br>			sum<br>		（<span class="hljs-number">2</span>）求乘积<br>			product<br>		（<span class="hljs-number">3</span>）最大值<br>			max<br>		（<span class="hljs-number">4</span>）最小值<br>			min<br>		（<span class="hljs-number">5</span>）排序<br>			sorded|sortBy|sortWith<br>			<br>集合计算高级函数：<br>		（<span class="hljs-number">1</span>）过滤 filter(函数：指定过滤条件) <br>			 遍历一个集合并从中获取满足指定条件的元素组成一个新的集合<br><br>		（<span class="hljs-number">2</span>）转换/映射  map<br>				 	<br>		（<span class="hljs-number">3</span>）扁平化 flatten   :::<br>			将集合中元素由整体转换为个体的过程<br><br>		（<span class="hljs-number">4</span>）扁平映射  flatMap  <br>			先映射再进行扁平化处理<br><br>		（<span class="hljs-number">5</span>）分组	gruopBy<br>			按照一定的分组规则，将集合中的元素放到不同的组中<br><br>		（<span class="hljs-number">6</span>）简化|规约<br>			&gt;对集合内部元素之间进行聚合 <br>			&gt;reduce   聚合的数据类型一致<br>			&gt;reduceLeft|reduceRight 	聚合的数据类型可以不一致<br><br>		（<span class="hljs-number">7</span>）折叠<br>			&gt;对外部元素和集合内部元素之间进行聚合<br>			&gt;fold 	聚合的数据类型一致<br>			&gt;foldLeft|foldRight		聚合的数据类型可以不一致<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="下划线的用法"><a href="#下划线的用法" class="headerlink" title="下划线的用法"></a>下划线的用法</h2><ul>
+<li>标识符命名</li>
+<li>导包<ul>
+<li>导入某一个类下的”静态成员” ：import scala.util.control.Breaks._</li>
+<li>导入某一包下的所有类：import java.util._</li>
+<li>屏蔽类：import java.sql.{Date=&gt;<em>,Array=&gt;</em>,_}</li>
+</ul>
+</li>
+<li>匿名函数<ul>
+<li>如果在匿名函数中，参数只出现了一次，那么参数可以省略，在函数体使用参数的时候，用下划线代替</li>
+</ul>
+</li>
+<li>在类中声明属性，如果要给属性赋默认值</li>
+<li>在模式匹配中<ul>
+<li>case_  表示上面所有case都没有匹配成功的情况，相当于default</li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Scala</category>
+      </categories>
+      <tags>
+        <tag>Scala</tag>
       </tags>
   </entry>
   <entry>
