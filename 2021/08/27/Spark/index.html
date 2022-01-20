@@ -185,7 +185,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      5.6k 字
+      6k 字
     </span>
   
 
@@ -195,7 +195,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      65
+      70
        分钟
     </span>
   
@@ -229,7 +229,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2021年10月10日 晚上
+                  本文最后更新于：2022年1月14日 下午
                 
               </p>
             
@@ -685,22 +685,19 @@
 </li>
 </ul>
 <h4 id="RDD，DataFrame，DataSet三者之间的关系"><a href="#RDD，DataFrame，DataSet三者之间的关系" class="headerlink" title="RDD，DataFrame，DataSet三者之间的关系"></a>RDD，DataFrame，DataSet三者之间的关系</h4><ul>
-<li><p>三者的共性</p>
-<ul>
+<li>三者的共性<ul>
 <li>都是spark平台下的分布式弹性数据集，为处理超大型数据提供便利</li>
 <li>三者都有惰性，再创建，转换，等操作时不会立即执行，只有再遇到Action操作时，才会开始运算。</li>
 </ul>
 </li>
-<li><p>三者的区别</p>
-<ul>
+<li>三者的区别<ul>
 <li>RDD不支持SparkSQL操作</li>
 <li>DataFrame每一行的类型固定为Row,每一列的值没法直接访问，只有通过解析才能获取各个字段的值。</li>
 <li>DataFrame是DataSet的一个特例  type DataFrame=Dataset[Row]</li>
 <li>DataFrame也可以叫DataSet[Row],每一行的类型Row，不解析，每一行究竟有哪些字段，各个字段又是什么类型都无法得知，只能用getAS方法或者共性中的第七条提到的模式匹配拿出特定字段。而DataSet中，每一行是什么类型是不一定的，在自定义了case  class之后可以很方便的获取每一行的信息。</li>
 </ul>
 </li>
-<li><p>三者之间的转换关系图</p>
-<ul>
+<li>三者之间的转换关系图<ul>
 <li><a target="_blank" rel="noopener" href="https://imgtu.com/i/4Dw8YQ"><img src="https://z3.ax1x.com/2021/09/24/4Dw8YQ.png" srcset="/img/loading.gif" lazyload alt="4Dw8YQ.png"></a></li>
 <li>速记<ul>
 <li>转换成RDD都是rdd</li>
@@ -709,6 +706,28 @@
 </ul>
 </li>
 <li>如果需要RDD与DF或者DS之间操作，那么需要引入<font color=red>import spark.implicits._ (spark不是包名，而是sparkSession对象的名称，所以必须先创建SparkSession再导入对象，.implicits是一个内部的object)</font></li>
+</ul>
+</li>
+</ul>
+<h3 id="Spark-sql-任务优化"><a href="#Spark-sql-任务优化" class="headerlink" title="Spark sql 任务优化"></a>Spark sql 任务优化</h3><h4 id="spark-sql-任务中小文件的优化"><a href="#spark-sql-任务中小文件的优化" class="headerlink" title="spark sql 任务中小文件的优化"></a>spark sql 任务中小文件的优化</h4><ul>
+<li><p>描述：在数栈开发过程中如果任务选择的是spark sql引擎，一定要注意减少小文件的输出。spark sql中  spark.spl.shuffle.partitions=200 ,即会在shuffle结果中产生200个文件，设置的是RDD1做shuffle处理后生成的结果RDD2的分区数。这样产生的影响有：<strong>大部分时间都花费在调度</strong>，任务执行本身花费时间较小；最终产生的小文件数过多，会对后续任务的使用造成资源浪费，<strong>且严重影响namenode的性能</strong>。如果结果数据不多且预计增量不会太大（例如缓慢变化维表，码值表等），可以将此参数数值设低。</p>
+</li>
+<li><p>解决：针对数据量变化较大的任务，可以通过以下参数动态调节shuffle.partition 的个数产生及小文件个数的产生。</p>
+</li>
+<li><p>针对数据量变化较大的任务，可以通过以下参数动态调节shuffle.partition的个数产生及小文件个数的产生。spark sql 小文件合并参数。</p>
+<ul>
+<li>spark.sql.adaptive.enabled=true</li>
+<li>spark.sql.adaptive.shuffle.targetPostShuffleInputSize=256000000  #hdfs中block大小的倍数。</li>
+</ul>
+</li>
+<li><p>以上参数只对宽依赖产生作用（join,groupby ,distribute by,order by 等），如果没有用到宽依赖的关键字，比如只用了union all,可以在sql代码最后添加distribute by 关键字，如：distribute by 1</p>
+</li>
+<li><p>任务中是否产生了小文件信息可以通过以下方法查看：</p>
+<ul>
+<li><p>通过hdfs_namenode的web页面进行查看，默认端口为50070</p>
+</li>
+<li><p>登录namenode节点，通过类似命令查看：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">hdfs dfs -du -h <span class="hljs-regexp">/dtInsight/</span>hive<span class="hljs-regexp">/warehouse/</span><span class="hljs-variable">$&#123;项目名称.db&#125;</span><span class="hljs-regexp">/$&#123;表名&#125;/</span>pt=<span class="hljs-variable">$&#123;分区&#125;</span>/<br></code></pre></td></tr></table></figure></li>
 </ul>
 </li>
 </ul>
