@@ -1,6 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Hbase简介</title>
+    <url>/2020/11/17/HBase%20introduction/</url>
+    <content><![CDATA[<h1 id="分布式数据库HBase简介"><a href="#分布式数据库HBase简介" class="headerlink" title="分布式数据库HBase简介"></a>分布式数据库HBase简介</h1><ol>
+<li><p>概述    </p>
+<ul>
+<li>HBase是针对谷歌BigTable的开源实现，是一个高可靠，高性能，面向列，可伸缩的分布式数据库           </li>
+<li>可以用来存储非结构化和半结构化的松散数据</li>
+</ul>
+</li>
+<li><p>数据模型</p>
+<ul>
+<li>索引通过四个元素来定位：行键，列族，列限定符，时间戳</li>
+<li> 面向列的存储</li>
+</ul>
+</li>
+<li><p>实现原理 </p>
+<ul>
+<li>HBase的功能组件<blockquote>
+<p>库函数<br>Master服务器<br>Region服务器    </p>
+</blockquote>
+</li>
+<li>两个核心概念表和Region<blockquote>
+<p>一个HBase表被划分成多个Region<br>一个Region会分裂成多个新的Region</p>
+</blockquote>
+</li>
+<li>怎么实现Region定位<blockquote>
+<p>三层结构索引实现Region的定位<br>Zookeeper文件<br>-ROOT-表<br>.MEAT.表      </p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>运行机制</p>
+<ul>
+<li>HBase的系统架构<blockquote>
+<p><img src="https://img-blog.csdnimg.cn/2020070104123335.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTE1NDU1OQ==,size_16,color_FFFFFF,t_70#pic_center" title="系统架构图"><br>Zookeeper服务器（被大量用于分布式系统，提供配置维护，域名服务，分布式同步服务）实现协同管理服务，提供管家功能（维护和管理整个HBase集群）<br>Master服务器作用：1.对表增删改查。2.负责不同Region服务器的负载均衡。3.负责调整分裂合并后Region的分布。4.负责重新分配故障，失效的Region服务器</p>
+</blockquote>
+</li>
+<li>Region服务器（负责用户数据的存储和管理）的工作原理</li>
+<li>Store的工作原理</li>
+<li>HLog的工作原理</li>
+</ul>
+</li>
+<li><p>编程实践<br>HBase安装及实践，参考厦门大学数据库实验室博客<br><a href="http://dblab.xmu.edu.cn/blog/2442-2/">参考链接</a></p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>大数据</category>
+        <category>老hadoop</category>
+      </categories>
+      <tags>
+        <tag>Hadoop</tag>
+        <tag>大数据</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Computer_Fundamentals</title>
     <url>/2021/10/13/Computer-Fundamentals/</url>
     <content><![CDATA[<h1 id="计算机基础"><a href="#计算机基础" class="headerlink" title="计算机基础"></a>计算机基础</h1><h2 id="计算机网络"><a href="#计算机网络" class="headerlink" title="计算机网络"></a>计算机网络</h2><ul>
@@ -245,62 +301,6 @@
       <tags>
         <tag>计算机网络</tag>
         <tag>计算机基础</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Hbase简介</title>
-    <url>/2020/11/17/HBase%20introduction/</url>
-    <content><![CDATA[<h1 id="分布式数据库HBase简介"><a href="#分布式数据库HBase简介" class="headerlink" title="分布式数据库HBase简介"></a>分布式数据库HBase简介</h1><ol>
-<li><p>概述    </p>
-<ul>
-<li>HBase是针对谷歌BigTable的开源实现，是一个高可靠，高性能，面向列，可伸缩的分布式数据库           </li>
-<li>可以用来存储非结构化和半结构化的松散数据</li>
-</ul>
-</li>
-<li><p>数据模型</p>
-<ul>
-<li>索引通过四个元素来定位：行键，列族，列限定符，时间戳</li>
-<li> 面向列的存储</li>
-</ul>
-</li>
-<li><p>实现原理 </p>
-<ul>
-<li>HBase的功能组件<blockquote>
-<p>库函数<br>Master服务器<br>Region服务器    </p>
-</blockquote>
-</li>
-<li>两个核心概念表和Region<blockquote>
-<p>一个HBase表被划分成多个Region<br>一个Region会分裂成多个新的Region</p>
-</blockquote>
-</li>
-<li>怎么实现Region定位<blockquote>
-<p>三层结构索引实现Region的定位<br>Zookeeper文件<br>-ROOT-表<br>.MEAT.表      </p>
-</blockquote>
-</li>
-</ul>
-</li>
-<li><p>运行机制</p>
-<ul>
-<li>HBase的系统架构<blockquote>
-<p><img src="https://img-blog.csdnimg.cn/2020070104123335.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NTE1NDU1OQ==,size_16,color_FFFFFF,t_70#pic_center" title="系统架构图"><br>Zookeeper服务器（被大量用于分布式系统，提供配置维护，域名服务，分布式同步服务）实现协同管理服务，提供管家功能（维护和管理整个HBase集群）<br>Master服务器作用：1.对表增删改查。2.负责不同Region服务器的负载均衡。3.负责调整分裂合并后Region的分布。4.负责重新分配故障，失效的Region服务器</p>
-</blockquote>
-</li>
-<li>Region服务器（负责用户数据的存储和管理）的工作原理</li>
-<li>Store的工作原理</li>
-<li>HLog的工作原理</li>
-</ul>
-</li>
-<li><p>编程实践<br>HBase安装及实践，参考厦门大学数据库实验室博客<br><a href="http://dblab.xmu.edu.cn/blog/2442-2/">参考链接</a></p>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>大数据</category>
-        <category>老hadoop</category>
-      </categories>
-      <tags>
-        <tag>Hadoop</tag>
-        <tag>大数据</tag>
       </tags>
   </entry>
   <entry>
@@ -1060,24 +1060,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Hello World</title>
-    <url>/2020/09/22/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo new <span class="hljs-string">&quot;My New Post&quot;</span><br></code></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo server<br></code></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo generate<br></code></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo deploy<br></code></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-]]></content>
-  </entry>
-  <entry>
     <title>hbase</title>
     <url>/2021/06/27/hbase/</url>
     <content><![CDATA[<h1 id="HBase"><a href="#HBase" class="headerlink" title="HBase"></a>HBase</h1><h2 id="HBbse概述"><a href="#HBbse概述" class="headerlink" title="HBbse概述"></a>HBbse概述</h2><ul>
@@ -1193,6 +1175,24 @@
         <tag>大数据</tag>
         <tag>flume</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2020/09/22/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo new <span class="hljs-string">&quot;My New Post&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo server<br></code></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo generate<br></code></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo deploy<br></code></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
   </entry>
   <entry>
     <title>kafka</title>
