@@ -231,7 +231,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2021年9月29日 下午
+                  本文最后更新于：2022年2月21日 上午
                 
               </p>
             
@@ -251,7 +251,6 @@
 </li>
 <li><p>hiveserver2，如果使用beeline，需要开启hiveserver2</p>
 </li>
-<li></li>
 <li><p>架构解析：</p>
 <ol>
 <li><p>用户接口：Client.CLI（command-line interface）、JDBC/ODBC(jdbc访问hive)、WEBUI（浏览器访问hive）</p>
@@ -643,7 +642,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT <br>    e.ename,<br>    d.dname, <br>    l.loc_name<br>FROM<br>	emp e <br>JOIN<br>	dept d<br>ON<br>	d.deptno &#x3D; e.deptno <br>JOIN<br>	location l<br>ON<br>	d.loc &#x3D; l.loc;<br></code></pre></td></tr></table></figure></li>
 </ul>
 <ul>
-<li><p>hive join目前不支持在on子句中使用谓词or(hive1 不支持)</p>
+<li><p><strong>hive join目前不支持在on子句中使用谓词or(hive1 不支持)</strong></p>
 <p>select e.empno, e.ename, d.deptno from emp e join dept d on e.deptno</p>
 <p>= d.deptno or e.ename=d.deptno;  在hive1错误的,hive3支持</p>
 </li>
