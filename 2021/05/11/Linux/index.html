@@ -187,7 +187,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      1.5k 字
+      1.8k 字
     </span>
   
 
@@ -197,7 +197,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      16
+      21
        分钟
     </span>
   
@@ -231,7 +231,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2021年5月11日 晚上
+                  本文最后更新于：2022年7月1日 下午
                 
               </p>
             
@@ -630,6 +630,111 @@
 <li>chmod 777 houge.txt</li>
 </ul>
 </li>
+</ul>
+</li>
+</ul>
+<h2 id="Crontab调度"><a href="#Crontab调度" class="headerlink" title="Crontab调度"></a>Crontab调度</h2><ul>
+<li><p>基本语法</p>
+<ul>
+<li>crontab -e：修改crontab文件。如果文件不存在会自动创建</li>
+<li>crontab -l：显示crontab文件</li>
+<li>crontab -r：删除crontab文件</li>
+<li>crontab -ir：删除crontab文件前提醒用户</li>
+</ul>
+</li>
+<li><p>脚本加执行权限</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo chmod +x my.sh<br></code></pre></td></tr></table></figure></li>
+<li><p>时间显示</p>
+</li>
+<li><pre><code>例子：
+    # 每月的最后1天
+    0 0 L * * *
+
+    说明：
+    Linux
+    *    *    *    *    *
+    -    -    -    -    -
+    |    |    |    |    |
+    |    |    |    |    +----- day of week (0 - 7) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat
+    |    |    |    +---------- month (1 - 12) OR jan,feb,mar,apr ...
+    |    |    +--------------- day of month (1 - 31)
+    |    +-------------------- hour (0 - 23)
+    +------------------------- minute (0 - 59)
+</code></pre>
+</li>
+<li></li>
+<li><table>
+<thead>
+<tr>
+<th align="left">字段</th>
+<th align="left">是否必填</th>
+<th align="left">允许值</th>
+<th align="left">允许特殊字符</th>
+<th align="left">备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Seconds</td>
+<td align="left">是</td>
+<td align="left">0–59</td>
+<td align="left"><code>*,-</code></td>
+<td align="left">标准实现不支持此字段。</td>
+</tr>
+<tr>
+<td align="left">Minutes</td>
+<td align="left">是</td>
+<td align="left">0–59</td>
+<td align="left"><code>*,-</code></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Hours</td>
+<td align="left">是</td>
+<td align="left">0–23</td>
+<td align="left"><code>*,-</code></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Day of month</td>
+<td align="left">是</td>
+<td align="left">1–31</td>
+<td align="left"><code>*,-?LW</code></td>
+<td align="left"><code>?LW</code>只有部分软件实现了</td>
+</tr>
+<tr>
+<td align="left">Month</td>
+<td align="left">是</td>
+<td align="left">1–12 or JAN–DEC</td>
+<td align="left"><code>*,-</code></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Day of week</td>
+<td align="left">是</td>
+<td align="left">0–7 or SUN–SAT</td>
+<td align="left"><code>*,-?L#</code></td>
+<td align="left"><code>?L#</code>只有部分软件实现了 Linux和Spring的允许值为0-7，0和7为周日 Quartz的允许值为1-7，1为周日</td>
+</tr>
+<tr>
+<td align="left">Year</td>
+<td align="left">否</td>
+<td align="left">1970–2099</td>
+<td align="left"><code>*,-</code></td>
+<td align="left">标准实现不支持此字段。</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>标准字段</p>
+<ul>
+<li><code>,</code>用于分隔列表。例如，在第5个字段（星期几）中使用<code>MON,WED,FRI</code>表示周一，周三和周五</li>
+<li><code>-</code>字符定义范围。例如，<code>2000-2010</code>，表示2000年至2010年期间的每年，包括2000年和2010年</li>
+</ul>
+</li>
+<li><p>非标准字段</p>
+<ul>
+<li><strong>“L”</strong>代表“Last”</li>
+<li>“day of month”字段可以使用<strong>“W”</strong>字符。指定最接近给定日期的工作日（星期一-星期五）</li>
+<li>分钟字段设置 <code>*/5</code>表示每5分钟一次，注意：这里指的是能被5整除的分钟数。</li>
 </ul>
 </li>
 </ul>
