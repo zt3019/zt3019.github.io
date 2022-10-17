@@ -685,13 +685,89 @@ ps
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/Hadoop/">Hadoop</a>
-            
               <a href="/tags/Hive/">Hive</a>
+            
+              <a href="/tags/Hadoop/">Hadoop</a>
             
               <a href="/tags/Flume/">Flume</a>
             
               <a href="/tags/Kafka/">Kafka</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2021/09/29/project/" target="_blank">
+          <img src="https://tse1-mm.cn.bing.net/th/id/OIP-C.B6pZ8N_dG3MNAYppM-zX0AHaEo?w=282&h=180&c=7&r=0&o=5&dpr=1.25&pid=1.7" srcset="/img/loading.gif" lazyload alt="project">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/09/29/project/" target="_blank">
+          project
+        </a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/09/29/project/" target="_blank">
+          
+          
+            
+          
+          项目总结数据采集项目
+项目框架版本：
+hadoop 3.1.3
+Hadoop本身不支持LZO压缩，需要下载并重新编译hadoop-lzo
+在core-site.xml增加配置支持LZO压缩
+创建LZO索引，LZO压缩文件可切片的特性依赖于其索引
+
+
+flume 1.9
+kafka 2.41
+Zookeeper 3.5.7
+hive 3.1.2
+spark 2.1.1
+
+
+项目架构
+
+
+
+
+日志数据
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-09-29 08:20" pubdate>
+              2021-09-29
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/%E9%A1%B9%E7%9B%AE/">项目</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E9%A1%B9%E7%9B%AE/">项目</a>
             
           </div>
         
@@ -824,82 +900,11 @@ object：从语法的角度上讲，上面的语法表示声明了一个伴生�
     </article>
   </div>
 
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2021/06/27/hbase/" target="_blank">
-          <img src="https://th.bing.com/th/id/R1ca597009e76b715bba612ba67909be7?rik=B64UMrUhcqEeag&riu=http%3a%2f%2fintellitech.pro%2fwp-content%2fuploads%2f2017%2f05%2fapache-hbase-image.png&ehk=70DnQXgetKij7C%2fCw%2bDtBFv6J1jPnGZV%2bFObTefSr24%3d&risl=&pid=ImgRaw" srcset="/img/loading.gif" lazyload alt="hbase">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2021/06/27/hbase/" target="_blank">
-          hbase
-        </a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2021/06/27/hbase/" target="_blank">
-          
-          
-            
-          
-          HBaseHBbse概述
-HBase是一种分布式，可扩展，，支持海量数据存储的NoSQL数据库。
-
-逻辑结构
-
-
-
-row key类似于主键
-
-region在行上的一个切分，几行分一个region
-
-列族：Column Qualifier。
-
-store：按照region和列族可以分为一个个store
-
-物理结构
-
-
-数据模型
-1. Name Space
-命名空间，类似于关系型数据库的DatabB
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2021-06-27 11:39" pubdate>
-              2021-06-27
-            </time>
-          </div>
-        
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a>
-            
-              <a href="/tags/flume/">flume</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
 
 
   <nav aria-label="navigation">
     <span class="pagination" id="pagination">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/#board">2</a><a class="page-number" href="/page/3/#board">3</a><a class="extend next" rel="next" href="/page/2/#board"><i class="iconfont icon-arrowright"></i></a>
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/#board">2</a><a class="page-number" href="/page/3/#board">3</a><a class="page-number" href="/page/4/#board">4</a><a class="extend next" rel="next" href="/page/2/#board"><i class="iconfont icon-arrowright"></i></a>
     </span>
   </nav>
 

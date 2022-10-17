@@ -187,7 +187,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      8.2k 字
+      8.3k 字
     </span>
   
 
@@ -197,7 +197,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      101
+      102
        分钟
     </span>
   
@@ -231,7 +231,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2022年6月30日 晚上
+                  本文最后更新于：2022年7月7日 下午
                 
               </p>
             
@@ -900,6 +900,8 @@
 </li>
 <li><p>存储过程中的语句必须包含在BEGIN和END之间</p>
 </li>
+<li><p>DELIMITER是分割符，默认情况下DELIMITER是分号，遇到分号就执行。</p>
+</li>
 <li><p>DECLARE中用来声明变量，变量默认赋值使用DEFAULT，语句块中改变变量值，使用SET变量=值</p>
 </li>
 <li><p>例子</p>
@@ -927,23 +929,25 @@
 <li>routine_body：函数体。函数体中必须含有return 语句，当函数体为复合结构时，需要使用begin….end语句</li>
 </ul>
 </li>
-<li><pre><code class="sql">    create
-        function myfun_getMax(num1 int, num2 int)
-        returns int        
-    begin
-        declare res int;
-        if(num1 &gt; num2) then
-            set res = num1;
-        elseif (num1 &lt; num2) then
-            set res = num2;
-        else
-            set res = num1;
-        end if;
-        return res;
-    end;
+<li><p>````sql</p>
+<pre><code>create
+    function myfun_getMax(num1 int, num2 int)
+    returns int        
+begin
+    declare res int;
+    if(num1 &gt; num2) then
+        set res = num1;
+    elseif (num1 &lt; num2) then
+        set res = num2;
+    else
+        set res = num1;
+    end if;
+    return res;
+end;
 </code></pre>
-</li>
-<li></li>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs less"><br>### 表格值函数<br><br>* 内联表格值函数:返回一个表格<br><br>  ````<span class="hljs-selector-tag">sql</span><br>  <span class="hljs-selector-tag">create</span> <span class="hljs-selector-tag">function</span> <span class="hljs-selector-tag">tabcmess</span>(<span class="hljs-variable">@title</span> VARCHAR(<span class="hljs-number">10</span>)) <span class="hljs-selector-tag">RETURNS</span> <span class="hljs-selector-tag">TABLE</span> <span class="hljs-selector-tag">as</span> <br>  <span class="hljs-selector-tag">return</span> (select title,des from product where title like <span class="hljs-string">&#x27;%&#x27;</span>+<span class="hljs-variable">@title</span>+<span class="hljs-string">&#x27;%&#x27;</span>)<br></code></pre></td></tr></table></figure></li>
+<li><p>多句表格值函数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plain"><br></code></pre></td></tr></table></figure></li>
 </ul>
 
             </div>
