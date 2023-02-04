@@ -197,7 +197,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      100
+      101
        分钟
     </span>
   
@@ -231,7 +231,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2021年12月30日 中午
+                  本文最后更新于：2023年2月4日 下午
                 
               </p>
             
@@ -792,6 +792,21 @@ cast(&#39;1000&#39; as int)
 </li>
 <li><p>不影响业务逻辑的情况下可以开启map端combiner</p>
 </li>
+<li><p>merge 如果是map only任务，默认打开，执行完任务后，会产生大量小文件，默认会帮你开启一个job，将小于16M的文件，合并到256M。如果是mapreduce任务，需要将该功能开启</p>
+</li>
+<li><p>压缩</p>
+</li>
+<li><p>列式存储</p>
+</li>
+<li><p>替换引擎</p>
+<ul>
+<li>MR</li>
+<li>TEZ</li>
+<li>SPARK</li>
+</ul>
+</li>
+<li><p>union，union all会去重</p>
+</li>
 <li><p>hive数据倾斜</p>
 <ul>
 <li><pre><code class="kotlin">set hive.groupby.skewindata=true
@@ -1063,9 +1078,9 @@ cast(&#39;1000&#39; as int)
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
                     
-                      <a class="hover-with-bg" href="/tags/Hive/">Hive</a>
-                    
                       <a class="hover-with-bg" href="/tags/Hadoop/">Hadoop</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Hive/">Hive</a>
                     
                       <a class="hover-with-bg" href="/tags/Flume/">Flume</a>
                     
