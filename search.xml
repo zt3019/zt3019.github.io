@@ -188,7 +188,7 @@
 <li>区别：<ul>
 <li>拥有资源：进程是资源分配的基本单位，但是线程不拥有资源，线程可以访问隶属进程的资源。</li>
 <li>调度：线程是独立调度的基本单位，在同一进程中，线程的切换不会引起进程的切换，从一个进程的线程切换到另一个进程的线程时，会引起进程切换。</li>
-<li>系统开销：由于创建或撤销进程时，系统都要为之分配或回收资源，所付出的开销远大于创建或撤销进程时的开销。线程切换时只需保存和设置少量寄存器内容，开销很小。</li>
+<li>系统开销：由于创建或撤销进程时，系统都要为之分配或回收资源，所付出的开销远大于创建或撤销线程时的开销。线程切换时只需保存和设置少量寄存器内容，开销很小。</li>
 <li>通信方面：线程间可以通过直接读写同一进程中的数据进行通信，但是进程通信需要借助IPC（进程间通信）</li>
 </ul>
 </li>
@@ -1180,44 +1180,6 @@
       </tags>
   </entry>
   <entry>
-    <title>git_learning</title>
-    <url>/2022/10/24/git-learning/</url>
-    <content><![CDATA[<h1 id="Git学习"><a href="#Git学习" class="headerlink" title="Git学习"></a>Git学习</h1><h2 id="入门知识点"><a href="#入门知识点" class="headerlink" title="入门知识点"></a>入门知识点</h2><figure class="highlight tex"><table><tr><td class="code"><pre><code class="hljs tex">很久没有写过新的博客了，这次将一直想学的git相关的知识学习一下。博客会根据情况陆续更新。<br></code></pre></td></tr></table></figure>
-
-<h3 id="背景知识"><a href="#背景知识" class="headerlink" title="背景知识"></a>背景知识</h3><ul>
-<li><p>大神Linus花了两周用C写的git，一个月之内Linux的源码就由git管理了。这就是鸡欧帝的力量吗。</p>
-</li>
-<li><p>Git迅速成为最流行的分布式版本控制系统，尤其是2008年，GitHub网站上线了，它为开源项目免费提供Git存储，无数开源项目开始迁移至GitHub，包括jQuery，PHP，Ruby等等。</p>
-</li>
-<li></li>
-</ul>
-]]></content>
-      <categories>
-        <category>Git</category>
-      </categories>
-      <tags>
-        <tag>git</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Hello World</title>
-    <url>/2020/09/22/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo new <span class="hljs-string">&quot;My New Post&quot;</span><br></code></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo server<br></code></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo generate<br></code></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo deploy<br></code></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-]]></content>
-  </entry>
-  <entry>
     <title>Hadoop简介</title>
     <url>/2020/10/21/hadoop-introduction/</url>
     <content><![CDATA[<h1 id="hadoop简介"><a href="#hadoop简介" class="headerlink" title="hadoop简介"></a>hadoop简介</h1><p>1.定义：<br>hadoop是一个开源分布式计算平台，为用户提供了底层细节透明的分布式基础框架。<br>2.特性：    </p>
@@ -1383,6 +1345,24 @@
         <tag>大数据</tag>
         <tag>flume</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2020/09/22/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo new <span class="hljs-string">&quot;My New Post&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo server<br></code></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo generate<br></code></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo deploy<br></code></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
   </entry>
   <entry>
     <title>Java多线程基础</title>
@@ -2113,326 +2093,9 @@
 <ul>
 <li><p><strong>date</strong>参数是合法的日期，<strong>format</strong>规定日期/时间的输出格式。</p>
 </li>
-<li><pre><code class="mysql">select date_format(&#39;2021-10-01 10:00:00&#39;,&#39;%Y-%m-%d %h:%i:%s&#39;)
-</code></pre>
-</li>
-<li><table>
-<thead>
-<tr>
-<th>%a</th>
-<th>缩写星期名</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>%b</td>
-<td>缩写月名</td>
-</tr>
-<tr>
-<td>%c</td>
-<td>月，数值</td>
-</tr>
-<tr>
-<td>%D</td>
-<td>带有英文前缀的月中的天</td>
-</tr>
-<tr>
-<td>%d</td>
-<td>月的天，数值(00-31)</td>
-</tr>
-<tr>
-<td>%e</td>
-<td>月的天，数值(0-31)</td>
-</tr>
-<tr>
-<td>%f</td>
-<td>微秒</td>
-</tr>
-<tr>
-<td>%H</td>
-<td>小时 (00-23)</td>
-</tr>
-<tr>
-<td>%h</td>
-<td>小时 (01-12)</td>
-</tr>
-<tr>
-<td>%I</td>
-<td>小时 (01-12)</td>
-</tr>
-<tr>
-<td>%i</td>
-<td>分钟，数值(00-59)</td>
-</tr>
-<tr>
-<td>%j</td>
-<td>年的天 (001-366)</td>
-</tr>
-<tr>
-<td>%k</td>
-<td>小时 (0-23)</td>
-</tr>
-<tr>
-<td>%l</td>
-<td>小时 (1-12)</td>
-</tr>
-<tr>
-<td>%M</td>
-<td>月名</td>
-</tr>
-<tr>
-<td>%m</td>
-<td>月，数值(00-12)</td>
-</tr>
-<tr>
-<td>%p</td>
-<td>AM 或 PM</td>
-</tr>
-<tr>
-<td>%r</td>
-<td>时间，12-小时（hh:mm:ss AM 或 PM）</td>
-</tr>
-<tr>
-<td>%S</td>
-<td>秒(00-59)</td>
-</tr>
-<tr>
-<td>%s</td>
-<td>秒(00-59)</td>
-</tr>
-<tr>
-<td>%T</td>
-<td>时间, 24-小时 (hh:mm:ss)</td>
-</tr>
-<tr>
-<td>%U</td>
-<td>周 (00-53) 星期日是一周的第一天</td>
-</tr>
-<tr>
-<td>%u</td>
-<td>周 (00-53) 星期一是一周的第一天</td>
-</tr>
-<tr>
-<td>%V</td>
-<td>周 (01-53) 星期日是一周的第一天，与 %X 使用</td>
-</tr>
-<tr>
-<td>%v</td>
-<td>周 (01-53) 星期一是一周的第一天，与 %x 使用</td>
-</tr>
-<tr>
-<td>%W</td>
-<td>星期名</td>
-</tr>
-<tr>
-<td>%w</td>
-<td>周的天 （0=星期日, 6=星期六）</td>
-</tr>
-<tr>
-<td>%X</td>
-<td>年，其中的星期日是周的第一天，4 位，与 %V 使用</td>
-</tr>
-<tr>
-<td>%x</td>
-<td>年，其中的星期一是周的第一天，4 位，与 %v 使用</td>
-</tr>
-<tr>
-<td>%Y</td>
-<td>年，4 位</td>
-</tr>
-<tr>
-<td>%y</td>
-<td>年，2 位</td>
-</tr>
-</tbody></table>
-</li>
+<li><p>````mysql<br>select date_format(‘2021-10-01 10:00:00’,’%Y-%m-%d %h:%i:%s’)</p>
+<figure class="highlight gherkin"><table><tr><td class="code"><pre><code class="hljs gherkin"><br>  - |<span class="hljs-string"> %a   </span>|<span class="hljs-string"> 缩写星期名                                     </span>|<br>    |<span class="hljs-string"> ---- </span>|<span class="hljs-string"> ---------------------------------------------- </span>|<br>    |<span class="hljs-string"> %b   </span>|<span class="hljs-string"> 缩写月名                                       </span>|<br>    |<span class="hljs-string"> %c   </span>|<span class="hljs-string"> 月，数值                                       </span>|<br>    |<span class="hljs-string"> %D   </span>|<span class="hljs-string"> 带有英文前缀的月中的天                         </span>|<br>    |<span class="hljs-string"> %d   </span>|<span class="hljs-string"> 月的天，数值(00-31)                            </span>|<br>    |<span class="hljs-string"> %e   </span>|<span class="hljs-string"> 月的天，数值(0-31)                             </span>|<br>    |<span class="hljs-string"> %f   </span>|<span class="hljs-string"> 微秒                                           </span>|<br>    |<span class="hljs-string"> %H   </span>|<span class="hljs-string"> 小时 (00-23)                                   </span>|<br>    |<span class="hljs-string"> %h   </span>|<span class="hljs-string"> 小时 (01-12)                                   </span>|<br>    |<span class="hljs-string"> %I   </span>|<span class="hljs-string"> 小时 (01-12)                                   </span>|<br>    |<span class="hljs-string"> %i   </span>|<span class="hljs-string"> 分钟，数值(00-59)                              </span>|<br>    |<span class="hljs-string"> %j   </span>|<span class="hljs-string"> 年的天 (001-366)                               </span>|<br>    |<span class="hljs-string"> %k   </span>|<span class="hljs-string"> 小时 (0-23)                                    </span>|<br>    |<span class="hljs-string"> %l   </span>|<span class="hljs-string"> 小时 (1-12)                                    </span>|<br>    |<span class="hljs-string"> %M   </span>|<span class="hljs-string"> 月名                                           </span>|<br>    |<span class="hljs-string"> %m   </span>|<span class="hljs-string"> 月，数值(00-12)                                </span>|<br>    |<span class="hljs-string"> %p   </span>|<span class="hljs-string"> AM 或 PM                                       </span>|<br>    |<span class="hljs-string"> %r   </span>|<span class="hljs-string"> 时间，12-小时（hh:mm:ss AM 或 PM）             </span>|<br>    |<span class="hljs-string"> %S   </span>|<span class="hljs-string"> 秒(00-59)                                      </span>|<br>    |<span class="hljs-string"> %s   </span>|<span class="hljs-string"> 秒(00-59)                                      </span>|<br>    |<span class="hljs-string"> %T   </span>|<span class="hljs-string"> 时间, 24-小时 (hh:mm:ss)                       </span>|<br>    |<span class="hljs-string"> %U   </span>|<span class="hljs-string"> 周 (00-53) 星期日是一周的第一天                </span>|<br>    |<span class="hljs-string"> %u   </span>|<span class="hljs-string"> 周 (00-53) 星期一是一周的第一天                </span>|<br>    |<span class="hljs-string"> %V   </span>|<span class="hljs-string"> 周 (01-53) 星期日是一周的第一天，与 %X 使用    </span>|<br>    |<span class="hljs-string"> %v   </span>|<span class="hljs-string"> 周 (01-53) 星期一是一周的第一天，与 %x 使用    </span>|<br>    |<span class="hljs-string"> %W   </span>|<span class="hljs-string"> 星期名                                         </span>|<br>    |<span class="hljs-string"> %w   </span>|<span class="hljs-string"> 周的天 （0=星期日, 6=星期六）                  </span>|<br>    |<span class="hljs-string"> %X   </span>|<span class="hljs-string"> 年，其中的星期日是周的第一天，4 位，与 %V 使用 </span>|<br>    |<span class="hljs-string"> %x   </span>|<span class="hljs-string"> 年，其中的星期一是周的第一天，4 位，与 %v 使用 </span>|<br>    |<span class="hljs-string"> %Y   </span>|<span class="hljs-string"> 年，4 位                                       </span>|<br>    |<span class="hljs-string"> %y   </span>|<span class="hljs-string"> 年，2 位                                       </span>|<br><br><span class="hljs-symbol">*</span> concat(str1,str2,...)    ，concat_ws(seperator,string1,string2)<br><br>  - MySQL `CONCAT()`函数需要一个或多个字符串参数，并将它们连接成一个字符串。`CONCAT()`函数需要至少一个参数，否则会引起错误。 <br>  - MySQL提供了一种特殊形式的`CONCAT()`函数：`CONCAT_WS()`函数。`CONCAT_WS()`函数将两个或多个字符串值与预定义的分隔符相连接。<br><br><span class="hljs-symbol">*</span> timediff(dt1,dt2)<br><br>  - `TIMEDIFF`函数接受两个必须为相同类型的参数，即`TIME`或`DATETIME`。 `TIMEDIFF`函数返回表示为时间值的`dt1 - dt2`的结果。<br>  - `TIMEDIFF`函数的结果是一个`TIME`值，范围是从`-838:59:59`到`838:59:59`。<br><br><span class="hljs-symbol">*</span> TIMESTAMPDIFF(unit,begin,end); <br><br>  - `TIMESTAMPDIFF`函数返回`end-begin`的结果，其中`begin`和`end`是[DATE](http://www.yiibai.com/mysql/date.html)或[DATETIME](http://www.yiibai.com/mysql/datetime.html)表达式。<br>  - `TIMESTAMPDIFF`函数允许其参数具有混合类型，例如，`begin`是`DATE`值，`end`可以是`DATETIME`值。 如果使用`DATE`值，则`TIMESTAMPDIFF`函数将其视为时间部分为`“00:00:00”`的`DATETIME`值。<br>  - `unit`参数是确定(`end-begin`)的结果的单位，表示为整数。 以下是有效单位：<br>    - MICROSECOND<br>    - SECOND<br>    - MINUTE<br>    - HOUR<br>    - DAY<br>    - WEEK<br>    - MONTH<br>    - QUARTER<br>    - YEAR<br><br><span class="hljs-symbol">*</span> 数据类型转换函数<br><br>  - cast(&#x27;2022-01-01 00:00:00&#x27; as datetime)<br>  - convert(&#x27;2021-01-01 00:00:00&#x27;,datetime)<br><br><span class="hljs-symbol">*</span> date_sub(date,INTERVAL expr type) <br><br>  - 从日期减去指定的时间间隔<br>  - <span class="hljs-symbol">*</span>date<span class="hljs-symbol">*</span> 参数是合法的日期表达式。<span class="hljs-symbol">*</span>expr<span class="hljs-symbol">*</span> 参数是您希望添加的时间间隔。<br><br><span class="hljs-symbol">*</span> DATE_ADD(date,INTERVAL expr type)<br><br>  - 从日期加上指定的时间间隔<br><br>  - <span class="hljs-symbol">*</span>date<span class="hljs-symbol">*</span> 参数是合法的日期表达式。<span class="hljs-symbol">*</span>expr<span class="hljs-symbol">*</span> 参数是您希望添加的时间间隔。<br><br>  - |<span class="hljs-string"> MICROSECOND        </span>|<br>    |<span class="hljs-string"> ------------------ </span>|<br>    |<span class="hljs-string"> SECOND             </span>|<br>    |<span class="hljs-string"> MINUTE             </span>|<br>    |<span class="hljs-string"> HOUR               </span>|<br>    |<span class="hljs-string"> DAY                </span>|<br>    |<span class="hljs-string"> WEEK               </span>|<br>    |<span class="hljs-string"> MONTH              </span>|<br>    |<span class="hljs-string"> QUARTER            </span>|<br>    |<span class="hljs-string"> YEAR               </span>|<br>    |<span class="hljs-string"> SECOND_MICROSECOND </span>|<br>    |<span class="hljs-string"> MINUTE_MICROSECOND </span>|<br>    |<span class="hljs-string"> MINUTE_SECOND      </span>|<br>    |<span class="hljs-string"> HOUR_MICROSECOND   </span>|<br>    |<span class="hljs-string"> HOUR_SECOND        </span>|<br>    |<span class="hljs-string"> HOUR_MINUTE        </span>|<br>    |<span class="hljs-string"> DAY_MICROSECOND    </span>|<br>    |<span class="hljs-string"> DAY_SECOND         </span>|<br>    |<span class="hljs-string"> DAY_MINUTE         </span>|<br>    |<span class="hljs-string"> DAY_HOUR           </span>|<br>    |<span class="hljs-string"> YEAR_MONTH         </span>|<br><br><span class="hljs-symbol">*</span> round(x,d)<br><br>  - x指要处理的数，d是指保留几位小数<br><br><span class="hljs-symbol">*</span> ifnull(expression_1,expression_2)<br><br>  - MySQL IFNULL函数是MySQL控制流函数之一，它接受两个参数，如果不是NULL，则返回第一个参数。 否则，IFNULL函数返回第二个参数。<br><br><span class="hljs-symbol">*</span> year(datetime)函数 取时间的年份<br><br><span class="hljs-symbol">*</span> month(datetime) 取月份<br><br><span class="hljs-symbol">*</span> dayofmonth() 取一个月的第几天<br><br><span class="hljs-symbol">*</span> if(expr1,expr2,expr3)函数<br><br>  - if() 类似与三元表达式，如果expr1的值为true，则返回expr2的值，如果expr1的值为false,则返回expr3的值<br><br><span class="hljs-symbol">*</span> substring_index(“待截取有用部分的字符串”，“截取数据依据的字符”，截取字符的位置N)<br><br><span class="hljs-symbol">*</span> substr(string,start,length)<br><br>  - string：表示要截取的字符串<br>  - start：规定字符串从何处开始。（1表示第一个下标）<br>  - length：可选<br><br><span class="hljs-symbol">*</span> 插入数据<br><br>  - INSERT INTO t1(field1,field2) VALUE(v001,v002)<br>  - INSERT INTO t1(field1,field2) VALUES(v101,v102),(v201,v202),(v301,v302),(v401,v402);　<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>在插入批量数据时方式2优于方式1<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span><br>  - INSERT INTO t2(field1,field2) SELECT col1,col2 FROM t1 WHERE<br>  - INSERT INTO t2 SELECT id, name, address FROM t1<br><br><span class="hljs-symbol">*</span> LENGTH( 字段名) <br><br>  - 返回字段中值的长度<br>  - mysql5.0版本以上：<br>    - UTF-8：一个汉字等于3个字节，英文是一个字节<br>    - GBK：一个汉字等于2个字节，英文是一个字节<br><br><span class="hljs-symbol">*</span> REPLACE(str,old_string,new_string);<br><br>  - 使用新的字符串替换表的列中的字符串<br><br><span class="hljs-symbol">*</span> curdate()  取时间 %Y-%m-%d<br><br><span class="hljs-symbol">*</span> curtime()  取时间 %H:%i%s<br><br><span class="hljs-symbol">*</span> |<span class="hljs-string"> NOW()               </span>|<span class="hljs-string"> CURDATE()  </span>|<span class="hljs-string"> CURTIME() </span>|<br>  |<span class="hljs-string"> :------------------ </span>|<span class="hljs-string"> :--------- </span>|<span class="hljs-string"> :-------- </span>|<br>  |<span class="hljs-string"> 2008-12-29 16:25:46 </span>|<span class="hljs-string"> 2008-12-29 </span>|<span class="hljs-string"> 16:25:46  </span>|<br><br><span class="hljs-symbol">*</span> with t as () 语句其实就是把一大堆重复用到的sql语句放在with as里面，取一个别名，后面的查询就可以用它，这样对于大批量的sql语句起到一个优化的作用，而且清楚明了<br><br>  ````sql<br>  with e as (select <span class="hljs-symbol">*</span> from scott.emp e where e.empno=4)<br>  select <span class="hljs-symbol">*</span> from e;<br>  <br>  <br>  with<br>  e as (select <span class="hljs-symbol">*</span> from scott.emp),<br>  d as (select <span class="hljs-symbol">*</span> from scott.dept)<br>  select <span class="hljs-symbol">*</span> from e, d where e.deptno = d.deptno;<br></code></pre></td></tr></table></figure></li>
 </ul>
-</li>
-<li><p>concat(str1,str2,…)    ，concat_ws(seperator,string1,string2)</p>
-<ul>
-<li>MySQL <code>CONCAT()</code>函数需要一个或多个字符串参数，并将它们连接成一个字符串。<code>CONCAT()</code>函数需要至少一个参数，否则会引起错误。 </li>
-<li>MySQL提供了一种特殊形式的<code>CONCAT()</code>函数：<code>CONCAT_WS()</code>函数。<code>CONCAT_WS()</code>函数将两个或多个字符串值与预定义的分隔符相连接。</li>
-</ul>
-</li>
-<li><p>timediff(dt1,dt2)</p>
-<ul>
-<li><code>TIMEDIFF</code>函数接受两个必须为相同类型的参数，即<code>TIME</code>或<code>DATETIME</code>。 <code>TIMEDIFF</code>函数返回表示为时间值的<code>dt1 - dt2</code>的结果。</li>
-<li><code>TIMEDIFF</code>函数的结果是一个<code>TIME</code>值，范围是从<code>-838:59:59</code>到<code>838:59:59</code>。</li>
-</ul>
-</li>
-<li><p>TIMESTAMPDIFF(unit,begin,end); </p>
-<ul>
-<li><code>TIMESTAMPDIFF</code>函数返回<code>end-begin</code>的结果，其中<code>begin</code>和<code>end</code>是<a href="http://www.yiibai.com/mysql/date.html">DATE</a>或<a href="http://www.yiibai.com/mysql/datetime.html">DATETIME</a>表达式。</li>
-<li><code>TIMESTAMPDIFF</code>函数允许其参数具有混合类型，例如，<code>begin</code>是<code>DATE</code>值，<code>end</code>可以是<code>DATETIME</code>值。 如果使用<code>DATE</code>值，则<code>TIMESTAMPDIFF</code>函数将其视为时间部分为<code>“00:00:00”</code>的<code>DATETIME</code>值。</li>
-<li><code>unit</code>参数是确定(<code>end-begin</code>)的结果的单位，表示为整数。 以下是有效单位：<ul>
-<li>MICROSECOND</li>
-<li>SECOND</li>
-<li>MINUTE</li>
-<li>HOUR</li>
-<li>DAY</li>
-<li>WEEK</li>
-<li>MONTH</li>
-<li>QUARTER</li>
-<li>YEAR</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>数据类型转换函数</p>
-<ul>
-<li>cast(‘2022-01-01 00:00:00’ as datetime)</li>
-<li>convert(‘2021-01-01 00:00:00’,datetime)</li>
-</ul>
-</li>
-<li><p>date_sub(date,INTERVAL expr type) </p>
-<ul>
-<li>从日期减去指定的时间间隔</li>
-<li><em>date</em> 参数是合法的日期表达式。<em>expr</em> 参数是您希望添加的时间间隔。</li>
-</ul>
-</li>
-<li><p>DATE_ADD(date,INTERVAL expr type)</p>
-<ul>
-<li><p>从日期加上指定的时间间隔</p>
-</li>
-<li><p><em>date</em> 参数是合法的日期表达式。<em>expr</em> 参数是您希望添加的时间间隔。</p>
-</li>
-<li><table>
-<thead>
-<tr>
-<th>MICROSECOND</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>SECOND</td>
-</tr>
-<tr>
-<td>MINUTE</td>
-</tr>
-<tr>
-<td>HOUR</td>
-</tr>
-<tr>
-<td>DAY</td>
-</tr>
-<tr>
-<td>WEEK</td>
-</tr>
-<tr>
-<td>MONTH</td>
-</tr>
-<tr>
-<td>QUARTER</td>
-</tr>
-<tr>
-<td>YEAR</td>
-</tr>
-<tr>
-<td>SECOND_MICROSECOND</td>
-</tr>
-<tr>
-<td>MINUTE_MICROSECOND</td>
-</tr>
-<tr>
-<td>MINUTE_SECOND</td>
-</tr>
-<tr>
-<td>HOUR_MICROSECOND</td>
-</tr>
-<tr>
-<td>HOUR_SECOND</td>
-</tr>
-<tr>
-<td>HOUR_MINUTE</td>
-</tr>
-<tr>
-<td>DAY_MICROSECOND</td>
-</tr>
-<tr>
-<td>DAY_SECOND</td>
-</tr>
-<tr>
-<td>DAY_MINUTE</td>
-</tr>
-<tr>
-<td>DAY_HOUR</td>
-</tr>
-<tr>
-<td>YEAR_MONTH</td>
-</tr>
-</tbody></table>
-</li>
-</ul>
-</li>
-<li><p>round(x,d)</p>
-<ul>
-<li>x指要处理的数，d是指保留几位小数</li>
-</ul>
-</li>
-<li><p>ifnull(expression_1,expression_2)</p>
-<ul>
-<li>MySQL IFNULL函数是MySQL控制流函数之一，它接受两个参数，如果不是NULL，则返回第一个参数。 否则，IFNULL函数返回第二个参数。</li>
-</ul>
-</li>
-<li><p>year(datetime)函数 取时间的年份</p>
-</li>
-<li><p>month(datetime) 取月份</p>
-</li>
-<li><p>dayofmonth() 取一个月的第几天</p>
-</li>
-<li><p>if(expr1,expr2,expr3)函数</p>
-<ul>
-<li>if() 类似与三元表达式，如果expr1的值为true，则返回expr2的值，如果expr1的值为false,则返回expr3的值</li>
-</ul>
-</li>
-<li><p>substring_index(“待截取有用部分的字符串”，“截取数据依据的字符”，截取字符的位置N)</p>
-</li>
-<li><p>substr(string,start,length)</p>
-<ul>
-<li>string：表示要截取的字符串</li>
-<li>start：规定字符串从何处开始。（1表示第一个下标）</li>
-<li>length：可选</li>
-</ul>
-</li>
-<li><p>插入数据</p>
-<ul>
-<li>INSERT INTO t1(field1,field2) VALUE(v001,v002)</li>
-<li>INSERT INTO t1(field1,field2) VALUES(v101,v102),(v201,v202),(v301,v302),(v401,v402);　<strong>在插入批量数据时方式2优于方式1</strong></li>
-<li>INSERT INTO t2(field1,field2) SELECT col1,col2 FROM t1 WHERE</li>
-<li>INSERT INTO t2 SELECT id, name, address FROM t1</li>
-</ul>
-</li>
-<li><p>LENGTH( 字段名) </p>
-<ul>
-<li>返回字段中值的长度</li>
-<li>mysql5.0版本以上：<ul>
-<li>UTF-8：一个汉字等于3个字节，英文是一个字节</li>
-<li>GBK：一个汉字等于2个字节，英文是一个字节</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>REPLACE(str,old_string,new_string);</p>
-<ul>
-<li>使用新的字符串替换表的列中的字符串</li>
-</ul>
-</li>
-<li><p>curdate()  取时间 %Y-%m-%d</p>
-</li>
-<li><p>curtime()  取时间 %H:%i%s</p>
-</li>
-<li><table>
-<thead>
-<tr>
-<th align="left">NOW()</th>
-<th align="left">CURDATE()</th>
-<th align="left">CURTIME()</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">2008-12-29 16:25:46</td>
-<td align="left">2008-12-29</td>
-<td align="left">16:25:46</td>
-</tr>
-</tbody></table>
 </li>
 </ul>
 ]]></content>
@@ -6475,7 +6138,7 @@ copyToLocal#与get完全一样
 <ul>
 <li><p>CAST： CAST ( expression AS data_type )</p>
 </li>
-<li><p>````sqlite<br>select</p>
+<li><p>````sql<br>select</p>
 <pre><code>cast(1000 as varchar(10))
 cast(1000 as varchar)
 cast(&#39;1000&#39; as int)
@@ -6852,6 +6515,65 @@ cast(&#39;1000&#39; as int)
 </ul>
 </li>
 </ul>
+<h2 id="数仓项目分层"><a href="#数仓项目分层" class="headerlink" title="数仓项目分层"></a>数仓项目分层</h2><ul>
+<li>ODS<ul>
+<li>保持数据原貌，（数据备份的作用）</li>
+<li>采用压缩    LZO  ==》减少磁盘空间  100g ==&gt;10g</li>
+<li>创建分区表  ：==》防止后续计算时的全表扫描</li>
+</ul>
+</li>
+<li>DWD<ul>
+<li>数据清洗   <ul>
+<li>解析数据</li>
+<li>核心字段不能为空</li>
+<li>过期数据清除</li>
+<li>重复数据，进行过滤</li>
+</ul>
+</li>
+<li>采用压缩，创建分区表，采用列式存储</li>
+<li><strong>维度退化</strong></li>
+<li><strong>维度建模</strong><ul>
+<li>选择业务过程<ul>
+<li>关心的事实表（下单，支付，点赞，收藏）</li>
+</ul>
+</li>
+<li>声明粒度<ul>
+<li>一行信息表示什么含义：1次，1h ,1day…..</li>
+<li>根据实际情况选择，最小粒度可以统计所有指标</li>
+</ul>
+</li>
+<li>确定维度<ul>
+<li>维度：时间，地区，用户，商品，活动，优惠卷</li>
+<li>维度退化（维度建模当中的星型模型，让事实表周围只有一级维度）</li>
+<li>商品表+商品SPU表+商品SKU表+三级分类+二级分类+一级分类==》商品表</li>
+<li>省份表+地区表==》地区表</li>
+<li>时间表+假期表==》时间表</li>
+<li>活动表+活动规则表==》活动表</li>
+</ul>
+</li>
+<li>确定事实<ul>
+<li>确定事实表的度量值（次数，个数，金额之类的可累加的统计值）</li>
+<li>度量值的特点就是可以累加</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>DWS<ul>
+<li>站在维度表的角度去看待事实，主要看事实表的度量值</li>
+</ul>
+</li>
+<li>DWT<ul>
+<li>站在维度表的角度去看待事实</li>
+<li>主要关心事实表的度量值的累加值、和累积一段时间的值，还有行为的开始时间，结束时间</li>
+</ul>
+</li>
+<li>ADS<ul>
+<li>一些结果指标</li>
+</ul>
+</li>
+</ul>
 ]]></content>
       <categories>
         <category>大数据</category>
@@ -7019,7 +6741,7 @@ cast(&#39;1000&#39; as int)
 </ul>
 <h2 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h2><ul>
 <li><p>创建索引的方式</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><code class="hljs sqlite">--直接创建索引<br>create index index_name on table (column(length))<br>--修改表结构的方式添加索引<br>alter table table_name add index index_name on (column(length))<br>--创建表的时候同时创建索引<br>CREATE TABLE &#96;table&#96; (<br>	&#96;id&#96; int(11) NOT NULL AUTO_INCREMENT ,<br>	&#96;title&#96; char(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,<br>	&#96;content&#96; text CHARACTER SET utf8 COLLATE utf8_general_ci NULL ,<br>	&#96;time&#96; int(10) NULL DEFAULT NULL ,<br>	PRIMARY KEY (&#96;id&#96;),<br>	INDEX index_name (title(length))<br>)<br>-- 删除索引<br>d<br></code></pre></td></tr></table></figure></li>
+<figure class="highlight plain"><table><tr><td class="code"><pre><code class="hljs sqlite">--直接创建索引<br>create index index_name on table (column(length))<br>--修改表结构的方式添加索引<br>alter table table_name add index index_name on (column(length))<br>--创建表的时候同时创建索引<br>CREATE TABLE &#96;table&#96; (<br>	&#96;id&#96; int(11) NOT NULL AUTO_INCREMENT ,<br>	&#96;title&#96; char(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,<br>	&#96;content&#96; text CHARACTER SET utf8 COLLATE utf8_general_ci NULL ,<br>	&#96;time&#96; int(10) NULL DEFAULT NULL ,<br>	PRIMARY KEY (&#96;id&#96;),<br>	INDEX index_name (title(length))<br>)<br>-- 删除索引<br>ALTER TABLE table_name DROP INDEX index_name<br>DROP INDEX index_name ON table_name<br></code></pre></td></tr></table></figure></li>
 <li><p>Btree索引：</p>
 <p><a href="https://imgtu.com/i/4qdvuQ"><img src="https://z3.ax1x.com/2021/10/03/4qdvuQ.png" alt="4qdvuQ.png"></a></p>
 <ul>
@@ -7316,7 +7038,7 @@ cast(&#39;1000&#39; as int)
 </blockquote>
 <figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">select</span> <br>	co.name countryName,<br>	ci.name capitalName,<br>	co.capital<br><span class="hljs-keyword">from</span> <br>	country2 co <br><span class="hljs-keyword">left</span> <span class="hljs-keyword">outer</span> <span class="hljs-keyword">join</span> <span class="hljs-comment">-- 左外联接, 保证左表数据完整</span><br>	city2 ci <br><span class="hljs-keyword">on</span> <br>	co.capital = ci.id ;<br>	<br><span class="hljs-keyword">select</span> <br>	co.name countryName,<br>	ci.name capitalName,<br>	co.capital<br><span class="hljs-keyword">from</span> <br>	country2 co <br><span class="hljs-keyword">right</span> <span class="hljs-keyword">outer</span> <span class="hljs-keyword">join</span> <span class="hljs-comment">-- 左外联接, 保证左表数据完整</span><br>	city2 ci <br><span class="hljs-keyword">on</span> <br>	co.capital = ci.id ;<br>	<br><span class="hljs-comment">--外联时可以省略outer关键字	</span><br><span class="hljs-keyword">select</span> <br>	co.name countryName,<br>	ci.name capitalName,<br>	co.capital<br><span class="hljs-keyword">from</span> <br>	country2 co <br><span class="hljs-keyword">left</span> <span class="hljs-keyword">join</span><br>	city2 ci <br><span class="hljs-keyword">on</span> <br>	co.capital = ci.id ;<br></code></pre></td></tr></table></figure>
 <h3 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h3><h4 id="单行函数"><a href="#单行函数" class="headerlink" title="单行函数"></a>单行函数</h4><figure class="highlight oxygene"><table><tr><td class="code"><pre><code class="hljs oxygene">单行函数 -- 作用于结果集中的每一条记录的.<br><span class="hljs-keyword">select</span> <br>	upper(name),<br>	now(),<br>	<span class="hljs-keyword">concat</span>(continent, code2)<br><span class="hljs-keyword">from</span> <br>	country;<br>	<br>查询国家表中的数据, 把国家名称,大洲, 国家代码 连接起来, 中间使用<span class="hljs-string">&#x27;=&gt;&#x27;</span>连接.<br>--<span class="hljs-keyword">concat</span>(<span class="hljs-keyword">concat</span>(<span class="hljs-keyword">concat</span>(<span class="hljs-keyword">concat</span>(name, <span class="hljs-string">&#x27;=&gt;&#x27;</span>), continent), <span class="hljs-string">&#x27;=&gt;&#x27;</span>), code)<br><span class="hljs-keyword">select</span> <br>	<span class="hljs-keyword">concat</span>(name, <span class="hljs-string">&#x27;=&gt;&#x27;</span>, continent, <span class="hljs-string">&#x27;=&gt;&#x27;</span>, code)<br><span class="hljs-keyword">from</span> <br>	country;<br></code></pre></td></tr></table></figure>
-<h4 id="组函数"><a href="#组函数" class="headerlink" title="组函数"></a>组函数</h4><figure class="highlight stylus"><table><tr><td class="code"><pre><code class="hljs stylus">组函数 -- 作用于一组数据, 最终针对一组只有一个结果. 也称为统计处理<br><span class="hljs-function"><span class="hljs-title">avg</span><span class="hljs-params">()</span></span> 平均<br><span class="hljs-function"><span class="hljs-title">max</span><span class="hljs-params">()</span></span> 最大<br><span class="hljs-function"><span class="hljs-title">min</span><span class="hljs-params">()</span></span> 最小<br><span class="hljs-function"><span class="hljs-title">count</span><span class="hljs-params">()</span></span> 计数<br><span class="hljs-function"><span class="hljs-title">sum</span><span class="hljs-params">()</span></span>求和<br></code></pre></td></tr></table></figure>
+<h4 id="聚合函数"><a href="#聚合函数" class="headerlink" title="聚合函数"></a>聚合函数</h4><figure class="highlight stylus"><table><tr><td class="code"><pre><code class="hljs stylus">组函数（聚合函数） -- 作用于一组数据, 最终针对一组只有一个结果. 也称为统计处理<br><span class="hljs-function"><span class="hljs-title">avg</span><span class="hljs-params">()</span></span> 平均<br><span class="hljs-function"><span class="hljs-title">max</span><span class="hljs-params">()</span></span> 最大<br><span class="hljs-function"><span class="hljs-title">min</span><span class="hljs-params">()</span></span> 最小<br><span class="hljs-function"><span class="hljs-title">count</span><span class="hljs-params">()</span></span> 计数<br><span class="hljs-function"><span class="hljs-title">sum</span><span class="hljs-params">()</span></span>求和<br></code></pre></td></tr></table></figure>
 <blockquote>
 <ul>
 <li>获取表中的记录数, 使用count(*)最好.</li>
@@ -7470,8 +7192,14 @@ cast(&#39;1000&#39; as int)
 </ol>
 <blockquote>
 <ul>
-<li>limit m, n 把结果集中的m条略过, 再截断成n条记录</li>
-<li>limit子句必须放在整个查询语句的最后！</li>
+<li><p>limit m, n 把结果集中的m条略过, 再截断成n条记录</p>
+</li>
+<li><p>limit子句必须放在整个查询语句的最后！</p>
+</li>
+<li><p>offset n 表示去掉n个值</p>
+</li>
+<li><p>一般用法：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> * <span class="hljs-keyword">FROM</span> employees<br><span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> hire_date <span class="hljs-keyword">DESC</span>      <span class="hljs-comment">-- 倒序</span><br><span class="hljs-keyword">LIMIT</span> <span class="hljs-number">1</span> <span class="hljs-keyword">offset</span> <span class="hljs-number">2</span>;       <span class="hljs-comment">-- 去掉排名倒数第一第二的时间，取倒数第三;   </span><br><br></code></pre></td></tr></table></figure></li>
 </ul>
 </blockquote>
 <h2 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h2><blockquote>
@@ -7679,7 +7407,7 @@ end;
 </blockquote>
 <h2 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h2><figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><br><br><span class="hljs-keyword">import</span> java.util.ArrayList;<br><span class="hljs-keyword">import</span> java.util.List;<br><br><span class="hljs-keyword">import</span> org.junit.Test;<br><br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 泛型要解决类型安全问题</span><br><span class="hljs-comment"> */</span><br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Person</span>&lt;<span class="hljs-title">X</span>&gt; </span>&#123; <span class="hljs-comment">// X表示某种类型, X在这里称为泛型的类型参数(是一个形参)</span><br>	<span class="hljs-comment">// X类型的真实类型会在创建对象时确定下来, 隶属于对象的存在而存在.</span><br>	<br>	<span class="hljs-keyword">private</span> String name;<br>	<span class="hljs-keyword">private</span> X info;<br>	<br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Person</span><span class="hljs-params">()</span> </span>&#123;<br>	&#125;<br><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Person</span><span class="hljs-params">(String name, X info)</span> </span>&#123;<br>		<span class="hljs-keyword">this</span>.name = name;<br>		<span class="hljs-keyword">this</span>.info = info;<br>	&#125;<br>	<br>	<span class="hljs-function"><span class="hljs-keyword">public</span> X <span class="hljs-title">getInfo</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> info;<br>	&#125;<br><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setInfo</span><span class="hljs-params">(X info)</span> </span>&#123;<br>		<span class="hljs-keyword">this</span>.info = info;<br>	&#125;<br><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">getName</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> name;<br>	&#125;<br><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setName</span><span class="hljs-params">(String name)</span> </span>&#123;<br>		<span class="hljs-keyword">this</span>.name = name;<br>	&#125;<br><br>	<span class="hljs-meta">@Override</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">toString</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> <span class="hljs-string">&quot;Person [name=&quot;</span> + name + <span class="hljs-string">&quot;, info=&quot;</span> + info + <span class="hljs-string">&quot;]&quot;</span>;<br>	&#125;<br>	<br>	<span class="hljs-comment">//在静态方法中不可以使用泛型类中的泛型</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test</span><span class="hljs-params">(X x)</span> </span>&#123;<br>	&#125;<br>&#125;<br><br><span class="hljs-comment">// 泛型和继承之间的关系</span><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">A</span>&lt;<span class="hljs-title">Y</span>&gt; </span>&#123;<br>	<span class="hljs-keyword">private</span> Y y;<br>	<span class="hljs-function"><span class="hljs-keyword">public</span> Y <span class="hljs-title">getY</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> y;<br>	&#125;<br>&#125;<br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">B1</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">A</span> </span>&#123;&#125; <span class="hljs-comment">// 子类中没有处理父类的泛型. 泛型类型就是类型最模糊的Object, 这种不好</span><br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">B2</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">A</span>&lt;<span class="hljs-title">Integer</span>&gt; </span>&#123;&#125; <span class="hljs-comment">// 子类在继承时把父类的泛型写死了 ,  这是最简单</span><br><span class="hljs-comment">//class B3 extends A&lt;Teacher&gt; &#123;&#125; // 在创建子类对象后, 其泛型是固定的.</span><br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">B4</span>&lt;<span class="hljs-title">Y</span>&gt; <span class="hljs-keyword">extends</span> <span class="hljs-title">A</span>&lt;<span class="hljs-title">Y</span>&gt; </span>&#123;&#125; <span class="hljs-comment">// 子类在继承时仍然继续泛型, 这是最灵活</span><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">GenericMethod</span>&lt;<span class="hljs-title">T</span>&gt; </span>&#123;<br>	<br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test</span><span class="hljs-params">(T t)</span> </span>&#123;<br>	&#125;<br>	<br>	<span class="hljs-comment">//public Object get(Object obj) &#123;</span><br>	<span class="hljs-comment">// 泛型方法中必须传入泛型类型的参数, 如果不传泛型永远无法确定.</span><br>	<span class="hljs-comment">// 这个泛型类型由实参的类型来决定, 所以它是和方法的某次调用相关</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> &lt;E&gt; <span class="hljs-function">E <span class="hljs-title">get</span><span class="hljs-params">(E e)</span> </span>&#123; <span class="hljs-comment">// E表示只可以在此方法中使用的某种类型</span><br>		<span class="hljs-keyword">return</span> <span class="hljs-keyword">null</span>;<br>	&#125;<br>	<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">GenericTest</span> </span>&#123;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test5</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-comment">//Object object = GenericMethod.get();</span><br>		String string = GenericMethod.get(<span class="hljs-string">&quot;abc&quot;</span>); <span class="hljs-comment">// 泛型方法必须通过实参来告诉方法, 泛型的具体类型是什么</span><br>		Integer integer = GenericMethod.get(<span class="hljs-number">200</span>);<br>		Boolean boolean1 = GenericMethod.get(<span class="hljs-keyword">false</span>);<br>		Object object = GenericMethod.get(<span class="hljs-keyword">null</span>); <span class="hljs-comment">// 如果实参是null, 将会导致泛型类型无法感知!!! </span><br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test4</span><span class="hljs-params">()</span> </span>&#123;<br>		B1 b1 = <span class="hljs-keyword">new</span> B1();<br>		Object y = b1.getY();<br>		<br>		Integer y2 = <span class="hljs-keyword">new</span> B2().getY();<br>		Integer y3 = <span class="hljs-keyword">new</span> B2().getY();<br>		<br>		<span class="hljs-comment">//Teacher y4 = new B3().getY();</span><br>		<br>		B4 b4 = <span class="hljs-keyword">new</span> B4();<br>		Object y5 = b4.getY();<br>		Double y6 = <span class="hljs-keyword">new</span> B4&lt;Double&gt;().getY();<br>		String y7 = <span class="hljs-keyword">new</span> B4&lt;String&gt;().getY();<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test3</span><span class="hljs-params">()</span> </span>&#123;<br>		Person&lt;Integer&gt; person1 = <span class="hljs-keyword">new</span> Person&lt;Integer&gt;(<span class="hljs-string">&quot;张三&quot;</span>, <span class="hljs-number">20</span>); <span class="hljs-comment">// 使用了泛型后, 类型就安全了.</span><br>		Integer info1 = person1.getInfo(); <span class="hljs-comment">// 获取到的属性也安全了, 清晰了.</span><br>		<br>		Person&lt;Boolean&gt; person2 = <span class="hljs-keyword">new</span> Person&lt;Boolean&gt;(<span class="hljs-string">&quot;李四&quot;</span>, <span class="hljs-keyword">true</span>);<br>		Boolean info2 = person2.getInfo();<br>		<br>		Person person3 = <span class="hljs-keyword">new</span> Person(<span class="hljs-string">&quot;王五&quot;</span>, <span class="hljs-number">3.22</span>);<br>		Object info3 = person3.getInfo();<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test2</span><span class="hljs-params">()</span> </span>&#123;<br>		Person person1 = <span class="hljs-keyword">new</span> Person(<span class="hljs-string">&quot;张三&quot;</span>, <span class="hljs-number">30</span>);<br>		Object info1 = person1.getInfo();<br>		<br>		Person person2 = <span class="hljs-keyword">new</span> Person(<span class="hljs-string">&quot;李四&quot;</span>, <span class="hljs-string">&quot;女&quot;</span>);<br>		Object info2 = person2.getInfo();<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test1</span><span class="hljs-params">()</span> </span>&#123;<br>		List list1 = <span class="hljs-keyword">new</span> ArrayList();<br>		list1.add(<span class="hljs-number">1</span>);<br>		list1.add(<span class="hljs-string">&quot;abc&quot;</span>);<br>		<br>		Object object = list1.get(<span class="hljs-number">0</span>);<br>		<br>		List&lt;Integer&gt; list2 = <span class="hljs-keyword">new</span> ArrayList&lt;Integer&gt;();<br>		list2.add(<span class="hljs-number">3</span>);<br>		<span class="hljs-comment">//list2.add(&quot;abc&quot;);</span><br>		<br>		List&lt;Object&gt; list3 = <span class="hljs-keyword">new</span> ArrayList&lt;Object&gt;();<br>	&#125;<br>&#125;<br><br><br></code></pre></td></tr></table></figure>
 
-<h2 id="集合"><a href="#集合" class="headerlink" title="集合"></a>集合</h2><figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> collection;<br><br><span class="hljs-keyword">import</span> java.util.*;<br><span class="hljs-keyword">import</span> org.junit.Test;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 	Collection 集合 : 保存一个一个的对象, 特点 : 无序可重复</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> * 		Set 特点 : 无序不可重复</span><br><span class="hljs-comment"> * 			HashSet : 基于数组使用哈希算法实现的Set集合, 判定重复的标准是两个对象的equals为true, 并且两个对象的hashCode一样</span><br><span class="hljs-comment"> * 				优点 : 全是优点</span><br><span class="hljs-comment"> * 				缺点 : 对内存要求高</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> * 			TreeSet : 基于二叉搜索树(红黑树)实现的Set集合, 判定重复的标准是两个对象的比较结果为0</span><br><span class="hljs-comment"> * 				优点 : 对内存要求低, 搜索速度快</span><br><span class="hljs-comment"> * 				缺点 : 插入和删除的速度慢，大量元素的比较和树的旋转</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> * 		List : 特点 : 有序可重复</span><br><span class="hljs-comment"> * 			ArrayList : 基于数组实现的List集合, 线程不安全.</span><br><span class="hljs-comment"> * 				缺点 : 对内存要求高, 因为内存必须连续, 非末端数据的插入和删除都是最慢的, 因为有大量元素的移动.</span><br><span class="hljs-comment"> * 				优点 : 末端插入删除速度快</span><br><span class="hljs-comment"> * 				适用场景 : 存档数据, 主要用于查询检索</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> * 			Vector : 和ArrayList一样, 是一个古老的实现. 但是线程安全</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> * 			LinkedList : 基于链表实现的List集合</span><br><span class="hljs-comment"> * 				优点 : 对内存要求低. 插入,删除速度非常快</span><br><span class="hljs-comment"> * 				缺点 : 检索速度慢,</span><br><span class="hljs-comment"> * 				适用场景 : 频繁修改数据, 很少检索</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> *	泛型 : 类型安全问题, 在集合中使用泛型的好处是约束中的元素的数据类型, 类型可以是确定的, 不再是类型最模糊的Object</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> *	遍历 : 增强for</span><br><span class="hljs-comment"> *			for (元素数据类型 临时变量 : 集合) &#123;</span><br><span class="hljs-comment"> *			&#125;</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> *		  迭代器 Iterator</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> 	必须从集合对象获取迭代器</span><br><span class="hljs-comment"> 	while (迭代器.hasNext()) &#123;</span><br><span class="hljs-comment"> 		元素 = 迭代器.next();</span><br><span class="hljs-comment"> 		处理元素;</span><br><span class="hljs-comment"> 	&#125;</span><br><span class="hljs-comment"> 	</span><br><span class="hljs-comment"> 	Map集合 : 保存的是一对一对的对象. 是具有映射关系的键值对象, 键值对象都可以是任意对象. 键到值是单向一对一映射.</span><br><span class="hljs-comment"> 	Map可以简单地看作是一个词典, 键是词条, 值是解释.</span><br><span class="hljs-comment"> 		Object put(Object key, Object value); //写入条目</span><br><span class="hljs-comment"> 		Object remove(Object key); // 根据键删除 一个条目</span><br><span class="hljs-comment"> 		Object get(Object key); // 根据键查找值, 查词典</span><br><span class="hljs-comment"> 		Set keySet(); // 获取一个保存所有键对象的Set子集合</span><br><span class="hljs-comment"> 		Set entrySet(); // 获取保存所有条件对象的Set集合</span><br><span class="hljs-comment"> 		int size() ; 条目个数</span><br><span class="hljs-comment"> 		</span><br><span class="hljs-comment"> 		</span><br><span class="hljs-comment"> 		HashMap 是典型实现, 使用哈希算法实现的Map集合</span><br><span class="hljs-comment"> 		TreeMap 是基于二叉树实现的Map集合</span><br><span class="hljs-comment"> 		Hashtable 是古老的实现, 和HashMap一样, 它是线程安全, 效率低.</span><br><span class="hljs-comment"> */</span><br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Dog</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Comparable</span></span>&#123;<br>	<span class="hljs-keyword">private</span> String name;<br>	<span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> age;<br>	<span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> weight;<br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Dog</span><span class="hljs-params">()</span> </span>&#123;<br>	&#125;<br>	<span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">getName</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> name;<br>	&#125;<br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setName</span><span class="hljs-params">(String name)</span> </span>&#123;<br>		<span class="hljs-keyword">this</span>.name = name;<br>	&#125;<br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">getAge</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> age;<br>	&#125;<br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setAge</span><span class="hljs-params">(<span class="hljs-keyword">int</span> age)</span> </span>&#123;<br>		<span class="hljs-keyword">this</span>.age = age;<br>	&#125;<br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">getWeight</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> weight;<br>	&#125;<br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setWeight</span><span class="hljs-params">(<span class="hljs-keyword">int</span> weight)</span> </span>&#123;<br>		<span class="hljs-keyword">this</span>.weight = weight;<br>	&#125;<br>	<span class="hljs-meta">@Override</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">toString</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> <span class="hljs-string">&quot;Dog [name=&quot;</span> + name + <span class="hljs-string">&quot;, age=&quot;</span> + age + <span class="hljs-string">&quot;, weight=&quot;</span> + weight + <span class="hljs-string">&quot;]&quot;</span>;<br>	&#125;<br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Dog</span><span class="hljs-params">(String name, <span class="hljs-keyword">int</span> age, <span class="hljs-keyword">int</span> weight)</span> </span>&#123;<br>		<span class="hljs-keyword">super</span>();<br>		<span class="hljs-keyword">this</span>.name = name;<br>		<span class="hljs-keyword">this</span>.age = age;<br>		<span class="hljs-keyword">this</span>.weight = weight;<br>	&#125;<br>	<span class="hljs-meta">@Override</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">compareTo</span><span class="hljs-params">(Object o)</span> </span>&#123;<br>		<span class="hljs-keyword">if</span>(o <span class="hljs-keyword">instanceof</span> Dog) &#123;<br>		<span class="hljs-keyword">return</span> ((Dog)o).age-<span class="hljs-keyword">this</span>.age;<br>		&#125;<br>		<span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> RuntimeException(<span class="hljs-string">&quot;对象不可比&quot;</span>);<br>	&#125;<br>	 <br>&#125;<br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">CollectionTest</span> </span>&#123;<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test2</span><span class="hljs-params">()</span> </span>&#123;<br>		<br>	&#125;<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test1</span><span class="hljs-params">()</span> </span>&#123;<br>		Set set=<span class="hljs-keyword">new</span> TreeSet();<br>		Dog dog1=<span class="hljs-keyword">new</span> Dog(<span class="hljs-string">&quot;小白&quot;</span>, <span class="hljs-number">5</span>, <span class="hljs-number">25</span>);<br>		Dog dog2=<span class="hljs-keyword">new</span> Dog(<span class="hljs-string">&quot;小黄&quot;</span>, <span class="hljs-number">6</span>, <span class="hljs-number">50</span>);<br>		Dog dog3=<span class="hljs-keyword">new</span> Dog(<span class="hljs-string">&quot;小黑&quot;</span>, <span class="hljs-number">4</span>, <span class="hljs-number">30</span>);<br>		Dog dog4=<span class="hljs-keyword">new</span> Dog(<span class="hljs-string">&quot;狗蛋&quot;</span>, <span class="hljs-number">2</span>, <span class="hljs-number">10</span>);<br>		set.add(dog1);<br>		set.add(dog2);<br>		set.add(dog3);<br>		set.add(dog4);<br>		<br>		<span class="hljs-keyword">for</span> (Object object : set) &#123;<br>			System.out.println(object);<br>		&#125;<br>	&#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+<h2 id="集合"><a href="#集合" class="headerlink" title="集合"></a>集合</h2><figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> collection;<br><br><span class="hljs-keyword">import</span> java.util.*;<br><span class="hljs-keyword">import</span> org.junit.Test;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 	Collection 集合 : 保存一个一个的对象, 特点 : 无序可重复</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> * 		Set 特点 : 无序不可重复</span><br><span class="hljs-comment"> * 			HashSet : 基于数组使用哈希算法实现的Set集合, </span><br><span class="hljs-comment"> 判定重复的标准是两个对象的equals为true, 并且两个对象的hashCode一样</span><br><span class="hljs-comment"> * 				优点 : 全是优点</span><br><span class="hljs-comment"> * 				缺点 : 对内存要求高</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> * 			TreeSet : 基于二叉搜索树(红黑树)实现的Set集合, </span><br><span class="hljs-comment"> 判定重复的标准是两个对象的比较结果为0</span><br><span class="hljs-comment"> * 				优点 : 对内存要求低, 搜索速度快</span><br><span class="hljs-comment"> * 				缺点 : 插入和删除的速度慢，大量元素的比较和树的旋转</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> * 		List : 特点 : 有序可重复</span><br><span class="hljs-comment"> * 			ArrayList : 基于数组实现的List集合, 线程不安全.</span><br><span class="hljs-comment"> * 				缺点 : 对内存要求高, 因为内存必须连续, </span><br><span class="hljs-comment"> 非末端数据的插入和删除都是最慢的, 因为有大量元素的移动.</span><br><span class="hljs-comment"> * 				优点 : 末端插入删除速度快</span><br><span class="hljs-comment"> * 				适用场景 : 存档数据, 主要用于查询检索</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> * 			Vector : 和ArrayList一样, 是一个古老的实现. 但是线程安全</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> * 			LinkedList : 基于链表实现的List集合</span><br><span class="hljs-comment"> * 				优点 : 对内存要求低. 插入,删除速度非常快</span><br><span class="hljs-comment"> * 				缺点 : 检索速度慢,</span><br><span class="hljs-comment"> * 				适用场景 : 频繁修改数据, 很少检索</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> *	泛型 : 类型安全问题, 在集合中使用泛型的好处是约束中的元素的数据类型, </span><br><span class="hljs-comment"> 类型可以是确定的, 不再是类型最模糊的Object</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> *	遍历 : 增强for</span><br><span class="hljs-comment"> *			for (元素数据类型 临时变量 : 集合) &#123;</span><br><span class="hljs-comment"> *			&#125;</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> *		  迭代器 Iterator</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> 	必须从集合对象获取迭代器</span><br><span class="hljs-comment"> 	while (迭代器.hasNext()) &#123;</span><br><span class="hljs-comment"> 		元素 = 迭代器.next();</span><br><span class="hljs-comment"> 		处理元素;</span><br><span class="hljs-comment"> 	&#125;</span><br><span class="hljs-comment"> 	</span><br><span class="hljs-comment"> 	Map集合 : 保存的是一对一对的对象. 是具有映射关系的键值对象, </span><br><span class="hljs-comment"> 	键值对象都可以是任意对象. 键到值是单向一对一映射.</span><br><span class="hljs-comment"> 	Map可以简单地看作是一个词典, 键是词条, 值是解释.</span><br><span class="hljs-comment"> 		Object put(Object key, Object value); //写入条目</span><br><span class="hljs-comment"> 		Object remove(Object key); // 根据键删除 一个条目</span><br><span class="hljs-comment"> 		Object get(Object key); // 根据键查找值, 查词典</span><br><span class="hljs-comment"> 		Set keySet(); // 获取一个保存所有键对象的Set子集合</span><br><span class="hljs-comment"> 		Set entrySet(); // 获取保存所有条件对象的Set集合</span><br><span class="hljs-comment"> 		int size() ; 条目个数</span><br><span class="hljs-comment"> 		</span><br><span class="hljs-comment"> 		</span><br><span class="hljs-comment"> 		HashMap 是典型实现, 使用哈希算法实现的Map集合</span><br><span class="hljs-comment"> 		TreeMap 是基于二叉树实现的Map集合</span><br><span class="hljs-comment"> 		Hashtable 是古老的实现, 和HashMap一样, 它是线程安全, 效率低.</span><br><span class="hljs-comment"> */</span><br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Dog</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Comparable</span></span>&#123;<br>	<span class="hljs-keyword">private</span> String name;<br>	<span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> age;<br>	<span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> weight;<br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Dog</span><span class="hljs-params">()</span> </span>&#123;<br>	&#125;<br>	<span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">getName</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> name;<br>	&#125;<br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setName</span><span class="hljs-params">(String name)</span> </span>&#123;<br>		<span class="hljs-keyword">this</span>.name = name;<br>	&#125;<br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">getAge</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> age;<br>	&#125;<br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setAge</span><span class="hljs-params">(<span class="hljs-keyword">int</span> age)</span> </span>&#123;<br>		<span class="hljs-keyword">this</span>.age = age;<br>	&#125;<br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">getWeight</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> weight;<br>	&#125;<br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">setWeight</span><span class="hljs-params">(<span class="hljs-keyword">int</span> weight)</span> </span>&#123;<br>		<span class="hljs-keyword">this</span>.weight = weight;<br>	&#125;<br>	<span class="hljs-meta">@Override</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> String <span class="hljs-title">toString</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-keyword">return</span> <span class="hljs-string">&quot;Dog [name=&quot;</span> + name + <span class="hljs-string">&quot;, age=&quot;</span> + age + <span class="hljs-string">&quot;, weight=&quot;</span> + weight + <span class="hljs-string">&quot;]&quot;</span>;<br>	&#125;<br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Dog</span><span class="hljs-params">(String name, <span class="hljs-keyword">int</span> age, <span class="hljs-keyword">int</span> weight)</span> </span>&#123;<br>		<span class="hljs-keyword">super</span>();<br>		<span class="hljs-keyword">this</span>.name = name;<br>		<span class="hljs-keyword">this</span>.age = age;<br>		<span class="hljs-keyword">this</span>.weight = weight;<br>	&#125;<br>	<span class="hljs-meta">@Override</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">compareTo</span><span class="hljs-params">(Object o)</span> </span>&#123;<br>		<span class="hljs-keyword">if</span>(o <span class="hljs-keyword">instanceof</span> Dog) &#123;<br>		<span class="hljs-keyword">return</span> ((Dog)o).age-<span class="hljs-keyword">this</span>.age;<br>		&#125;<br>		<span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> RuntimeException(<span class="hljs-string">&quot;对象不可比&quot;</span>);<br>	&#125;<br>	 <br>&#125;<br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">CollectionTest</span> </span>&#123;<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test2</span><span class="hljs-params">()</span> </span>&#123;<br>		<br>	&#125;<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test1</span><span class="hljs-params">()</span> </span>&#123;<br>		Set set=<span class="hljs-keyword">new</span> TreeSet();<br>		Dog dog1=<span class="hljs-keyword">new</span> Dog(<span class="hljs-string">&quot;小白&quot;</span>, <span class="hljs-number">5</span>, <span class="hljs-number">25</span>);<br>		Dog dog2=<span class="hljs-keyword">new</span> Dog(<span class="hljs-string">&quot;小黄&quot;</span>, <span class="hljs-number">6</span>, <span class="hljs-number">50</span>);<br>		Dog dog3=<span class="hljs-keyword">new</span> Dog(<span class="hljs-string">&quot;小黑&quot;</span>, <span class="hljs-number">4</span>, <span class="hljs-number">30</span>);<br>		Dog dog4=<span class="hljs-keyword">new</span> Dog(<span class="hljs-string">&quot;狗蛋&quot;</span>, <span class="hljs-number">2</span>, <span class="hljs-number">10</span>);<br>		set.add(dog1);<br>		set.add(dog2);<br>		set.add(dog3);<br>		set.add(dog4);<br>		<br>		<span class="hljs-keyword">for</span> (Object object : set) &#123;<br>			System.out.println(object);<br>		&#125;<br>	&#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
 <h2 id="时间"><a href="#时间" class="headerlink" title="时间"></a>时间</h2><figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> date;<br><br><span class="hljs-keyword">import</span> java.text.ParseException;<br><span class="hljs-keyword">import</span> java.text.SimpleDateFormat;<br><span class="hljs-keyword">import</span> java.time.LocalDate;<br><span class="hljs-keyword">import</span> java.time.LocalDateTime;<br><span class="hljs-keyword">import</span> java.time.LocalTime;<br><span class="hljs-keyword">import</span> java.time.format.DateTimeFormatter;<br><span class="hljs-keyword">import</span> java.util.Calendar;<br><span class="hljs-keyword">import</span> java.util.Date;<br><br><span class="hljs-keyword">import</span> org.junit.Test;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * LocalDate,LocalTime,LocalDateTime Java8中新提供的处理时间的类</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">DateTest</span> </span>&#123;<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test6</span><span class="hljs-params">()</span> </span>&#123;<br>		LocalDateTime of = LocalDateTime.of(<span class="hljs-number">2000</span>, <span class="hljs-number">8</span>, <span class="hljs-number">10</span>, <span class="hljs-number">20</span>, <span class="hljs-number">10</span>,<span class="hljs-number">1</span>);<br>		System.out.println(of);<br>		DateTimeFormatter dtf = DateTimeFormatter.ofPattern(<span class="hljs-string">&quot;yyyy年MM月dd天&quot;</span>);<br>		System.out.println(dtf.format(of));<br>	&#125;<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test5</span><span class="hljs-params">()</span> </span>&#123;<br>		LocalTime time=LocalTime.now();<br>		System.out.println(time);<br>		LocalDateTime now = LocalDateTime.now();<br>		System.out.println(now);<br>		DateTimeFormatter dtf = DateTimeFormatter.ofPattern(<span class="hljs-string">&quot;yyyy-MM-dd HH:mm:ss&quot;</span>);<br>		System.out.println(dtf.format(now));<br>	&#125;<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test4</span><span class="hljs-params">()</span> </span>&#123;<br>		String str1 = <span class="hljs-string">&quot;abcwerthelloyuiodef &quot;</span>;<br>		String str2 = <span class="hljs-string">&quot;cvhellobnm&quot;</span>;<br>		<span class="hljs-keyword">int</span> length = str2.length();<br>		l1: <span class="hljs-keyword">while</span> (length &gt; <span class="hljs-number">0</span>) &#123;<br>			<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> begin = <span class="hljs-number">0</span>; begin + length &lt;= str2.length(); begin++) &#123;<br>				<span class="hljs-keyword">if</span> (str1.contains(str2.substring(begin, begin + length))) &#123;<br>					System.out.println(str2.substring(begin, begin + length));<br>					<span class="hljs-keyword">break</span> l1;<br>				&#125;<br>			&#125;<br>			length--;<br>		&#125;<br>	&#125;<br><br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test3</span><span class="hljs-params">()</span> </span>&#123;<br>		LocalDate date = LocalDate.now();<br>		System.out.println(date);<br>		LocalDate withYear = date.withYear(<span class="hljs-number">2000</span>).withMonth(<span class="hljs-number">8</span>).withDayOfMonth(<span class="hljs-number">10</span>);<br>		System.out.println(withYear);<br>		LocalDate plusYears = withYear.plusDays(<span class="hljs-number">100</span>);<br>		System.out.println(plusYears);<br>	&#125;<br><br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test2</span><span class="hljs-params">()</span> </span>&#123;<br>		Calendar instance = Calendar.getInstance();<br>		<span class="hljs-comment">//</span><br>		instance.set(Calendar.YEAR, <span class="hljs-number">2000</span>);<br>		instance.set(Calendar.MONTH, <span class="hljs-number">7</span>);<br>		instance.set(Calendar.YEAR, <span class="hljs-number">10</span>);<br>		System.out.println(instance.getTime());<br>		instance.add(Calendar.DAY_OF_MONTH, <span class="hljs-number">100</span>);<br>		System.out.println(instance.getTime());<br>	&#125;<br><br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test1</span><span class="hljs-params">()</span> </span>&#123;<br>		System.out.println(System.currentTimeMillis());<span class="hljs-comment">// 距离1970-01-01 00:00:00:000的毫秒数</span><br>		Date date = <span class="hljs-keyword">new</span> Date();<br>		System.out.println(date);<br>		SimpleDateFormat sdf = <span class="hljs-keyword">new</span> SimpleDateFormat(<span class="hljs-string">&quot;yyyy-MM-dd HH:mm:ss&quot;</span>);<br>		String format = sdf.format(date);<br>		System.out.println(format);<br>		String string = <span class="hljs-string">&quot;2001-12-06 20:45:19&quot;</span>;<br>		<span class="hljs-keyword">try</span> &#123;<br>			System.out.println(sdf.parse(string));<br>		&#125; <span class="hljs-keyword">catch</span> (ParseException e) &#123;<br>			<span class="hljs-comment">// TODO Auto-generated catch block</span><br>			e.printStackTrace();<br>		&#125;<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 <h2 id="大数"><a href="#大数" class="headerlink" title="大数"></a>大数</h2><figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> math;<br><br><span class="hljs-keyword">import</span> java.math.BigInteger;<br><br><span class="hljs-keyword">import</span> org.junit.Test;<br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * java中所有字符都是两个字节</span><br><span class="hljs-comment"> * C语言中汉字占两个字节，其他字符1个字节</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MathClassTest</span> </span>&#123;<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">test1</span><span class="hljs-params">()</span> </span>&#123;<br>		System.out.println(Math.random());<br>		System.out.println(Math.round(-<span class="hljs-number">4.5</span>));<br>		BigInteger bi1=<span class="hljs-keyword">new</span> BigInteger(<span class="hljs-string">&quot;41654894789415618977465187416518948651327849816354184894561564897488465415415&quot;</span>);<br>		BigInteger bi2=<span class="hljs-keyword">new</span> BigInteger(<span class="hljs-string">&quot;41654894789415641568977465187416518948651327849816354184894561564897488465415415&quot;</span>);<br>		System.out.println(bi2.add(bi1));<br>	&#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
 
