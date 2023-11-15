@@ -1,0 +1,985 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="	#87CEFA">
+  <meta name="description" content="Just Do it!">
+  <meta name="author" content="daxiazou">
+  <meta name="keywords" content="">
+  
+    <meta name="baidu-site-verification" content="code-wxp4a58PBe" />
+  
+  <title>Linux - Nevermind</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.6.0/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.10","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Nevermind</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('https://tse3-mm.cn.bing.net/th/id/OIP.MRvVM6gs0F-4wBqhEvbhogHaNK?w=115&h=186&c=7&o=5&dpr=1.25&pid=1.7') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Linux">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-05-11 18:43" pubdate>
+        2021年5月11日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.8k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      21
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Linux</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：2022年7月1日 下午
+                
+              </p>
+            
+            <div class="markdown-body">
+              <h1 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h1><h2 id="vim的三种模式"><a href="#vim的三种模式" class="headerlink" title="vim的三种模式"></a>vim的三种模式</h2><h3 id="一般模式"><a href="#一般模式" class="headerlink" title="一般模式"></a>一般模式</h3><ul>
+<li>以vi/vim编辑器打开一个文件就进入了一般默认，是默认的默认</li>
+<li>在一般模式中可以对文件进行复制、粘贴、删除、撤销</li>
+<li>常用的命令<ul>
+<li>yy<ul>
+<li>复制一行</li>
+</ul>
+</li>
+<li>y数字y<ul>
+<li>复制多行</li>
+</ul>
+</li>
+<li>dd<ul>
+<li>删除一行</li>
+</ul>
+</li>
+<li>d数字d<ul>
+<li>删除多行</li>
+</ul>
+</li>
+<li>p<ul>
+<li>粘贴</li>
+</ul>
+</li>
+<li>u<ul>
+<li>撤销</li>
+</ul>
+</li>
+<li>^<ul>
+<li>回到行头</li>
+</ul>
+</li>
+<li>$<ul>
+<li>回到行尾</li>
+</ul>
+</li>
+<li>gg或1+G<ul>
+<li>回到页头</li>
+</ul>
+</li>
+<li>G<ul>
+<li>回到页尾</li>
+</ul>
+</li>
+<li>数字+G<ul>
+<li>回到某一行<h3 id="编辑模式"><a href="#编辑模式" class="headerlink" title="编辑模式"></a>编辑模式</h3></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>在一般模式中输入i、o、a或I、O、A时就进入了编辑模式</li>
+<li>在编辑模式中按Esc又回到一般模式</li>
+<li>常用的命令<ul>
+<li>i<ul>
+<li>在光标前插入</li>
+</ul>
+</li>
+<li>o<ul>
+<li>在下一行插入<h3 id="命令模式"><a href="#命令模式" class="headerlink" title="命令模式"></a>命令模式</h3></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>在一般模式中输入:、/或？时就进入了命令模式</li>
+<li>在命令模式中按Esc又回到一般模式</li>
+<li>常用的命令<ul>
+<li>:w<ul>
+<li>保存</li>
+</ul>
+</li>
+<li>:q<ul>
+<li>推出</li>
+</ul>
+</li>
+<li>:!<ul>
+<li>强制执行</li>
+</ul>
+</li>
+<li>:wq！<ul>
+<li>保存并强制退出</li>
+</ul>
+</li>
+<li>ZZ<ul>
+<li>如果没有修改直接退出，修改了保存后退出</li>
+</ul>
+</li>
+<li>:%s/old 字符/new 字符<ul>
+<li>批量替换字符</li>
+</ul>
+</li>
+<li>:nohl<ul>
+<li>取消高亮显示</li>
+</ul>
+</li>
+<li>/要查找的词或?要查找的词<ul>
+<li>通过n或N进行向上或向下的查找</li>
+</ul>
+</li>
+<li>:set nu<ul>
+<li>设置显示行号</li>
+</ul>
+</li>
+<li>:set nonu<ul>
+<li>取消显示行号</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="网络相关命令"><a href="#网络相关命令" class="headerlink" title="网络相关命令"></a>网络相关命令</h2><ul>
+<li>ifconfig<ul>
+<li>查询ip地址</li>
+</ul>
+</li>
+<li>hostname<ul>
+<li>查看主机名</li>
+<li>修改主机名<ul>
+<li>vim /etc/sysconfig/network</li>
+</ul>
+</li>
+<li>配置ip地址与主机名的映射关系<ul>
+<li>vim /etc/hosts</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>service 管理后台服务<ul>
+<li>service 服务名 start<ul>
+<li>开启某个服务</li>
+</ul>
+</li>
+<li>service 服务名 stop<ul>
+<li>关闭某个服务</li>
+</ul>
+</li>
+<li>service 服务名 status<ul>
+<li>查看服务的状态</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>chkconfig 查看开机启动状态<ul>
+<li>chkconfig 服务名 on<ul>
+<li>开启某个服务开机自启</li>
+</ul>
+</li>
+<li>chkconfig 服务名 off<ul>
+<li>关闭某个服务开机自启</li>
+</ul>
+</li>
+<li>chkconfig 服务名 –list<ul>
+<li>查看某个服务的开机自启状态</li>
+<li>一共有7个运行级别（0到6）<ul>
+<li>如果2、3、4、5这四个运行级别是开启的则当前服务就是开机自启的</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="帮助相关命令"><a href="#帮助相关命令" class="headerlink" title="帮助相关命令"></a>帮助相关命令</h2><ul>
+<li>man和help<ul>
+<li>查询命令的帮助信息</li>
+</ul>
+</li>
+<li>常用的快捷键<ul>
+<li>ctrl + l<ul>
+<li>清屏</li>
+</ul>
+</li>
+<li>ctrl + c<ul>
+<li>停止进程</li>
+</ul>
+</li>
+<li>一定要善用Tab键<ul>
+<li>可以帮助我们自动补全路径，防止出错</li>
+</ul>
+</li>
+<li>通过上下键查询最近输入过的命令</li>
+<li>ctrl + alt<ul>
+<li>鼠标在虚拟机之间和主机之间切换</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="文件相关命令"><a href="#文件相关命令" class="headerlink" title="文件相关命令"></a>文件相关命令</h2><ul>
+<li>pwd<ul>
+<li>查看当前所在的工作目录</li>
+</ul>
+</li>
+<li>cd<ul>
+<li>进入某个目录<ul>
+<li>通过绝对路径和相对路径都可以进入某个目录</li>
+</ul>
+</li>
+<li>cd -<ul>
+<li>返回上一次所在的目录</li>
+</ul>
+</li>
+<li>cd或cd ~<ul>
+<li>回到自己的家目录</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>rm -rf <ul>
+<li>强制删除文件或目录，不提示</li>
+</ul>
+</li>
+<li>touch 文件名<ul>
+<li>创建一个空文件</li>
+</ul>
+</li>
+<li>mkdir<ul>
+<li>创建目录</li>
+</ul>
+</li>
+<li>echo “要输出的内容”<ul>
+<li>输出内容到控制台</li>
+</ul>
+</li>
+<li>cat 文件<ul>
+<li>查看小文件</li>
+</ul>
+</li>
+<li>less 文件<ul>
+<li>查看大文件<ul>
+<li>通过pageup和pagedown键翻页</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>cp 源文件 目录<ul>
+<li>将某个文件复制到某个目录下</li>
+</ul>
+</li>
+<li>mv<ul>
+<li>mv 老名字 新名字<ul>
+<li>给文件重命名</li>
+</ul>
+</li>
+<li>mv 源文件 目录<ul>
+<li>剪切文件到某个目录下</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="搜索查找类命令"><a href="#搜索查找类命令" class="headerlink" title="搜索查找类命令"></a>搜索查找类命令</h2><ul>
+<li>find 某个目录 [选项] 内容<ul>
+<li>在某个目录下查找相关内容</li>
+<li>选项<ul>
+<li>-name <ul>
+<li>根据文件名称查找</li>
+</ul>
+</li>
+<li>-user<ul>
+<li>根据文件所属的用户查找</li>
+</ul>
+</li>
+<li>-size<ul>
+<li>根据文件的大小查找</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>grep<ul>
+<li>通常结合管道符 | 进行过滤查找</li>
+<li>ll /root | grep -n atguigu.txt<ul>
+<li>查找/root目录下是否包含atguigu.txt文件，并且会显示出行号</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>which<ul>
+<li>查询某个命令在那个目录下</li>
+</ul>
+</li>
+</ul>
+<h2 id="压缩解压缩类命令"><a href="#压缩解压缩类命令" class="headerlink" title="压缩解压缩类命令"></a>压缩解压缩类命令</h2><ul>
+<li>tar -zcvf  xxx.tar.gz 要压缩的内容<ul>
+<li>压缩文件</li>
+</ul>
+</li>
+<li>tar -zxvf xxx.tar.gz<ul>
+<li>解压缩tar包</li>
+</ul>
+</li>
+</ul>
+<h2 id="进程线程类命令"><a href="#进程线程类命令" class="headerlink" title="进程线程类命令"></a>进程线程类命令</h2><ul>
+<li>ps -aux | grep xxx<ul>
+<li>查看内存和CPU的占用率</li>
+</ul>
+</li>
+<li>ps -ef | grep xxx<ul>
+<li>查看进程和父进程的ID</li>
+</ul>
+</li>
+<li>kill -9 进程ID<ul>
+<li>通过进程ID杀死进程</li>
+</ul>
+</li>
+<li>killall 进程名<ul>
+<li>通过进程名杀死进程</li>
+</ul>
+</li>
+<li>netstat -nlp | grep 端口号<ul>
+<li>查看端口号是否被占用</li>
+</ul>
+</li>
+</ul>
+<h2 id="RPM软件包和YUM仓库"><a href="#RPM软件包和YUM仓库" class="headerlink" title="RPM软件包和YUM仓库"></a>RPM软件包和YUM仓库</h2><ul>
+<li>rpm -qa<ul>
+<li>查询安装的所有的rpm软件包</li>
+</ul>
+</li>
+<li>rpm -qa | grep 软件名<ul>
+<li>查询安装的某个软件的rpm软件包名</li>
+</ul>
+</li>
+<li>rpm -e –nodeps rpm软件包名<ul>
+<li>不检查依赖协助某个rpm软件包</li>
+</ul>
+</li>
+<li>rpm -ivh rpm软件包名<ul>
+<li>安装rpm软件包</li>
+</ul>
+</li>
+<li>yum -y install<ul>
+<li>安装rpm软件包</li>
+</ul>
+</li>
+<li>yum -y update<ul>
+<li>更新rpm软件包</li>
+</ul>
+</li>
+<li>yum -y check-update<ul>
+<li>检查某个rpm软件包是否有更新</li>
+</ul>
+</li>
+<li>yum -y remove<ul>
+<li>卸载rpm软件包</li>
+</ul>
+</li>
+<li>yum list<ul>
+<li>查询所有缓存的rpm软件包</li>
+</ul>
+</li>
+<li>yum clean all<ul>
+<li>清除缓存</li>
+</ul>
+</li>
+<li>yum makecache<ul>
+<li>建立缓存</li>
+</ul>
+</li>
+<li>yum deplist<ul>
+<li>显示yum软件包的所有依赖关系</li>
+</ul>
+</li>
+</ul>
+<h2 id="文件权限管理"><a href="#文件权限管理" class="headerlink" title="文件权限管理"></a>文件权限管理</h2><ul>
+<li>文件属性<ul>
+<li>Linux系统是一种典型的多用户系统，不同的用户处于不同的地位，拥有不同的权限。为了保护系统的安全性，Linux系统对不同的用户访问同一文件（包括目录文件）的权限做了不同的规定。在Linux中我们可以使用ll或者ls -l命令来显示一个文件的属性以及文件所属的用户和组。</li>
+<li><a target="_blank" rel="noopener" href="https://imgtu.com/i/ga5mY6"><img src="https://z3.ax1x.com/2021/05/11/ga5mY6.md.png" srcset="/img/loading.gif" lazyload alt="ga5mY6.md.png"></a></li>
+<li>首位表示类型<ul>
+<li>符号 - 代表文件</li>
+<li>符号 d 代表目录</li>
+<li>符号 l 代表链接文档</li>
+</ul>
+</li>
+<li>第1-3位确定属主（该文件的所有者）拥有该文件的权限。—User </li>
+<li>第4-6位确定属组（所有者的同组用户）拥有该文件的权限，—Group </li>
+<li>第7-9位确定其他用户拥有该文件的权限 —Other </li>
+</ul>
+</li>
+<li>chmod修改权限<ul>
+<li>方式一：<ul>
+<li>chmod  [{ugoa}{+-=}{rwx}] 文件或目录 </li>
+<li>chmod g+x houge.txt</li>
+<li>chmod u-x,o+x houge.txt</li>
+</ul>
+</li>
+<li>方式二：<ul>
+<li>chmod  [mode=421 ]  [文件或目录]</li>
+<li>u:所有者  g:所有组  o:其他人  a:所有人(u、g、o的总和)</li>
+<li>r=4 w=2 x=1        rwx=4+2+1=7 </li>
+<li>chmod 777 houge.txt</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Crontab调度"><a href="#Crontab调度" class="headerlink" title="Crontab调度"></a>Crontab调度</h2><ul>
+<li><p>基本语法</p>
+<ul>
+<li>crontab -e：修改crontab文件。如果文件不存在会自动创建</li>
+<li>crontab -l：显示crontab文件</li>
+<li>crontab -r：删除crontab文件</li>
+<li>crontab -ir：删除crontab文件前提醒用户</li>
+</ul>
+</li>
+<li><p>脚本加执行权限</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo chmod +x my.sh<br></code></pre></td></tr></table></figure></li>
+<li><p>时间显示</p>
+</li>
+<li><pre><code>例子：
+    # 每月的最后1天
+    0 0 L * * *
+
+    说明：
+    Linux
+    *    *    *    *    *
+    -    -    -    -    -
+    |    |    |    |    |
+    |    |    |    |    +----- day of week (0 - 7) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat
+    |    |    |    +---------- month (1 - 12) OR jan,feb,mar,apr ...
+    |    |    +--------------- day of month (1 - 31)
+    |    +-------------------- hour (0 - 23)
+    +------------------------- minute (0 - 59)
+</code></pre>
+</li>
+<li></li>
+<li><table>
+<thead>
+<tr>
+<th align="left">字段</th>
+<th align="left">是否必填</th>
+<th align="left">允许值</th>
+<th align="left">允许特殊字符</th>
+<th align="left">备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Seconds</td>
+<td align="left">是</td>
+<td align="left">0–59</td>
+<td align="left"><code>*,-</code></td>
+<td align="left">标准实现不支持此字段。</td>
+</tr>
+<tr>
+<td align="left">Minutes</td>
+<td align="left">是</td>
+<td align="left">0–59</td>
+<td align="left"><code>*,-</code></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Hours</td>
+<td align="left">是</td>
+<td align="left">0–23</td>
+<td align="left"><code>*,-</code></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Day of month</td>
+<td align="left">是</td>
+<td align="left">1–31</td>
+<td align="left"><code>*,-?LW</code></td>
+<td align="left"><code>?LW</code>只有部分软件实现了</td>
+</tr>
+<tr>
+<td align="left">Month</td>
+<td align="left">是</td>
+<td align="left">1–12 or JAN–DEC</td>
+<td align="left"><code>*,-</code></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Day of week</td>
+<td align="left">是</td>
+<td align="left">0–7 or SUN–SAT</td>
+<td align="left"><code>*,-?L#</code></td>
+<td align="left"><code>?L#</code>只有部分软件实现了 Linux和Spring的允许值为0-7，0和7为周日 Quartz的允许值为1-7，1为周日</td>
+</tr>
+<tr>
+<td align="left">Year</td>
+<td align="left">否</td>
+<td align="left">1970–2099</td>
+<td align="left"><code>*,-</code></td>
+<td align="left">标准实现不支持此字段。</td>
+</tr>
+</tbody></table>
+</li>
+<li><p>标准字段</p>
+<ul>
+<li><code>,</code>用于分隔列表。例如，在第5个字段（星期几）中使用<code>MON,WED,FRI</code>表示周一，周三和周五</li>
+<li><code>-</code>字符定义范围。例如，<code>2000-2010</code>，表示2000年至2010年期间的每年，包括2000年和2010年</li>
+</ul>
+</li>
+<li><p>非标准字段</p>
+<ul>
+<li><strong>“L”</strong>代表“Last”</li>
+<li>“day of month”字段可以使用<strong>“W”</strong>字符。指定最接近给定日期的工作日（星期一-星期五）</li>
+<li>分钟字段设置 <code>*/5</code>表示每5分钟一次，注意：这里指的是能被5整除的分钟数。</li>
+</ul>
+</li>
+</ul>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Linux/">Linux</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/05/11/shell_introduction/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">shell介绍</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/05/02/JVM/">
+                        <span class="hidden-mobile">JVM</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.2/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js" ></script>
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      $('#local-search-input').on('click', function() {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      });
+      $('#modalSearch').on('shown.bs.modal', function() {
+        $('#local-search-input').focus();
+      });
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

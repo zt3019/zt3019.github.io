@@ -1,0 +1,754 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="	#87CEFA">
+  <meta name="description" content="Just Do it!">
+  <meta name="author" content="daxiazou">
+  <meta name="keywords" content="">
+  
+    <meta name="baidu-site-verification" content="code-wxp4a58PBe" />
+  
+  <title>JVM - Nevermind</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.6.0/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.10","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Nevermind</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('https://tse4-mm.cn.bing.net/th/id/OIP.q9wT3J3sd1ajXEKu9NzpAgDMEy?w=117&h=180&c=7&o=5&dpr=1.25&pid=1.7') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="JVM">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-05-02 11:33" pubdate>
+        2021年5月2日 中午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      4.8k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      53
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">JVM</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：2021年10月12日 下午
+                
+              </p>
+            
+            <div class="markdown-body">
+              <h1 id="JVM"><a href="#JVM" class="headerlink" title="JVM"></a>JVM</h1><h2 id="JVM定义"><a href="#JVM定义" class="headerlink" title="JVM定义"></a>JVM定义</h2><blockquote>
+<ul>
+<li>JVM是运行在操作系统之上的，它与硬件没有直接的交互</li>
+<li>通过编译器将 Java 程序转换成该虚拟机所能识别的指令序列，也称 Java 字节码。Java虚拟机会将字节码，即class文件加载到JVM中。由JVM进行解释和执行</li>
+</ul>
+</blockquote>
+<h2 id="类加载器"><a href="#类加载器" class="headerlink" title="类加载器"></a>类加载器</h2><blockquote>
+<ul>
+<li>类加载器，即ClassLoader,它负责加载class文件，class文件在文件开头有特定的文件标示，并且ClassLoader只负责class文件的加载，至于它是否可以运行，则由Execution Engine决定</li>
+</ul>
+</blockquote>
+<h3 id="类加载器分类"><a href="#类加载器分类" class="headerlink" title="类加载器分类"></a>类加载器分类</h3><h4 id="虚拟机自带的类加载器"><a href="#虚拟机自带的类加载器" class="headerlink" title="虚拟机自带的类加载器"></a>虚拟机自带的类加载器</h4><ol>
+<li>启动类加载器：主要负责加载jre中的最为基础、最为重要的类。如$JAVA_HOME/jre/lib/rt.jar等，以及由虚拟机参数 -Xbootclasspath 指定的类。由于它由C++代码实现，没有对应的java对象，因此在java中，尝试获取此类时，只能使用null来指代。</li>
+<li>扩展类加载器：由Java代码实现，用于加载相对次要、但又通用的类，比如存放在 JRE 的 lib/ext 目录下 jar 包中的类，以及由系统变量 java.ext.dirs 指定的类。如$JAVA_HOME/jre/lib/ext/*.jar。</li>
+<li>应用程序类加载器：由Java代码实现， 它负责加载应用程序路径下的类。（这里的应用程序路径，便是指虚拟机参数 -cp/-classpath、系统变量 java.class.path 或环境变量 CLASSPATH 所指定的路径。）默认情况下，应用程序中包含的类便是由应用类加载器加载的。</li>
+</ol>
+<h4 id="用户自定义的加载器"><a href="#用户自定义的加载器" class="headerlink" title="用户自定义的加载器"></a>用户自定义的加载器</h4><blockquote>
+<ul>
+<li>Java.lang.ClassLoader的子类，用户可以定制类的加载方式。例如可以对 class 文件进行加密，加载时再利用自定义的类加载器对其解密。</li>
+</ul>
+</blockquote>
+<h3 id="双亲委派机制"><a href="#双亲委派机制" class="headerlink" title="双亲委派机制"></a>双亲委派机制</h3><blockquote>
+<ul>
+<li>双亲委派模型：每当一个类加载器接收到加载请求时，它会先将请求转发给父类加载器。在父类加载器没有找到所请求的类的情况下，该类加载器才会尝试去加载。</li>
+<li>应用程序类加载器的父类是扩展类加载器，扩展类加载器的父类是启动类加载器</li>
+<li>优点：1.避免类的重复加载。2.防止核心API中定义的类型不会被用户恶意替换和篡改</li>
+</ul>
+</blockquote>
+<h2 id="JVM的内存模型"><a href="#JVM的内存模型" class="headerlink" title="JVM的内存模型"></a>JVM的内存模型</h2><p><a target="_blank" rel="noopener" href="https://imgtu.com/i/gZ2GDO" title="内存模型图片"><img src="https://z3.ax1x.com/2021/05/02/gZ2GDO.png" srcset="/img/loading.gif" lazyload alt="gZ2GDO.png"></a></p>
+<ul>
+<li>Java虚拟机将运行时内存区域划分为五个部分，分别为<font color=red>方法区，堆，PC寄存器，Java方法栈和本地方法栈</font>。</li>
+<li>执行Java代码首先需要使用类加载器将它编译成而成的class文件加载到Java虚拟机中。加载后的Java类会被存放于方法区（Method Area）中。实际运行时，虚拟机会执行方法区内的代码。</li>
+<li>在虚拟机中，方法区和堆为线程共享，也是垃圾回收的重点照顾区域。栈空间为线程私有，基本不会出现垃圾回收。</li>
+<li>Java虚拟机将栈细分为面向Java方法的Java方法栈，面向本地方法（c++写的native方法）的本地方法栈，以及存放各个执行线程执行位置的PC寄存器（程序计数器）</li>
+<li>在运行过程中，每当调用进入一个Java方法，Java虚拟机会在当前线程的Java方法栈中生成一个栈帧（栈的一片区域），用以存放局部变量以及字节码的操作数。这个栈帧的大小是提前计算好的，而且Java虚拟机不要求栈帧在内存空间里连续分布。当推出当前执行的方法时，不管是正常返回还是异常返回，Java虚拟机均会弹出当前线程的当前栈帧，并将之舍弃。</li>
+</ul>
+<blockquote>
+<ul>
+<li>Execution Engine执行引擎负责解释命令，提交操作系统执行</li>
+<li>Native Method Stack:定义了很多调用本地操作系统的方法，也称之为本地方法接口</li>
+<li>每个线程都有一个程序计数器，是线程私有的,就是一个指针</li>
+<li>方法区：所有定义的方法的信息都保存在该区域，此区属于共享区间。<br>静态变量+常量+类信息(构造方法/接口定义)+运行时常量池存在方法区中。</li>
+<li>JDK1.7之前通过永久代实现方法区，1.7之前字符串常量池放到方法区中</li>
+<li>JDK1.8之后，通过元空间实现方法区，1.7之后字符串常量放到堆中</li>
+</ul>
+</blockquote>
+<h3 id="栈"><a href="#栈" class="headerlink" title="栈"></a>栈</h3><blockquote>
+<ul>
+<li>栈我们也叫内存，是线程私有的，生命周期随线程的生命周期，线程结束栈内存释放</li>
+<li>栈：8种基本类型的变量+对象的引用变量+实例方法都是在栈内存中分配</li>
+<li>在栈区域规定了两种异常状态：如果线程请求的栈深度大于虚拟机所允许的深度，则抛出StackOverflowError异常；如果虚拟机栈可以动态扩展，在扩展时无法申请到足够的内存，就会抛出OutOfMemoryError异常。</li>
+<li>栈帧：一个线程的每个方法在调用时都会在栈上划分一块区域，用于存储方法所需要的变量等信息，这块区域称之为栈帧（stack frame）。栈由多个栈帧构成，好比一部电影由多个帧的画面构成。</li>
+</ul>
+</blockquote>
+<h3 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h3><ul>
+<li>堆内存:存储的是数组和对象（其实数组就是对象），凡是new建立的都是在堆中，堆中存放的都是实体（对象），实体用于封装数据，而且是封装多个（实体的多个属性），如果一个数据消失，这个实体也没有消失，还可以用，所以堆是不会随时释放的，但是栈不一样，栈里存放的都是单个变量，变量被释放了，那就没有了。堆里的实体虽然不会被释放，但是会被当成垃圾，Java有垃圾回收机制不定时的收取。</li>
+</ul>
+<blockquote>
+<ul>
+<li>逻辑上分为三部分：1.新生区。2.养老区。3.永久区。（1.8后改为元空间）</li>
+<li>新生区进一步分为：<blockquote>
+<ul>
+<li>伊甸园区</li>
+<li>幸存区<blockquote>
+<ul>
+<li>幸存from区</li>
+<li>幸存to区</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</blockquote>
+</li>
+<li>在物理上划分，堆被划分成两个不同的区域：新生代 ( Young )、老年代 ( Old )。新生代 ( Young ) 又被划分为三个区域：Eden、From Survivor、To Survivor</li>
+<li>创建对象的过程<blockquote>
+<ul>
+<li>新new的对象会放在伊甸园区（大对象直接进入老年代），伊甸园区的对象存活率非常低，当伊甸园区快满时会触发轻量级的垃圾回收机制（MinorGC）MinorGC会回收伊甸园区和幸存from区，会将伊甸园的幸存者标记复制到幸存to区，from区中的幸存者会根据它的年龄判断它的去向：默认情况下，如果年龄小于15则被标记到to区，如果年龄大于15则被标记复制到养老区，然后from区和to区交换角色（to区又为空了，下次又是回收from区的)</li>
+<li>当养老区内存不足时会触发重量级垃圾回收机制（MajorGC/fullGC），如果养老区无法回收内存则会出现OOM异常</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</blockquote>
+<h3 id="JVM常见参数设置"><a href="#JVM常见参数设置" class="headerlink" title="JVM常见参数设置"></a>JVM常见参数设置</h3><blockquote>
+<ul>
+<li>-Xms:堆初始值（默认为物理内存的1/64）</li>
+<li>-Xmx:堆最大可用值（默认为物理内存的1/4）</li>
+<li>-Xss:每个线程的栈大小，默认为1M，此值不能设置过大，否则会减少线程并发数。</li>
+</ul>
+</blockquote>
+<h3 id="常见异常"><a href="#常见异常" class="headerlink" title="常见异常"></a>常见异常</h3><blockquote>
+<ul>
+<li>错误原因: java.lang.OutOfMemoryError: Java heap space 堆内存溢出</li>
+<li>解决办法:调大堆内存大小 </li>
+<li>错误原因: java.lang.StackOverflowError表示为栈溢出，一般产生于递归调用。</li>
+<li>解决办法:设置线程最大调用深度，默认是1m</li>
+</ul>
+</blockquote>
+<h2 id="GC"><a href="#GC" class="headerlink" title="GC"></a>GC</h2><blockquote>
+<ul>
+<li>GC:JVM中的Garbage Collection，简称GC，它会不定时去堆内存中清理不可达对象。</li>
+<li>分类：两种类型，一种是普通GC（minor GC），一种是全局GC（major GC or Full GC）</li>
+<li>　新生代GC（minor GC）：只针对新生代区域的GC。</li>
+<li>老年代GC（major GC or Full GC）：针对老年代的GC，偶尔伴随对新生代的GC以及对永久代的GC。</li>
+<li>Minor GC触发机制：当年轻代满时就会触发Minor GC，这里的年轻代满指的是Eden区满，Survivor满不会引发GC。</li>
+<li>Full GC触发机制：当年老代满时会引发Full GC，Full GC将会同时回收年轻代、年老代，当永久代满时也会引发Full GC，会导致Class、Method元信息的卸载</li>
+<li>工作特点：理论上GC过程中会频繁收集Young区，很少收集Old区，基本不动Perm区（元空间/方法区）</li>
+</ul>
+</blockquote>
+<h3 id="标记不可达对象"><a href="#标记不可达对象" class="headerlink" title="标记不可达对象"></a>标记不可达对象</h3><blockquote>
+<ul>
+<li>引用计数法：引用计数法就是如果一个对象没有被任何引用指向，则可视之为垃圾。这种方法的缺点就是不能检测到循环指向的存在。</li>
+<li>可达性分析（GC ROOTS算法）简单理解，可以理解为堆外指向堆内的引用</li>
+</ul>
+</blockquote>
+<h3 id="垃圾回收的三种方式"><a href="#垃圾回收的三种方式" class="headerlink" title="垃圾回收的三种方式"></a>垃圾回收的三种方式</h3><ol>
+<li>清除：第一种是清除（sweep），即把死亡对象所占据的内存标记为空闲内存，并记录在一个空闲列表（free list）之中</li>
+<li>压缩：第二种是压缩（compact），即把存活的对象聚集到内存区域的起始位置，从而留下一段连续的内存空间</li>
+<li>复制第三种则是复制（copy），即把内存区域分为两等分，分别用两个指针 from 和 to 来维护，并且只是用 from 指针指向的内存区域来分配内<blockquote>
+<ul>
+<li>总结：回收死亡对象的内存共有三种方式，分别为：会造成内存碎片的清除、性能开销较大的压缩、以及堆使用效率较低的复制。</li>
+</ul>
+</blockquote>
+</li>
+</ol>
+<h3 id="垃圾回收算法"><a href="#垃圾回收算法" class="headerlink" title="垃圾回收算法"></a>垃圾回收算法</h3><ol>
+<li>标记复制算法 因此Minor GC使用的则是标记-复制算法，理性情况下：，Eden 区中的对象基本都死亡了，那么需要复制的数据将非常少，因此采用这种标记 - 复制算法的效果极好。<blockquote>
+<ul>
+<li>优点：不会产生内存碎片 </li>
+<li>缺点：需要双倍空间，浪费内存</li>
+</ul>
+</blockquote>
+</li>
+<li>标记清除算法 老年代一般是由标记清除或者是标记清除与标记压缩的混合实现<blockquote>
+<ul>
+<li>优点：不需要双倍空间</li>
+<li>缺点：1.会产生内存碎片 2.需要停止整个应用程序 3.需要维护内存碎片的地址列表</li>
+</ul>
+</blockquote>
+</li>
+<li>标记压缩算法<blockquote>
+<ul>
+<li>优点：1.不需要双倍空间，也不会产生内存碎片 2.不需要维护内存碎片的列表，只需要记录内存的起始地址即可 </li>
+<li>缺点：开销大，需要更新对象的地址</li>
+</ul>
+</blockquote>
+</li>
+<li>标记清除压缩算法 标记清除压缩(Mark-Sweep-Compact)算法是标记清除算法和标记压缩算法的结合算法。其原理和标记清除算法一致，只不过会在多次GC后，进行一次Compact压缩操作！</li>
+</ol>
+<h2 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h2><h3 id="JVM内存分几个区，每个区的作用是什么？"><a href="#JVM内存分几个区，每个区的作用是什么？" class="headerlink" title="JVM内存分几个区，每个区的作用是什么？"></a>JVM内存分几个区，每个区的作用是什么？</h3><ul>
+<li>方法区<ul>
+<li>有时候也称为永久代，该区很少发生垃圾回收，在这里进行GC主要是对方法区里的常量池和对类型的卸载。</li>
+<li>方法区用来存放已经被虚拟机加载的类信息，常量，静态变量和即时编译器编译后的代码等数据。</li>
+<li>该区域是被线程共享的。</li>
+<li>静态变量+常量+类信息(构造方法/接口定义)+运行时常量池存在方法区中</li>
+</ul>
+</li>
+<li>Java栈<ul>
+<li>8种基本类型的变量+对象的引用变量+实例方法都是在栈内存中分配</li>
+<li>是线程私有的，它的生命周期与线程相同</li>
+<li>在栈区域规定了两种异常状态：如果线程请求的栈深度大于虚拟机所允许的深度，则抛出StackOverflowError异常；如果虚拟机栈可以动态扩展，在扩展时无法申请到足够的内存，就会抛出OutOfMemoryError异常。</li>
+</ul>
+</li>
+<li>本地方法栈<ul>
+<li>本地方法栈和Java栈类似，只不过本地方法栈为Native方法服务</li>
+</ul>
+</li>
+<li>堆<ul>
+<li>堆是所有线程所共享的一块内存，在虚拟机启动时创建，几乎所有的对象实例都在这里创建，因此该区域经常发生垃圾回收操作。</li>
+<li>堆区被所有线程共享</li>
+</ul>
+</li>
+<li>程序计数器<ul>
+<li>内存空间小，字节码解释器工作时通过改变这个计数值可以选取下一条需要执行的字节码指令。该内存区域是唯一一个Java虚拟机规范没有规定任何OOM情况的区域。</li>
+<li>线程私有的</li>
+</ul>
+</li>
+</ul>
+<h3 id="Java类加载过程"><a href="#Java类加载过程" class="headerlink" title="Java类加载过程"></a>Java类加载过程</h3><ul>
+<li>加载</li>
+<li>验证</li>
+<li>解析</li>
+<li>初始化</li>
+</ul>
+<h3 id="如何判断一个对象是否存活"><a href="#如何判断一个对象是否存活" class="headerlink" title="如何判断一个对象是否存活"></a>如何判断一个对象是否存活</h3><ul>
+<li>引用计数法<ul>
+<li>引用计数法就是如果一个对象没有被任何引用指向，则视之为垃圾。这种方法的缺点就是不能检测到循环指向的存在。</li>
+</ul>
+</li>
+<li>可达性算法（引用链法）</li>
+<li>根据搜索算法的基本思路就是通过一系列名为“GC Roots”的对象作为起始点，从这些节点开始向下搜索，搜索走过的路径称为引用链（Reference Chain），当一个对象到GC Roots没有任何引用链时，则证明此对象时不可用的。</li>
+</ul>
+<h3 id="Java中的垃圾收集的方法有哪些"><a href="#Java中的垃圾收集的方法有哪些" class="headerlink" title="Java中的垃圾收集的方法有哪些"></a>Java中的垃圾收集的方法有哪些</h3><ul>
+<li>在上面</li>
+</ul>
+<h3 id="什么是类加载器，类加载器有哪些"><a href="#什么是类加载器，类加载器有哪些" class="headerlink" title="什么是类加载器，类加载器有哪些"></a>什么是类加载器，类加载器有哪些</h3><ul>
+<li><p>类加载器，即ClassLoader,它负责加载class文件，class文件在文件开头有特定的文件标示，并且ClassLoader只负责class文件的加载，至于它是否可以运行，则由Execution Engine决定</p>
+</li>
+<li><p>在上面</p>
+</li>
+</ul>
+<h3 id="简述Java内存分配以及垃圾回收策略Minor-GC，Major-GC（Full-GC）"><a href="#简述Java内存分配以及垃圾回收策略Minor-GC，Major-GC（Full-GC）" class="headerlink" title="简述Java内存分配以及垃圾回收策略Minor GC，Major GC（Full GC）"></a>简述Java内存分配以及垃圾回收策略Minor GC，Major GC（Full GC）</h3><ul>
+<li>在上面</li>
+</ul>
+<h2 id="JUC"><a href="#JUC" class="headerlink" title="JUC"></a>JUC</h2><ul>
+<li><p>线程和进程</p>
+<ul>
+<li>程序(program)是为完成特定任务，用某种语言编写的一组指令的集合。即指一段静态的代码。</li>
+<li>进程(process)是程序的一次执行过程，或是正在运行的一个程序。进程是一个动态的过程，即有它自身的产生，存在和消亡的过程。每个Java程序都有一个隐含的主程序，即main 方法</li>
+<li>线程（thread）是进程内部的一条具体的执行路径。若一个程序可同一时间执行多个线程，就是支持多线程的。</li>
+<li>总结：程序是静态的，程序运行后变为一个进程，一个进程内部可以有多个线程同时执行。进程是所有线程的集合，每一个线程是进程中的一条路径。线程是直接去竞争cpu资源的。</li>
+</ul>
+</li>
+<li><p>线程安全</p>
+<ul>
+<li>当多个线程同时共享同一个全局变量或静态变量，<font color=red>做写的操作时</font>，可能会发生数据冲突问题，也就是线程安全问题。</li>
+</ul>
+</li>
+<li><p>线程安全的解决方式</p>
+<ul>
+<li><p>使用多线程之间同步或使用锁（lock）可以解决线程安全问题。</p>
+</li>
+<li><p>使用同步代码块</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/*</span><br><span class="hljs-comment">synchronized(同一个对象)&#123;</span><br><span class="hljs-comment">	可能会发生线程冲突问题</span><br><span class="hljs-comment">&#125;</span><br><span class="hljs-comment">*/</span><br><br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Ticket</span></span><br><span class="hljs-class"></span>&#123;<br>	<span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> number = <span class="hljs-number">30</span>;<br>	<br>	<br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">synchronized</span> <span class="hljs-keyword">void</span> <span class="hljs-title">sale</span><span class="hljs-params">()</span> </span>&#123;<br>		<br>		<span class="hljs-keyword">if</span> (number &gt; <span class="hljs-number">0</span>) &#123;<br>			System.out.println(Thread.currentThread().getName() + <span class="hljs-string">&quot;卖出第：\t&quot;</span> + (number--) + <span class="hljs-string">&quot;\t 还剩下：&quot;</span> + number);<br>		&#125;<br>	&#125;<br><br>&#125;<br><br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SaleTicket</span> </span><br><span class="hljs-class"></span>&#123;<br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span></span><br><span class="hljs-function">	</span>&#123;<br>		<span class="hljs-comment">//创建资源对象</span><br>		Ticket tc = <span class="hljs-keyword">new</span> Ticket();<br>		<span class="hljs-comment">//创建AA线程、</span><br>		<span class="hljs-keyword">new</span> Thread(<span class="hljs-keyword">new</span> Runnable() &#123;<br>			<br>			<span class="hljs-meta">@Override</span><br>			<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">run</span><span class="hljs-params">()</span> </span>&#123;<br>				<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">40</span>; i++) &#123;<br>					<span class="hljs-comment">//卖票</span><br>					tc.sale();<br>				&#125;<br>			&#125;<br>		&#125;, <span class="hljs-string">&quot;AA&quot;</span>).start();<br>		<span class="hljs-comment">//创建BB线程、</span><br>		<span class="hljs-keyword">new</span> Thread(<span class="hljs-keyword">new</span> Runnable() &#123;<br>			<br>			<span class="hljs-meta">@Override</span><br>			<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">run</span><span class="hljs-params">()</span> </span>&#123;<br>				<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">40</span>; i++) &#123;<br>					<span class="hljs-comment">//卖票</span><br>					tc.sale();<br>				&#125;<br>			&#125;<br>		&#125;, <span class="hljs-string">&quot;BB&quot;</span>).start();<br>		<span class="hljs-comment">//创建CC线程、</span><br>		<span class="hljs-keyword">new</span> Thread(<span class="hljs-keyword">new</span> Runnable() &#123;<br>			<br>			<span class="hljs-meta">@Override</span><br>			<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">run</span><span class="hljs-params">()</span> </span>&#123;<br>				<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">40</span>; i++) &#123;<br>					<span class="hljs-comment">//卖票</span><br>					tc.sale();<br>				&#125;<br>			&#125;<br>		&#125;, <span class="hljs-string">&quot;CC&quot;</span>).start();<br>	&#125;<br>&#125;<br><br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>使用Lock解决线程安全</p>
+<ul>
+<li><p>java.util.concurrent.locks.Lock接口是控制多个线程对共享资源进行访问的工具。Lock实现提供更广泛的锁定操作可以比使用 synchronized获得方法和声明更好。</p>
+</li>
+<li><p>相比于synchronized的有系统获取锁和释放锁，Lock需要自己动手实现加锁和释放锁，因此会更加灵活。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Ticket</span></span><br><span class="hljs-class"></span>&#123;<br>	<span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> number = <span class="hljs-number">30</span>;<br>	<br>	<span class="hljs-comment">//创建锁</span><br>	Lock lock = <span class="hljs-keyword">new</span> ReentrantLock();<br><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">sale</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-comment">//上锁</span><br>		lock.lock();<br>		<span class="hljs-keyword">try</span> &#123;<br>			<span class="hljs-keyword">if</span> (number &gt; <span class="hljs-number">0</span>) &#123;<br>				System.out.println(Thread.currentThread().getName() + <span class="hljs-string">&quot;卖出第：\t&quot;</span> + (number--) + <span class="hljs-string">&quot;\t 还剩下：&quot;</span> + number);<br>			&#125;<br>		&#125; <span class="hljs-keyword">finally</span> &#123;<br>			<span class="hljs-comment">//解锁</span><br>			lock.unlock();<br>		&#125;<br>		<br>	&#125;<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SaleTicket</span> </span><br><span class="hljs-class"></span>&#123;<br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span><span class="hljs-comment">//main所有程序的入口</span></span><br><span class="hljs-function">	</span>&#123;<br>		<span class="hljs-comment">//创建资源对象</span><br>		Ticket tc = <span class="hljs-keyword">new</span> Ticket();<br>		<span class="hljs-comment">//创建AA线程、</span><br>		<span class="hljs-keyword">new</span> Thread(<span class="hljs-keyword">new</span> Runnable() &#123;<br>			<br>			<span class="hljs-meta">@Override</span><br>			<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">run</span><span class="hljs-params">()</span> </span>&#123;<br>				<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">40</span>; i++) &#123;<br>					<span class="hljs-comment">//卖票</span><br>					tc.sale();<br>				&#125;<br>			&#125;<br>		&#125;, <span class="hljs-string">&quot;AA&quot;</span>).start();<br>		<span class="hljs-comment">//创建BB线程、</span><br>		<span class="hljs-keyword">new</span> Thread(<span class="hljs-keyword">new</span> Runnable() &#123;<br>			<br>			<span class="hljs-meta">@Override</span><br>			<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">run</span><span class="hljs-params">()</span> </span>&#123;<br>				<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">40</span>; i++) &#123;<br>					<span class="hljs-comment">//卖票</span><br>					tc.sale();<br>				&#125;<br>			&#125;<br>		&#125;, <span class="hljs-string">&quot;BB&quot;</span>).start();<br>		<span class="hljs-comment">//创建CC线程、</span><br>		<span class="hljs-keyword">new</span> Thread(<span class="hljs-keyword">new</span> Runnable() &#123;<br>			<br>			<span class="hljs-meta">@Override</span><br>			<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">run</span><span class="hljs-params">()</span> </span>&#123;<br>				<span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">40</span>; i++) &#123;<br>					<span class="hljs-comment">//卖票</span><br>					tc.sale();<br>				&#125;<br>			&#125;<br>		&#125;, <span class="hljs-string">&quot;CC&quot;</span>).start();<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<h3 id="多线程的创建"><a href="#多线程的创建" class="headerlink" title="多线程的创建"></a>多线程的创建</h3><ul>
+<li>继承Thread类<ul>
+<li>定义子类继承Thread类</li>
+<li>子类重写Thread类中的run方法</li>
+<li>创建Thread子类对象，即创建了线程对象</li>
+<li>调用线程对象start方法启动线程，默认调用run方法<ul>
+<li>注意：如果只是调用run方法，则此时会在调用该方法的线程中来执行，而不是另启动一个线程</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>实现Runnable接口<ul>
+<li>定义子类，实现Runnable接口</li>
+<li>子类中重写Runnable接口中的run 方法</li>
+<li>通过Thread类含参构造器创建线程对象，将Runnable接口的子类对象作为实际参数传递给Thread类的构造方法中。</li>
+<li>调用Thread类的start方法启动线程，其最终调用Runnable子类接口的run方法。</li>
+</ul>
+</li>
+<li>实现Runnable接口避免了单继承的局限性，多个线程可以共享同一个接口子类的对象，非常适合多个相同线程来处理同一份资源。</li>
+<li>使用Callable 接口</li>
+<li>与Runnable比较：<ul>
+<li>相比于run方法可以有返回值</li>
+<li>可以抛出异常</li>
+<li>支持泛型的返回值</li>
+<li>落地方法是call方法</li>
+</ul>
+</li>
+<li>分布式锁<ul>
+<li><font color=red>当在分布式模型下，数据只有一份（或有限制），此时需要利用锁的技术控制某一时刻修改数据的进程数。</font>分布式锁可以将标记存在内存，只是该内存不是某个进程分配的内存而是公共内存，如 Redis，通过set (key,value,nx,px,timeout)方法添加分布式锁。</li>
+</ul>
+</li>
+<li>分布式事务<ul>
+<li>分布式事务指事务的参与者、支持事务的服务器、资源服务器以及事务管理器分别位于不同的分布式系统的不同节点之上。简单的说，就是一次大的操作由不同的小操作组成，这些小的操作分布在不同的服务器上，且属于不同的应用，分布式事务需要保证这些小操作要么全部成功，要么全部失败。</li>
+</ul>
+</li>
+</ul>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/Java/">Java</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Java/">Java</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/05/11/Linux/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Linux</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/04/25/mysql/">
+                        <span class="hidden-mobile">MySQL</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.2/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js" ></script>
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      $('#local-search-input').on('click', function() {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      });
+      $('#modalSearch').on('shown.bs.modal', function() {
+        $('#local-search-input').focus();
+      });
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

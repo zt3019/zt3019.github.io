@@ -1,0 +1,979 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="	#87CEFA">
+  <meta name="description" content="Just Do it!">
+  <meta name="author" content="daxiazou">
+  <meta name="keywords" content="">
+  
+    <meta name="baidu-site-verification" content="code-wxp4a58PBe" />
+  
+  <title>flink - Nevermind</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.6.0/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.10","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Nevermind</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('https://tse1-mm.cn.bing.net/th/id/R-C.631fcf4016085f85835625b73d904e3e?rik=uC436ur5Ia1d6Q&riu=http%3a%2f%2fwww.diegocalvo.es%2fwp-content%2fuploads%2f2018%2f07%2fflink_logo.jpg&ehk=od7yDuDjUjYZejJjRo49FRltkgRD9K8tS%2fN3HNBCm%2bQ%3d&risl=&pid=ImgRaw&r=0') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="flink">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-10-31 11:28" pubdate>
+        2021年10月31日 上午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      10.1k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      128
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">flink</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：2021年12月29日 晚上
+                
+              </p>
+            
+            <div class="markdown-body">
+              <h1 id="Flink"><a href="#Flink" class="headerlink" title="Flink"></a>Flink</h1><h2 id="Flink简介"><a href="#Flink简介" class="headerlink" title="Flink简介"></a>Flink简介</h2><ul>
+<li><p>Apache Flink是为分布式，高性能，随时可用以及准确的流处理应用程序打造的开源流处理框架。</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IEp9K0"><img src="https://z3.ax1x.com/2021/11/03/IEp9K0.png" srcset="/img/loading.gif" lazyload alt="IEp9K0.png"></a></p>
+</li>
+<li><p>流处理架构的演变</p>
+<ul>
+<li>lambda 架构（批处理+流处理 ，由twitter提出）<ul>
+<li><a target="_blank" rel="noopener" href="https://imgtu.com/i/ImBDQx"><img src="https://z3.ax1x.com/2021/11/04/ImBDQx.png" srcset="/img/loading.gif" lazyload alt="ImBDQx.png"></a></li>
+</ul>
+</li>
+<li>flink 流批统一（同时保证低延迟和结果正确）</li>
+</ul>
+</li>
+</ul>
+<h3 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h3><ul>
+<li><p>Flink的重要特点：</p>
+<ul>
+<li>事件型驱动（Event-driven）事件驱动型应用是一类具有状态的应用，它从一个或多个事件流提取数据，并根据到来的事件触发计算，状态更新或其他外部动作。比较典型的就是以Kafka为代表的消息队列几乎都是事件驱动型应用。</li>
+</ul>
+</li>
+<li><p>与Spark对比：</p>
+<ul>
+<li>在spark的世界观中，一切都是由批次组成的，离线数据是一个大批次，而实时数据是由一个个无限的小批次组成的，最本质上来说还是批处理的。</li>
+<li>在Flink的世界观中，一切都是由流组成的，离线数据是有界限的流，实时数据是一个没有界限的流，这就是所谓的有界流和无界流。</li>
+</ul>
+</li>
+<li><p>分层API</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/IEiil9"><img src="https://z3.ax1x.com/2021/11/03/IEiil9.png" srcset="/img/loading.gif" lazyload alt="IEiil9.png"></a></p>
+<ul>
+<li>最底层的抽象仅仅提供了有状态流，它将通过过程函数（Process Function）被嵌入到DataStream API中，底层过程函数（Process Function）与DataStream API相集成，使其可以对某些特定的操作进行底层的抽象，它允许用户可以自由地处理来自一个或多个数据流的事件，并使用一致的容错的状态。</li>
+<li>目前Flink作为批处理还不是主流，不如Spark成熟，所以DataSet使用的并不是很多。Flink Table API和Flink SQL也并不完善，大多都由各大厂商自己定制。所以我们主要学习DataStream API的使用。实际上Flink作为最接近Google DataFlow模型的实现，是流批统一的观点，所以基本上使用DataStream就可以了。</li>
+</ul>
+</li>
+</ul>
+<h2 id="快速上手"><a href="#快速上手" class="headerlink" title="快速上手"></a>快速上手</h2><ul>
+<li><p>搭建maven工程，添加Scala框架</p>
+<ul>
+<li><p>参考pom文件</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">project</span> <span class="hljs-attr">xmlns</span>=<span class="hljs-string">&quot;http://maven.apache.org/POM/4.0.0&quot;</span></span><br><span class="hljs-tag">         <span class="hljs-attr">xmlns:xsi</span>=<span class="hljs-string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span></span><br><span class="hljs-tag">         <span class="hljs-attr">xsi:schemaLocation</span>=<span class="hljs-string">&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">modelVersion</span>&gt;</span>4.0.0<span class="hljs-tag">&lt;/<span class="hljs-name">modelVersion</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.zt.flink<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>Flink<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>1.0<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br><br>    <span class="hljs-tag">&lt;<span class="hljs-name">dependencies</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.apache.flink<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>flink-scala_2.11<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>1.10.0<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br>        <span class="hljs-comment">&lt;!-- https://mvnrepository.com/artifact/org.apache.flink/flink-streaming-scala --&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.apache.flink<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>flink-streaming-scala_2.11<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>1.10.0<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">dependencies</span>&gt;</span><br><br><span class="hljs-tag">&lt;<span class="hljs-name">build</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">plugins</span>&gt;</span><br>    <span class="hljs-comment">&lt;!-- 该插件用于将Scala代码编译成class文件 --&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">plugin</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>net.alchim31.maven<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>scala-maven-plugin<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>3.4.6<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">executions</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">execution</span>&gt;</span><br>                <span class="hljs-comment">&lt;!-- 声明绑定到maven的compile阶段 --&gt;</span><br>                <span class="hljs-tag">&lt;<span class="hljs-name">goals</span>&gt;</span><br>                    <span class="hljs-tag">&lt;<span class="hljs-name">goal</span>&gt;</span>compile<span class="hljs-tag">&lt;/<span class="hljs-name">goal</span>&gt;</span><br>                <span class="hljs-tag">&lt;/<span class="hljs-name">goals</span>&gt;</span><br>            <span class="hljs-tag">&lt;/<span class="hljs-name">execution</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">executions</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">plugin</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">plugin</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.apache.maven.plugins<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>maven-assembly-plugin<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>3.0.0<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">configuration</span>&gt;</span><br>                <span class="hljs-tag">&lt;<span class="hljs-name">descriptorRefs</span>&gt;</span><br>                    <span class="hljs-tag">&lt;<span class="hljs-name">descriptorRef</span>&gt;</span>jar-with-dependencies<span class="hljs-tag">&lt;/<span class="hljs-name">descriptorRef</span>&gt;</span><br>                <span class="hljs-tag">&lt;/<span class="hljs-name">descriptorRefs</span>&gt;</span><br>            <span class="hljs-tag">&lt;/<span class="hljs-name">configuration</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">executions</span>&gt;</span><br>                <span class="hljs-tag">&lt;<span class="hljs-name">execution</span>&gt;</span><br>                    <span class="hljs-tag">&lt;<span class="hljs-name">id</span>&gt;</span>make-assembly<span class="hljs-tag">&lt;/<span class="hljs-name">id</span>&gt;</span><br>                    <span class="hljs-tag">&lt;<span class="hljs-name">phase</span>&gt;</span>package<span class="hljs-tag">&lt;/<span class="hljs-name">phase</span>&gt;</span><br>                    <span class="hljs-tag">&lt;<span class="hljs-name">goals</span>&gt;</span><br>                        <span class="hljs-tag">&lt;<span class="hljs-name">goal</span>&gt;</span>single<span class="hljs-tag">&lt;/<span class="hljs-name">goal</span>&gt;</span><br>                    <span class="hljs-tag">&lt;/<span class="hljs-name">goals</span>&gt;</span><br>                <span class="hljs-tag">&lt;/<span class="hljs-name">execution</span>&gt;</span><br>            <span class="hljs-tag">&lt;/<span class="hljs-name">executions</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">plugin</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">plugins</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">build</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">project</span>&gt;</span><br><br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>批处理wordcount。记得导包：import org.apache.flink.api.scala._  否则会报错no implicits found for parameter evidence</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs scala"><br><span class="hljs-keyword">import</span> org.apache.flink.api.scala._<br><span class="hljs-class"><span class="hljs-keyword">object</span> <span class="hljs-title">PiChuLiWordCount</span> </span>&#123;<br>  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">main</span></span>(args: <span class="hljs-type">Array</span>[<span class="hljs-type">String</span>]): <span class="hljs-type">Unit</span> = &#123;<br>    <span class="hljs-comment">// 创建执行环境</span><br>    <span class="hljs-keyword">val</span> env = <span class="hljs-type">ExecutionEnvironment</span>.getExecutionEnvironment<br>    <span class="hljs-comment">// 从文件中读取数据</span><br>    <span class="hljs-keyword">val</span> inputPath = <span class="hljs-string">&quot;E:\\idea\\flink\\src\\main\\Scala\\word.txt&quot;</span><br>    <span class="hljs-keyword">val</span> inputDS: <span class="hljs-type">DataSet</span>[<span class="hljs-type">String</span>] = env.readTextFile(inputPath)<br>    <span class="hljs-comment">// 分词之后，对单词进行groupby分组，然后用sum进行聚合</span><br>    <span class="hljs-keyword">val</span> wordCountDS: <span class="hljs-type">AggregateDataSet</span>[(<span class="hljs-type">String</span>, <span class="hljs-type">Int</span>)] =<br>      inputDS.flatMap(_.split(<span class="hljs-string">&quot; &quot;</span>))<br>          .map((_,<span class="hljs-number">1</span>))<br>          .groupBy(<span class="hljs-number">0</span>)<br>          .sum(<span class="hljs-number">1</span>)<br><br>    <span class="hljs-comment">// 打印输出</span><br>    wordCountDS.print()<br><br>  &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure></li>
+<li><p>流处理的wordcount</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs scala"><span class="hljs-keyword">import</span> org.apache.flink.streaming.api.scala._<br><br><span class="hljs-class"><span class="hljs-keyword">object</span> <span class="hljs-title">StreamWordCount</span> </span>&#123;<br>  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">main</span></span>(args: <span class="hljs-type">Array</span>[<span class="hljs-type">String</span>]): <span class="hljs-type">Unit</span> = &#123;<br>    <span class="hljs-comment">//创建流处理环境</span><br>    <span class="hljs-keyword">val</span> env: <span class="hljs-type">StreamExecutionEnvironment</span> = <span class="hljs-type">StreamExecutionEnvironment</span>.getExecutionEnvironment<br>    <span class="hljs-comment">//接收socket 文本流</span><br>    <span class="hljs-keyword">val</span> textDstream: <span class="hljs-type">DataStream</span>[<span class="hljs-type">String</span>] = env.socketTextStream(<span class="hljs-string">&quot;hadoop100&quot;</span>, <span class="hljs-number">7777</span>)<br><br>    <span class="hljs-keyword">import</span> org.apache.flink.api.scala._<br>    <span class="hljs-keyword">val</span> dataStream: <span class="hljs-type">DataStream</span>[(<span class="hljs-type">String</span>, <span class="hljs-type">Int</span>)] = textDstream.flatMap(_.split(<span class="hljs-string">&quot;\\s&quot;</span>))<br>      .filter(_.nonEmpty)<br>      .map((_, <span class="hljs-number">1</span>))<br>      .keyBy(<span class="hljs-number">0</span>)<br>      .sum(<span class="hljs-number">1</span>)<br>    dataStream.print().setParallelism(<span class="hljs-number">1</span>);<br><br>    <span class="hljs-comment">//启动excutor ,执行任务</span><br>    env.execute(<span class="hljs-string">&quot;Socket stream word count&quot;</span>)<br><br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="Flink部署"><a href="#Flink部署" class="headerlink" title="Flink部署"></a>Flink部署</h3><ul>
+<li>standalone模式<ul>
+<li>解压缩,修改flink/conf/flink-conf.yaml文件，jobmanager.rpc.address:hadoop100</li>
+<li>修改flink/conf/slaves文件  加上从机器的机器名hadoop101,hadoop102</li>
+<li>分发flink文件</li>
+</ul>
+</li>
+<li>Yarn模式<ul>
+<li>Session-Cluster<ul>
+<li><a target="_blank" rel="noopener" href="https://imgtu.com/i/IEGJHK"><img src="https://z3.ax1x.com/2021/11/03/IEGJHK.png" srcset="/img/loading.gif" lazyload alt="IEGJHK.png"></a></li>
+</ul>
+</li>
+<li>Per-Job-Cluster<ul>
+<li><a target="_blank" rel="noopener" href="https://imgtu.com/i/IEJSDx"><img src="https://z3.ax1x.com/2021/11/03/IEJSDx.png" srcset="/img/loading.gif" lazyload alt="IEJSDx.png"></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Kubernetes部署<ul>
+<li>容器化部署是是目前业界很流行的一项技术，基于Docker镜像运行能够让用户更加方便地对应用进行管理和运维。现在最流行地就是K8s了，flink也支持k8s部署模式</li>
+</ul>
+</li>
+</ul>
+<h2 id="运行架构（重点）"><a href="#运行架构（重点）" class="headerlink" title="运行架构（重点）"></a>运行架构（重点）</h2><h3 id="运行时的组件"><a href="#运行时的组件" class="headerlink" title="运行时的组件"></a>运行时的组件</h3><ul>
+<li>Flink运行时架构主要包括四个不同的组件，它们会在运行流处理应用程序时协同工作:作业管理器（JobManager），资源管理器（ResourceManager）,任务管理器（TaskManager）,以及分发器（Dispatcher）。Flink是由Java和Scala实现的，因此所有的组件都会运行在Java虚拟机中。</li>
+<li>作业管理器（JobManager）<ul>
+<li>控制一个应用程序执行的主进程，也就是说，每个应用程序都会被一个不同的JobManager 所控制执行。JobManager会先接收到要执行的应用程序，这个应用程序包括：作业图（JobGraph）,逻辑数据流图（logical dataflow graph）和打包了所有的类，库和其他资源的JAR包。JobManager会把作业图转换成一个物理层面的数据流图，这个图被叫做”执行图“（ExecutionGraph），包含了所有可以并发执行的任务。作业管理器会向资源管理器请求执行任务必要的资源，也就是任务管理器（TaskManager）上的插槽（slot）。一旦作业管理器获取到了足够的资源，就会将执行图分发到真正运行他们的任务管理器（TaskManager）上。而在运行过程中，JobManager会负责所有需要中央协调的操作，比如检查点（checkpoint）的协调。</li>
+</ul>
+</li>
+<li>资源管理器(ResourceManager)<ul>
+<li>主要负责管理任务管理器（TaskManager）的插槽（slot），TaskManager插槽是Flink中定义的处理资源单位。Flink为不同的环境和资源管理工具提供了不同的资源管理器，比如Yarn，K8s,standalone。当JobManager申请插槽资源时，ResourceManager会将有空闲插槽的TaskManager分配给JobManager 。如果ResourceManager没有足够的插槽来满足JobManager的请求，它还可以向资源提供平台发起会话，以提供启动TaskManager进程的容器，另外，ResourceManager还负责终止空闲的TaskManager,释放计算资源。</li>
+</ul>
+</li>
+<li>任务管理器（TaskManager）<ul>
+<li>通常一个Flink中会有多个TaskManager运行，每一个TaskManager都包含了一定数量的插槽（slots）。插槽的数量限制了TaskManager能执行的任务数量。任务管理器启动之后回向资源管理器注册它的插槽；收到资源管理器的指令后，TaskManager就会将一个或者多个插槽提供给任务管理器（JobManager）调用。任务管理器就可以向插槽分配任务（tasks）来执行。在执行过程中，一个任务管理器可以跟其它运行同一应用程序的TaskManager交换数据。</li>
+</ul>
+</li>
+<li>分发器（Dispatcher）<ul>
+<li>可以跨作业运行，它为应用提交提供了REST接口。当一个应用被提交执行时，分发器就会启动并将应用移交给一个JobManager。由于是REST接口，所以Dispatcher可以作为集群的一个HTTP接入点，这样就能够不受防火墙阻挡。Dispatcher也会启动一个Web UI，用来方便的展示和监控作业执行的信息。Dispatcher 在架构中可能并不是必须的，这取决于应用提交运行的方式。</li>
+<li>REST接口：REST 用来规范应用如何在 HTTP 层与 API 提供方进行数据交互 。REST 描述了 HTTP 层里客户端和服务器端的数据交互规则；客户端通过向服务器端发送 HTTP（s）请求，接收服务器的响应，完成一次 HTTP 交互。这个交互过程中，REST 架构约定两个重要方面就是 HTTP 请求所采用的方法，以及请求的链接。</li>
+</ul>
+</li>
+</ul>
+<h3 id="任务提交流程"><a href="#任务提交流程" class="headerlink" title="任务提交流程"></a>任务提交流程</h3><ul>
+<li>Yarn环境下任务的提交流程<ul>
+<li><a target="_blank" rel="noopener" href="https://imgtu.com/i/IEOkxf"><img src="https://z3.ax1x.com/2021/11/03/IEOkxf.png" srcset="/img/loading.gif" lazyload alt="IEOkxf.png"></a></li>
+<li>Client向HDFS上传Flink的Jar包和配置</li>
+<li>Client向ResourceManager提交任务</li>
+<li>ResourceManager分配Container资源并通知对应的NodeManager启动ApplicationMaster</li>
+<li>ApplicationMaster启动后下载Client提交的资源和配置构建环境，启动JobManager</li>
+<li>ApplicationMaster向ResourceManager申请Container资源启动TaskManager。（NodeManager加载flink的jar包和配置构建环境并启动TaskManager）</li>
+<li>TaskManager启动后向JobManager发送心跳包，并等待JobManager向其分配任务</li>
+</ul>
+</li>
+</ul>
+<h3 id="任务调度原理"><a href="#任务调度原理" class="headerlink" title="任务调度原理"></a>任务调度原理</h3><ul>
+<li><p>客户端（Client）不是运行时和程序执行的一部分，但它用于准备并发送dataflow(JobGraph)给Master（JobManager），然后，客户端断开连接或者维持连接以等待接收计算结果。</p>
+</li>
+<li><p>Client,JobManager,TaskManager三者均为独立的JVM进程。</p>
+</li>
+<li><p>TaskManager与Slots</p>
+<ul>
+<li>TaskManager是一个<strong>JVM进程</strong>，它可能会在<strong>独立的线程</strong>上执行一个或多个subtask。为了控制一个TaskManager能接收多少个task，Task Manager通过task slot来进行控制。（一个Task Manager至少有一个task slot）</li>
+<li>每一个task slot表示TaskManager拥有资源的<strong>一个固定大小的子集</strong>。假如一个TaskManager有三个slot，那么他会将其管理的内存分成三份给各个slot。</li>
+<li>一个TaskManager多个slot意味着更多的subtask可以共享一个JVM。</li>
+<li><strong>Task Slot是静态的概念，是指TaskManager具有的并发执行的能力</strong>，可以通过参数配置，而<strong>并行度parallelism是动态概念</strong>，即TaskManager运行程序时实际使用的并发能力。可以通过参数配置</li>
+</ul>
+</li>
+<li><p>程序与数据流</p>
+<ul>
+<li><p>所有flink都是由三部分组成的</p>
+</li>
+<li><p>Source</p>
+<ul>
+<li>负责读取数据源</li>
+</ul>
+</li>
+<li><p>Transformation</p>
+<ul>
+<li>利用各种算子进行处理加工</li>
+</ul>
+</li>
+<li><p>Sink</p>
+<ul>
+<li>负责进行输出</li>
+</ul>
+</li>
+<li><p>在运行时，Flink 上运行的程序会被映射成”逻辑数据流“（dataflows），它包含了这三部分，<strong>每一个dataflow以一个或多个source开始以一个或多个sinks结束</strong>dataflow类似于任意的有向无环图（DAG）</p>
+</li>
+</ul>
+</li>
+<li><p>执行图</p>
+<ul>
+<li>由Flink程序直接映射成的数据流图是StreamGraph，也被称为逻辑流图，因为它们表示的是计算逻辑的高级视图。为了执行一个流处理程序，Flink需要将逻辑流图转换为物理数据流图（也叫执行图），详细说明程序的执行方式。</li>
+<li><strong>StreamGraph</strong>：是根据用户通过 Stream API 编写的代码生成的最初的图。用来表示程序的拓扑结构。</li>
+<li><strong>JobGraph</strong>：StreamGraph经过优化后生成了 JobGraph，提交给 JobManager 的数据结构。主要的优化为，将多个符合条件的节点 chain 在一起作为一个节点，这样可以减少数据在节点之间流动所需要的序列化/反序列化/传输消耗。</li>
+<li><strong>ExecutionGraph</strong>：JobManager 根据 JobGraph 生成ExecutionGraph。ExecutionGraph是JobGraph的并行化版本，是调度层最核心的数据结构。</li>
+<li><strong>物理执行图</strong>：JobManager 根据 ExecutionGraph 对 Job 进行调度后，在各个TaskManager 上部署 Task 后形成的“图”，并不是一个具体的数据结构。</li>
+</ul>
+</li>
+<li><p>并行度</p>
+<ul>
+<li><p>在flink程序执行过程中，一个流（stream）包含一个或多个分区（stream partition），而每个算子（operator）可以包含一个或多个子任务（operator subtask）</p>
+</li>
+<li><p>一个特定算子的子任务（subtask）的个数称作它的并行度</p>
+</li>
+<li><p>stream算子之间传输数据的形式可以是one-to-one(forwarding)的模式也可以是redistributing的模式</p>
+</li>
+<li><p><strong>One-to-one</strong>：stream(比如在source和map operator之间)维护着分区以及元素的顺序。那意味着map 算子的子任务看到的元素的个数以及顺序跟source 算子的子任务生产的元素的个数、顺序相同，map、fliter、flatMap等算子都是one-to-one的对应关系。类似于spark中的窄依赖</p>
+</li>
+<li><p><strong>Redistributing</strong>：stream(map()跟keyBy/window之间或者keyBy/window跟sink之间)的分区会发生改变。每一个算子的子任务依据所选择的transformation发送数据到不同的目标任务。例如，keyBy() 基于hashCode重分区、broadcast和rebalance会随机重新分区，这些算子都会引起redistribute过程，而redistribute过程就类似于Spark中的shuffle过程。类似于spark中的宽依赖。</p>
+</li>
+</ul>
+</li>
+<li><p>任务链</p>
+<ul>
+<li>相同并行度的one to one操作，Flink这样相连的算子链接在一起形成一个task，原来的算子成为里面的一部分。将算子链接成task是非常有效的优化，它能减少线程之间的切换和基于缓存区的数据交换，在减少时延的同时提升吞吐量。</li>
+</ul>
+</li>
+</ul>
+<h2 id="Flink-流处理API"><a href="#Flink-流处理API" class="headerlink" title="Flink 流处理API"></a>Flink 流处理API</h2><h3 id="Environment"><a href="#Environment" class="headerlink" title="Environment"></a>Environment</h3><ul>
+<li>ExcutionEnvironment.getExcutionEnvironment</li>
+<li>val env = StreamExecutionEnvironment.createLocalEnvironment(1)</li>
+<li>val env = ExecutionEnvironment.createRemoteEnvironment(“jobmanage-hostname”, 6123,”YOURPATH//wordcount.jar”)</li>
+</ul>
+<h3 id="Source"><a href="#Source" class="headerlink" title="Source"></a>Source</h3><ul>
+<li>从集合读取数据</li>
+<li>从文件读取数据</li>
+<li>以Kafka消息队列的数据作为来源</li>
+<li>自定义Source</li>
+</ul>
+<h3 id="Transform"><a href="#Transform" class="headerlink" title="Transform"></a>Transform</h3><ul>
+<li>map</li>
+<li>flatMap</li>
+<li>Filter</li>
+<li>KeyBy</li>
+<li>滚动聚合算子</li>
+<li>Reduce</li>
+<li>Split和Select</li>
+<li>Connect和CoMap</li>
+<li>Union</li>
+</ul>
+<h3 id="支持的数据类型"><a href="#支持的数据类型" class="headerlink" title="支持的数据类型"></a>支持的数据类型</h3><ul>
+<li>基础数据类型</li>
+<li>Java和Scala元组</li>
+<li>Scala样例类</li>
+<li>Java简单对象</li>
+<li>Flink对Java和Scala中的一些特殊目的的类型也都是支持的，比如Java的ArrayList，HashMap，Enum等等。</li>
+</ul>
+<h3 id="实现UDF函数"><a href="#实现UDF函数" class="headerlink" title="实现UDF函数"></a>实现UDF函数</h3><ul>
+<li>函数类（Function Classes）</li>
+<li>匿名函数（Lambda Functions）</li>
+<li>富函数（Rich Functions）<ul>
+<li>富函数是DataStream API提供的一个函数类接口，所有Flink函数类都有其Rich版本</li>
+<li>富函数与常规函数的不同在于，可以获取运行环境的上下文，并拥有一些生命周期方法，所以可以实现更复杂的功能。</li>
+</ul>
+</li>
+</ul>
+<h3 id="Sink"><a href="#Sink" class="headerlink" title="Sink"></a>Sink</h3><ul>
+<li>Kafka</li>
+<li>Redis</li>
+<li>Elasticsearch</li>
+<li>JDBC自定义sink</li>
+</ul>
+<h2 id="Flink中的Window（重点）"><a href="#Flink中的Window（重点）" class="headerlink" title="Flink中的Window（重点）"></a>Flink中的Window（重点）</h2><ul>
+<li><p>增量聚合函数 AggregateFunction</p>
+</li>
+<li><p>全窗口聚合函数 ProcessWindowFunction</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><code class="hljs scala"><span class="hljs-keyword">import</span> org.apache.flink.api.common.functions.<span class="hljs-type">AggregateFunction</span><br><span class="hljs-keyword">import</span> org.apache.flink.streaming.api.scala._<br><span class="hljs-keyword">import</span> org.apache.flink.streaming.api.scala.function.<span class="hljs-type">ProcessWindowFunction</span><br><span class="hljs-keyword">import</span> org.apache.flink.streaming.api.windowing.time.<span class="hljs-type">Time</span><br><span class="hljs-keyword">import</span> org.apache.flink.streaming.api.windowing.windows.<span class="hljs-type">TimeWindow</span><br><span class="hljs-keyword">import</span> org.apache.flink.util.<span class="hljs-type">Collector</span><br><span class="hljs-comment">//最低最高温度</span><br><span class="hljs-class"><span class="hljs-keyword">object</span> <span class="hljs-title">MinMaxTemp</span> </span>&#123;<br><br>  <span class="hljs-comment">//样例类</span><br>  <span class="hljs-keyword">case</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MinMaxTemp</span>(<span class="hljs-params">id: <span class="hljs-type">String</span>, min: <span class="hljs-type">Double</span>, max: <span class="hljs-type">Double</span>, endTs: <span class="hljs-type">Long</span></span>)</span><br><span class="hljs-class"></span><br><span class="hljs-class">  <span class="hljs-title">def</span> <span class="hljs-title">main</span>(<span class="hljs-params">args: <span class="hljs-type">Array</span>[<span class="hljs-type">String</span>]</span>)</span>: <span class="hljs-type">Unit</span> = &#123;<br>    <span class="hljs-keyword">val</span> env: <span class="hljs-type">StreamExecutionEnvironment</span> = <span class="hljs-type">StreamExecutionEnvironment</span>.getExecutionEnvironment<br>    env.setParallelism(<span class="hljs-number">1</span>)<br><br>    <span class="hljs-keyword">val</span> stream: <span class="hljs-type">DataStream</span>[<span class="hljs-type">SensorReading</span>] = env.addSource(<span class="hljs-keyword">new</span> <span class="hljs-type">SensorSource</span>)<br>    stream.keyBy(_.id).timeWindow(<span class="hljs-type">Time</span>.seconds(<span class="hljs-number">5</span>))<br>      .aggregate(<span class="hljs-keyword">new</span> <span class="hljs-type">HighAndLowAgg</span>, <span class="hljs-keyword">new</span> <span class="hljs-type">WindowResult</span>)<br>      .print()<br>    env.execute()<br>  &#125;<br><span class="hljs-comment">//增量聚合函数</span><br>  <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">HighAndLowAgg</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">AggregateFunction</span>[<span class="hljs-type">SensorReading</span>, (<span class="hljs-type">String</span>, <span class="hljs-type">Double</span>, <span class="hljs-type">Double</span>), (<span class="hljs-type">String</span>, <span class="hljs-type">Double</span>, <span class="hljs-type">Double</span>)] </span>&#123;<br>    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">createAccumulator</span></span>(): (<span class="hljs-type">String</span>, <span class="hljs-type">Double</span>, <span class="hljs-type">Double</span>) = (<span class="hljs-string">&quot;&quot;</span>, <span class="hljs-type">Double</span>.<span class="hljs-type">MaxValue</span>, <span class="hljs-type">Double</span>.<span class="hljs-type">MinValue</span>)<br><br>    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">add</span></span>(value: <span class="hljs-type">SensorReading</span>, accumulator: (<span class="hljs-type">String</span>, <span class="hljs-type">Double</span>, <span class="hljs-type">Double</span>)): (<span class="hljs-type">String</span>, <span class="hljs-type">Double</span>, <span class="hljs-type">Double</span>) =<br>      (value.id, value.temperature.min(accumulator._2), value.temperature.max(accumulator._3))<br><br>    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">getResult</span></span>(accumulator: (<span class="hljs-type">String</span>, <span class="hljs-type">Double</span>, <span class="hljs-type">Double</span>)): (<span class="hljs-type">String</span>, <span class="hljs-type">Double</span>, <span class="hljs-type">Double</span>) = accumulator<br><br>    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">merge</span></span>(a: (<span class="hljs-type">String</span>, <span class="hljs-type">Double</span>, <span class="hljs-type">Double</span>), b: (<span class="hljs-type">String</span>, <span class="hljs-type">Double</span>, <span class="hljs-type">Double</span>)): (<span class="hljs-type">String</span>, <span class="hljs-type">Double</span>, <span class="hljs-type">Double</span>) =<br>      (a._1, a._2.min(b._2), a._3.max(b._3))<br>  &#125;<br><span class="hljs-comment">//全窗口聚合函数</span><br>  <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">WindowResult</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">ProcessWindowFunction</span>[(<span class="hljs-type">String</span>, <span class="hljs-type">Double</span>, <span class="hljs-type">Double</span>), <span class="hljs-type">MinMaxTemp</span>, <span class="hljs-type">String</span>, <span class="hljs-type">TimeWindow</span>] </span>&#123;<br>    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">process</span></span>(key: <span class="hljs-type">String</span>, context: <span class="hljs-type">Context</span>, elements: <span class="hljs-type">Iterable</span>[(<span class="hljs-type">String</span>, <span class="hljs-type">Double</span>, <span class="hljs-type">Double</span>)], out: <span class="hljs-type">Collector</span>[<span class="hljs-type">MinMaxTemp</span>]): <span class="hljs-type">Unit</span> = &#123;<br>      <span class="hljs-keyword">val</span> minMax: (<span class="hljs-type">String</span>, <span class="hljs-type">Double</span>, <span class="hljs-type">Double</span>) = elements.head<br>      out.collect(<span class="hljs-type">MinMaxTemp</span>(key, minMax._2, minMax._3, context.window.getEnd))<br><br>    &#125;<br>  &#125;<br><br>&#125;<br><br></code></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="Flink中的时间语义和Watermark（重点）"><a href="#Flink中的时间语义和Watermark（重点）" class="headerlink" title="Flink中的时间语义和Watermark（重点）"></a>Flink中的时间语义和Watermark（重点）</h2><h3 id="时间语义"><a href="#时间语义" class="headerlink" title="时间语义"></a>时间语义</h3><ul>
+<li>事件时间（event time）<ul>
+<li>真正正确的时间，时间语义完全正确。事件创建的事件（必须包含在数据源中的元素里面）</li>
+<li>是事件创建的时间。它通常由事件中的时间戳描述，例如采集的日志数据中，每一条日志都会记录自己的生成时间，Flink通过时间戳分配器访问事件时间戳。</li>
+</ul>
+</li>
+<li>机器时间<ul>
+<li>Ingestion Time :数据进入Flink的时间,与机器相关</li>
+<li>Processing Time: 是每一个执行基于时间操作的算子的本地系统时间，与机器相关，默认的时间属性就是Processing Time</li>
+</ul>
+</li>
+</ul>
+<h3 id="Watermark"><a href="#Watermark" class="headerlink" title="Watermark"></a>Watermark</h3><ul>
+<li>当Flink以Event Time模式处理数据流时，它会根据数据里的时间戳来处理基于时间的算子</li>
+<li>由于网络，分布式等原因，会导致乱序数据的产生</li>
+<li>乱序数据会让窗口计算不准确</li>
+<li>Watermark的特点<ul>
+<li>水位线：系统认为时间戳小于水位线的事件都已经达到了</li>
+<li>水位线是一种特殊的事件，在source算子后面插入到流中</li>
+<li>事件时间窗口的闭合触发规则：水位线大于等于窗口结束时间的时候</li>
+<li>水位线由程序员编程插入到流中，水位线是一个特殊的事件</li>
+</ul>
+</li>
+<li>水位线几个重要的概念<ul>
+<li>Flink默认每隔200ms（机器时间）向数据流中插入一次Watermark</li>
+<li><font color=red>水位线产生的公式：水位线=系统观察到的最大事件时间 - 最大延迟时间</font></li>
+<li><font color=red>最大延迟时间由程序员自己设定</font></li>
+</ul>
+</li>
+<li>为了保证事件时间的正确性：Flink有三重保障<ul>
+<li>watermark</li>
+<li>允许迟到时间  allowedLateness()</li>
+<li>侧输出流  sideOutputLateData()</li>
+</ul>
+</li>
+</ul>
+<h2 id="ProcessFunction-API-底层-API"><a href="#ProcessFunction-API-底层-API" class="headerlink" title="ProcessFunction API(底层 API)"></a>ProcessFunction API(底层 API)</h2><ul>
+<li><p>之前学习的转换算子是无法访问事件的时间戳信息和水位线信息的。基于此 DataStream API提供了一系列的Low-Level转换算子。可以访问时间戳，watermark以及注册定时事件。还可以输出特定的一些事件，例如超时事件等。ProcessFunction用来构建事件驱动的应用以及实现自定义的业务逻辑（使用之前的window 函数和转换算子无法实现）。例如，Flink SQL就是使用Process Function实现的。</p>
+</li>
+<li><p>常用的几个</p>
+<ul>
+<li><strong>KeyedProcessFunction</strong>：KeyBy以后的流，没有开窗口</li>
+<li>ProcessFunction：既没有分流也没有开窗</li>
+<li><strong>ProcessWindowFunction</strong>：分流和开窗口以后的流</li>
+<li>ProcessAllWindowFunction：没有分流，但是开了窗口的流</li>
+<li><strong>CoProcessFunction</strong>：两条联合的流（connect）</li>
+<li><strong>AggregateFunction</strong>：窗口的增量聚合函数</li>
+<li>Trigger: 窗口聚合函数的底层实现，可以自由的控制窗口计算的时机</li>
+</ul>
+</li>
+<li><p>常用函数的案例：</p>
+<ul>
+<li><p>KeyedProcessFunction</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><code class="hljs scala"><span class="hljs-keyword">import</span> org.apache.flink.api.common.state.<span class="hljs-type">ValueStateDescriptor</span><br><span class="hljs-keyword">import</span> org.apache.flink.api.scala.typeutils.<span class="hljs-type">Types</span><br><span class="hljs-keyword">import</span> org.apache.flink.streaming.api.functions.<span class="hljs-type">KeyedProcessFunction</span><br><span class="hljs-keyword">import</span> org.apache.flink.streaming.api.scala._<br><span class="hljs-keyword">import</span> org.apache.flink.util.<span class="hljs-type">Collector</span><br><br><span class="hljs-comment">//检查连续1s内温度上升</span><br><span class="hljs-class"><span class="hljs-keyword">object</span> <span class="hljs-title">TempIncreaseAlert</span> </span>&#123;<br>  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">main</span></span>(args: <span class="hljs-type">Array</span>[<span class="hljs-type">String</span>]): <span class="hljs-type">Unit</span> = &#123;<br>    <span class="hljs-keyword">val</span> env = <span class="hljs-type">StreamExecutionEnvironment</span>.getExecutionEnvironment<br>    env.setParallelism(<span class="hljs-number">1</span>)<br>    <span class="hljs-keyword">val</span> stream = env.addSource(<span class="hljs-keyword">new</span> <span class="hljs-type">SensorSource</span>)<br>      .keyBy(_.id)<br>      .process(<span class="hljs-keyword">new</span> <span class="hljs-type">TempIncreaseAlertFunction</span>)<br><br>    stream.print()<br><br>    env.execute()<br>  &#125;<br><br>  <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">TempIncreaseAlertFunction</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">KeyedProcessFunction</span>[<span class="hljs-type">String</span>, <span class="hljs-type">SensorReading</span>, <span class="hljs-type">String</span>] </span>&#123;<br>    <span class="hljs-comment">//初始化一个状态变量</span><br>    <span class="hljs-comment">//懒加载，惰性赋值</span><br>    <span class="hljs-comment">//当执行到process算子时，才会初始化，所以是懒加载</span><br>    <span class="hljs-comment">//通过配置，状态变量可以通过检查点操作，保存在hdfs里面</span><br>    <span class="hljs-comment">//当程序故障时，可以从最近一次检查点恢复</span><br>    <span class="hljs-comment">//所以要有一个名字last-temp和变量的类型（需要明确告诉flink状态变量的类型）</span><br>    <span class="hljs-comment">//状态变量只会被初始化一次，允许程序时，如果没有这个状态变量，就初始化一个，如果有这个状态变量，直接读取，是单例模式</span><br>    <span class="hljs-keyword">lazy</span> <span class="hljs-keyword">val</span> lastTemp = getRuntimeContext.getState(<br>      <span class="hljs-keyword">new</span> <span class="hljs-type">ValueStateDescriptor</span>[<span class="hljs-type">Double</span>](<span class="hljs-string">&quot;last-temp&quot;</span>, <span class="hljs-type">Types</span>.of[<span class="hljs-type">Double</span>])<br>    )<br>    <span class="hljs-comment">//用来保存报警定时器的时间戳，默认是0L</span><br>    <span class="hljs-keyword">lazy</span> <span class="hljs-keyword">val</span> timerTs = getRuntimeContext.getState(<br>      <span class="hljs-keyword">new</span> <span class="hljs-type">ValueStateDescriptor</span>[<span class="hljs-type">Long</span>](<span class="hljs-string">&quot;ts&quot;</span>, <span class="hljs-type">Types</span>.of[<span class="hljs-type">Long</span>])<br>    )<br><br>    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">processElement</span></span>(value: <span class="hljs-type">SensorReading</span>, ctx: <span class="hljs-type">KeyedProcessFunction</span>[<span class="hljs-type">String</span>, <span class="hljs-type">SensorReading</span>, <span class="hljs-type">String</span>]#<span class="hljs-type">Context</span>, out: <span class="hljs-type">Collector</span>[<span class="hljs-type">String</span>]): <span class="hljs-type">Unit</span> = &#123;<br>      <span class="hljs-comment">//获取最近一次温度，调用&#x27;.valeu()&#x27;方法</span><br>      <span class="hljs-comment">//如果来的是第一条温度，那么prevTemp是0.0</span><br>      <span class="hljs-keyword">val</span> prevTemp = lastTemp.value()<br>      <span class="hljs-comment">//将来的温度值更新到lastTemp状态变量，使用update方法</span><br>      lastTemp.update(value.temperature)<br><br>      <span class="hljs-keyword">val</span> curTimerTs = timerTs.value()<br><br>      <span class="hljs-keyword">if</span> (prevTemp == <span class="hljs-number">0.0</span> || value.temperature &lt; prevTemp) &#123;<br>        <span class="hljs-comment">//如果来的温度是第一条温度，或者来的温度小于最近一次温度</span><br>        <span class="hljs-comment">//删除报警定时器</span><br>        ctx.timerService().deleteProcessingTimeTimer(curTimerTs)<br>        <span class="hljs-comment">//情况保存定时器时间戳的状态变量，使用clear方法</span><br>        timerTs.clear()<br>      &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (value.temperature &gt; prevTemp &amp;&amp; curTimerTs == <span class="hljs-number">0</span>L) &#123;<br>        <span class="hljs-comment">//来的温度大于最近一次温度，并且我们没有注册报警定时器，因为curTimerTs等于0L</span><br>        <span class="hljs-keyword">val</span> ts = ctx.timerService().currentProcessingTime() + <span class="hljs-number">1000</span>L<br>        ctx.timerService().registerProcessingTimeTimer(ts)<br>        timerTs.update(ts)<br>      &#125;<br>    &#125;<br><br>    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">onTimer</span></span>(timestamp: <span class="hljs-type">Long</span>, ctx: <span class="hljs-type">KeyedProcessFunction</span>[<span class="hljs-type">String</span>, <span class="hljs-type">SensorReading</span>, <span class="hljs-type">String</span>]#<span class="hljs-type">OnTimerContext</span>, out: <span class="hljs-type">Collector</span>[<span class="hljs-type">String</span>]): <span class="hljs-type">Unit</span> = &#123;<br>      out.collect(<span class="hljs-string">&quot;传感器ID为&quot;</span> + ctx.getCurrentKey + <span class="hljs-string">&quot;的传感器温度连续1s上升&quot;</span>)<br>      timerTs.clear() <span class="hljs-comment">//清空定时器</span><br>    &#125;<br>  &#125;<br><br>&#125;<br><br></code></pre></td></tr></table></figure></li>
+<li><p>ProcessFunction</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><code class="hljs scala"><span class="hljs-keyword">import</span> org.apache.flink.streaming.api.functions.<span class="hljs-type">ProcessFunction</span><br><span class="hljs-keyword">import</span> org.apache.flink.streaming.api.scala._<br><span class="hljs-keyword">import</span> org.apache.flink.util.<span class="hljs-type">Collector</span><br><br><span class="hljs-class"><span class="hljs-keyword">object</span> <span class="hljs-title">FreezingAlarm</span> </span>&#123;<br>  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">main</span></span>(args: <span class="hljs-type">Array</span>[<span class="hljs-type">String</span>]): <span class="hljs-type">Unit</span> = &#123;<br>    <span class="hljs-keyword">val</span> env: <span class="hljs-type">StreamExecutionEnvironment</span> = <span class="hljs-type">StreamExecutionEnvironment</span>.getExecutionEnvironment<br>    env.setParallelism(<span class="hljs-number">1</span>)<br>    <span class="hljs-keyword">val</span> stream = env.addSource(<span class="hljs-keyword">new</span> <span class="hljs-type">SensorSource</span>)<br>      <span class="hljs-comment">//没有KeyBy,没有开窗口函数</span><br>      .process(<span class="hljs-keyword">new</span> <span class="hljs-type">FreezingAlarmFunction</span>)<br>    <span class="hljs-comment">//stream.print()//打印常规输出</span><br>    <span class="hljs-comment">//打印侧输出流</span><br>    <span class="hljs-comment">//侧输出标签的名字必须是一样的</span><br>    stream.getSideOutput(<span class="hljs-keyword">new</span> <span class="hljs-type">OutputTag</span>[<span class="hljs-type">String</span>](<span class="hljs-string">&quot;freezing-alarm&quot;</span>)).print()<br>    env.execute()<br>  &#125;<br><br>  <span class="hljs-comment">//ProcessFunction处理的是没有KeyBy的流</span><br>  <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">FreezingAlarmFunction</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">ProcessFunction</span>[<span class="hljs-type">SensorReading</span>, <span class="hljs-type">SensorReading</span>] </span>&#123;<br>    <span class="hljs-comment">//定义一个侧输出标签，实际上就是侧输出流的名字</span><br>    <span class="hljs-comment">//侧输出流中的元素泛型是String</span><br>    <span class="hljs-keyword">lazy</span> <span class="hljs-keyword">val</span> freezingAlarmOut = <span class="hljs-keyword">new</span> <span class="hljs-type">OutputTag</span>[<span class="hljs-type">String</span>](<span class="hljs-string">&quot;freezing-alarm&quot;</span>)<br><br>    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">processElement</span></span>(value: <span class="hljs-type">SensorReading</span>, ctx: <span class="hljs-type">ProcessFunction</span>[<span class="hljs-type">SensorReading</span>, <span class="hljs-type">SensorReading</span>]#<span class="hljs-type">Context</span>, out: <span class="hljs-type">Collector</span>[<span class="hljs-type">SensorReading</span>]): <span class="hljs-type">Unit</span> = &#123;<br>      <span class="hljs-keyword">if</span> (value.temperature &lt; <span class="hljs-number">32.0</span>) &#123;<br>        <span class="hljs-comment">//第一个参数是侧输出标签，第二个参数是发送的数据</span><br>        ctx.output(freezingAlarmOut, value.id + <span class="hljs-string">&quot;的传感器低温报警&quot;</span>)<br>      &#125;<br>      <span class="hljs-comment">//将所以读数发送到常规输出</span><br>      out.collect(value)<br>    &#125;<br>  &#125;<br><br>&#125;<br></code></pre></td></tr></table></figure></li>
+<li><p>CoProcessFunction</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><code class="hljs scala"><span class="hljs-keyword">import</span> org.apache.flink.api.common.state.<span class="hljs-type">ValueStateDescriptor</span><br><span class="hljs-keyword">import</span> org.apache.flink.api.scala.typeutils.<span class="hljs-type">Types</span><br><span class="hljs-keyword">import</span> org.apache.flink.streaming.api.functions.co.<span class="hljs-type">CoProcessFunction</span><br><span class="hljs-keyword">import</span> org.apache.flink.streaming.api.scala._<br><span class="hljs-keyword">import</span> org.apache.flink.util.<span class="hljs-type">Collector</span><br><br><span class="hljs-class"><span class="hljs-keyword">object</span> <span class="hljs-title">CoProcessFunctionExample</span> </span>&#123;<br>  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">main</span></span>(args: <span class="hljs-type">Array</span>[<span class="hljs-type">String</span>]): <span class="hljs-type">Unit</span> = &#123;<br>    <span class="hljs-keyword">val</span> env = <span class="hljs-type">StreamExecutionEnvironment</span>.getExecutionEnvironment<br>    env.setParallelism(<span class="hljs-number">1</span>)<br>    <span class="hljs-comment">//第一条流,无限流</span><br>    <span class="hljs-keyword">val</span> stream1 = env.addSource(<span class="hljs-keyword">new</span> <span class="hljs-type">SensorSource</span>)<br>    <span class="hljs-comment">//第二条流，有限流，只有一个元素，用来做开关，对Sensor_7的数据放行10s</span><br>    <span class="hljs-keyword">val</span> stream2 = env.fromElements(<br>      (<span class="hljs-string">&quot;Sensor_7&quot;</span>, <span class="hljs-number">5</span> * <span class="hljs-number">1000</span>L)<br>    )<br>    <span class="hljs-keyword">val</span> result = stream1<br>      .connect(stream2)<br>      .keyBy(_.id, _._1) <span class="hljs-comment">//on stream1.id=stream2._1</span><br>      .process(<span class="hljs-keyword">new</span> <span class="hljs-type">ReadingFilter</span>)<br><br>    result.print()<br><br>    env.execute()<br><br>  &#125;<br><br>  <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ReadingFilter</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">CoProcessFunction</span>[<span class="hljs-type">SensorReading</span>, (<span class="hljs-type">String</span>, <span class="hljs-type">Long</span>), <span class="hljs-type">SensorReading</span>] </span>&#123;<br>    <span class="hljs-comment">//初始值为false</span><br>    <span class="hljs-keyword">lazy</span> <span class="hljs-keyword">val</span> forwardEnabled = getRuntimeContext.getState(<br>      <span class="hljs-keyword">new</span> <span class="hljs-type">ValueStateDescriptor</span>[<span class="hljs-type">Boolean</span>](<span class="hljs-string">&quot;switch&quot;</span>, <span class="hljs-type">Types</span>.of[<span class="hljs-type">Boolean</span>])<br>    )<br><br>    <span class="hljs-comment">//处理来自传感器的流数据</span><br>    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">processElement1</span></span>(value: <span class="hljs-type">SensorReading</span>, ctx: <span class="hljs-type">CoProcessFunction</span>[<span class="hljs-type">SensorReading</span>, (<span class="hljs-type">String</span>, <span class="hljs-type">Long</span>), <span class="hljs-type">SensorReading</span>]#<span class="hljs-type">Context</span>, out: <span class="hljs-type">Collector</span>[<span class="hljs-type">SensorReading</span>]): <span class="hljs-type">Unit</span> = &#123;<br>      <span class="hljs-comment">//如果开关为true，就允许数据流向下发送</span><br>      <span class="hljs-keyword">if</span> (forwardEnabled.value()) &#123;<br>        out.collect(value)<br>      &#125;<br>    &#125;<br><br>    <span class="hljs-comment">//处理来自开关流的数据</span><br>    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">processElement2</span></span>(value: (<span class="hljs-type">String</span>, <span class="hljs-type">Long</span>), ctx: <span class="hljs-type">CoProcessFunction</span>[<span class="hljs-type">SensorReading</span>, (<span class="hljs-type">String</span>, <span class="hljs-type">Long</span>), <span class="hljs-type">SensorReading</span>]#<span class="hljs-type">Context</span>, out: <span class="hljs-type">Collector</span>[<span class="hljs-type">SensorReading</span>]): <span class="hljs-type">Unit</span> = &#123;<br>      <span class="hljs-comment">//打开开关</span><br>      forwardEnabled.update(<span class="hljs-literal">true</span>)<br>      <span class="hljs-comment">//开关元组的第二个值是放行时间</span><br>      <span class="hljs-keyword">val</span> ts = ctx.timerService().currentProcessingTime() + value._2<br>      <span class="hljs-comment">//注册一个定时器</span><br>      ctx.timerService().registerProcessingTimeTimer(ts)<br>    &#125;<br><br>    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">onTimer</span></span>(timestamp: <span class="hljs-type">Long</span>, ctx: <span class="hljs-type">CoProcessFunction</span>[<span class="hljs-type">SensorReading</span>, (<span class="hljs-type">String</span>, <span class="hljs-type">Long</span>), <span class="hljs-type">SensorReading</span>]#<span class="hljs-type">OnTimerContext</span>, out: <span class="hljs-type">Collector</span>[<span class="hljs-type">SensorReading</span>]): <span class="hljs-type">Unit</span> = &#123;<br>      <span class="hljs-comment">//关闭开关</span><br>      forwardEnabled.clear()<br>    &#125;<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>水位线+迟到事件处理+侧输出流处理</p>
+<ul>
+<li>每200ms系统默认插入一个水位线</li>
+<li>窗口是一个左闭右开的区间</li>
+</ul>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><code class="hljs scala"><br><span class="hljs-keyword">import</span> org.apache.flink.api.common.state.<span class="hljs-type">ValueStateDescriptor</span><br><span class="hljs-keyword">import</span> org.apache.flink.api.scala.typeutils.<span class="hljs-type">Types</span><br><span class="hljs-keyword">import</span> org.apache.flink.streaming.api.<span class="hljs-type">TimeCharacteristic</span><br><span class="hljs-keyword">import</span> org.apache.flink.streaming.api.functions.timestamps.<span class="hljs-type">BoundedOutOfOrdernessTimestampExtractor</span><br><span class="hljs-keyword">import</span> org.apache.flink.streaming.api.scala._<br><span class="hljs-keyword">import</span> org.apache.flink.streaming.api.scala.function.<span class="hljs-type">ProcessWindowFunction</span><br><span class="hljs-keyword">import</span> org.apache.flink.streaming.api.windowing.time.<span class="hljs-type">Time</span><br><span class="hljs-keyword">import</span> org.apache.flink.streaming.api.windowing.windows.<span class="hljs-type">TimeWindow</span><br><span class="hljs-keyword">import</span> org.apache.flink.util.<span class="hljs-type">Collector</span><br><br><span class="hljs-class"><span class="hljs-keyword">object</span> <span class="hljs-title">UpdateWindowResultWithLateElement</span> </span>&#123;<br>  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">main</span></span>(args: <span class="hljs-type">Array</span>[<span class="hljs-type">String</span>]): <span class="hljs-type">Unit</span> = &#123;<br>    <span class="hljs-keyword">val</span> env = <span class="hljs-type">StreamExecutionEnvironment</span>.getExecutionEnvironment<br>    env.setParallelism(<span class="hljs-number">1</span>)<br>    <span class="hljs-comment">//设置事件时间</span><br>    env.setStreamTimeCharacteristic(<span class="hljs-type">TimeCharacteristic</span>.<span class="hljs-type">EventTime</span>)<br>    <span class="hljs-keyword">val</span> stream = env<br>      .socketTextStream(<span class="hljs-string">&quot;hadoop100&quot;</span>, <span class="hljs-number">9999</span>, &#x27;\n&#x27;)<br>      .map(line =&gt; &#123;<br>        <span class="hljs-keyword">val</span> arr = line.split(<span class="hljs-string">&quot; &quot;</span>)<br>        (arr(<span class="hljs-number">0</span>), arr(<span class="hljs-number">1</span>).toLong * <span class="hljs-number">1000</span>L)<br>      &#125;)<br>      .assignTimestampsAndWatermarks(<br>        <span class="hljs-comment">//最大延迟时间5s</span><br>        <span class="hljs-keyword">new</span> <span class="hljs-type">BoundedOutOfOrdernessTimestampExtractor</span>[(<span class="hljs-type">String</span>, <span class="hljs-type">Long</span>)](<span class="hljs-type">Time</span>.seconds(<span class="hljs-number">5</span>)) &#123;<br>          <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">extractTimestamp</span></span>(element: (<span class="hljs-type">String</span>, <span class="hljs-type">Long</span>)): <span class="hljs-type">Long</span> = element._2<br>        &#125;<br>      )<br>      .keyBy(_._1)<br>      .timeWindow(<span class="hljs-type">Time</span>.seconds(<span class="hljs-number">5</span>))<br>      <span class="hljs-comment">//允许迟到时间</span><br>      .allowedLateness(<span class="hljs-type">Time</span>.seconds(<span class="hljs-number">5</span>))<br>      <span class="hljs-comment">//将迟到事件发送到侧输出流中去</span><br>      .process(<span class="hljs-keyword">new</span> <span class="hljs-type">UpdateWindowResult</span>)<br>    stream.print()<br>    env.execute()<br>  &#125;<br><br>  <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">UpdateWindowResult</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">ProcessWindowFunction</span>[(<span class="hljs-type">String</span>, <span class="hljs-type">Long</span>), <span class="hljs-type">String</span>, <span class="hljs-type">String</span>, <span class="hljs-type">TimeWindow</span>] </span>&#123;<br>    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">process</span></span>(key: <span class="hljs-type">String</span>, context: <span class="hljs-type">Context</span>, elements: <span class="hljs-type">Iterable</span>[(<span class="hljs-type">String</span>, <span class="hljs-type">Long</span>)], out: <span class="hljs-type">Collector</span>[<span class="hljs-type">String</span>]): <span class="hljs-type">Unit</span> = &#123;<br>      <span class="hljs-comment">//当第一次对窗口进行求值时，也就是水位线超过窗口结束时间的时候</span><br>      <span class="hljs-comment">//会第一次调用process函数</span><br>      <span class="hljs-comment">//这是isUpdate为默认值false</span><br>      <span class="hljs-comment">//窗口内初始化一个状态变量使用windowState,只对当前窗口可见</span><br>      <span class="hljs-keyword">val</span> isUpdate = context.windowState.getState(<br>        <span class="hljs-keyword">new</span> <span class="hljs-type">ValueStateDescriptor</span>[<span class="hljs-type">Boolean</span>](<span class="hljs-string">&quot;update&quot;</span>, <span class="hljs-type">Types</span>.of[<span class="hljs-type">Boolean</span>])<br>      )<br>      <span class="hljs-keyword">if</span> (!isUpdate.value()) &#123;<br>        <span class="hljs-comment">//当水位线超过窗口结束时间，第一次调用</span><br>        out.collect(<span class="hljs-string">&quot;窗口第一次求值了！元素共有&quot;</span> + elements.size + <span class="hljs-string">&quot; 个&quot;</span>)<br>        <span class="hljs-comment">//第一次调用完process后，将isUpdate赋值为true</span><br>        isUpdate.update(<span class="hljs-literal">true</span>)<br>      &#125; <span class="hljs-keyword">else</span> &#123;<br>        out.collect(<span class="hljs-string">&quot;迟到元素来了，更新的元素数量为&quot;</span> + elements.size + <span class="hljs-string">&quot; 个&quot;</span>)<br>      &#125;<br>    &#125;<br>  &#125;<br><br>&#125;<br><br></code></pre></td></tr></table></figure></li>
+<li><p>触发器Trigger</p>
+</li>
+<li><p>每次调用Trigger都会产生一个TriggerResult来决定窗口接下来发生什么。TriggerResult可以取以下结果:</p>
+<ul>
+<li>CONTINUE：什么都不做</li>
+<li>FIRE：如果window operator有ProcessWindowFunction这个参数，将会调用ProcessWindowFunction，如果窗口仅有增量聚合函数（ReduceFunction或者AggregateFunction）作为参数，那么当前的聚合结果将会被发送，窗口的state不变</li>
+<li>PURGE：窗口所以内容包括窗口的元数据都将被丢弃</li>
+<li>FIRE_AND_PURGE:先对窗口求值，再将窗口中的内容丢弃</li>
+</ul>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br></pre></td><td class="code"><pre><code class="hljs scala"><span class="hljs-keyword">import</span> org.apache.flink.api.common.state.<span class="hljs-type">ValueStateDescriptor</span><br><span class="hljs-keyword">import</span> org.apache.flink.api.scala.typeutils.<span class="hljs-type">Types</span><br><span class="hljs-keyword">import</span> org.apache.flink.streaming.api.<span class="hljs-type">TimeCharacteristic</span><br><span class="hljs-keyword">import</span> org.apache.flink.streaming.api.scala._<br><span class="hljs-keyword">import</span> org.apache.flink.streaming.api.scala.function.<span class="hljs-type">ProcessWindowFunction</span><br><span class="hljs-keyword">import</span> org.apache.flink.streaming.api.windowing.time.<span class="hljs-type">Time</span><br><span class="hljs-keyword">import</span> org.apache.flink.streaming.api.windowing.triggers.<span class="hljs-type">Trigger</span>.<span class="hljs-type">TriggerContext</span><br><span class="hljs-keyword">import</span> org.apache.flink.streaming.api.windowing.triggers.&#123;<span class="hljs-type">Trigger</span>, <span class="hljs-type">TriggerResult</span>&#125;<br><span class="hljs-keyword">import</span> org.apache.flink.streaming.api.windowing.windows.<span class="hljs-type">TimeWindow</span><br><span class="hljs-keyword">import</span> org.apache.flink.util.<span class="hljs-type">Collector</span><br><br><span class="hljs-class"><span class="hljs-keyword">object</span> <span class="hljs-title">TriggerExample</span> </span>&#123;<br>  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">main</span></span>(args: <span class="hljs-type">Array</span>[<span class="hljs-type">String</span>]): <span class="hljs-type">Unit</span> = &#123;<br>    <span class="hljs-keyword">val</span> env = <span class="hljs-type">StreamExecutionEnvironment</span>.getExecutionEnvironment<br>    env.setParallelism(<span class="hljs-number">1</span>)<br>    env.setStreamTimeCharacteristic(<span class="hljs-type">TimeCharacteristic</span>.<span class="hljs-type">EventTime</span>)<br>    <span class="hljs-keyword">val</span> stream = env<br>      .socketTextStream(<span class="hljs-string">&quot;hadoop100&quot;</span>, <span class="hljs-number">9999</span>, &#x27;\n&#x27;)<br>      .map(line =&gt; &#123;<br>        <span class="hljs-keyword">val</span> arr = line.split(<span class="hljs-string">&quot; &quot;</span>)<br>        (arr(<span class="hljs-number">0</span>), arr(<span class="hljs-number">1</span>).toLong)<br>      &#125;)<br>      .assignAscendingTimestamps(_._2)<br>      .keyBy(_._1)<br>      .timeWindow(<span class="hljs-type">Time</span>.seconds(<span class="hljs-number">10</span>))<br>      .trigger(<span class="hljs-keyword">new</span> <span class="hljs-type">OneSecondIntervalTrigger</span>)<br>      .process(<span class="hljs-keyword">new</span> <span class="hljs-type">WindowCount</span>)<br><br>    stream.print()<br>    env.execute()<br>  &#125;<br><br>  <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">OneSecondIntervalTrigger</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Trigger</span>[(<span class="hljs-type">String</span>, <span class="hljs-type">Long</span>), <span class="hljs-type">TimeWindow</span>] </span>&#123;<br>    <span class="hljs-comment">//每来一条元素都要调用一次</span><br>    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">onElement</span></span>(element: (<span class="hljs-type">String</span>, <span class="hljs-type">Long</span>), timestamp: <span class="hljs-type">Long</span>, window: <span class="hljs-type">TimeWindow</span>, ctx: <span class="hljs-type">TriggerContext</span>): <span class="hljs-type">TriggerResult</span> = &#123;<br>      <span class="hljs-comment">//默认值为false</span><br>      <span class="hljs-comment">//当第一条事件来的时候将firstSeen置为false</span><br>      <span class="hljs-keyword">val</span> firstSeen = ctx.getPartitionedState(<br>        <span class="hljs-keyword">new</span> <span class="hljs-type">ValueStateDescriptor</span>[<span class="hljs-type">Boolean</span>](<span class="hljs-string">&quot;first-seen&quot;</span>, <span class="hljs-type">Types</span>.of[<span class="hljs-type">Boolean</span>])<br>      )<br>      <span class="hljs-comment">//当第一条数据来的时候，！firstSeen.value()为true</span><br>      <span class="hljs-comment">//仅对第一条数据注册定时器</span><br>      <span class="hljs-comment">//这里的定时器指的是：onEventTime函数</span><br>      <span class="hljs-keyword">if</span> (!firstSeen.value()) &#123;<br>        <span class="hljs-comment">//如果当前水位线为1234，那么t=1234+(1000-1234%1000)=2000</span><br>        println(<span class="hljs-string">&quot;第一条数据进入时的水位线是：&quot;</span>+ctx.getCurrentWatermark)<br>        <span class="hljs-keyword">val</span> t = ctx.getCurrentWatermark + (<span class="hljs-number">1000</span> - (ctx.getCurrentWatermark % <span class="hljs-number">1000</span>))<br>        println(<span class="hljs-string">&quot;第一次注册的定时器时间是：&quot;</span>+ t)<br>        ctx.registerEventTimeTimer(t) <span class="hljs-comment">//第一条数据的时间戳之后的整数秒注册一个定时器</span><br>        println(<span class="hljs-string">&quot;第一次注册的窗口结束时间定时器时间是：&quot;</span>+window.getEnd)<br>        ctx.registerEventTimeTimer(window.getEnd) <span class="hljs-comment">//在窗口结束时间注册一个定时器</span><br>        firstSeen.update(<span class="hljs-literal">true</span>)<br>      &#125;<br>      <span class="hljs-type">TriggerResult</span>.<span class="hljs-type">CONTINUE</span> <span class="hljs-comment">//什么都不敢(fire=false,purge=false)</span><br>    &#125;<br><br>    <span class="hljs-comment">//我们使用的是事件事件，所以onProcessingTime什么都不用做</span><br>    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">onProcessingTime</span></span>(time: <span class="hljs-type">Long</span>, window: <span class="hljs-type">TimeWindow</span>, ctx: <span class="hljs-type">TriggerContext</span>): <span class="hljs-type">TriggerResult</span> = &#123;<br>      <span class="hljs-type">TriggerResult</span>.<span class="hljs-type">CONTINUE</span><br>    &#125;<br>    <span class="hljs-comment">//定时器函数，在水位线到达time时触发</span><br>    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">onEventTime</span></span>(time: <span class="hljs-type">Long</span>, window: <span class="hljs-type">TimeWindow</span>, ctx: <span class="hljs-type">TriggerContext</span>): <span class="hljs-type">TriggerResult</span> = &#123;<br>      println(<span class="hljs-string">&quot;当前水位线是&quot;</span>+ctx.getCurrentWatermark)<br>      <span class="hljs-comment">//在onElement函数中，我们注册过窗口结束时间的定时器</span><br>      <span class="hljs-keyword">if</span> (time == window.getEnd) &#123;<br>        <span class="hljs-comment">//在窗口闭合时，触发计算并清空窗口</span><br>        <span class="hljs-type">TriggerResult</span>.<span class="hljs-type">FIRE_AND_PURGE</span><br>      &#125; <span class="hljs-keyword">else</span> &#123;<br>        <span class="hljs-keyword">val</span> t = ctx.getCurrentWatermark + (<span class="hljs-number">1000</span> - (ctx.getCurrentWatermark % <span class="hljs-number">1000</span>))<br>        <span class="hljs-keyword">if</span> (t &lt; window.getEnd) &#123;<br>          ctx.registerEventTimeTimer(t)<br>          println(<span class="hljs-string">&quot;注册的定时器时间是：&quot;</span>+t)<br>        &#125;<br>        <span class="hljs-type">TriggerResult</span>.<span class="hljs-type">FIRE</span><br>      &#125;<br>    &#125;<br><br>    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">clear</span></span>(window: <span class="hljs-type">TimeWindow</span>, ctx: <span class="hljs-type">TriggerContext</span>): <span class="hljs-type">Unit</span> = &#123;<br>      <span class="hljs-comment">//状态变量是一个单例</span><br>      <span class="hljs-keyword">val</span> firstSeen = ctx.getPartitionedState(<br>        <span class="hljs-keyword">new</span> <span class="hljs-type">ValueStateDescriptor</span>[<span class="hljs-type">Boolean</span>](<span class="hljs-string">&quot;first-seen&quot;</span>, <span class="hljs-type">Types</span>.of[<span class="hljs-type">Boolean</span>])<br>      )<br><br>      firstSeen.clear()<br>    &#125;<br>  &#125;<br><br>  <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">WindowCount</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">ProcessWindowFunction</span>[(<span class="hljs-type">String</span>, <span class="hljs-type">Long</span>), <span class="hljs-type">String</span>, <span class="hljs-type">String</span>, <span class="hljs-type">TimeWindow</span>] </span>&#123;<br>    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">process</span></span>(key: <span class="hljs-type">String</span>, context: <span class="hljs-type">Context</span>, elements: <span class="hljs-type">Iterable</span>[(<span class="hljs-type">String</span>, <span class="hljs-type">Long</span>)], out: <span class="hljs-type">Collector</span>[<span class="hljs-type">String</span>]): <span class="hljs-type">Unit</span> = &#123;<br>      out.collect(<span class="hljs-string">&quot;窗口中有&quot;</span> + elements.size + <span class="hljs-string">&quot;条数据！ &quot;</span> + <span class="hljs-string">&quot;窗口结束时间是&quot;</span> + context.window.getEnd)<br>    &#125;<br>  &#125;<br><br>&#125;<br><br></code></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="Flink状态编程和容错机制"><a href="#Flink状态编程和容错机制" class="headerlink" title="Flink状态编程和容错机制"></a>Flink状态编程和容错机制</h2><h3 id="状态编程"><a href="#状态编程" class="headerlink" title="状态编程"></a>状态编程</h3><ul>
+<li><p>流式计算分为无状态编程和有状态编程两种情况。无状态计算观察每个独立事件，并根据最后一个事件输出结果。</p>
+</li>
+<li><p>无状态计算例子：</p>
+<ul>
+<li>流处理应用程序从传感器接收温度读数，并在温度超过90度时发出警告。</li>
+</ul>
+</li>
+<li><p>有状态计算例子：</p>
+<ul>
+<li>所有窗口类型，例如，计算过去一小时的平均温度，就是有状态的计算</li>
+<li>所有用于复杂事件处理的状态机。例如，若在一分钟内收到两个相差20度以上的温度读数，则发出警告，这就是有状态的计算。</li>
+<li>流与流之间的所有关联操作，以及流与静态表或动态表之间的关联操作，都是有状态的计算。</li>
+</ul>
+</li>
+<li><p>无状态流处理每次只转换一条输入记录，并且仅根据最新的输入记录输出结果，有状态流处理维护所有已经处理记录的状态值，并根据每条新输入的记录更新状态，因此输出记录反映的是综合考虑多个事件之后的结果。</p>
+</li>
+<li><p>在Flink中，状态始终与特定算子相关联。总的来说，有两种类型的状态：</p>
+<ul>
+<li>算子状态（operator state）<ul>
+<li>算子状态的作用范围限定为算子任务。这意味着同一并行任务所处理的所有数据都可以访问到相同的状态，状态对于同一任务而言是共享的，算子状态不能由相同或不同算子的另一个任务访问。</li>
+</ul>
+</li>
+<li>键控状态  (keyed state)<ul>
+<li>键控状态是根据输入数据流中定义的键（key）来维护和访问的。Fink为每个键值维护一个状态实例，并将具有相同键的所有数据，都分区到同一个算子任务中，这个任务会维护和处理这个key对应的状态。当任务处理一条数据时，它会自动将状态的访问范围限定为当前数据的key。因此，具有相同key的所有数据都会访问相同的状态。Keyed State很类似于一个分布式的key-value map数据结构，只能用于KeyedStream (KeyBy算子处理之后)</li>
+<li><a target="_blank" rel="noopener" href="https://imgtu.com/i/IwrVfS"><img src="https://z3.ax1x.com/2021/11/11/IwrVfS.png" srcset="/img/loading.gif" lazyload alt="IwrVfS.png"></a></li>
+<li>Flink的Keyed State 支持以下数据类型：<ul>
+<li>ValueState[T]保存单个的值，值的类型为T。<ul>
+<li>get操作: ValueState.value()</li>
+<li>set操作: ValueState.update(value: T)</li>
+</ul>
+</li>
+<li> ListState[T]保存一个列表，列表里的元素的数据类型为T。基本操作如下：</li>
+<li>o ListState.add(value: T)</li>
+<li> ListState.addAll(values: java.util.List[T])</li>
+<li>ListState.get()返回Iterable[T]</li>
+<li>ListState.update(values: java.util.List[T])</li>
+<li>MapState[K,V]保存Key-Value对<ul>
+<li>MapState.get(key:K)</li>
+<li>MapState.put(key:K,value:V)</li>
+<li>MapState.contains(key:K)</li>
+<li>MapState.remove(key:K)</li>
+</ul>
+</li>
+<li>ReducingState[T]</li>
+<li>AggregatingState[I,O]</li>
+<li>State.clear()是清空操作</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><code class="hljs scala"><span class="hljs-keyword">import</span> org.apache.flink.api.common.state.&#123;<span class="hljs-type">ListStateDescriptor</span>, <span class="hljs-type">ValueStateDescriptor</span>&#125;<br><span class="hljs-keyword">import</span> org.apache.flink.api.scala.typeutils.<span class="hljs-type">Types</span><br><span class="hljs-keyword">import</span> org.apache.flink.streaming.api.functions.<span class="hljs-type">KeyedProcessFunction</span><br><span class="hljs-keyword">import</span> org.apache.flink.streaming.api.scala._<br><span class="hljs-keyword">import</span> org.apache.flink.util.<span class="hljs-type">Collector</span><br><br><span class="hljs-keyword">import</span> scala.collection.mutable.<span class="hljs-type">ListBuffer</span><br><br><span class="hljs-class"><span class="hljs-keyword">object</span> <span class="hljs-title">ListStateExample</span> </span>&#123;<br>  <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">main</span></span>(args: <span class="hljs-type">Array</span>[<span class="hljs-type">String</span>]): <span class="hljs-type">Unit</span> = &#123;<br>    <span class="hljs-keyword">val</span> env = <span class="hljs-type">StreamExecutionEnvironment</span>.getExecutionEnvironment<br>    env.setParallelism(<span class="hljs-number">1</span>)<br>    <span class="hljs-keyword">val</span> stream = env<br>      .addSource(<span class="hljs-keyword">new</span> <span class="hljs-type">SensorSource</span>)<br>      .filter(_.id.equals(<span class="hljs-string">&quot;Sensor_1&quot;</span>))<br>      .keyBy(_.id)<br>      .process(<span class="hljs-keyword">new</span> <span class="hljs-type">Keyed</span>)<br><br>    stream.print()<br><br>    env.execute()<br>  &#125;<br><br>  <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Keyed</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">KeyedProcessFunction</span>[<span class="hljs-type">String</span>, <span class="hljs-type">SensorReading</span>, <span class="hljs-type">String</span>] </span>&#123;<br>    <span class="hljs-keyword">lazy</span> <span class="hljs-keyword">val</span> listState = getRuntimeContext.getListState(<br>      <span class="hljs-keyword">new</span> <span class="hljs-type">ListStateDescriptor</span>[<span class="hljs-type">SensorReading</span>](<span class="hljs-string">&quot;list-state&quot;</span>, <span class="hljs-type">Types</span>.of[<span class="hljs-type">SensorReading</span>])<br>    )<br>    <span class="hljs-keyword">lazy</span> <span class="hljs-keyword">val</span> timer = getRuntimeContext.getState(<br>      <span class="hljs-keyword">new</span> <span class="hljs-type">ValueStateDescriptor</span>[<span class="hljs-type">Long</span>](<span class="hljs-string">&quot;timer&quot;</span>, <span class="hljs-type">Types</span>.of[<span class="hljs-type">Long</span>])<br>    )<br><br>    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">processElement</span></span>(value: <span class="hljs-type">SensorReading</span>, ctx: <span class="hljs-type">KeyedProcessFunction</span>[<span class="hljs-type">String</span>, <span class="hljs-type">SensorReading</span>, <span class="hljs-type">String</span>]#<span class="hljs-type">Context</span>, out: <span class="hljs-type">Collector</span>[<span class="hljs-type">String</span>]): <span class="hljs-type">Unit</span> = &#123;<br>      listState.add(value) <span class="hljs-comment">//添加value到列表状态变量中</span><br>      <span class="hljs-keyword">if</span> (timer.value() == <span class="hljs-number">0</span>L) &#123;<br>        <span class="hljs-keyword">val</span> ts = ctx.timerService().currentProcessingTime() + <span class="hljs-number">10</span> * <span class="hljs-number">1000</span>L<br>        ctx.timerService().registerProcessingTimeTimer(ts)<br>        timer.update(ts)<br>      &#125;<br>    &#125;<br><br>    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">onTimer</span></span>(timestamp: <span class="hljs-type">Long</span>, ctx: <span class="hljs-type">KeyedProcessFunction</span>[<span class="hljs-type">String</span>, <span class="hljs-type">SensorReading</span>, <span class="hljs-type">String</span>]#<span class="hljs-type">OnTimerContext</span>, out: <span class="hljs-type">Collector</span>[<span class="hljs-type">String</span>]): <span class="hljs-type">Unit</span> = &#123;<br>      <span class="hljs-comment">//不能直接对列表状态变量进行计数</span><br>      <span class="hljs-keyword">val</span> readings: <span class="hljs-type">ListBuffer</span>[<span class="hljs-type">SensorReading</span>] = <span class="hljs-keyword">new</span> <span class="hljs-type">ListBuffer</span>()<br>      <span class="hljs-comment">//隐式类型转换必须导入</span><br>      <span class="hljs-keyword">import</span> scala.collection.<span class="hljs-type">JavaConversions</span>._<br>      <span class="hljs-keyword">for</span> (r &lt;- listState.get()) &#123;<br>        readings += r;<br>      &#125;<br>      out.collect(<span class="hljs-string">&quot;当前时刻列表状态变量里面共有&quot;</span> + readings.size + <span class="hljs-string">&quot;条数据&quot;</span>)<br>      timer.clear() <span class="hljs-comment">//清空定时器</span><br>    &#125;<br>  &#125;<br><br>&#125;<br><br></code></pre></td></tr></table></figure></li>
+<li><p>状态后端(State Backends)</p>
+<ul>
+<li>每传入一条数据，有状态的算子任务都会读取和更新状态</li>
+<li>由于有效的状态访问对于处理数据的低延迟至关重要，因此每个并行任务都会在本地维护其状态，以确保快速的状态访问。</li>
+<li>状态的存储，访问以及维护，由一个可插入的组件决定这个组件就叫做状态后端。</li>
+<li>状态后端主要负责两件事情，本地状态管理，以及将检查点（checkpoint）状态写入远程存储（HDFS）。</li>
+</ul>
+</li>
+<li><p>状态后端的选择</p>
+<ul>
+<li>MemoryStateBackend<ul>
+<li>内存级的状态后端，会将键控状态作为内存中的对象进行管理，将他们存储在TaskManager的JVM堆上，而将checkpoint存储在JobManager的内存中</li>
+<li>特定：快速，但不稳定，一般用于测试</li>
+</ul>
+</li>
+<li>FsStateBackend<ul>
+<li>将checkpoint存到远程的持久化文件系统（FileSystem）上，而对于本地状态，跟MemoryStateBackend一样，也会存储在TaskManager的JVM堆上</li>
+<li>特点：同时拥有内存级的本地访问速度，和更好的容错保证</li>
+</ul>
+</li>
+<li>RocksDBStateBackend<ul>
+<li>将所有状态序列化后，存入本地的RocksDB中存储。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Flink的一个重大价值在于，它既保证了exactly-once，也具有低延迟和高吞吐的处理能力</p>
+</li>
+</ul>
+<h3 id="容错机制"><a href="#容错机制" class="headerlink" title="容错机制"></a>容错机制</h3><ul>
+<li>Flink故障恢复机制的核心就是<strong>应用状态的一致性检查点</strong></li>
+<li>有状态应用的一致检查点，其实就是所有任务的状态，在某个时间点的一份拷贝（一份快照）；这个时间点，应该是所有任务都恰好处理完一个相同的输入数据的时候。</li>
+<li>从检查点恢复状态过程：<ul>
+<li>遇到故障之后，第一步就是重启应用</li>
+<li>第二步是从checkpoint中读取状态，将状态重置，从检查点重新启动应用程序后，其内部状态与检查点完成时的状态完全相同。</li>
+<li>第三步：开始消费并处理检查点到发生故障之间的所有数据</li>
+</ul>
+</li>
+<li>这种检查点的保存和恢复机制可以为应用程序提供“精确一次”（exactly-once）的一致性，因为所有算子都会保存检查点并恢复其所有状态，这样一来所有的输入流都会被重置到检查点完成时的位置。</li>
+</ul>
+<h4 id="状态一致性"><a href="#状态一致性" class="headerlink" title="状态一致性"></a>状态一致性</h4><ul>
+<li>状态一致性级别</li>
+<li>flink 端到端（end-to-end）状态一致性<ul>
+<li>内部保证 checkpoint</li>
+<li>source端  可重设数据的读取位置</li>
+<li>sink 端      从故障恢复时，数据不会重复写入外部系统<ul>
+<li>幂等写入</li>
+<li>事物写入</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Flink-SQL"><a href="#Flink-SQL" class="headerlink" title="Flink SQL"></a>Flink SQL</h2><ul>
+<li>SQL的几个优点<ul>
+<li>声明式（Declarative）</li>
+<li>自动调优（Optimized）</li>
+<li>易于理解（Understandable）</li>
+<li>稳定（Stable）</li>
+<li>流与批的统一（Unify）</li>
+</ul>
+</li>
+<li>Flink SQL的流与批统一总结起来就一句话：One Query，One Result</li>
+</ul>
+<h3 id="Flink-SQL核心概念"><a href="#Flink-SQL核心概念" class="headerlink" title="Flink SQL核心概念"></a>Flink SQL核心概念</h3><ul>
+<li>动态表&amp;流表二像性<ul>
+<li>传统的SQL是定义在表上的，为了能在流上定义SQL，我们也需要一个表的概念。这里就需要引入一个非常重要的概念：动态表（Dynamic Table）。所谓动态表，就是数据会随着时间变化的表，可以想象成就是数据库中一张被不断更新的表。我们发现流与表有非常紧密的关系，流表可以看作动态表，动态表可以看做流。我们称之为流表二象性。<ul>
+<li><a target="_blank" rel="noopener" href="https://imgtu.com/i/TrLqK0"><img src="https://s4.ax1x.com/2021/12/28/TrLqK0.png" srcset="/img/loading.gif" lazyload alt="TrLqK0.png"></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>连续查询<ul>
+<li>动态表是流的另一种表现形式，有了动态表后，我们就可以在流上定义SQL了，流式SQL可以想象成连续查询（Continous Query）。传统的查询是只运行一次的SQL，产生一个结果表就结束了。连续查询会一直运行在那里，当每个数据到来，都会持续增量地更新计算结果，从而产生另一个动态表。而这个结果动态表（也就是流）会作为另一个SQL（连续查询）的输入接着计算，从而串起整个数据流图。</li>
+<li><a target="_blank" rel="noopener" href="https://imgtu.com/i/TrOOSA"><img src="https://s4.ax1x.com/2021/12/28/TrOOSA.png" srcset="/img/loading.gif" lazyload alt="TrOOSA.png"></a></li>
+</ul>
+</li>
+</ul>
+<h3 id="Flink-SQL核心功能"><a href="#Flink-SQL核心功能" class="headerlink" title="Flink SQL核心功能"></a>Flink SQL核心功能</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://imgtu.com/i/TrXKkF"><img src="https://s4.ax1x.com/2021/12/28/TrXKkF.png" srcset="/img/loading.gif" lazyload alt="TrXKkF.png"></a></li>
+<li>高级功能<ul>
+<li>双流join<ul>
+<li>双流join功能是将两条流进行关联，用来补齐流上的字段。双流join又分为无限流的双流JOIN和带窗口的双流JOIN</li>
+</ul>
+</li>
+<li>维表join<ul>
+<li>维表JOIN功能是流与表的关联，也是用来为数据流补齐字段，只是补齐的维表字段是在外部存储的维表中的。</li>
+</ul>
+</li>
+<li>TopN<ul>
+<li>全局TopN，分组TopN</li>
+</ul>
+</li>
+<li>Window<ul>
+<li>支持滚动窗口，滑动窗口，会话窗口，以及传统数据库中的OVER窗口</li>
+</ul>
+</li>
+<li>多路输入，多路输出</li>
+<li>MiniBatch 优化<ul>
+<li>对于有状态的算子，每个进入算子的元素都需要对状态做序列化/反序列化的操作，频繁的状态序列化/反序列化操作占了性能开销的大半。MiniBatch的核心思想是，对进入算子的元素进行攒批，一批数据只需要对状态序列化/反序列化一次即可，极大地提升了性能。</li>
+</ul>
+</li>
+<li>Retraction 撤回机制<ul>
+<li>撤回机制是Flink SQL中一个非常重要地基石，它解决了early-fire导致的结果正确性问题（所有的GroupBy都是early-fire的）。而利用好撤回机制有时候能够很巧妙地帮助业务解决一些特殊需求。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="Flink-SQL-维表JOIN与异步优化"><a href="#Flink-SQL-维表JOIN与异步优化" class="headerlink" title="Flink SQL 维表JOIN与异步优化"></a>Flink SQL 维表JOIN与异步优化</h3><ul>
+<li><p>维表JOIN语法</p>
+<ul>
+<li>假设我们有一个Orders订单数据流，希望根据产品ID补全流上地产品维度信息，所以需要跟Products维度表进行关联。Orders 和 Products的DDL声明语句如下：</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> Orders (<br>  orderId <span class="hljs-built_in">VARCHAR</span>,          <span class="hljs-comment">-- 订单 id</span><br>  productId <span class="hljs-built_in">VARCHAR</span>,        <span class="hljs-comment">-- 产品 id</span><br>  units <span class="hljs-built_in">INT</span>,                <span class="hljs-comment">-- 购买数量</span><br>  orderTime <span class="hljs-built_in">TIMESTAMP</span>       <span class="hljs-comment">-- 下单时间</span><br>) <span class="hljs-keyword">with</span> (<br>  <span class="hljs-keyword">type</span> = <span class="hljs-string">&#x27;tt&#x27;</span>,              <span class="hljs-comment">-- tt 日志流</span><br>  ...<br>)<br><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> Products (<br>  productId <span class="hljs-built_in">VARCHAR</span>,        <span class="hljs-comment">-- 产品 id</span><br>  <span class="hljs-keyword">name</span> <span class="hljs-built_in">VARCHAR</span>,             <span class="hljs-comment">-- 产品名称</span><br>  unitPrice <span class="hljs-keyword">DOUBLE</span>          <span class="hljs-comment">-- 单价</span><br>  <span class="hljs-keyword">PERIOD</span> <span class="hljs-keyword">FOR</span> SYSTEM_TIME,   <span class="hljs-comment">-- 这是一张随系统时间而变化的表，用来声明维表</span><br>  PRIMARY <span class="hljs-keyword">KEY</span> (productId)   <span class="hljs-comment">-- 维表必须声明主键</span><br>) <span class="hljs-keyword">with</span> (<br>  <span class="hljs-keyword">type</span> = <span class="hljs-string">&#x27;alihbase&#x27;</span>,        <span class="hljs-comment">-- HBase 数据源</span><br>  ...<br>)<br><br><span class="hljs-comment">-- JOIN当前维表</span><br><span class="hljs-keyword">SELECT</span> *<br><span class="hljs-keyword">FROM</span> Orders <span class="hljs-keyword">AS</span> o<br>[<span class="hljs-keyword">LEFT</span>] <span class="hljs-keyword">JOIN</span> Products <span class="hljs-keyword">FOR</span> SYSTEM_TIME <span class="hljs-keyword">AS</span> <span class="hljs-keyword">OF</span> PROCTIME() <span class="hljs-keyword">AS</span> p<br><span class="hljs-keyword">ON</span> o.productId = p.productId<br><br><br><span class="hljs-comment">-- Flink SQL支持LEFT JOIN和INNER JOIN的维表关联。只是Products维表后面需要跟上FOR SYSTEM_TIME AS OF PROCTIME()的关键字，其含义是每条到达的数据所关联上的是到达时刻的维表快照，也就是说，当数据到达时，我们会根据数据上的Key去查询远程数据库，拿到匹配的结果后关联输出。这里的PROCTIME()即processing time。使用JOIN当前维表功能需要注意的是，如果维表插入了一条数据能匹配上之前左表的数据时，JOIN的结果流，不会发出更新的数据以弥补之前的未匹配。JOIN行为只发生在处理时间（processing time）,即使维表中的数据都被删了，之前JOIN流已经发出的关联上的数据也不会被撤回或改变。</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+<ul>
+<li><p>JOIN当前维表</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> *<br><span class="hljs-keyword">FROM</span> Orders <span class="hljs-keyword">AS</span> o<br>[<span class="hljs-keyword">LEFT</span>] <span class="hljs-keyword">JOIN</span> Products <span class="hljs-keyword">FOR</span> SYSTEM_TIME <span class="hljs-keyword">AS</span> <span class="hljs-keyword">OF</span> PROCTIME() <span class="hljs-keyword">AS</span> p<br><span class="hljs-keyword">ON</span> o.productId = p.productId<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>Flink SQL支持LEFT JOIN和INNER JOIN的维表关联。只是Products维表后面需要跟上<strong>FOR SYSTEM_TIME AS OF PROCTIME()<strong>的关键字，其含义是每条到达的数据所关联上的是到达时刻的维表快照，也就是说，当数据到达时，我们会根据数据上的Key去查询远程数据库，拿到匹配的结果后关联输出。这里的</strong>PROCTIME()<strong>即</strong>processing time</strong>。使用JOIN当前维表功能需要注意的是，如果维表插入了一条数据能匹配上之前左表的数据时，JOIN的结果流，不会发出更新的数据以弥补之前的未匹配。JOIN行为只发生在处理时间（processing time）,即使维表中的数据都被删了，之前JOIN流已经发出的关联上的数据也不会被撤回或改变。</li>
+</ul>
+</li>
+<li><p>JOIN历史维表</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> *<br><span class="hljs-keyword">FROM</span> Orders <span class="hljs-keyword">AS</span> o<br>[<span class="hljs-keyword">LEFT</span>] <span class="hljs-keyword">JOIN</span> Products <span class="hljs-keyword">FOR</span> SYSTEM_TIME <span class="hljs-keyword">AS</span> <span class="hljs-keyword">OF</span> o.orderTime <span class="hljs-keyword">AS</span> p<br><span class="hljs-keyword">ON</span> o.productId = p.productId<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>有时候想关联上的维度数据，并不是当前时刻的值，而是某个时刻的值。比如，产品的价格一直在发生变化，订单流希望补全的是下单时的价格，而不是当前的价格，那就是JOIN历史维表。语法上只需要将上文的PROCTIME()改成o.orderTime即可。</li>
+</ul>
+</li>
+<li><p>Flink 在获取维度数据时，会根据左流的时间去查对应时刻的快照数据。因此JOIN历史维表需要外部存储支持多版本存储，如HBase，或者存储的数据中带有多版本信息。</p>
+</li>
+<li><p>维表优化</p>
+<ul>
+<li>提高吞吐。维表的IO请求严重阻塞了数据流的计算处理。解决办法：异步IO，原始的维表JOIN是同步访问的方式，来一条数据，去数据库查询一次，等待返回后输出关联结果。可以发现网络等待时间极大地阻碍了吞吐和延迟。为了解决同步访问地问题，异步模式可以并发地处理多个请求和回复，从而连续地请求之间不需要阻塞等待。</li>
+<li>降低维表数据库读压力。如HBase也只能承受单机每秒20万的读请求。解决办法：进行缓存，LRU和ALL（维表较小，可以将整个维表缓存到本地）</li>
+<li>通过 <code>cache=&#39;LRU&#39;</code>参数可以开启 LRU 缓存优化</li>
+<li>ALL cache 可以通过 <code>cache=&#39;ALL&#39;</code>参数开启</li>
+<li>通过<code>cacheTTLMs</code>控制缓存的刷新间隔。</li>
+</ul>
+</li>
+</ul>
+<h3 id="流式TopN"><a href="#流式TopN" class="headerlink" title="流式TopN"></a>流式TopN</h3><ul>
+<li></li>
+</ul>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/Flink/">Flink</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a>
+                    
+                      <a class="hover-with-bg" href="/tags/Flink/">Flink</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/02/25/Hive-WindowFunction/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Hive_WindowFunction</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/10/22/shuju-qiinxie/">
+                        <span class="hidden-mobile">shuju_qiinxie</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.2/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js" ></script>
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      $('#local-search-input').on('click', function() {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      });
+      $('#modalSearch').on('shown.bs.modal', function() {
+        $('#local-search-input').focus();
+      });
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

@@ -1,0 +1,573 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="	#87CEFA">
+  <meta name="description" content="Just Do it!">
+  <meta name="author" content="daxiazou">
+  <meta name="keywords" content="">
+  
+    <meta name="baidu-site-verification" content="code-wxp4a58PBe" />
+  
+  <title>flume - Nevermind</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.6.0/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.10","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Nevermind</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('https://img.stackshare.io/service/4337/Flume.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="flume">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-06-21 17:20" pubdate>
+        2021年6月21日 下午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.8k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      21
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">flume</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：2021年7月5日 上午
+                
+              </p>
+            
+            <div class="markdown-body">
+              <h1 id="Flume"><a href="#Flume" class="headerlink" title="Flume"></a>Flume</h1><h2 id="Flume概述"><a href="#Flume概述" class="headerlink" title="Flume概述"></a>Flume概述</h2><ul>
+<li><p>配置文档，自定义Source,Interceptor,sink就来看官方文档：<a target="_blank" rel="noopener" href="http://flume.apache.org/releases/content/1.9.0/FlumeUserGuide.html#spooling-directory-source">官方文档</a></p>
+</li>
+<li><p>flume是一个高可用的，可靠的，分布式的<em><strong>海量日志采集，聚合，和传输的系统</strong></em>基于流式框架，灵活简单。</p>
+</li>
+<li><p>基础架构：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/REvBm8"><img src="https://z3.ax1x.com/2021/06/21/REvBm8.png" srcset="/img/loading.gif" lazyload alt="REvBm8.png"></a></p>
+<ul>
+<li>Agent:是一个JVM进程，它以事件的形式将数据从源头送至目的</li>
+<li>source负责接收数据到Flume agent 的组件。可以处理各种类型，格式的日志数据。例如：spooling directory，netcat,avro,exec</li>
+<li>sink不断轮询channel中的事件并且批量的移除他们，将这些事件批量写入到存储或索引系统，或者被发送到另一个flume agent。sink组件发送目的地包括：hdfs,logger,avro,file,HBase</li>
+<li>Channel是位于source和sink之间缓冲区。Flume自带两种Channel：Memory Channel和File Channel。</li>
+</ul>
+</li>
+<li><p>event:flume传输数据的基本单元。由Header和Body组成。Header用来存放该event的一些属性，为K-V结构，Body用来存放该条数据，形式为字节数组。</p>
+</li>
+</ul>
+<h2 id="flume入门案例"><a href="#flume入门案例" class="headerlink" title="flume入门案例"></a>flume入门案例</h2><ul>
+<li><p>实时监控Hive日志，并上传到HDFS中</p>
+<figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><code class="hljs nix"><span class="hljs-number">1</span>.第一种方式<br>flume-ng agent --name agent的名字 --conf 配置文件的目录 --conf-file agent的配置文件（自己手动写）-Dflume.root.<span class="hljs-attr">logger=INFO,console</span><br><br>需要写配置文件<br>基本步骤：<br><span class="hljs-comment">#1.agent的source,channel,sink组件</span><br><span class="hljs-comment">#2.source配置</span><br><span class="hljs-comment">#3.channel配置</span><br><span class="hljs-comment">#4.sink配置</span><br><span class="hljs-comment">#5.source,channel,sink之间的关系</span><br><span class="hljs-comment"># Name the components on this agent</span><br>a2.<span class="hljs-attr">sources</span> = r2<br>a2.<span class="hljs-attr">sinks</span> = k2<br>a2.<span class="hljs-attr">channels</span> = c2<br><br><span class="hljs-comment"># Describe/configure the source</span><br>a2.sources.r2.<span class="hljs-attr">type</span> = exec<br>a2.sources.r2.<span class="hljs-attr">command</span> = tail -F /opt/module/hive/logs/hive.log<br>a2.sources.r2.<span class="hljs-attr">shell</span> = /bin/bash -c<br><br><span class="hljs-comment"># Describe the sink</span><br>a2.sinks.k2.<span class="hljs-attr">type</span> = hdfs<br>a2.sinks.k2.hdfs.<span class="hljs-attr">path</span> = hdfs://hadoop102:<span class="hljs-number">8020</span>/flume/%Y%m%d/%H<br><span class="hljs-comment">#上传文件的前缀</span><br>a2.sinks.k2.hdfs.<span class="hljs-attr">filePrefix</span> = logs-<br><span class="hljs-comment">#是否按照时间滚动文件夹</span><br>a2.sinks.k2.hdfs.<span class="hljs-attr">round</span> = <span class="hljs-literal">true</span><br><span class="hljs-comment">#多少时间单位创建一个新的文件夹</span><br>a2.sinks.k2.hdfs.<span class="hljs-attr">roundValue</span> = <span class="hljs-number">1</span><br><span class="hljs-comment">#重新定义时间单位</span><br>a2.sinks.k2.hdfs.<span class="hljs-attr">roundUnit</span> = hour<br><span class="hljs-comment">#是否使用本地时间戳</span><br>a2.sinks.k2.hdfs.<span class="hljs-attr">useLocalTimeStamp</span> = <span class="hljs-literal">true</span><br><span class="hljs-comment">#积攒多少个Event才flush到HDFS一次</span><br>a2.sinks.k2.hdfs.<span class="hljs-attr">batchSize</span> = <span class="hljs-number">100</span><br><span class="hljs-comment">#设置文件类型，可支持压缩</span><br>a2.sinks.k2.hdfs.<span class="hljs-attr">fileType</span> = DataStream<br><span class="hljs-comment">#多久生成一个新的文件</span><br>a2.sinks.k2.hdfs.<span class="hljs-attr">rollInterval</span> = <span class="hljs-number">60</span><br><span class="hljs-comment">#设置每个文件的滚动大小</span><br>a2.sinks.k2.hdfs.<span class="hljs-attr">rollSize</span> = <span class="hljs-number">134217700</span><br><span class="hljs-comment">#文件的滚动与Event数量无关</span><br>a2.sinks.k2.hdfs.<span class="hljs-attr">rollCount</span> = <span class="hljs-number">0</span><br><br><span class="hljs-comment"># Use a channel which buffers events in memory</span><br>a2.channels.c2.<span class="hljs-attr">type</span> = memory<br>a2.channels.c2.<span class="hljs-attr">capacity</span> = <span class="hljs-number">1000</span><br>a2.channels.c2.<span class="hljs-attr">transactionCapacity</span> = <span class="hljs-number">100</span><br><br><span class="hljs-comment"># Bind the source and sink to the channel</span><br>a2.sources.r2.<span class="hljs-attr">channels</span> = c2<br>a2.sinks.k2.<span class="hljs-attr">channel</span> = c2<br></code></pre></td></tr></table></figure></li>
+<li><p>log4j.properties(日志架构)，类似于程序中的调试代码，输出一些东西，供编码的时候调试。但是项目上线后不能再直接输出，于是将这些调试输出输出到专门的日志文件中。</p>
+</li>
+</ul>
+<h2 id="Flume进阶"><a href="#Flume进阶" class="headerlink" title="Flume进阶"></a>Flume进阶</h2><ul>
+<li><p>flume事务。主要是为了保证数据不会丢失。</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/RZxhvR"><img src="https://z3.ax1x.com/2021/06/22/RZxhvR.png" srcset="/img/loading.gif" lazyload alt="RZxhvR.png"></a></p>
+</li>
+<li><p>flume agent内部原理：</p>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/RZxsbV"><img src="https://z3.ax1x.com/2021/06/22/RZxsbV.png" srcset="/img/loading.gif" lazyload alt="RZxsbV.png"></a></p>
+</li>
+</ul>
+<ul>
+<li><ol>
+<li><p>Source接受数据，将数据以event的形式发给ChannnelProcessor</p>
+</li>
+<li><p>ChannelProcessor将事件传递给拦截器，在拦截其中可以对event数据进行更改。</p>
+</li>
+<li><p>拦截器再将事件返回到ChannelProcessor，ChannelProcessor将每个事件给Channel选择器。ChannelSelector的作用就是选出Event将要被发往哪个Channel。其共有两种类型，分别是Replicating（复制）和Multiplexing（多路复用）。</p>
+</li>
+<li><p>再返回到ChannelProcessor，根据选择器的选择，event进入不同的channel</p>
+</li>
+<li><p>SinkProcessor再决定channel中的enevt的走向。</p>
+<p>SinkProcessor共有三种类型，分别是DefaultSinkProcessor、LoadBalancingSinkProcessor和FailoverSinkProcessor。</p>
+<p>DefaultSinkProcessor对应的是单个的Sink，LoadBalancingSinkProcessor和FailoverSinkProcessor对应的是Sink Group，LoadBalancingSinkProcessor可以实现负载均衡的功能，FailoverSinkProcessor可以错误恢复的功能(故障转移）。</p>
+</li>
+</ol>
+</li>
+<li><p>flume拓扑结构</p>
+<ul>
+<li>简单串联。多个agent串起来</li>
+<li>复制和多路复用。Flume支持将事件流向一个或者多个目的地。这种模式可以将相同数据复制到多个channel中，或者将不同数据分发到不同的channel中，sink可以选择传送到不同的目的地。</li>
+<li>负载均衡和故障转移。Flume支持使用将多个sink逻辑上分到一个sink组，sink组配合不同的SinkProcessor可以实现负载均衡和错误恢复的功能。</li>
+<li>聚合。将多台服务器部署一个flume日志采集，再将所有日志聚合到一个集中收集日志的flume，由此上传到HDFS,HBase，进行数据分析。</li>
+</ul>
+</li>
+</ul>
+<h3 id="API编程"><a href="#API编程" class="headerlink" title="API编程"></a>API编程</h3><ul>
+<li>可以查看官网的开发者文档。</li>
+<li>自定义Interceptor。定义类实现Interceptor接口，重写四个方法（初始化，单event修改，多event修改，关闭资源）还需要一个Builder静态内部类。</li>
+</ul>
+<h2 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h2><h3 id="flume的source-sink-Channel的作用？"><a href="#flume的source-sink-Channel的作用？" class="headerlink" title="flume的source,sink,Channel的作用？"></a>flume的source,sink,Channel的作用？</h3><ul>
+<li><p>作用：</p>
+<p>（1）Source组件是专门用来收集数据的，可以处理各种类型、各种格式的日志数据，包括avro、thrift、exec、jms、spooling directory、netcat、sequence generator、syslog、http、legacy</p>
+<p>（2）Channel组件对采集到的数据进行缓存，可以存放在Memory或File中。</p>
+<p>（3）Sink组件是用于把数据发送到目的地的组件，目的地包括Hdfs、Logger、avro、thrift、ipc、file、Hbase、solr、自定义。</p>
+</li>
+</ul>
+<h3 id="flume参数调优"><a href="#flume参数调优" class="headerlink" title="flume参数调优"></a>flume参数调优</h3><ul>
+<li><p><em><strong>1. source</strong></em></p>
+<p>增加Source个（使用Tair Dir Source时可增加FileGroups个数）可以增大Source的读取数据的能力。例如：当某一个目录产生的文件过多时需要将这个文件目录拆分成多个文件目录，同时配置好多个Source 以保证Source有足够的能力获取到新产生的数据。</p>
+<p>batchSize参数决定Source一次批量运输到Channel的event条数，适当调大这个参数可以提高Source搬运Event到Channel时的性能。</p>
+<p><em><strong>2. Channel:</strong></em></p>
+<p>type 选择memory时Channel的性能最好，但是如果Flume进程意外挂掉可能会丢失数据。type选择file时Channel的容错性更好，但是性能上会比memory channel差。</p>
+<p>使用file Channel时dataDirs配置多个不同盘下的目录可以提高性能。</p>
+<p>Capacity 参数决定Channel可容纳最大的event条数。transactionCapacity 参数决定每次Source往channel里面写的最大event条数和每次Sink从channel里面读的最大event条数。transactionCapacity需要大于Source和Sink的batchSize参数。</p>
+<p><em><strong>3. Sink</strong></em></p>
+<p>增加Sink的个数可以增加Sink消费event的能力。Sink也不是越多越好够用就行，过多的Sink会占用系统资源，造成系统资源不必要的浪费。</p>
+<p>batchSize参数决定Sink一次批量从Channel读取的event条数，适当调大这个参数可以提高Sink从Channel搬出event的性能。</p>
+</li>
+</ul>
+<h3 id="flume数据是否会丢失？"><a href="#flume数据是否会丢失？" class="headerlink" title="flume数据是否会丢失？"></a>flume数据是否会丢失？</h3><ul>
+<li>flume采用事务机制，Flume使用两个独立的事务分别负责从Soucrce到Channel，以及从Channel到Sink的事件传递。如果因为某种原因使得事件无法记录，那么事务将会回滚。</li>
+<li>正是因为flume完善的事务机制，flume不会丢失数据。</li>
+<li>唯一可能丢失数据的情况是Channel采用memoryChannel，agent宕机导致数据丢失，或者Channel存储数据已满，导致Source不再写入，未写入的数据丢失。</li>
+<li>Flume不会丢失数据，但是有可能造成数据的重复，例如数据已经成功由Sink发出，但是没有接收到响应，Sink会再次发送数据，此时可能会导致数据的重复。</li>
+</ul>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/flume/">flume</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a>
+                    
+                      <a class="hover-with-bg" href="/tags/flume/">flume</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/06/24/kafka/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">kafka</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/06/04/hive/">
+                        <span class="hidden-mobile">Hive</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.2/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js" ></script>
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      $('#local-search-input').on('click', function() {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      });
+      $('#modalSearch').on('shown.bs.modal', function() {
+        $('#local-search-input').focus();
+      });
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
