@@ -187,7 +187,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      9.4k 字
+      9.5k 字
     </span>
   
 
@@ -197,7 +197,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      105
+      106
        分钟
     </span>
   
@@ -231,7 +231,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2023年3月20日 下午
+                  本文最后更新于：2023年4月13日 下午
                 
               </p>
             
@@ -778,6 +778,12 @@ cast(&#39;1000&#39; as int)
 </li>
 <li><p>优化</p>
 <ul>
+<li><p>sql优化</p>
+<ul>
+<li>大表对大表：尽量减少数据集，可以通过分区表，避免扫描全表或者全字段</li>
+<li>大表对小表：设置自动识别小表，将小表放入内存中去执行</li>
+</ul>
+</li>
 <li><p>mapjoin  默认打开 ，不要关闭</p>
 </li>
 <li><p>先执行where再执行join,可以通过先where过滤一部分数据，再进行连接</p>
@@ -788,6 +794,8 @@ cast(&#39;1000&#39; as int)
 <ul>
 <li>CombinehiveInputformat ===&gt;减少切片个数，减少maptask个数</li>
 <li>JVM重用</li>
+<li>使用concatenate命令   alter table B partition(day=20201224) concatenate;</li>
+<li>ALTER TABLE A ARCHIVE PARTITION(dt=’2021-05-07’, hr=’12’);</li>
 </ul>
 </li>
 <li><p>不影响业务逻辑的情况下可以开启map端combiner</p>
@@ -1102,6 +1110,7 @@ cast(&#39;1000&#39; as int)
 <li>度量值的特点就是可以累加</li>
 </ul>
 </li>
+<li>通过上面的四步，结合数仓的业务事实，得出业务总线矩阵图</li>
 </ul>
 </li>
 </ul>

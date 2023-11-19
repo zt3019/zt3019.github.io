@@ -187,7 +187,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      10.1k 字
+      11.8k 字
     </span>
   
 
@@ -197,7 +197,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      128
+      149
        分钟
     </span>
   
@@ -231,7 +231,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2021年12月29日 晚上
+                  本文最后更新于：2023年4月12日 下午
                 
               </p>
             
@@ -447,20 +447,51 @@
 <li>JDBC自定义sink</li>
 </ul>
 <h2 id="Flink中的Window（重点）"><a href="#Flink中的Window（重点）" class="headerlink" title="Flink中的Window（重点）"></a>Flink中的Window（重点）</h2><ul>
+<li><p>flink中处理一般是分流–》开窗–》聚合 </p>
+</li>
+<li><p>窗口就是将无限流切割成为有限流的一种方式，它会将流数据分发到有限大小的桶中进行分析</p>
+</li>
+<li><p>窗口类型：时间窗口，计数窗口</p>
+</li>
+<li><p>时间窗口</p>
+<ul>
+<li>滚动时间窗口</li>
+<li>滑动时间窗口</li>
+<li>会话窗口（flink支持）</li>
+</ul>
+</li>
+<li><p>计数窗口</p>
+<ul>
+<li>滚动计数窗口</li>
+<li>滑动计数窗口</li>
+</ul>
+</li>
 <li><p>增量聚合函数 AggregateFunction</p>
+<ul>
+<li>来一条数据进行一次运算，只保存一个简单的状态（累加器）</li>
+<li>当窗口闭合的时候，增量聚合完成</li>
+<li>处理时间：当机器时间超过窗口结束时间的时候，窗口闭合</li>
+<li>来一条数据计算一次</li>
+</ul>
 </li>
 <li><p>全窗口聚合函数 ProcessWindowFunction</p>
+<ul>
+<li>先把窗口所有的数据收集起来，等到计算的时候会遍历所有数据</li>
+<li>可以访问到窗口信息</li>
+</ul>
+<p>可以将增量窗口聚合函数和全窗口聚合函数结合使用，ProcessWindowFunction提供更多对数据流的访问权限（比如窗口开始时间，窗口结束时间），但是耗性能，先用AggregateFunction处理，最后传一个结果值给ProcessWindowFunction。</p>
 <figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><code class="hljs scala"><span class="hljs-keyword">import</span> org.apache.flink.api.common.functions.<span class="hljs-type">AggregateFunction</span><br><span class="hljs-keyword">import</span> org.apache.flink.streaming.api.scala._<br><span class="hljs-keyword">import</span> org.apache.flink.streaming.api.scala.function.<span class="hljs-type">ProcessWindowFunction</span><br><span class="hljs-keyword">import</span> org.apache.flink.streaming.api.windowing.time.<span class="hljs-type">Time</span><br><span class="hljs-keyword">import</span> org.apache.flink.streaming.api.windowing.windows.<span class="hljs-type">TimeWindow</span><br><span class="hljs-keyword">import</span> org.apache.flink.util.<span class="hljs-type">Collector</span><br><span class="hljs-comment">//最低最高温度</span><br><span class="hljs-class"><span class="hljs-keyword">object</span> <span class="hljs-title">MinMaxTemp</span> </span>&#123;<br><br>  <span class="hljs-comment">//样例类</span><br>  <span class="hljs-keyword">case</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MinMaxTemp</span>(<span class="hljs-params">id: <span class="hljs-type">String</span>, min: <span class="hljs-type">Double</span>, max: <span class="hljs-type">Double</span>, endTs: <span class="hljs-type">Long</span></span>)</span><br><span class="hljs-class"></span><br><span class="hljs-class">  <span class="hljs-title">def</span> <span class="hljs-title">main</span>(<span class="hljs-params">args: <span class="hljs-type">Array</span>[<span class="hljs-type">String</span>]</span>)</span>: <span class="hljs-type">Unit</span> = &#123;<br>    <span class="hljs-keyword">val</span> env: <span class="hljs-type">StreamExecutionEnvironment</span> = <span class="hljs-type">StreamExecutionEnvironment</span>.getExecutionEnvironment<br>    env.setParallelism(<span class="hljs-number">1</span>)<br><br>    <span class="hljs-keyword">val</span> stream: <span class="hljs-type">DataStream</span>[<span class="hljs-type">SensorReading</span>] = env.addSource(<span class="hljs-keyword">new</span> <span class="hljs-type">SensorSource</span>)<br>    stream.keyBy(_.id).timeWindow(<span class="hljs-type">Time</span>.seconds(<span class="hljs-number">5</span>))<br>      .aggregate(<span class="hljs-keyword">new</span> <span class="hljs-type">HighAndLowAgg</span>, <span class="hljs-keyword">new</span> <span class="hljs-type">WindowResult</span>)<br>      .print()<br>    env.execute()<br>  &#125;<br><span class="hljs-comment">//增量聚合函数</span><br>  <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">HighAndLowAgg</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">AggregateFunction</span>[<span class="hljs-type">SensorReading</span>, (<span class="hljs-type">String</span>, <span class="hljs-type">Double</span>, <span class="hljs-type">Double</span>), (<span class="hljs-type">String</span>, <span class="hljs-type">Double</span>, <span class="hljs-type">Double</span>)] </span>&#123;<br>    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">createAccumulator</span></span>(): (<span class="hljs-type">String</span>, <span class="hljs-type">Double</span>, <span class="hljs-type">Double</span>) = (<span class="hljs-string">&quot;&quot;</span>, <span class="hljs-type">Double</span>.<span class="hljs-type">MaxValue</span>, <span class="hljs-type">Double</span>.<span class="hljs-type">MinValue</span>)<br><br>    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">add</span></span>(value: <span class="hljs-type">SensorReading</span>, accumulator: (<span class="hljs-type">String</span>, <span class="hljs-type">Double</span>, <span class="hljs-type">Double</span>)): (<span class="hljs-type">String</span>, <span class="hljs-type">Double</span>, <span class="hljs-type">Double</span>) =<br>      (value.id, value.temperature.min(accumulator._2), value.temperature.max(accumulator._3))<br><br>    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">getResult</span></span>(accumulator: (<span class="hljs-type">String</span>, <span class="hljs-type">Double</span>, <span class="hljs-type">Double</span>)): (<span class="hljs-type">String</span>, <span class="hljs-type">Double</span>, <span class="hljs-type">Double</span>) = accumulator<br><br>    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">merge</span></span>(a: (<span class="hljs-type">String</span>, <span class="hljs-type">Double</span>, <span class="hljs-type">Double</span>), b: (<span class="hljs-type">String</span>, <span class="hljs-type">Double</span>, <span class="hljs-type">Double</span>)): (<span class="hljs-type">String</span>, <span class="hljs-type">Double</span>, <span class="hljs-type">Double</span>) =<br>      (a._1, a._2.min(b._2), a._3.max(b._3))<br>  &#125;<br><span class="hljs-comment">//全窗口聚合函数</span><br>  <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">WindowResult</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">ProcessWindowFunction</span>[(<span class="hljs-type">String</span>, <span class="hljs-type">Double</span>, <span class="hljs-type">Double</span>), <span class="hljs-type">MinMaxTemp</span>, <span class="hljs-type">String</span>, <span class="hljs-type">TimeWindow</span>] </span>&#123;<br>    <span class="hljs-keyword">override</span> <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">process</span></span>(key: <span class="hljs-type">String</span>, context: <span class="hljs-type">Context</span>, elements: <span class="hljs-type">Iterable</span>[(<span class="hljs-type">String</span>, <span class="hljs-type">Double</span>, <span class="hljs-type">Double</span>)], out: <span class="hljs-type">Collector</span>[<span class="hljs-type">MinMaxTemp</span>]): <span class="hljs-type">Unit</span> = &#123;<br>      <span class="hljs-keyword">val</span> minMax: (<span class="hljs-type">String</span>, <span class="hljs-type">Double</span>, <span class="hljs-type">Double</span>) = elements.head<br>      out.collect(<span class="hljs-type">MinMaxTemp</span>(key, minMax._2, minMax._3, context.window.getEnd))<br><br>    &#125;<br>  &#125;<br><br>&#125;<br><br></code></pre></td></tr></table></figure></li>
 </ul>
 <h2 id="Flink中的时间语义和Watermark（重点）"><a href="#Flink中的时间语义和Watermark（重点）" class="headerlink" title="Flink中的时间语义和Watermark（重点）"></a>Flink中的时间语义和Watermark（重点）</h2><h3 id="时间语义"><a href="#时间语义" class="headerlink" title="时间语义"></a>时间语义</h3><ul>
 <li>事件时间（event time）<ul>
 <li>真正正确的时间，时间语义完全正确。事件创建的事件（必须包含在数据源中的元素里面）</li>
 <li>是事件创建的时间。它通常由事件中的时间戳描述，例如采集的日志数据中，每一条日志都会记录自己的生成时间，Flink通过时间戳分配器访问事件时间戳。</li>
+<li>flink事件事件单位是ms，代码中需要注意</li>
 </ul>
 </li>
 <li>机器时间<ul>
-<li>Ingestion Time :数据进入Flink的时间,与机器相关</li>
-<li>Processing Time: 是每一个执行基于时间操作的算子的本地系统时间，与机器相关，默认的时间属性就是Processing Time</li>
+<li>Ingestion Time（摄入时间） :数据进入Flink的时间,与机器相关</li>
+<li>Processing Time（处理时间）: 是每一个执行基于时间操作的算子的本地系统时间，与机器相关，默认的时间属性就是Processing Time</li>
 </ul>
 </li>
 </ul>
@@ -468,6 +499,7 @@
 <li>当Flink以Event Time模式处理数据流时，它会根据数据里的时间戳来处理基于时间的算子</li>
 <li>由于网络，分布式等原因，会导致乱序数据的产生</li>
 <li>乱序数据会让窗口计算不准确</li>
+<li>窗口的区间是左闭右开区间</li>
 <li>Watermark的特点<ul>
 <li>水位线：系统认为时间戳小于水位线的事件都已经达到了</li>
 <li>水位线是一种特殊的事件，在source算子后面插入到流中</li>
@@ -479,6 +511,7 @@
 <li>Flink默认每隔200ms（机器时间）向数据流中插入一次Watermark</li>
 <li><font color=red>水位线产生的公式：水位线=系统观察到的最大事件时间 - 最大延迟时间</font></li>
 <li><font color=red>最大延迟时间由程序员自己设定</font></li>
+<li>分配时间戳和水位线一定要在keyBy之前进行</li>
 </ul>
 </li>
 <li>为了保证事件时间的正确性：Flink有三重保障<ul>
@@ -543,6 +576,8 @@
 <li>所有用于复杂事件处理的状态机。例如，若在一分钟内收到两个相差20度以上的温度读数，则发出警告，这就是有状态的计算。</li>
 <li>流与流之间的所有关联操作，以及流与静态表或动态表之间的关联操作，都是有状态的计算。</li>
 </ul>
+</li>
+<li><p>可以认为状态就是一个本地变量，可以被任务的业务逻辑访问</p>
 </li>
 <li><p>无状态流处理每次只转换一条输入记录，并且仅根据最新的输入记录输出结果，有状态流处理维护所有已经处理记录的状态值，并根据每条新输入的记录更新状态，因此输出记录反映的是综合考虑多个事件之后的结果。</p>
 </li>
@@ -621,17 +656,64 @@
 </ul>
 </li>
 <li>这种检查点的保存和恢复机制可以为应用程序提供“精确一次”（exactly-once）的一致性，因为所有算子都会保存检查点并恢复其所有状态，这样一来所有的输入流都会被重置到检查点完成时的位置。</li>
-</ul>
-<h4 id="状态一致性"><a href="#状态一致性" class="headerlink" title="状态一致性"></a>状态一致性</h4><ul>
-<li>状态一致性级别</li>
-<li>flink 端到端（end-to-end）状态一致性<ul>
-<li>内部保证 checkpoint</li>
-<li>source端  可重设数据的读取位置</li>
-<li>sink 端      从故障恢复时，数据不会重复写入外部系统<ul>
-<li>幂等写入</li>
-<li>事物写入</li>
+<li>保存点：flink提供了可以自定义的镜像保存功能，就是保存点（savepoints）<ul>
+<li>原则上，创建保存点使用的算法与检查点完全相同，因此保存点可以认为就是具有一些额外元数据的检查点</li>
+<li>flink不会自动创建保存点，需要用户手动执行的（在程序中编写相应的代码）</li>
 </ul>
 </li>
+</ul>
+<h4 id="状态一致性"><a href="#状态一致性" class="headerlink" title="状态一致性"></a>状态一致性</h4><ul>
+<li><p>状态一致性级别</p>
+</li>
+<li><p>flink 端到端（end-to-end）状态一致性</p>
+<ul>
+<li><p>内部保证 checkpoint</p>
+</li>
+<li><p>source端  可重设数据的读取位置   (Kafka,FileSystem)</p>
+</li>
+<li><p>sink 端      从故障恢复时，数据不会重复写入外部系统</p>
+<ul>
+<li><p>幂等写入：   幂等操作就是指：一个操作，可以重复执行很多次，但只导致一次结果更改，也就是说，后面再重复执行就不起作用了</p>
+</li>
+<li><p>事物写入：  具有原子性，一个事务中的一系列操作要么全部成功，要么一个都不做</p>
+<ul>
+<li>实现思想：构建的事务对应着checkpoint，等到checkpoint 真正完成的时候，才把所有对应的结果写入sink系统中</li>
+<li>实现方式：<ul>
+<li>预写日志   (宕机会导致不能实现exactly-once)</li>
+<li>两阶段提交（真正实现exactly-once）外部sink系统必须要提供事务</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>不同sink的一致性保证</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://imgse.com/i/ppOOckT"><img src="https://s1.ax1x.com/2023/04/12/ppOOckT.png" srcset="/img/loading.gif" lazyload alt="ppOOckT.png"></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Flink-CEP"><a href="#Flink-CEP" class="headerlink" title="Flink CEP"></a>Flink CEP</h2><ul>
+<li><p>一个或多个由简单事件构成的事件流通过一定的规则匹配，然后输出用户想得到的数据，满足规则的复杂事件。</p>
+<ul>
+<li>目标：从有序的简单事件流中发现一些高阶特征</li>
+<li>输入：一个或多个由简单事件构成的事件流</li>
+<li>处理：识别简单事件之间的内在联系，多个符合一定规则的简单事件构成复杂事件</li>
+<li>输出：满足规则的复杂事件</li>
+</ul>
+</li>
+<li><p>CEP用于分析低延迟、频繁产生的不同来源的事件流。CEP可以帮助在复杂的、不相关的事件流中找出有意义的模式和复杂的关系，以接近实时或准实时的获得通知并阻止一些行为。</p>
+<p>CEP支持在流上进行模式匹配，根据模式的条件不同，分为连续的条件或不连续的条件；模式的条件允许有时间的限制，当在条件范围内没有达到满足的条件时，会导致模式匹配超时。</p>
+</li>
+<li><p>功能</p>
+<ul>
+<li>输入的流数据，尽快产生结果</li>
+<li>在2个event流上，基于时间进行聚合类的计算</li>
+<li>提供实时/准实时的警告和通知</li>
+<li>在多样的数据源中产生关联并分析模式</li>
+<li>高吞吐、低延迟的处理</li>
 </ul>
 </li>
 </ul>
@@ -725,8 +807,54 @@
 </ul>
 </li>
 </ul>
-<h3 id="流式TopN"><a href="#流式TopN" class="headerlink" title="流式TopN"></a>流式TopN</h3><ul>
-<li></li>
+<h3 id="Flink-sql-支持的语法"><a href="#Flink-sql-支持的语法" class="headerlink" title="Flink sql 支持的语法"></a>Flink sql 支持的语法</h3><ul>
+<li><p>````sql<br>insert:<br>  INSERT INTO tableReference<br>  query</p>
+<p>query:<br>  values<br>  | {</p>
+<pre><code>  select
+  | selectWithoutFrom
+  | query UNION [ ALL ] query
+  | query EXCEPT query
+  | query INTERSECT query
+&#125;
+[ ORDER BY orderItem [, orderItem ]* ]
+[ LIMIT &#123; count | ALL &#125; ]
+[ OFFSET start &#123; ROW | ROWS &#125; ]
+[ FETCH &#123; FIRST | NEXT &#125; [ count ] &#123; ROW | ROWS &#125; ONLY]
+</code></pre>
+<p>orderItem:<br>  expression [ ASC | DESC ]</p>
+<p>select:<br>  SELECT [ ALL | DISTINCT ]<br>  { * | projectItem [, projectItem ]* }<br>  FROM tableExpression<br>  [ WHERE booleanExpression ]<br>  [ GROUP BY { groupItem [, groupItem ]* } ]<br>  [ HAVING booleanExpression ]<br>  [ WINDOW windowName AS windowSpec [, windowName AS windowSpec ]* ]</p>
+<p>selectWithoutFrom:<br>  SELECT [ ALL | DISTINCT ]<br>  { * | projectItem [, projectItem ]* }</p>
+<p>projectItem:<br>  expression [ [ AS ] columnAlias ]<br>  | tableAlias . *</p>
+<p>tableExpression:<br>  tableReference [, tableReference ]*<br>  | tableExpression [ NATURAL ] [ LEFT | RIGHT | FULL ] JOIN tableExpression [ joinCondition ]</p>
+<p>joinCondition:<br>  ON booleanExpression<br>  | USING ‘(‘ column [, column ]* ‘)’</p>
+<p>tableReference:<br>  tablePrimary<br>  [ [ AS ] alias [ ‘(‘ columnAlias [, columnAlias ]* ‘)’ ] ]</p>
+<p>tablePrimary:<br>  [ TABLE ] [ [ catalogName . ] schemaName . ] tableName<br>  | LATERAL TABLE ‘(‘ functionName ‘(‘ expression [, expression ]* ‘)’ ‘)’<br>  | UNNEST ‘(‘ expression ‘)’</p>
+<p>values:<br>  VALUES expression [, expression ]*</p>
+<p>groupItem:<br>  expression<br>  | ‘(‘ ‘)’<br>  | ‘(‘ expression [, expression ]* ‘)’<br>  | CUBE ‘(‘ expression [, expression ]* ‘)’<br>  | ROLLUP ‘(‘ expression [, expression ]* ‘)’<br>  | GROUPING SETS ‘(‘ groupItem [, groupItem ]* ‘)’</p>
+<p>windowRef:</p>
+<pre><code>windowName
+</code></pre>
+<p>  | windowSpec</p>
+<p>windowSpec:</p>
+<pre><code>[ windowName ]
+&#39;(&#39;
+[ ORDER BY orderItem [, orderItem ]* ]
+[ PARTITION BY expression [, expression ]* ]
+[
+    RANGE numericOrIntervalExpression &#123;PRECEDING&#125;
+  | ROWS numericExpression &#123;PRECEDING&#125;
+]
+&#39;)&#39;
+</code></pre>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs"><br>  <br><br>#### Group Window<br><br>* 根据窗口数据划分的不同，目前Flink有如下三种Bounded Window<br><br>  - Tumble,滚动窗口，窗口数据有固定的大小，窗口数据无叠加<br><br>    ````sqlite<br>    SELECT <br>        [gk],<br>        [TUMBLE_START(timeCol, size)], <br>        [TUMBLE_END(timeCol, size)], <br>        agg1(col1), <br>        ... <br>        aggn(colN)<br>    FROM Tab1<br>    GROUP BY [gk], TUMBLE(timeCol, size)<br>    <br>    /*<br>    [gk] 决定了是否需要按照字段进行聚合；<br>    TUMBLE_START 代表窗口开始时间；<br>    TUMBLE_END 代表窗口结束时间；<br>    timeCol 是流表中表示时间字段；<br>    size 表示窗口的大小，如 秒、分钟、小时、天。<br>    */<br>    -- 举个例子，假如我们要计算每个人每天的订单量，按照 user 进行聚合分组：<br>    <br>    SELECT user, <br>    TUMBLE_START(rowtime, INTERVAL ‘1’ DAY) as wStart, <br>    SUM(amount) <br>    FROM Orders <br>    GROUP BY TUMBLE(rowtime, INTERVAL ‘1’ DAY), user;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p>Hop,滑动窗口，窗口数据有固定大小，有固定的窗口重建频率，窗口数据有叠加</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> <br>    [gk], <br>    [HOP_START(timeCol, slide, <span class="hljs-keyword">size</span>)] ,  <br>    [HOP_END(timeCol, slide, <span class="hljs-keyword">size</span>)],<br>    agg1(col1), <br>    ... <br>    aggN(colN) <br><span class="hljs-keyword">FROM</span> Tab1<br><span class="hljs-keyword">GROUP</span> <span class="hljs-keyword">BY</span> [gk], HOP(timeCol, slide, <span class="hljs-keyword">size</span>)<br><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">[gk] 决定了是否需要按照字段进行聚合；</span><br><span class="hljs-comment">HOP_START 表示窗口开始时间；</span><br><span class="hljs-comment">HOP_END 表示窗口结束时间；</span><br><span class="hljs-comment">timeCol 表示流表中表示时间字段；</span><br><span class="hljs-comment">slide 表示每次窗口滑动的大小；</span><br><span class="hljs-comment">size 表示整个窗口的大小，如 秒、分钟、小时、天。</span><br><span class="hljs-comment">*/</span><br><span class="hljs-comment">-- 我们要每过一小时计算一次过去 24 小时内每个商品的销量：</span><br><span class="hljs-keyword">SELECT</span> product, <br><span class="hljs-keyword">SUM</span>(amount) <br><span class="hljs-keyword">FROM</span> Orders <br><span class="hljs-keyword">GROUP</span> <span class="hljs-keyword">BY</span> HOP(rowtime, <span class="hljs-built_in">INTERVAL</span> <span class="hljs-string">&#x27;1&#x27;</span> <span class="hljs-keyword">HOUR</span>, <span class="hljs-built_in">INTERVAL</span> <span class="hljs-string">&#x27;1&#x27;</span> <span class="hljs-keyword">DAY</span>), product<br></code></pre></td></tr></table></figure></li>
+<li><p>Session, 会话窗口，窗口数据没有固定的大小，根据窗口数据活跃程度划分窗口，窗口数据无叠加</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> <br>    [gk], <br>    SESSION_START(timeCol, gap) <span class="hljs-keyword">AS</span> winStart,  <br>    SESSION_END(timeCol, gap) <span class="hljs-keyword">AS</span> winEnd,<br>    agg1(col1),<br>     ... <br>    aggn(colN)<br><span class="hljs-keyword">FROM</span> Tab1<br><span class="hljs-keyword">GROUP</span> <span class="hljs-keyword">BY</span> [gk], <span class="hljs-keyword">SESSION</span>(timeCol, gap)<br><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">[gk] 决定了是否需要按照字段进行聚合；</span><br><span class="hljs-comment">SESSION_START 表示窗口开始时间；</span><br><span class="hljs-comment">SESSION_END 表示窗口结束时间；</span><br><span class="hljs-comment">timeCol 表示流表中表示时间字段；</span><br><span class="hljs-comment">gap 表示窗口数据非活跃周期的时长。</span><br><span class="hljs-comment">*/</span><br><span class="hljs-comment">-- 例如，我们需要计算每个用户访问时间 12 小时内的订单量：</span><br><span class="hljs-keyword">SELECT</span> <br><span class="hljs-keyword">user</span>, <br>SESSION_START(rowtime, <span class="hljs-built_in">INTERVAL</span> ‘<span class="hljs-number">12</span>’ <span class="hljs-keyword">HOUR</span>) <span class="hljs-keyword">AS</span> sStart, <br>SESSION_ROWTIME(rowtime, <span class="hljs-built_in">INTERVAL</span> ‘<span class="hljs-number">12</span>’ <span class="hljs-keyword">HOUR</span>) <span class="hljs-keyword">AS</span> sEnd, <br><span class="hljs-keyword">SUM</span>(amount) <br><span class="hljs-keyword">FROM</span> Orders <br><span class="hljs-keyword">GROUP</span> <span class="hljs-keyword">BY</span> <span class="hljs-keyword">SESSION</span>(rowtime, <span class="hljs-built_in">INTERVAL</span> ‘<span class="hljs-number">12</span>’ <span class="hljs-keyword">HOUR</span>), <span class="hljs-keyword">user</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
 </ul>
 
             </div>
