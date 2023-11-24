@@ -113,7 +113,6 @@ deploy:
   type: 'git'
   repository:
     github: git@github.com:zt3019/zt3019.github.io.git
-    coding: git@e.coding.net:daxiazou/daxiazou.coding.me/daxiazou.coding.me.git
   branch: master
 
 

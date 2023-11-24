@@ -1,6 +1,6 @@
 ---
 title: shell介绍
-date:
+date: 2020-10-31 11:28:48
 updated:
 tags:
 - shell
