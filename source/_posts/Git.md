@@ -542,3 +542,4 @@ banner_img: https://tse2-mm.cn.bing.net/th/id/OIP-C.R1Bi3fNDyYjLsXdg9OqoIAHaEo?r
 
   - 配置别名也可以直接修改这个文件，如果改错了，可以删掉文件重新通过命令配置。
 
+* 内容测试
