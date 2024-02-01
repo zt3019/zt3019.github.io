@@ -231,7 +231,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2023年11月28日 上午
+                  本文最后更新于：2024年2月1日 中午
                 
               </p>
             
@@ -318,7 +318,7 @@
 <h1 id="git-reset命令既可以回退版本，也可以把暂存区的修改回退到工作区。当我们用HEAD时，表示最新的版本。"><a href="#git-reset命令既可以回退版本，也可以把暂存区的修改回退到工作区。当我们用HEAD时，表示最新的版本。" class="headerlink" title="git reset命令既可以回退版本，也可以把暂存区的修改回退到工作区。当我们用HEAD时，表示最新的版本。"></a>git reset命令既可以回退版本，也可以把暂存区的修改回退到工作区。当我们用HEAD时，表示最新的版本。</h1><p>git reset HEAD readme.txt</p>
 <h1 id="丢弃工作区的修改"><a href="#丢弃工作区的修改" class="headerlink" title="丢弃工作区的修改"></a>丢弃工作区的修改</h1><p>git checkout – readme.txt<br>#git checkout其实是用版本库里的版本替换工作区的版本，无论工作区是修改还是删除，都可以“一键还原”。</p>
 <h1 id="删除文件，然后commit文件就删除了"><a href="#删除文件，然后commit文件就删除了" class="headerlink" title="删除文件，然后commit文件就删除了"></a>删除文件，然后commit文件就删除了</h1><p>rm test.txt</p>
-<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs clean"><br>### 远程仓库<br><br>* 采用github作为远程在线的git服务器<br><br>* 注册一个github账号，本地git仓库和github仓库之间的传输是通过SSH加密的<br><br>* 步骤<br><br>  ````bash<br>  #第<span class="hljs-number">1</span>步：创建SSH Key。在用户主目录下，看看有没有.ssh目录，如果有，再看看这个目录下有没有id_rsa和#id_rsa.pub这两个文件。有的话也可以删掉重新创建ssh key。如果没有，打开Shell（Windows下打开Git #Bash），创建SSH Key：<br>  ssh-keygen -t rsa -C <span class="hljs-string">&quot;youremail@example.com&quot;</span><br>  <br>  #第二步：在github中将公钥id_rsa.pub的内容添加<br>  <br>  #为什么GitHub需要SSH Key呢？因为GitHub需要识别出你推送的提交确实是你推送的，而不是别人冒充的，而Git支持SSH协议，所以，GitHub只要知道了你的公钥，就可以确认只有你自己才能推送。<br>  <br>  #当然，GitHub允许你添加多个Key。假定你有若干电脑，你一会儿在公司提交，一会儿在家里提交，只要把每台电脑的Key都添加到GitHub，就可以在每台电脑上往GitHub推送了。<br>  <br>  #最后友情提示，在GitHub上免费托管的Git仓库，任何人都可以看到喔（但只有你自己才能改）。所以，不要把敏感信息放进去。<br>  <br>  #如果你不想让别人看到Git库，有两个办法，一个是交点保护费，让GitHub把公开的仓库变成私有的，这样别人就看不见了（不可读更不可写）。另一个办法是自己动手，搭一个Git服务器，因为是你自己的Git服务器，所以别人也是看不见的。这个方法我们后面会讲到的，相当简单，公司内部开发必备。<br>  <br>  #确保你拥有一个GitHub账号后，我们就即将开始远程仓库的学习。<br></code></pre></td></tr></table></figure></li>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs clean"><br>### 远程仓库<br><br>* 采用github作为远程在线的git服务器<br><br>* 注册一个github账号，本地git仓库和github仓库之间的传输是通过SSH加密的<br><br>* 步骤<br><br>  ````bash<br>  #第<span class="hljs-number">1</span>步：创建SSH Key。在C盘当前用户的主目录下，看看有没有.ssh目录，如果有，再看看这个目录下有没有id_rsa和#id_rsa.pub这两个文件。有的话也可以删掉重新创建ssh key。如果没有，打开Shell（Windows下打开Git #Bash），创建SSH Key：<br>  ssh-keygen -t rsa -C <span class="hljs-string">&quot;youremail@example.com&quot;</span><br>  <br>  #第二步：在github中将公钥id_rsa.pub的内容添加<br>  <br>  #为什么GitHub需要SSH Key呢？因为GitHub需要识别出你推送的提交确实是你推送的，而不是别人冒充的，而Git支持SSH协议，所以，GitHub只要知道了你的公钥，就可以确认只有你自己才能推送。<br>  <br>  #当然，GitHub允许你添加多个Key。假定你有若干电脑，你一会儿在公司提交，一会儿在家里提交，只要把每台电脑的Key都添加到GitHub，就可以在每台电脑上往GitHub推送了。<br>  <br>  #最后友情提示，在GitHub上免费托管的Git仓库，任何人都可以看到喔（但只有你自己才能改）。所以，不要把敏感信息放进去。<br>  <br>  #如果你不想让别人看到Git库，有两个办法，一个是交点保护费，让GitHub把公开的仓库变成私有的，这样别人就看不见了（不可读更不可写）。另一个办法是自己动手，搭一个Git服务器，因为是你自己的Git服务器，所以别人也是看不见的。这个方法我们后面会讲到的，相当简单，公司内部开发必备。<br>  <br>  #确保你拥有一个GitHub账号后，我们就即将开始远程仓库的学习。<br></code></pre></td></tr></table></figure></li>
 <li><p><img src="D:\图片\gtihub添加ssh公钥.png" srcset="/img/loading.gif" lazyload></p>
 </li>
 </ul>
@@ -331,7 +331,7 @@
 </li>
 <li><p>第二步：和新创建的远程github仓库进行关联</p>
 <ul>
-<li>````bash<br>git remote add origin <a href="mailto:&#103;&#x69;&#116;&#x40;&#x67;&#105;&#116;&#x68;&#117;&#x62;&#46;&#x63;&#x6f;&#109;">&#103;&#x69;&#116;&#x40;&#x67;&#105;&#116;&#x68;&#117;&#x62;&#46;&#x63;&#x6f;&#109;</a>:zt3019/learngit.git<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs crmsh"><br>- 第三步：将本地库的所有内容推送到远程库上<br><br>  - ````bash<br>    <span class="hljs-comment">#添加关联后，远程库的名字叫origin，这是git的默认叫法，也可以修改</span><br>    git push -u origin <span class="hljs-keyword">master</span><br>    <span class="hljs-title">#由于远程库是空的，我们第一次推送master</span>分支时，加上了-u参数，Git不但会把本地的<span class="hljs-literal">master</span>分支内容推送的远程新的<span class="hljs-literal">master</span>分支，还会把本地的<span class="hljs-literal">master</span>分支和远程的<span class="hljs-literal">master</span>分支关联起来，在以后的推送或者拉取时就可以简化命令。<br></code></pre></td></tr></table></figure></li>
+<li>````bash<br>git remote add origin <a href="mailto:&#x67;&#x69;&#116;&#x40;&#x67;&#x69;&#x74;&#104;&#x75;&#98;&#46;&#99;&#x6f;&#x6d;">&#x67;&#x69;&#116;&#x40;&#x67;&#x69;&#x74;&#104;&#x75;&#98;&#46;&#99;&#x6f;&#x6d;</a>:zt3019/learngit.git<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs crmsh"><br>- 第三步：将本地库的所有内容推送到远程库上<br><br>  - ````bash<br>    <span class="hljs-comment">#添加关联后，远程库的名字叫origin，这是git的默认叫法，也可以修改</span><br>    git push -u origin <span class="hljs-keyword">master</span><br>    <span class="hljs-title">#由于远程库是空的，我们第一次推送master</span>分支时，加上了-u参数，Git不但会把本地的<span class="hljs-literal">master</span>分支内容推送的远程新的<span class="hljs-literal">master</span>分支，还会把本地的<span class="hljs-literal">master</span>分支和远程的<span class="hljs-literal">master</span>分支关联起来，在以后的推送或者拉取时就可以简化命令。<br></code></pre></td></tr></table></figure></li>
 </ul>
 </li>
 <li><p>在这之后，需要提交代码到远程库只需要执行push命令</p>
@@ -496,6 +496,12 @@
                 <div class="post-prevnext">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2024/01/03/StarRocks/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">StarRocks</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
