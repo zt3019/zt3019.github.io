@@ -1,4 +1,5 @@
 ---
+
 title: Git
 date: 2023-11-16 18:02:28
 tags:
@@ -122,7 +123,7 @@ banner_img: https://tse2-mm.cn.bing.net/th/id/OIP-C.R1Bi3fNDyYjLsXdg9OqoIAHaEo?r
   * 步骤
 
     ````bash
-    #第1步：创建SSH Key。在用户主目录下，看看有没有.ssh目录，如果有，再看看这个目录下有没有id_rsa和#id_rsa.pub这两个文件。有的话也可以删掉重新创建ssh key。如果没有，打开Shell（Windows下打开Git #Bash），创建SSH Key：
+    #第1步：创建SSH Key。在C盘当前用户的主目录下，看看有没有.ssh目录，如果有，再看看这个目录下有没有id_rsa和#id_rsa.pub这两个文件。有的话也可以删掉重新创建ssh key。如果没有，打开Shell（Windows下打开Git #Bash），创建SSH Key：
     ssh-keygen -t rsa -C "youremail@example.com"
     
     #第二步：在github中将公钥id_rsa.pub的内容添加
@@ -541,3 +542,56 @@ banner_img: https://tse2-mm.cn.bing.net/th/id/OIP-C.R1Bi3fNDyYjLsXdg9OqoIAHaEo?r
   - 而当前用户的Git配置文件放在用户主目录下的一个隐藏文件`.gitconfig`中
 
   - 配置别名也可以直接修改这个文件，如果改错了，可以删掉文件重新通过命令配置。
+
+## 利用git分支，多端更新博客
+
+* 参考博客[链接](https://blog.csdn.net/K1052176873/article/details/122879462)
+
+### 需求：想在不同地方的电脑更新博客
+
+### 解决原理
+
+* hexo博客目录结构
+  - [![目录结构](https://s11.ax1x.com/2024/02/20/pFtSSW8.png)](https://imgse.com/i/pFtSSW8)
+
+* hexo生成的静态页面文件默认放在master分支上，是_config.yml配置文件配置的
+  - [![pFYzbsH.png](https://s11.ax1x.com/2024/02/20/pFYzbsH.png)](https://imgse.com/i/pFYzbsH)
+* 每次写完博客执行hexo deploy的时候，hexo会帮我们把生成好的静态页面文件推到master分支上。
+* 第一次部署好博客时，github给我们创建的唯一一个分支就是master分支，同时也会是github的默认分支。每次git clone 或 git pull时拉取的都是默认分支的代码
+* **hexo delpoy执行时，推送静态页面文件到github，和是否是默认分支是无关的。这是由_config.yml配置文件决定的，写着什么分支就推送到什么分支**
+* 根据hexo提交的特性，现在hexo生成的静态博客文件都放在master分支上。所以我们可以新创建一个hexo分支，然后把hexo分支设置为默认分支。
+
+### 解决办法：
+
+* **把新创建的hexo设置为默认分支，用于存放博客的所有需要的源文件，master分支依然存放静态文件**
+* 在旧电脑上，把必要的博客源文件上传git push到hexo分支。在新电脑上git clone +"仓库地址"，把hexo分支的文件下载下来，剩下的就是安装好hexo环境，随后就可以在新电脑上hexo deploy推送生成的静态页面到master分支上。（因为克隆下来的博客源文件中的_config.yml配置文件写的是master分支）
+* 这种方式创建的两个分支，实际上是完全独立的两个分支。一个是静态页面的文件，一个是博客的源文件。通过`git add . git commit -m "" git push `来更新源文件分支，`hexo deploy`来更新静态页面
+
+#### 具体步骤
+
+1. 在github创建一个hexo分支，并设置其为默认分支
+
+2. 打包将要推送到github上的文件
+
+   - clone该仓库到本地（clone的是hexo默认分支）
+
+   - clone的文件夹里仅留下.git 文件夹，其他的文件都删除
+
+   - 找见我们hexo原位置，将hexo文件夹内除.deploy_git 以外都复制到clone下来的文件夹中
+
+   - 可以配置一下`.gitignore`文件，减少一些非必要文件的上传
+
+     - ````bash
+       .DS_Store
+       Thumbs.db
+       db.json
+       *.log
+       node_modules/
+       public/
+       .deploy*/
+       
+       ````
+
+* 如果已经clone过主题文件，那么需要把theme主题文件夹里的 .git 也删除。因为git不能嵌套上传，最好是显示隐藏文件，检查一下有没有，否则上传的时候会出错，导致你的主题文件无法上传，这样你的配置在别的电脑上就用不了了。
+* 最后将clone并修改之后的文件夹推送到远程库
+
