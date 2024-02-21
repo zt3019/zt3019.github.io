@@ -187,7 +187,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      5.4k 字
+      6.1k 字
     </span>
   
 
@@ -197,7 +197,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      62
+      70
        分钟
     </span>
   
@@ -231,7 +231,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2024年2月1日 中午
+                  本文最后更新于：2024年2月20日 晚上
                 
               </p>
             
@@ -331,7 +331,7 @@
 </li>
 <li><p>第二步：和新创建的远程github仓库进行关联</p>
 <ul>
-<li>````bash<br>git remote add origin <a href="mailto:&#x67;&#x69;&#116;&#x40;&#x67;&#x69;&#x74;&#104;&#x75;&#98;&#46;&#99;&#x6f;&#x6d;">&#x67;&#x69;&#116;&#x40;&#x67;&#x69;&#x74;&#104;&#x75;&#98;&#46;&#99;&#x6f;&#x6d;</a>:zt3019/learngit.git<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs crmsh"><br>- 第三步：将本地库的所有内容推送到远程库上<br><br>  - ````bash<br>    <span class="hljs-comment">#添加关联后，远程库的名字叫origin，这是git的默认叫法，也可以修改</span><br>    git push -u origin <span class="hljs-keyword">master</span><br>    <span class="hljs-title">#由于远程库是空的，我们第一次推送master</span>分支时，加上了-u参数，Git不但会把本地的<span class="hljs-literal">master</span>分支内容推送的远程新的<span class="hljs-literal">master</span>分支，还会把本地的<span class="hljs-literal">master</span>分支和远程的<span class="hljs-literal">master</span>分支关联起来，在以后的推送或者拉取时就可以简化命令。<br></code></pre></td></tr></table></figure></li>
+<li>````bash<br>git remote add origin <a href="mailto:&#103;&#x69;&#116;&#64;&#103;&#x69;&#116;&#104;&#117;&#98;&#46;&#99;&#x6f;&#x6d;">&#103;&#x69;&#116;&#64;&#103;&#x69;&#116;&#104;&#117;&#98;&#46;&#99;&#x6f;&#x6d;</a>:zt3019/learngit.git<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs crmsh"><br>- 第三步：将本地库的所有内容推送到远程库上<br><br>  - ````bash<br>    <span class="hljs-comment">#添加关联后，远程库的名字叫origin，这是git的默认叫法，也可以修改</span><br>    git push -u origin <span class="hljs-keyword">master</span><br>    <span class="hljs-title">#由于远程库是空的，我们第一次推送master</span>分支时，加上了-u参数，Git不但会把本地的<span class="hljs-literal">master</span>分支内容推送的远程新的<span class="hljs-literal">master</span>分支，还会把本地的<span class="hljs-literal">master</span>分支和远程的<span class="hljs-literal">master</span>分支关联起来，在以后的推送或者拉取时就可以简化命令。<br></code></pre></td></tr></table></figure></li>
 </ul>
 </li>
 <li><p>在这之后，需要提交代码到远程库只需要执行push命令</p>
@@ -462,6 +462,65 @@
 </li>
 </ul>
 </li>
+</ul>
+<h2 id="利用git分支，多端更新博客"><a href="#利用git分支，多端更新博客" class="headerlink" title="利用git分支，多端更新博客"></a>利用git分支，多端更新博客</h2><ul>
+<li>参考博客<a target="_blank" rel="noopener" href="https://blog.csdn.net/K1052176873/article/details/122879462">链接</a></li>
+</ul>
+<h3 id="需求：想在不同地方的电脑更新博客"><a href="#需求：想在不同地方的电脑更新博客" class="headerlink" title="需求：想在不同地方的电脑更新博客"></a>需求：想在不同地方的电脑更新博客</h3><h3 id="解决原理"><a href="#解决原理" class="headerlink" title="解决原理"></a>解决原理</h3><ul>
+<li><p>hexo博客目录结构</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://imgse.com/i/pFtSSW8"><img src="https://s11.ax1x.com/2024/02/20/pFtSSW8.png" srcset="/img/loading.gif" lazyload alt="目录结构"></a></li>
+</ul>
+</li>
+<li><p>hexo生成的静态页面文件默认放在master分支上，是_config.yml配置文件配置的</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://imgse.com/i/pFYzbsH"><img src="https://s11.ax1x.com/2024/02/20/pFYzbsH.png" srcset="/img/loading.gif" lazyload alt="pFYzbsH.png"></a></li>
+</ul>
+</li>
+<li><p>每次写完博客执行hexo deploy的时候，hexo会帮我们把生成好的静态页面文件推到master分支上。</p>
+</li>
+<li><p>第一次部署好博客时，github给我们创建的唯一一个分支就是master分支，同时也会是github的默认分支。每次git clone 或 git pull时拉取的都是默认分支的代码</p>
+</li>
+<li><p><strong>hexo delpoy执行时，推送静态页面文件到github，和是否是默认分支是无关的。这是由_config.yml配置文件决定的，写着什么分支就推送到什么分支</strong></p>
+</li>
+<li><p>根据hexo提交的特性，现在hexo生成的静态博客文件都放在master分支上。所以我们可以新创建一个hexo分支，然后把hexo分支设置为默认分支。</p>
+</li>
+</ul>
+<h3 id="解决办法："><a href="#解决办法：" class="headerlink" title="解决办法："></a>解决办法：</h3><ul>
+<li><strong>把新创建的hexo设置为默认分支，用于存放博客的所有需要的源文件，master分支依然存放静态文件</strong></li>
+<li>在旧电脑上，把必要的博客源文件上传git push到hexo分支。在新电脑上git clone +”仓库地址”，把hexo分支的文件下载下来，剩下的就是安装好hexo环境，随后就可以在新电脑上hexo deploy推送生成的静态页面到master分支上。（因为克隆下来的博客源文件中的_config.yml配置文件写的是master分支）</li>
+<li>这种方式创建的两个分支，实际上是完全独立的两个分支。一个是静态页面的文件，一个是博客的源文件。通过<code>git add . git commit -m &quot;&quot; git push </code>来更新源文件分支，<code>hexo deploy</code>来更新静态页面</li>
+</ul>
+<h4 id="具体步骤"><a href="#具体步骤" class="headerlink" title="具体步骤"></a>具体步骤</h4><ol>
+<li><p>在github创建一个hexo分支，并设置其为默认分支</p>
+</li>
+<li><p>打包将要推送到github上的文件</p>
+<ul>
+<li><p>clone该仓库到本地（clone的是hexo默认分支）</p>
+</li>
+<li><p>clone的文件夹里仅留下.git 文件夹，其他的文件都删除</p>
+</li>
+<li><p>找见我们hexo原位置，将hexo文件夹内除.deploy_git 以外都复制到clone下来的文件夹中</p>
+</li>
+<li><p>可以配置一下<code>.gitignore</code>文件，减少一些非必要文件的上传</p>
+<ul>
+<li><pre><code class="bash">.DS_Store
+Thumbs.db
+db.json
+*.log
+node_modules/
+public/
+.deploy*/
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<ul>
+<li>如果已经clone过主题文件，那么需要把theme主题文件夹里的 .git 也删除。因为git不能嵌套上传，最好是显示隐藏文件，检查一下有没有，否则上传的时候会出错，导致你的主题文件无法上传，这样你的配置在别的电脑上就用不了了。</li>
+<li>最后将clone并修改之后的文件夹推送到远程库</li>
 </ul>
 
             </div>

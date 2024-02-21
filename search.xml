@@ -345,7 +345,7 @@
 </li>
 <li><p>第二步：和新创建的远程github仓库进行关联</p>
 <ul>
-<li>````bash<br>git remote add origin <a href="mailto:&#x67;&#x69;&#116;&#x40;&#x67;&#x69;&#x74;&#104;&#x75;&#98;&#46;&#99;&#x6f;&#x6d;">&#x67;&#x69;&#116;&#x40;&#x67;&#x69;&#x74;&#104;&#x75;&#98;&#46;&#99;&#x6f;&#x6d;</a>:zt3019/learngit.git<figure class="highlight crmsh"><table><tr><td class="code"><pre><code class="hljs crmsh"><br>- 第三步：将本地库的所有内容推送到远程库上<br><br>  - ````bash<br>    <span class="hljs-comment">#添加关联后，远程库的名字叫origin，这是git的默认叫法，也可以修改</span><br>    git push -u origin <span class="hljs-keyword">master</span><br>    <span class="hljs-title">#由于远程库是空的，我们第一次推送master</span>分支时，加上了-u参数，Git不但会把本地的<span class="hljs-literal">master</span>分支内容推送的远程新的<span class="hljs-literal">master</span>分支，还会把本地的<span class="hljs-literal">master</span>分支和远程的<span class="hljs-literal">master</span>分支关联起来，在以后的推送或者拉取时就可以简化命令。<br></code></pre></td></tr></table></figure></li>
+<li>````bash<br>git remote add origin <a href="mailto:&#103;&#x69;&#116;&#64;&#103;&#x69;&#116;&#104;&#117;&#98;&#46;&#99;&#x6f;&#x6d;">&#103;&#x69;&#116;&#64;&#103;&#x69;&#116;&#104;&#117;&#98;&#46;&#99;&#x6f;&#x6d;</a>:zt3019/learngit.git<figure class="highlight crmsh"><table><tr><td class="code"><pre><code class="hljs crmsh"><br>- 第三步：将本地库的所有内容推送到远程库上<br><br>  - ````bash<br>    <span class="hljs-comment">#添加关联后，远程库的名字叫origin，这是git的默认叫法，也可以修改</span><br>    git push -u origin <span class="hljs-keyword">master</span><br>    <span class="hljs-title">#由于远程库是空的，我们第一次推送master</span>分支时，加上了-u参数，Git不但会把本地的<span class="hljs-literal">master</span>分支内容推送的远程新的<span class="hljs-literal">master</span>分支，还会把本地的<span class="hljs-literal">master</span>分支和远程的<span class="hljs-literal">master</span>分支关联起来，在以后的推送或者拉取时就可以简化命令。<br></code></pre></td></tr></table></figure></li>
 </ul>
 </li>
 <li><p>在这之后，需要提交代码到远程库只需要执行push命令</p>
@@ -477,12 +477,213 @@
 </ul>
 </li>
 </ul>
+<h2 id="利用git分支，多端更新博客"><a href="#利用git分支，多端更新博客" class="headerlink" title="利用git分支，多端更新博客"></a>利用git分支，多端更新博客</h2><ul>
+<li>参考博客<a href="https://blog.csdn.net/K1052176873/article/details/122879462">链接</a></li>
+</ul>
+<h3 id="需求：想在不同地方的电脑更新博客"><a href="#需求：想在不同地方的电脑更新博客" class="headerlink" title="需求：想在不同地方的电脑更新博客"></a>需求：想在不同地方的电脑更新博客</h3><h3 id="解决原理"><a href="#解决原理" class="headerlink" title="解决原理"></a>解决原理</h3><ul>
+<li><p>hexo博客目录结构</p>
+<ul>
+<li><a href="https://imgse.com/i/pFtSSW8"><img src="https://s11.ax1x.com/2024/02/20/pFtSSW8.png" alt="目录结构"></a></li>
+</ul>
+</li>
+<li><p>hexo生成的静态页面文件默认放在master分支上，是_config.yml配置文件配置的</p>
+<ul>
+<li><a href="https://imgse.com/i/pFYzbsH"><img src="https://s11.ax1x.com/2024/02/20/pFYzbsH.png" alt="pFYzbsH.png"></a></li>
+</ul>
+</li>
+<li><p>每次写完博客执行hexo deploy的时候，hexo会帮我们把生成好的静态页面文件推到master分支上。</p>
+</li>
+<li><p>第一次部署好博客时，github给我们创建的唯一一个分支就是master分支，同时也会是github的默认分支。每次git clone 或 git pull时拉取的都是默认分支的代码</p>
+</li>
+<li><p><strong>hexo delpoy执行时，推送静态页面文件到github，和是否是默认分支是无关的。这是由_config.yml配置文件决定的，写着什么分支就推送到什么分支</strong></p>
+</li>
+<li><p>根据hexo提交的特性，现在hexo生成的静态博客文件都放在master分支上。所以我们可以新创建一个hexo分支，然后把hexo分支设置为默认分支。</p>
+</li>
+</ul>
+<h3 id="解决办法："><a href="#解决办法：" class="headerlink" title="解决办法："></a>解决办法：</h3><ul>
+<li><strong>把新创建的hexo设置为默认分支，用于存放博客的所有需要的源文件，master分支依然存放静态文件</strong></li>
+<li>在旧电脑上，把必要的博客源文件上传git push到hexo分支。在新电脑上git clone +”仓库地址”，把hexo分支的文件下载下来，剩下的就是安装好hexo环境，随后就可以在新电脑上hexo deploy推送生成的静态页面到master分支上。（因为克隆下来的博客源文件中的_config.yml配置文件写的是master分支）</li>
+<li>这种方式创建的两个分支，实际上是完全独立的两个分支。一个是静态页面的文件，一个是博客的源文件。通过<code>git add . git commit -m &quot;&quot; git push </code>来更新源文件分支，<code>hexo deploy</code>来更新静态页面</li>
+</ul>
+<h4 id="具体步骤"><a href="#具体步骤" class="headerlink" title="具体步骤"></a>具体步骤</h4><ol>
+<li><p>在github创建一个hexo分支，并设置其为默认分支</p>
+</li>
+<li><p>打包将要推送到github上的文件</p>
+<ul>
+<li><p>clone该仓库到本地（clone的是hexo默认分支）</p>
+</li>
+<li><p>clone的文件夹里仅留下.git 文件夹，其他的文件都删除</p>
+</li>
+<li><p>找见我们hexo原位置，将hexo文件夹内除.deploy_git 以外都复制到clone下来的文件夹中</p>
+</li>
+<li><p>可以配置一下<code>.gitignore</code>文件，减少一些非必要文件的上传</p>
+<ul>
+<li><pre><code class="bash">.DS_Store
+Thumbs.db
+db.json
+*.log
+node_modules/
+public/
+.deploy*/
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<ul>
+<li>如果已经clone过主题文件，那么需要把theme主题文件夹里的 .git 也删除。因为git不能嵌套上传，最好是显示隐藏文件，检查一下有没有，否则上传的时候会出错，导致你的主题文件无法上传，这样你的配置在别的电脑上就用不了了。</li>
+<li>最后将clone并修改之后的文件夹推送到远程库</li>
+</ul>
 ]]></content>
       <categories>
         <category>git</category>
       </categories>
       <tags>
         <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>HA&amp;ZooKeeper</title>
+    <url>/2021/06/02/HAHA-zk/</url>
+    <content><![CDATA[<h1 id="HA-amp-ZooKeeper"><a href="#HA-amp-ZooKeeper" class="headerlink" title="HA&amp;ZooKeeper"></a>HA&amp;ZooKeeper</h1><h2 id="zookeeper"><a href="#zookeeper" class="headerlink" title="zookeeper"></a>zookeeper</h2><h3 id="zk概述"><a href="#zk概述" class="headerlink" title="zk概述"></a>zk概述</h3><ul>
+<li>ZooKeeper是一个开源的分布式的，为分布式应用提供协调服务的Apache项目。</li>
+<li>设计模式：是一个基于观察者模式设计的分布式服务管理框架，它辅助存储和管理大家都关心的数据，然后接受观察者的注册，一旦这些数据的状态发生变化，Zookeeper就将负责通知已经在Zookeeper上注册的那些观察者做出相应的反应。</li>
+<li>Zookeeper特点，数据结构<ul>
+<li><a href="https://imgtu.com/i/2lpCjI"><img src="https://z3.ax1x.com/2021/06/02/2lpCjI.png" alt="2lpCjI.png"></a></li>
+<li><a href="https://imgtu.com/i/2lpmCQ"><img src="https://z3.ax1x.com/2021/06/02/2lpmCQ.png" alt="2lpmCQ.png"></a></li>
+</ul>
+</li>
+</ul>
+<h3 id="zk实战应用"><a href="#zk实战应用" class="headerlink" title="zk实战应用"></a>zk实战应用</h3><ul>
+<li><p>客户端命令</p>
+</li>
+<li><p>启动客户端：zkCli.sh</p>
+<table>
+<thead>
+<tr>
+<th>命令基本语法</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>help</td>
+<td>显示所有操作命令</td>
+</tr>
+<tr>
+<td>ls path [watch]</td>
+<td>使用 ls 命令来查看当前znode中所包含的内容</td>
+</tr>
+<tr>
+<td>ls2 path [watch]</td>
+<td>查看当前节点数据并能看到更新次数等数据</td>
+</tr>
+<tr>
+<td>create</td>
+<td>普通创建-s  含有序列-e  临时（重启或者超时消失）</td>
+</tr>
+<tr>
+<td>get path [watch]</td>
+<td>获得节点的值</td>
+</tr>
+<tr>
+<td>set</td>
+<td>设置节点的具体值</td>
+</tr>
+<tr>
+<td>stat</td>
+<td>查看节点状态</td>
+</tr>
+<tr>
+<td>delete</td>
+<td>删除节点</td>
+</tr>
+<tr>
+<td>rmr</td>
+<td>递归删除节点</td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+<h3 id="zk内部原理"><a href="#zk内部原理" class="headerlink" title="zk内部原理"></a>zk内部原理</h3><ul>
+<li><p>节点类型</p>
+<p><a href="https://imgtu.com/i/2lpq2j"><img src="https://z3.ax1x.com/2021/06/02/2lpq2j.png" alt="2lpq2j.png"></a></p>
+</li>
+</ul>
+<ul>
+<li><p>Stat结构体</p>
+<ol>
+<li><p>czxid-创建节点的事务zxid</p>
+<p>每次修改ZooKeeper状态都会收到一个zxid形式的时间戳，也就是ZooKeeper事务ID。</p>
+<p>事务ID是ZooKeeper中所有修改总的次序。每个修改都有唯一的zxid，如果zxid1小于zxid2，那么zxid1在zxid2之前发生。</p>
+</li>
+</ol>
+</li>
+<li><p>监听器原理</p>
+<p> <img src="C:\Users\Hasee\AppData\Roaming\Typora\typora-user-images\image-20210602195353003.png" alt="image-20210602195353003"></p>
+</li>
+<li><p>选举机制</p>
+<ul>
+<li><a href="https://imgtu.com/i/2l9oO1"><img src="https://z3.ax1x.com/2021/06/02/2l9oO1.png" alt="2l9oO1.png"></a><ol>
+<li>集群会通过比较先会比较zxid,若zxid相同则比较myid选择leader(每次修改ZooKeeper状态都会收到一个zxid形式的时间戳，也就是ZooKeeper事务ID)</li>
+<li>若第一次启动集群（zxid相等）myid如图所示：则大致流程如下：<ol>
+<li>server1投票给自己，但是票数没到集群机器的半数以上，选举无法进行。server1状态为LOOKING</li>
+<li>server2启动，发起选举，投票给自己，1发现2的myid大，更改选票为2。同理选举依然没法完成。</li>
+<li>3启动，发起选举，投给自己，1，2发现3的myid大。则1，2将选票投给3，3获得三票。成为Leader,1,2更改状态为FOLLOWING。3更改状态为LEADING。</li>
+<li>4启动，发起选举，1，2，3不在是LOOKING状态，不会更改选票信息。交换选票信息后，3为3票，4为一票，少数服从多数，更改选票信息为server3，更改状态为FOLLOWING。</li>
+<li>同4一样</li>
+</ol>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p>ZAB</p>
+<ul>
+<li><p>ZAB协议是专门为zookeeper实现分布式协调功能而设计。zookeeper主要是根据ZAB协议是实现分布式系统数据一致性</p>
+</li>
+<li><p>写数据流程：</p>
+<p><a href="https://imgtu.com/i/2lERBj"><img src="https://z3.ax1x.com/2021/06/02/2lERBj.png" alt="2lERBj.png"></a></p>
+<ul>
+<li>三个服务器会对是否写数据提出意见，都同意那正常执行写操作</li>
+<li>一个server不同意而总票数支持同意，该server自杀再重启，再朝Leader同步信息</li>
+<li>leader不同意，但总票数同意。leader自杀重启，重新选举leader，重启后再向leader同步数据</li>
+<li>为什么会不同意：查看zxid，如果发来的zxid事物请求比自身的大才会同意</li>
+<li>总之就是要尽可能的保持集群数据的一致性。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="HA"><a href="#HA" class="headerlink" title="HA"></a>HA</h2><h3 id="HA概述"><a href="#HA概述" class="headerlink" title="HA概述"></a>HA概述</h3><ul>
+<li>HA（High Availablity）</li>
+<li>实现高可用最重要的是消除单点故障</li>
+<li>防止出现namenode节点挂了，无法正常提供服务</li>
+</ul>
+<h3 id="HA工作机制"><a href="#HA工作机制" class="headerlink" title="HA工作机制"></a>HA工作机制</h3><ul>
+<li><p>故障转移机制 HDFS-HA</p>
+<p><a href="https://imgtu.com/i/2lA1SS"><img src="https://z3.ax1x.com/2021/06/02/2lA1SS.png" alt="2lA1SS.png"></a></p>
+</li>
+<li><p>故障转移机制</p>
+<ul>
+<li>为了保证数据不丢失，一个失效后另一个补上不会丢失数据，日志文件写到第三方平台（相当于2nn）</li>
+<li>新激活的namenode 可以从第三方，读取edits文件将缺少的数据补上，防止数据丢失</li>
+<li>Zkfc检测到假死后是通过zookeeper服务器将信息传到其它的namenode的zkfc</li>
+</ul>
+</li>
+<li><p>YARN-HA</p>
+<p><a href="https://imgtu.com/i/2lAaF0"><img src="https://z3.ax1x.com/2021/06/02/2lAaF0.png" alt="2lAaF0.png"></a></p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>大数据</category>
+        <category>Hadoop</category>
+      </categories>
+      <tags>
+        <tag>zookeeper</tag>
+        <tag>HA</tag>
       </tags>
   </entry>
   <entry>
@@ -1147,148 +1348,6 @@ copyToLocal#与get完全一样
       <tags>
         <tag>Hive</tag>
         <tag>窗口函数</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>HA&amp;ZooKeeper</title>
-    <url>/2021/06/02/HAHA-zk/</url>
-    <content><![CDATA[<h1 id="HA-amp-ZooKeeper"><a href="#HA-amp-ZooKeeper" class="headerlink" title="HA&amp;ZooKeeper"></a>HA&amp;ZooKeeper</h1><h2 id="zookeeper"><a href="#zookeeper" class="headerlink" title="zookeeper"></a>zookeeper</h2><h3 id="zk概述"><a href="#zk概述" class="headerlink" title="zk概述"></a>zk概述</h3><ul>
-<li>ZooKeeper是一个开源的分布式的，为分布式应用提供协调服务的Apache项目。</li>
-<li>设计模式：是一个基于观察者模式设计的分布式服务管理框架，它辅助存储和管理大家都关心的数据，然后接受观察者的注册，一旦这些数据的状态发生变化，Zookeeper就将负责通知已经在Zookeeper上注册的那些观察者做出相应的反应。</li>
-<li>Zookeeper特点，数据结构<ul>
-<li><a href="https://imgtu.com/i/2lpCjI"><img src="https://z3.ax1x.com/2021/06/02/2lpCjI.png" alt="2lpCjI.png"></a></li>
-<li><a href="https://imgtu.com/i/2lpmCQ"><img src="https://z3.ax1x.com/2021/06/02/2lpmCQ.png" alt="2lpmCQ.png"></a></li>
-</ul>
-</li>
-</ul>
-<h3 id="zk实战应用"><a href="#zk实战应用" class="headerlink" title="zk实战应用"></a>zk实战应用</h3><ul>
-<li><p>客户端命令</p>
-</li>
-<li><p>启动客户端：zkCli.sh</p>
-<table>
-<thead>
-<tr>
-<th>命令基本语法</th>
-<th>功能描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>help</td>
-<td>显示所有操作命令</td>
-</tr>
-<tr>
-<td>ls path [watch]</td>
-<td>使用 ls 命令来查看当前znode中所包含的内容</td>
-</tr>
-<tr>
-<td>ls2 path [watch]</td>
-<td>查看当前节点数据并能看到更新次数等数据</td>
-</tr>
-<tr>
-<td>create</td>
-<td>普通创建-s  含有序列-e  临时（重启或者超时消失）</td>
-</tr>
-<tr>
-<td>get path [watch]</td>
-<td>获得节点的值</td>
-</tr>
-<tr>
-<td>set</td>
-<td>设置节点的具体值</td>
-</tr>
-<tr>
-<td>stat</td>
-<td>查看节点状态</td>
-</tr>
-<tr>
-<td>delete</td>
-<td>删除节点</td>
-</tr>
-<tr>
-<td>rmr</td>
-<td>递归删除节点</td>
-</tr>
-</tbody></table>
-</li>
-</ul>
-<h3 id="zk内部原理"><a href="#zk内部原理" class="headerlink" title="zk内部原理"></a>zk内部原理</h3><ul>
-<li><p>节点类型</p>
-<p><a href="https://imgtu.com/i/2lpq2j"><img src="https://z3.ax1x.com/2021/06/02/2lpq2j.png" alt="2lpq2j.png"></a></p>
-</li>
-</ul>
-<ul>
-<li><p>Stat结构体</p>
-<ol>
-<li><p>czxid-创建节点的事务zxid</p>
-<p>每次修改ZooKeeper状态都会收到一个zxid形式的时间戳，也就是ZooKeeper事务ID。</p>
-<p>事务ID是ZooKeeper中所有修改总的次序。每个修改都有唯一的zxid，如果zxid1小于zxid2，那么zxid1在zxid2之前发生。</p>
-</li>
-</ol>
-</li>
-<li><p>监听器原理</p>
-<p> <img src="C:\Users\Hasee\AppData\Roaming\Typora\typora-user-images\image-20210602195353003.png" alt="image-20210602195353003"></p>
-</li>
-<li><p>选举机制</p>
-<ul>
-<li><a href="https://imgtu.com/i/2l9oO1"><img src="https://z3.ax1x.com/2021/06/02/2l9oO1.png" alt="2l9oO1.png"></a><ol>
-<li>集群会通过比较先会比较zxid,若zxid相同则比较myid选择leader(每次修改ZooKeeper状态都会收到一个zxid形式的时间戳，也就是ZooKeeper事务ID)</li>
-<li>若第一次启动集群（zxid相等）myid如图所示：则大致流程如下：<ol>
-<li>server1投票给自己，但是票数没到集群机器的半数以上，选举无法进行。server1状态为LOOKING</li>
-<li>server2启动，发起选举，投票给自己，1发现2的myid大，更改选票为2。同理选举依然没法完成。</li>
-<li>3启动，发起选举，投给自己，1，2发现3的myid大。则1，2将选票投给3，3获得三票。成为Leader,1,2更改状态为FOLLOWING。3更改状态为LEADING。</li>
-<li>4启动，发起选举，1，2，3不在是LOOKING状态，不会更改选票信息。交换选票信息后，3为3票，4为一票，少数服从多数，更改选票信息为server3，更改状态为FOLLOWING。</li>
-<li>同4一样</li>
-</ol>
-</li>
-</ol>
-</li>
-</ul>
-</li>
-<li><p>ZAB</p>
-<ul>
-<li><p>ZAB协议是专门为zookeeper实现分布式协调功能而设计。zookeeper主要是根据ZAB协议是实现分布式系统数据一致性</p>
-</li>
-<li><p>写数据流程：</p>
-<p><a href="https://imgtu.com/i/2lERBj"><img src="https://z3.ax1x.com/2021/06/02/2lERBj.png" alt="2lERBj.png"></a></p>
-<ul>
-<li>三个服务器会对是否写数据提出意见，都同意那正常执行写操作</li>
-<li>一个server不同意而总票数支持同意，该server自杀再重启，再朝Leader同步信息</li>
-<li>leader不同意，但总票数同意。leader自杀重启，重新选举leader，重启后再向leader同步数据</li>
-<li>为什么会不同意：查看zxid，如果发来的zxid事物请求比自身的大才会同意</li>
-<li>总之就是要尽可能的保持集群数据的一致性。</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="HA"><a href="#HA" class="headerlink" title="HA"></a>HA</h2><h3 id="HA概述"><a href="#HA概述" class="headerlink" title="HA概述"></a>HA概述</h3><ul>
-<li>HA（High Availablity）</li>
-<li>实现高可用最重要的是消除单点故障</li>
-<li>防止出现namenode节点挂了，无法正常提供服务</li>
-</ul>
-<h3 id="HA工作机制"><a href="#HA工作机制" class="headerlink" title="HA工作机制"></a>HA工作机制</h3><ul>
-<li><p>故障转移机制 HDFS-HA</p>
-<p><a href="https://imgtu.com/i/2lA1SS"><img src="https://z3.ax1x.com/2021/06/02/2lA1SS.png" alt="2lA1SS.png"></a></p>
-</li>
-<li><p>故障转移机制</p>
-<ul>
-<li>为了保证数据不丢失，一个失效后另一个补上不会丢失数据，日志文件写到第三方平台（相当于2nn）</li>
-<li>新激活的namenode 可以从第三方，读取edits文件将缺少的数据补上，防止数据丢失</li>
-<li>Zkfc检测到假死后是通过zookeeper服务器将信息传到其它的namenode的zkfc</li>
-</ul>
-</li>
-<li><p>YARN-HA</p>
-<p><a href="https://imgtu.com/i/2lAaF0"><img src="https://z3.ax1x.com/2021/06/02/2lAaF0.png" alt="2lAaF0.png"></a></p>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>大数据</category>
-        <category>Hadoop</category>
-      </categories>
-      <tags>
-        <tag>zookeeper</tag>
-        <tag>HA</tag>
       </tags>
   </entry>
   <entry>
@@ -3494,50 +3553,6 @@ copyToLocal#与get完全一样
       </tags>
   </entry>
   <entry>
-    <title>algorithm</title>
-    <url>/2021/10/04/algorithm/</url>
-    <content><![CDATA[<h1 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h1><h2 id="动态规划"><a href="#动态规划" class="headerlink" title="动态规划"></a>动态规划</h2><ul>
-<li>首先，动态规划问题一般形式就是求最值，求解动态规划的核心问题是穷举。</li>
-<li>由于动态规划这类问题基本存在<strong>重叠子问题</strong>，如果暴力求解的话效率会很低，所以需要<strong>备忘录或者DP table</strong>来优化穷举过程。</li>
-<li>动态规划问题一定会具备<strong>最优子结构</strong>，这样就能通过子问题求解原问题。要符合最优子结构，子问题之间必须相互独立。</li>
-<li>正确的<strong>状态转移方程</strong>才能正确的求解。</li>
-<li>求解动态规划的一般办法：<ul>
-<li>确定基础案例，也就是最简单的子问题。</li>
-<li>确定状态，也就是原问题和子问题中会变化的量</li>
-<li>确定选择，也就是导致状态变化的行为</li>
-<li>明确dp 数组的含义</li>
-</ul>
-</li>
-</ul>
-<h2 id="排序算法"><a href="#排序算法" class="headerlink" title="排序算法"></a>排序算法</h2><ul>
-<li>常见排序算法的时间复杂度，稳定性<ul>
-<li><a href="https://imgtu.com/i/5KSEnO"><img src="https://z3.ax1x.com/2021/10/13/5KSEnO.png" alt="5KSEnO.png"></a></li>
-</ul>
-</li>
-</ul>
-<h2 id="大数取余算法"><a href="#大数取余算法" class="headerlink" title="大数取余算法"></a>大数取余算法</h2><ul>
-<li>场景：当一个数很大时，大到基本类型都放不下，这时我们需要用String来存储数字。那么怎么进行取余操作呢？</li>
-<li>我们根据一个例子来看看：<ul>
-<li><a href="https://imgtu.com/i/5KlnOS"><img src="https://z3.ax1x.com/2021/10/13/5KlnOS.png" alt="5KlnOS.png"></a></li>
-<li>计算过程<ul>
-<li>第一位数字4： 4%3=1；</li>
-<li>第二位数字4：（1*10+4）%3=2</li>
-<li>第三位数字3：（2*10+3）%3=2</li>
-</ul>
-</li>
-<li>最终的结果是最后一步计算得到的余数2.</li>
-</ul>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>算法</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>StarRocks</title>
     <url>/2024/01/03/StarRocks/</url>
     <content><![CDATA[<h1 id="StarRocks"><a href="#StarRocks" class="headerlink" title="StarRocks"></a>StarRocks</h1><h2 id="基础介绍"><a href="#基础介绍" class="headerlink" title="基础介绍"></a>基础介绍</h2><ul>
@@ -3574,6 +3589,8 @@ copyToLocal#与get完全一样
 </ul>
 <h3 id="系统架构"><a href="#系统架构" class="headerlink" title="系统架构"></a>系统架构</h3><ul>
 <li><p>架构简洁，核心只有FE(Frontend),BE(Backend)或CN(Compute Node)两类进程，方便部署维护，可水平扩展，有副本机制，确保系统无单点。SR支持Mysql协议接口，支持SQL标准语法。</p>
+</li>
+<li><p><a href="https://imgse.com/i/pFJGuQg"><img src="https://s11.ax1x.com/2024/02/18/pFJGuQg.png" alt="pFJGuQg.png"></a></p>
 </li>
 <li><p>FE 节点负责元数据管理、客户端连接管理、查询计划和查询调度。每个 FE 在其内存中存储和维护完整的元数据副本，确保每个 FE 都能提供无差别的服务。</p>
 </li>
@@ -3658,12 +3675,157 @@ copyToLocal#与get完全一样
 <li><p>内部表归属于 Internal catalog 的数据库，数据保存在 StarRocks 中。内部表由行和列构成，每一行数据是一条记录。</p>
 <ul>
 <li>在 StarRocks 中，根据约束的类型将内部表分四种，分别是主键表、明细表、聚合表和更新表，适用于存储和查询多种业务场景中的数据，比如原始日志、实时数据、以及汇总数据。</li>
-<li>内部表采用分区+分桶的两级数据分布策略，实现数据均匀分布。并且分桶以多副本形式均匀分布至 BE 节点，保证数据高可用。</li>
+<li><strong>内部表采用分区+分桶的两级数据分布策略，实现数据均匀分布。并且分桶以多副本形式均匀分布至 BE 节点，保证数据高可用。</strong></li>
 </ul>
 </li>
 <li><p>外部表是 External catalog 中的表，实际数据存在外部数据源中，StarRocks 只保存表对应的元数据，您可以通过外部表查询外部数据。</p>
 </li>
+</ul>
+<h4 id="物化视图"><a href="#物化视图" class="headerlink" title="物化视图"></a>物化视图</h4><ul>
+<li><strong>物化视图是特殊的物理表，能够存储基于基表的预计算结果。</strong>当您对基表执行复杂查询时，StarRocks可以自动复用物化视图中的预计算结果，实现查询透明加速，湖仓加速和数据建模等业务需求。</li>
+<li>视图（也叫逻辑视图）是虚拟表，不存储数据，其中所展示的数据来自于基表生成的查询结果。每次在查询中引用某个视图时，都会运行定义该视图的查询。</li>
+<li>SR有权限系统，权限决定了哪些用户可以对哪些特定对象执行哪些特定的操作。SR采用两种权限模型：<strong>基于用户标识的访问控制和基于角色的访问控制</strong>。您可以将权限赋予给角色然后通过角色传递权限给用户，或直接赋予权限给用户标识。</li>
+<li>存算分离架构，数据存储功能从原来的BE中抽离，数据可持久存储在更为可靠廉价的远端对象存储（如S3（AWS S3 全名是 Simple Storage Service，简便的存储服务。亚马逊的云存储业务））或HDFS上，本地磁盘只用于缓存热数据来加速查询</li>
+</ul>
+<h3 id="表概览"><a href="#表概览" class="headerlink" title="表概览"></a>表概览</h3><ul>
+<li>表是数据存储单元。理解 StarRocks 中的表结构，以及如何设计合理的表结构，有利于优化数据组织，提高查询效率。相比于传统的数据库，StarRocks 会以列的方式存储 JSON、ARRAY 等复杂的半结构化数据，保证高效查询。</li>
+</ul>
+<h4 id="表类型"><a href="#表类型" class="headerlink" title="表类型"></a>表类型</h4><ul>
+<li>SR提供四种类型的表，包括明细表，主键表，聚合表和更新表，使用于存储多种业务数据。<ul>
+<li>明细表简单易用，表中数据不具有任何约束，相同的数据行可以重复存在。<strong>适用于存储不需要约束和预聚合的原始数据。</strong></li>
+<li>主键表能力强大，具有唯一性非空约束。<strong>该表能够支撑实时更新，部分列更新等场景的同时，保证查询性能，使用于实时查询。</strong></li>
+<li><strong>聚合表适用于存储预聚合后的数据，可以降低聚合查询时所需扫描和计算的数据量，极大的提高聚合查询的效率。</strong></li>
+<li>更新表适用于实时更新的业务场景，目前已逐渐被主键表取代。</li>
+</ul>
+</li>
+</ul>
+<h4 id="数据分布"><a href="#数据分布" class="headerlink" title="数据分布"></a>数据分布</h4><ul>
+<li>SR采用分区+分桶的两级数据分布策略，将数据均匀分布各个BE节点。查询时能够有效裁剪数据扫描量，最大限度的利用集群的并发性能。</li>
+</ul>
+<h5 id="分区"><a href="#分区" class="headerlink" title="分区"></a>分区</h5><ul>
+<li><strong>第一层级为分区，表中数据可以根据分区列（通常是时间和日期）分成一个个更小的数据管理单元。</strong>查询时，通过分区裁剪，可以减少扫描的数据量，显著优化查询性能。</li>
+<li>SR提供简单易用的<strong>表达式分区</strong>。还提供更加灵活的分区方式，<strong>Range分区和List分区</strong>。</li>
+</ul>
+<h5 id="分桶"><a href="#分桶" class="headerlink" title="分桶"></a>分桶</h5><ul>
+<li><strong>第二层级为分桶，同一个分区中的数据通过分桶，划分成更小的数据管理单元。</strong>并且分桶以多副本的形式均匀分布在BE节点上，保证数据的高可用。</li>
+<li>SR有两种分桶方式：<ul>
+<li>哈希分桶：根据数据的分桶键值，将数据划分至分桶。选择查询时经常使用的条件组成分桶键，能够有效的提高查询效率。</li>
+<li>随机分桶：随机划分数据至分桶，这种方式更加简单易用。</li>
+</ul>
+</li>
+</ul>
+<h5 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h5><ul>
+<li>支持多种数据类型，和hive差不多</li>
+</ul>
+<h5 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h5><ul>
+<li>索引是一种特殊的数据结构，相当于数据的目录。</li>
+<li>SR提供内置索引，包括前缀索引，Ordinal索引和ZoneMap索引。也支持手动创建索引，提高查询效率，包括Bitmap和Bloom Filter索引。</li>
+</ul>
+<h5 id="约束"><a href="#约束" class="headerlink" title="约束"></a>约束</h5><ul>
+<li>约束用于确保数据的完整性、一致性和准确性。主键表的 Primary Key 列具有唯一非空约束，聚合表的 Aggregate Key 列和更新表的 Unique Key 列具有唯一约束。</li>
+</ul>
+<h3 id="表类型-1"><a href="#表类型-1" class="headerlink" title="表类型"></a>表类型</h3><h4 id="基础信息"><a href="#基础信息" class="headerlink" title="基础信息"></a>基础信息</h4><ul>
+<li>四种表类型：分别是明细表 (Duplicate key table)、聚合表 (Aggregate table)、更新表 (Unique Key table) 和主键表 ( Primary Key table)。</li>
+</ul>
+<h4 id="排序键"><a href="#排序键" class="headerlink" title="排序键"></a>排序键</h4><ul>
+<li>数据导入至使用某个类型的表，会按照建表时指定的一列或多列排序后存储，这部分用于排序的列就称为排序键。排序键通常为查询时过滤条件频繁使用的一个或者多个列，用以加速查询。 明细表中，数据按照排序键 <code>DUPLICATE KEY</code> 排序，并且排序键不需要满足唯一性约束。 聚合表中，数据按照排序键 <code>AGGREGATE KEY</code> 聚合后排序，并且排序键需要满足唯一性约束。 更新表中，数据按照排序键 <code>UNIQUE KEY</code> REPLACE 后排序，并且排序键需要满足唯一性约束。 主键表支持分别定义主键和排序键，主键 <code>PRIMARY KEY</code> 需要满足唯一性和非空约束，主键相同的数据进行 REPLACE。排序键是用于排序，由 <code>ORDER BY</code> 指定 。</li>
+<li>在建表语句中，排序键必须定义在其他列之前。</li>
+<li>在创建表时，您可以将一个或多个列定义为排序键。排序键在建表语句中的出现次序，为数据存储时多重排序的次序。</li>
+<li>不支持排序键的数据类型为 BITMAP、HLL。</li>
+<li>前缀索引的长度限制为 36 字节。如果排序键中全部列的值的长度加起来超过 36 字节，则前缀索引仅会保存限制范围内排序键的若干前缀列。</li>
+<li>如果导入的数据存在重复的主键，则数据导入至不同类型的表时，存储在 StarRocks 时，则会按照如下方式进行处理：<ul>
+<li>明细表：表中会存在主键重复的数据行，并且与导入的数据是完全对应的。您可以召回所导入的全部历史数据。</li>
+<li>聚合表：表中不存在主键重复的数据行，主键满足唯一性约束。导入的数据中主键重复的数据行聚合为一行，即具有相同主键的指标列，会通过聚合函数进行聚合。您只能召回导入的全部历史数据的聚合结果，但是无法召回历史明细数据。</li>
+<li>主键表和更新表：表中不存在主键重复的数据行，主键满足唯一性约束。最新导入的数据行，替换掉其他主键重复的数据行。这两种类型的表可以视为聚合表的特殊情况，相当于在聚合表中，为表的指标列指定聚合函数为 REPLACE，REPLACE 函数返回主键相同的一组数据中的最新数据。</li>
+</ul>
+</li>
+</ul>
+<h4 id="明细表"><a href="#明细表" class="headerlink" title="明细表"></a>明细表</h4><ul>
+<li><p>明细表是默认创建的表类型。如果在建表时未指定任何key，默认创建的是明细表</p>
+</li>
+<li><p>创建表时，支持定义排序键。如果查询的过滤条件包含排序键，则 StarRocks 能够快速地过滤数据，提高查询效率。<strong>明细表适用于日志数据分析等场景，支持追加新数据，不支持修改历史数据。</strong></p>
+</li>
+<li><p>建表语句</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs sqlite">CREATE TABLE IF NOT EXISTS detail (<br>    event_time DATETIME NOT NULL COMMENT &quot;datetime of event&quot;,<br>    event_type INT NOT NULL COMMENT &quot;type of event&quot;,<br>    user_id INT COMMENT &quot;id of user&quot;,<br>    device_code INT COMMENT &quot;device code&quot;,<br>    channel INT COMMENT &quot;&quot;<br>)<br>DUPLICATE KEY(event_time, event_type)<br>DISTRIBUTED BY HASH(user_id)<br>PROPERTIES (<br>&quot;replication_num&quot; = &quot;3&quot;<br>);<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p>排序键的相关说明：</p>
+<ul>
+<li><p>在建表语句中，排序键必须定义在其他列之前。</p>
+</li>
+<li><p>排序键可以通过 <code>DUPLICATE KEY</code> 显式定义。本示例中排序键为 <code>event_time</code> 和 <code>event_type</code>。</p>
+<blockquote>
+<p>如果未指定，则默认选择表的前三列作为排序键。</p>
+</blockquote>
+</li>
+<li><p>明细表中的排序键可以为部分或全部维度列。</p>
+</li>
+</ul>
+</li>
+<li><p>建表时，支持为指标列创建 BITMAP、Bloom Filter 等索引。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="聚合表"><a href="#聚合表" class="headerlink" title="聚合表"></a>聚合表</h4><ul>
+<li><p><strong>建表时，支持定义排序键和指标列，并为指标列指定聚合函数。当多条数据具有相同的排序键时，指标列会进行聚合。</strong>在分析统计和汇总数据时，聚合表能够减少查询时所需要处理的数据，提升查询效率。</p>
+</li>
+<li><p>适用于分析统计和汇总数据</p>
+</li>
+<li><p>原理：<strong>从数据导入至数据查询阶段，聚合表内部同一排序键的数据会多次聚合</strong>，步骤：</p>
+<ol>
+<li>数据导入阶段：数据按批次导入至聚合表时，每一个批次的数据形成一个版本。在一个版本中，同一排序键的数据会进行一次聚合</li>
+<li>后台文件合并阶段（Compaction）：数据分批次多次导入至聚合表中，会生成多个版本的文件，多个版本的文件定期合并成一个大版本文件时，同一排序键的数据会进行一次聚合。</li>
+<li>查询阶段：所有版本中同一排序键的数据进行聚合，然后返回查询结果</li>
+</ol>
+</li>
+<li><p>聚合表中数据进行多次聚合，能够减少查询时所需要处理的数据量，进而提升查询的效率</p>
+</li>
+<li><p>创建表</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs sqlite">/*<br>例如需要分析某一段时间内，来自不同城市的用户，访问不同网页的总次数。则可以将网页地址 site_id、日期 date 和城市代码 city_code 作为排序键，将访问次数 pv 作为指标列，并为指标列 pv 指定聚合函数为 SUM。<br>*/<br>CREATE TABLE IF NOT EXISTS example_db.aggregate_tbl (<br>    site_id LARGEINT NOT NULL COMMENT &quot;id of site&quot;,<br>    date DATE NOT NULL COMMENT &quot;time of event&quot;,<br>    city_code VARCHAR(20) COMMENT &quot;city_code of user&quot;,<br>    pv BIGINT SUM DEFAULT &quot;0&quot; COMMENT &quot;total page views&quot;<br>)<br>AGGREGATE KEY(site_id, date, city_code)<br>DISTRIBUTED BY HASH(site_id)<br>PROPERTIES (<br>&quot;replication_num&quot; = &quot;3&quot;<br>);<br></code></pre></td></tr></table></figure></li>
+<li><p>建表时必须使用 <code>DISTRIBUTED BY HASH</code> 子句指定分桶键。分桶键的更多说明，请参见<a href="https://docs.starrocks.io/zh/docs/table_design/Data_distribution/#%E5%88%86%E6%A1%B6">分桶</a>。</p>
+</li>
+<li><p>自 2.5.7 版本起，StarRocks 支持在建表和新增分区时自动设置分桶数量 (BUCKETS)，您无需手动设置分桶数量。更多信息，请参见 <a href="https://docs.starrocks.io/zh/docs/table_design/Data_distribution/#%E8%AE%BE%E7%BD%AE%E5%88%86%E6%A1%B6%E6%95%B0%E9%87%8F">设置分桶数量</a>。</p>
+</li>
+<li><p>排序键的相关说明：</p>
+<ul>
+<li><p>在建表语句中，<strong>排序键必须定义在其他列之前</strong>。</p>
+</li>
+<li><p>排序键可以通过 <code>AGGREGATE KEY</code> 显式定义。</p>
+<blockquote>
+<ul>
+<li>如果 <code>AGGREGATE KEY</code> 未包含全部维度列（除指标列之外的列），则建表会失败。</li>
+<li>如果不通过 <code>AGGREGATE KEY</code> 显示定义排序键，则默认除指标列之外的列均为排序键。</li>
+</ul>
+</blockquote>
+</li>
+<li><p>排序键必须满足唯一性约束，必须包含全部维度列，并且列的值不会更新。</p>
+</li>
+</ul>
+</li>
+<li><p>指标列：通过在列名后指定聚合函数，定义该列为指标列。一般为需要汇总统计的数据。</p>
+</li>
+<li><p>聚合函数：指标列使用的聚合函数。聚合表支持的聚合函数，请参见 <a href="https://docs.starrocks.io/zh/docs/sql-reference/sql-statements/data-definition/CREATE_TABLE/">CREATE TABLE</a>。</p>
+</li>
+<li><p>查询时，排序键在多版聚合之前就能进行过滤，而指标列的过滤在多版本聚合之后。因此建议将频繁使用的过滤字段作为排序键，在聚合前就能过滤数据，从而提升查询性能。</p>
+</li>
+<li><p>建表时，不支持为指标列创建 BITMAP、Bloom Filter 等索引。</p>
+</li>
+</ul>
+<h4 id="更新表"><a href="#更新表" class="headerlink" title="更新表"></a>更新表</h4><ul>
+<li><p>建表时，支持定义主键和指标列，查询时返回主键相同的一组数据中的最新数据。相对于明细表，更新表简化了数据导入流程，能够更好地支撑实时和频繁更新的场景。</p>
+</li>
+<li><p>建表</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs sqlite">CREATE TABLE IF NOT EXISTS orders (<br>    create_time DATE NOT NULL COMMENT &quot;create time of an order&quot;,<br>    order_id BIGINT NOT NULL COMMENT &quot;id of an order&quot;,<br>    order_state INT COMMENT &quot;state of an order&quot;,<br>    total_price BIGINT COMMENT &quot;price of an order&quot;<br>)<br>UNIQUE KEY(create_time, order_id)<br>DISTRIBUTED BY HASH(order_id)<br>PROPERTIES (<br>&quot;replication_num&quot; = &quot;3&quot;<br>); <br></code></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="主键表"><a href="#主键表" class="headerlink" title="主键表"></a>主键表</h4><ul>
+<li>主键表支持分别定义主键和排序键。数据导入至主键表时先按照排序键排序后存储。查询时返回主键相同的一组数据中的最新数据。相对于更新表，主键表在查询时不需要执行聚合操作，并且支持谓词和索引下推，能够在支持<strong>实时和频繁更新</strong>等场景的同时，提供高效查询。</li>
+<li>适用场景：<ul>
+<li><strong>实时对接事务型数据至StarRocks。</strong><a href="https://docs.starrocks.io/zh/docs/loading/Flink_cdc_load/">通过 Flink-CDC 等工具直接对接 TP 的 Binlog</a>，实时同步增删改的数据至主键表，可以简化数据同步流程，并且相对于 Merge-On-Read 策略的更新表，查询性能能够提升 3~10 倍。</li>
+<li><strong>利用部分列更新轻松实现多流JOIN</strong>。在用户画像等分析场景中，一般会采用大宽表方式来提升多维分析的性能，同时简化数据分析师的使用模型。而这种场景中的上游数据，往往可能来自于多个不同业务（比如来自购物消费业务、快递业务、银行业务等）或系统（比如计算用户不同标签属性的机器学习系统），主键表的部分列更新功能就很好地满足这种需求，不同业务直接各自按需更新与业务相关的列即可，并且继续享受主键表的实时同步增删改数据及高效的查询性能。</li>
 <li></li>
+</ul>
+</li>
 </ul>
 ]]></content>
       <categories>
@@ -3671,6 +3833,50 @@ copyToLocal#与get完全一样
       </categories>
       <tags>
         <tag>大数据</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>algorithm</title>
+    <url>/2021/10/04/algorithm/</url>
+    <content><![CDATA[<h1 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h1><h2 id="动态规划"><a href="#动态规划" class="headerlink" title="动态规划"></a>动态规划</h2><ul>
+<li>首先，动态规划问题一般形式就是求最值，求解动态规划的核心问题是穷举。</li>
+<li>由于动态规划这类问题基本存在<strong>重叠子问题</strong>，如果暴力求解的话效率会很低，所以需要<strong>备忘录或者DP table</strong>来优化穷举过程。</li>
+<li>动态规划问题一定会具备<strong>最优子结构</strong>，这样就能通过子问题求解原问题。要符合最优子结构，子问题之间必须相互独立。</li>
+<li>正确的<strong>状态转移方程</strong>才能正确的求解。</li>
+<li>求解动态规划的一般办法：<ul>
+<li>确定基础案例，也就是最简单的子问题。</li>
+<li>确定状态，也就是原问题和子问题中会变化的量</li>
+<li>确定选择，也就是导致状态变化的行为</li>
+<li>明确dp 数组的含义</li>
+</ul>
+</li>
+</ul>
+<h2 id="排序算法"><a href="#排序算法" class="headerlink" title="排序算法"></a>排序算法</h2><ul>
+<li>常见排序算法的时间复杂度，稳定性<ul>
+<li><a href="https://imgtu.com/i/5KSEnO"><img src="https://z3.ax1x.com/2021/10/13/5KSEnO.png" alt="5KSEnO.png"></a></li>
+</ul>
+</li>
+</ul>
+<h2 id="大数取余算法"><a href="#大数取余算法" class="headerlink" title="大数取余算法"></a>大数取余算法</h2><ul>
+<li>场景：当一个数很大时，大到基本类型都放不下，这时我们需要用String来存储数字。那么怎么进行取余操作呢？</li>
+<li>我们根据一个例子来看看：<ul>
+<li><a href="https://imgtu.com/i/5KlnOS"><img src="https://z3.ax1x.com/2021/10/13/5KlnOS.png" alt="5KlnOS.png"></a></li>
+<li>计算过程<ul>
+<li>第一位数字4： 4%3=1；</li>
+<li>第二位数字4：（1*10+4）%3=2</li>
+<li>第三位数字3：（2*10+3）%3=2</li>
+</ul>
+</li>
+<li>最终的结果是最后一步计算得到的余数2.</li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
       </tags>
   </entry>
   <entry>
@@ -4581,105 +4787,6 @@ cast(&#39;1000&#39; as int)
       </tags>
   </entry>
   <entry>
-    <title>flume</title>
-    <url>/2021/06/21/flume/</url>
-    <content><![CDATA[<h1 id="Flume"><a href="#Flume" class="headerlink" title="Flume"></a>Flume</h1><h2 id="Flume概述"><a href="#Flume概述" class="headerlink" title="Flume概述"></a>Flume概述</h2><ul>
-<li><p>配置文档，自定义Source,Interceptor,sink就来看官方文档：<a href="http://flume.apache.org/releases/content/1.9.0/FlumeUserGuide.html#spooling-directory-source">官方文档</a></p>
-</li>
-<li><p>flume是一个高可用的，可靠的，分布式的<em><strong>海量日志采集，聚合，和传输的系统</strong></em>基于流式框架，灵活简单。</p>
-</li>
-<li><p>基础架构：</p>
-<p><a href="https://imgtu.com/i/REvBm8"><img src="https://z3.ax1x.com/2021/06/21/REvBm8.png" alt="REvBm8.png"></a></p>
-<ul>
-<li>Agent:是一个JVM进程，它以事件的形式将数据从源头送至目的</li>
-<li>source负责接收数据到Flume agent 的组件。可以处理各种类型，格式的日志数据。例如：spooling directory，netcat,avro,exec</li>
-<li>sink不断轮询channel中的事件并且批量的移除他们，将这些事件批量写入到存储或索引系统，或者被发送到另一个flume agent。sink组件发送目的地包括：hdfs,logger,avro,file,HBase</li>
-<li>Channel是位于source和sink之间缓冲区。Flume自带两种Channel：Memory Channel和File Channel。</li>
-</ul>
-</li>
-<li><p>event:flume传输数据的基本单元。由Header和Body组成。Header用来存放该event的一些属性，为K-V结构，Body用来存放该条数据，形式为字节数组。</p>
-</li>
-</ul>
-<h2 id="flume入门案例"><a href="#flume入门案例" class="headerlink" title="flume入门案例"></a>flume入门案例</h2><ul>
-<li><p>实时监控Hive日志，并上传到HDFS中</p>
-<figure class="highlight jboss-cli"><table><tr><td class="code"><pre><code class="hljs jboss-cli">1.第一种方式<br>flume-ng agent <span class="hljs-params">--name</span> agent的名字 <span class="hljs-params">--conf</span> 配置文件的目录 <span class="hljs-params">--conf-file</span> agent的配置文件（自己手动写）-Dflume.root.logger=INFO,console<br><br>需要写配置文件<br>基本步骤：<br><span class="hljs-comment">#1.agent的source,channel,sink组件</span><br><span class="hljs-comment">#2.source配置</span><br><span class="hljs-comment">#3.channel配置</span><br><span class="hljs-comment">#4.sink配置</span><br><span class="hljs-comment">#5.source,channel,sink之间的关系</span><br><span class="hljs-comment"># Name the components on this agent</span><br>a2.sources = r2<br>a2.sinks = k2<br>a2.channels = c2<br><br><span class="hljs-comment"># Describe/configure the source</span><br>a2.sources.r2.type = exec<br>a2.sources.r2.<span class="hljs-keyword">command</span> = tail -F <span class="hljs-string">/opt/module/hive/logs/hive.log</span><br>a2.sources.r2.shell = <span class="hljs-string">/bin/bash</span> -c<br><br><span class="hljs-comment"># Describe the sink</span><br>a2.sinks.k2.type = hdfs<br>a2.sinks.k2.hdfs.path = hdfs:<span class="hljs-string">//hadoop102</span><span class="hljs-function">:8020</span>/flume/%Y%m%d/%H<br><span class="hljs-comment">#上传文件的前缀</span><br>a2.sinks.k2.hdfs.filePrefix = logs-<br><span class="hljs-comment">#是否按照时间滚动文件夹</span><br>a2.sinks.k2.hdfs.round = <span class="hljs-literal">true</span><br><span class="hljs-comment">#多少时间单位创建一个新的文件夹</span><br>a2.sinks.k2.hdfs.roundValue = 1<br><span class="hljs-comment">#重新定义时间单位</span><br>a2.sinks.k2.hdfs.roundUnit = hour<br><span class="hljs-comment">#是否使用本地时间戳</span><br>a2.sinks.k2.hdfs.useLocalTimeStamp = <span class="hljs-literal">true</span><br><span class="hljs-comment">#积攒多少个Event才flush到HDFS一次</span><br>a2.sinks.k2.hdfs.<span class="hljs-keyword">batch</span>Size = 100<br><span class="hljs-comment">#设置文件类型，可支持压缩</span><br>a2.sinks.k2.hdfs.fileType = DataStream<br><span class="hljs-comment">#多久生成一个新的文件</span><br>a2.sinks.k2.hdfs.rollInterval = 60<br><span class="hljs-comment">#设置每个文件的滚动大小</span><br>a2.sinks.k2.hdfs.rollSize = 134217700<br><span class="hljs-comment">#文件的滚动与Event数量无关</span><br>a2.sinks.k2.hdfs.rollCount = 0<br><br><span class="hljs-comment"># Use a channel which buffers events in memory</span><br>a2.channels.c2.type = memory<br>a2.channels.c2.capacity = 1000<br>a2.channels.c2.transactionCapacity = 100<br><br><span class="hljs-comment"># Bind the source and sink to the channel</span><br>a2.sources.r2.channels = c2<br>a2.sinks.k2.channel = c2<br></code></pre></td></tr></table></figure></li>
-<li><p>log4j.properties(日志架构)，类似于程序中的调试代码，输出一些东西，供编码的时候调试。但是项目上线后不能再直接输出，于是将这些调试输出输出到专门的日志文件中。</p>
-</li>
-</ul>
-<h2 id="Flume进阶"><a href="#Flume进阶" class="headerlink" title="Flume进阶"></a>Flume进阶</h2><ul>
-<li><p>flume事务。主要是为了保证数据不会丢失。</p>
-<p><a href="https://imgtu.com/i/RZxhvR"><img src="https://z3.ax1x.com/2021/06/22/RZxhvR.png" alt="RZxhvR.png"></a></p>
-</li>
-<li><p>flume agent内部原理：</p>
-<p><a href="https://imgtu.com/i/RZxsbV"><img src="https://z3.ax1x.com/2021/06/22/RZxsbV.png" alt="RZxsbV.png"></a></p>
-</li>
-</ul>
-<ul>
-<li><ol>
-<li><p>Source接受数据，将数据以event的形式发给ChannnelProcessor</p>
-</li>
-<li><p>ChannelProcessor将事件传递给拦截器，在拦截其中可以对event数据进行更改。</p>
-</li>
-<li><p>拦截器再将事件返回到ChannelProcessor，ChannelProcessor将每个事件给Channel选择器。ChannelSelector的作用就是选出Event将要被发往哪个Channel。其共有两种类型，分别是Replicating（复制）和Multiplexing（多路复用）。</p>
-</li>
-<li><p>再返回到ChannelProcessor，根据选择器的选择，event进入不同的channel</p>
-</li>
-<li><p>SinkProcessor再决定channel中的enevt的走向。</p>
-<p>SinkProcessor共有三种类型，分别是DefaultSinkProcessor、LoadBalancingSinkProcessor和FailoverSinkProcessor。</p>
-<p>DefaultSinkProcessor对应的是单个的Sink，LoadBalancingSinkProcessor和FailoverSinkProcessor对应的是Sink Group，LoadBalancingSinkProcessor可以实现负载均衡的功能，FailoverSinkProcessor可以错误恢复的功能(故障转移）。</p>
-</li>
-</ol>
-</li>
-<li><p>flume拓扑结构</p>
-<ul>
-<li>简单串联。多个agent串起来</li>
-<li>复制和多路复用。Flume支持将事件流向一个或者多个目的地。这种模式可以将相同数据复制到多个channel中，或者将不同数据分发到不同的channel中，sink可以选择传送到不同的目的地。</li>
-<li>负载均衡和故障转移。Flume支持使用将多个sink逻辑上分到一个sink组，sink组配合不同的SinkProcessor可以实现负载均衡和错误恢复的功能。</li>
-<li>聚合。将多台服务器部署一个flume日志采集，再将所有日志聚合到一个集中收集日志的flume，由此上传到HDFS,HBase，进行数据分析。</li>
-</ul>
-</li>
-</ul>
-<h3 id="API编程"><a href="#API编程" class="headerlink" title="API编程"></a>API编程</h3><ul>
-<li>可以查看官网的开发者文档。</li>
-<li>自定义Interceptor。定义类实现Interceptor接口，重写四个方法（初始化，单event修改，多event修改，关闭资源）还需要一个Builder静态内部类。</li>
-</ul>
-<h2 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h2><h3 id="flume的source-sink-Channel的作用？"><a href="#flume的source-sink-Channel的作用？" class="headerlink" title="flume的source,sink,Channel的作用？"></a>flume的source,sink,Channel的作用？</h3><ul>
-<li><p>作用：</p>
-<p>（1）Source组件是专门用来收集数据的，可以处理各种类型、各种格式的日志数据，包括avro、thrift、exec、jms、spooling directory、netcat、sequence generator、syslog、http、legacy</p>
-<p>（2）Channel组件对采集到的数据进行缓存，可以存放在Memory或File中。</p>
-<p>（3）Sink组件是用于把数据发送到目的地的组件，目的地包括Hdfs、Logger、avro、thrift、ipc、file、Hbase、solr、自定义。</p>
-</li>
-</ul>
-<h3 id="flume参数调优"><a href="#flume参数调优" class="headerlink" title="flume参数调优"></a>flume参数调优</h3><ul>
-<li><p><em><strong>1. source</strong></em></p>
-<p>增加Source个（使用Tair Dir Source时可增加FileGroups个数）可以增大Source的读取数据的能力。例如：当某一个目录产生的文件过多时需要将这个文件目录拆分成多个文件目录，同时配置好多个Source 以保证Source有足够的能力获取到新产生的数据。</p>
-<p>batchSize参数决定Source一次批量运输到Channel的event条数，适当调大这个参数可以提高Source搬运Event到Channel时的性能。</p>
-<p><em><strong>2. Channel:</strong></em></p>
-<p>type 选择memory时Channel的性能最好，但是如果Flume进程意外挂掉可能会丢失数据。type选择file时Channel的容错性更好，但是性能上会比memory channel差。</p>
-<p>使用file Channel时dataDirs配置多个不同盘下的目录可以提高性能。</p>
-<p>Capacity 参数决定Channel可容纳最大的event条数。transactionCapacity 参数决定每次Source往channel里面写的最大event条数和每次Sink从channel里面读的最大event条数。transactionCapacity需要大于Source和Sink的batchSize参数。</p>
-<p><em><strong>3. Sink</strong></em></p>
-<p>增加Sink的个数可以增加Sink消费event的能力。Sink也不是越多越好够用就行，过多的Sink会占用系统资源，造成系统资源不必要的浪费。</p>
-<p>batchSize参数决定Sink一次批量从Channel读取的event条数，适当调大这个参数可以提高Sink从Channel搬出event的性能。</p>
-</li>
-</ul>
-<h3 id="flume数据是否会丢失？"><a href="#flume数据是否会丢失？" class="headerlink" title="flume数据是否会丢失？"></a>flume数据是否会丢失？</h3><ul>
-<li>flume采用事务机制，Flume使用两个独立的事务分别负责从Soucrce到Channel，以及从Channel到Sink的事件传递。如果因为某种原因使得事件无法记录，那么事务将会回滚。</li>
-<li>正是因为flume完善的事务机制，flume不会丢失数据。</li>
-<li>唯一可能丢失数据的情况是Channel采用memoryChannel，agent宕机导致数据丢失，或者Channel存储数据已满，导致Source不再写入，未写入的数据丢失。</li>
-<li>Flume不会丢失数据，但是有可能造成数据的重复，例如数据已经成功由Sink发出，但是没有接收到响应，Sink会再次发送数据，此时可能会导致数据的重复。</li>
-</ul>
-]]></content>
-      <categories>
-        <category>大数据</category>
-        <category>flume</category>
-      </categories>
-      <tags>
-        <tag>大数据</tag>
-        <tag>flume</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>flink</title>
     <url>/2021/10/31/flink/</url>
     <content><![CDATA[<h1 id="Flink"><a href="#Flink" class="headerlink" title="Flink"></a>Flink</h1><h2 id="Flink简介"><a href="#Flink简介" class="headerlink" title="Flink简介"></a>Flink简介</h2><ul>
@@ -5313,6 +5420,240 @@ cast(&#39;1000&#39; as int)
       </tags>
   </entry>
   <entry>
+    <title>flume</title>
+    <url>/2021/06/21/flume/</url>
+    <content><![CDATA[<h1 id="Flume"><a href="#Flume" class="headerlink" title="Flume"></a>Flume</h1><h2 id="Flume概述"><a href="#Flume概述" class="headerlink" title="Flume概述"></a>Flume概述</h2><ul>
+<li><p>配置文档，自定义Source,Interceptor,sink就来看官方文档：<a href="http://flume.apache.org/releases/content/1.9.0/FlumeUserGuide.html#spooling-directory-source">官方文档</a></p>
+</li>
+<li><p>flume是一个高可用的，可靠的，分布式的<em><strong>海量日志采集，聚合，和传输的系统</strong></em>基于流式框架，灵活简单。</p>
+</li>
+<li><p>基础架构：</p>
+<p><a href="https://imgtu.com/i/REvBm8"><img src="https://z3.ax1x.com/2021/06/21/REvBm8.png" alt="REvBm8.png"></a></p>
+<ul>
+<li>Agent:是一个JVM进程，它以事件的形式将数据从源头送至目的</li>
+<li>source负责接收数据到Flume agent 的组件。可以处理各种类型，格式的日志数据。例如：spooling directory，netcat,avro,exec</li>
+<li>sink不断轮询channel中的事件并且批量的移除他们，将这些事件批量写入到存储或索引系统，或者被发送到另一个flume agent。sink组件发送目的地包括：hdfs,logger,avro,file,HBase</li>
+<li>Channel是位于source和sink之间缓冲区。Flume自带两种Channel：Memory Channel和File Channel。</li>
+</ul>
+</li>
+<li><p>event:flume传输数据的基本单元。由Header和Body组成。Header用来存放该event的一些属性，为K-V结构，Body用来存放该条数据，形式为字节数组。</p>
+</li>
+</ul>
+<h2 id="flume入门案例"><a href="#flume入门案例" class="headerlink" title="flume入门案例"></a>flume入门案例</h2><ul>
+<li><p>实时监控Hive日志，并上传到HDFS中</p>
+<figure class="highlight jboss-cli"><table><tr><td class="code"><pre><code class="hljs jboss-cli">1.第一种方式<br>flume-ng agent <span class="hljs-params">--name</span> agent的名字 <span class="hljs-params">--conf</span> 配置文件的目录 <span class="hljs-params">--conf-file</span> agent的配置文件（自己手动写）-Dflume.root.logger=INFO,console<br><br>需要写配置文件<br>基本步骤：<br><span class="hljs-comment">#1.agent的source,channel,sink组件</span><br><span class="hljs-comment">#2.source配置</span><br><span class="hljs-comment">#3.channel配置</span><br><span class="hljs-comment">#4.sink配置</span><br><span class="hljs-comment">#5.source,channel,sink之间的关系</span><br><span class="hljs-comment"># Name the components on this agent</span><br>a2.sources = r2<br>a2.sinks = k2<br>a2.channels = c2<br><br><span class="hljs-comment"># Describe/configure the source</span><br>a2.sources.r2.type = exec<br>a2.sources.r2.<span class="hljs-keyword">command</span> = tail -F <span class="hljs-string">/opt/module/hive/logs/hive.log</span><br>a2.sources.r2.shell = <span class="hljs-string">/bin/bash</span> -c<br><br><span class="hljs-comment"># Describe the sink</span><br>a2.sinks.k2.type = hdfs<br>a2.sinks.k2.hdfs.path = hdfs:<span class="hljs-string">//hadoop102</span><span class="hljs-function">:8020</span>/flume/%Y%m%d/%H<br><span class="hljs-comment">#上传文件的前缀</span><br>a2.sinks.k2.hdfs.filePrefix = logs-<br><span class="hljs-comment">#是否按照时间滚动文件夹</span><br>a2.sinks.k2.hdfs.round = <span class="hljs-literal">true</span><br><span class="hljs-comment">#多少时间单位创建一个新的文件夹</span><br>a2.sinks.k2.hdfs.roundValue = 1<br><span class="hljs-comment">#重新定义时间单位</span><br>a2.sinks.k2.hdfs.roundUnit = hour<br><span class="hljs-comment">#是否使用本地时间戳</span><br>a2.sinks.k2.hdfs.useLocalTimeStamp = <span class="hljs-literal">true</span><br><span class="hljs-comment">#积攒多少个Event才flush到HDFS一次</span><br>a2.sinks.k2.hdfs.<span class="hljs-keyword">batch</span>Size = 100<br><span class="hljs-comment">#设置文件类型，可支持压缩</span><br>a2.sinks.k2.hdfs.fileType = DataStream<br><span class="hljs-comment">#多久生成一个新的文件</span><br>a2.sinks.k2.hdfs.rollInterval = 60<br><span class="hljs-comment">#设置每个文件的滚动大小</span><br>a2.sinks.k2.hdfs.rollSize = 134217700<br><span class="hljs-comment">#文件的滚动与Event数量无关</span><br>a2.sinks.k2.hdfs.rollCount = 0<br><br><span class="hljs-comment"># Use a channel which buffers events in memory</span><br>a2.channels.c2.type = memory<br>a2.channels.c2.capacity = 1000<br>a2.channels.c2.transactionCapacity = 100<br><br><span class="hljs-comment"># Bind the source and sink to the channel</span><br>a2.sources.r2.channels = c2<br>a2.sinks.k2.channel = c2<br></code></pre></td></tr></table></figure></li>
+<li><p>log4j.properties(日志架构)，类似于程序中的调试代码，输出一些东西，供编码的时候调试。但是项目上线后不能再直接输出，于是将这些调试输出输出到专门的日志文件中。</p>
+</li>
+</ul>
+<h2 id="Flume进阶"><a href="#Flume进阶" class="headerlink" title="Flume进阶"></a>Flume进阶</h2><ul>
+<li><p>flume事务。主要是为了保证数据不会丢失。</p>
+<p><a href="https://imgtu.com/i/RZxhvR"><img src="https://z3.ax1x.com/2021/06/22/RZxhvR.png" alt="RZxhvR.png"></a></p>
+</li>
+<li><p>flume agent内部原理：</p>
+<p><a href="https://imgtu.com/i/RZxsbV"><img src="https://z3.ax1x.com/2021/06/22/RZxsbV.png" alt="RZxsbV.png"></a></p>
+</li>
+</ul>
+<ul>
+<li><ol>
+<li><p>Source接受数据，将数据以event的形式发给ChannnelProcessor</p>
+</li>
+<li><p>ChannelProcessor将事件传递给拦截器，在拦截其中可以对event数据进行更改。</p>
+</li>
+<li><p>拦截器再将事件返回到ChannelProcessor，ChannelProcessor将每个事件给Channel选择器。ChannelSelector的作用就是选出Event将要被发往哪个Channel。其共有两种类型，分别是Replicating（复制）和Multiplexing（多路复用）。</p>
+</li>
+<li><p>再返回到ChannelProcessor，根据选择器的选择，event进入不同的channel</p>
+</li>
+<li><p>SinkProcessor再决定channel中的enevt的走向。</p>
+<p>SinkProcessor共有三种类型，分别是DefaultSinkProcessor、LoadBalancingSinkProcessor和FailoverSinkProcessor。</p>
+<p>DefaultSinkProcessor对应的是单个的Sink，LoadBalancingSinkProcessor和FailoverSinkProcessor对应的是Sink Group，LoadBalancingSinkProcessor可以实现负载均衡的功能，FailoverSinkProcessor可以错误恢复的功能(故障转移）。</p>
+</li>
+</ol>
+</li>
+<li><p>flume拓扑结构</p>
+<ul>
+<li>简单串联。多个agent串起来</li>
+<li>复制和多路复用。Flume支持将事件流向一个或者多个目的地。这种模式可以将相同数据复制到多个channel中，或者将不同数据分发到不同的channel中，sink可以选择传送到不同的目的地。</li>
+<li>负载均衡和故障转移。Flume支持使用将多个sink逻辑上分到一个sink组，sink组配合不同的SinkProcessor可以实现负载均衡和错误恢复的功能。</li>
+<li>聚合。将多台服务器部署一个flume日志采集，再将所有日志聚合到一个集中收集日志的flume，由此上传到HDFS,HBase，进行数据分析。</li>
+</ul>
+</li>
+</ul>
+<h3 id="API编程"><a href="#API编程" class="headerlink" title="API编程"></a>API编程</h3><ul>
+<li>可以查看官网的开发者文档。</li>
+<li>自定义Interceptor。定义类实现Interceptor接口，重写四个方法（初始化，单event修改，多event修改，关闭资源）还需要一个Builder静态内部类。</li>
+</ul>
+<h2 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h2><h3 id="flume的source-sink-Channel的作用？"><a href="#flume的source-sink-Channel的作用？" class="headerlink" title="flume的source,sink,Channel的作用？"></a>flume的source,sink,Channel的作用？</h3><ul>
+<li><p>作用：</p>
+<p>（1）Source组件是专门用来收集数据的，可以处理各种类型、各种格式的日志数据，包括avro、thrift、exec、jms、spooling directory、netcat、sequence generator、syslog、http、legacy</p>
+<p>（2）Channel组件对采集到的数据进行缓存，可以存放在Memory或File中。</p>
+<p>（3）Sink组件是用于把数据发送到目的地的组件，目的地包括Hdfs、Logger、avro、thrift、ipc、file、Hbase、solr、自定义。</p>
+</li>
+</ul>
+<h3 id="flume参数调优"><a href="#flume参数调优" class="headerlink" title="flume参数调优"></a>flume参数调优</h3><ul>
+<li><p><em><strong>1. source</strong></em></p>
+<p>增加Source个（使用Tair Dir Source时可增加FileGroups个数）可以增大Source的读取数据的能力。例如：当某一个目录产生的文件过多时需要将这个文件目录拆分成多个文件目录，同时配置好多个Source 以保证Source有足够的能力获取到新产生的数据。</p>
+<p>batchSize参数决定Source一次批量运输到Channel的event条数，适当调大这个参数可以提高Source搬运Event到Channel时的性能。</p>
+<p><em><strong>2. Channel:</strong></em></p>
+<p>type 选择memory时Channel的性能最好，但是如果Flume进程意外挂掉可能会丢失数据。type选择file时Channel的容错性更好，但是性能上会比memory channel差。</p>
+<p>使用file Channel时dataDirs配置多个不同盘下的目录可以提高性能。</p>
+<p>Capacity 参数决定Channel可容纳最大的event条数。transactionCapacity 参数决定每次Source往channel里面写的最大event条数和每次Sink从channel里面读的最大event条数。transactionCapacity需要大于Source和Sink的batchSize参数。</p>
+<p><em><strong>3. Sink</strong></em></p>
+<p>增加Sink的个数可以增加Sink消费event的能力。Sink也不是越多越好够用就行，过多的Sink会占用系统资源，造成系统资源不必要的浪费。</p>
+<p>batchSize参数决定Sink一次批量从Channel读取的event条数，适当调大这个参数可以提高Sink从Channel搬出event的性能。</p>
+</li>
+</ul>
+<h3 id="flume数据是否会丢失？"><a href="#flume数据是否会丢失？" class="headerlink" title="flume数据是否会丢失？"></a>flume数据是否会丢失？</h3><ul>
+<li>flume采用事务机制，Flume使用两个独立的事务分别负责从Soucrce到Channel，以及从Channel到Sink的事件传递。如果因为某种原因使得事件无法记录，那么事务将会回滚。</li>
+<li>正是因为flume完善的事务机制，flume不会丢失数据。</li>
+<li>唯一可能丢失数据的情况是Channel采用memoryChannel，agent宕机导致数据丢失，或者Channel存储数据已满，导致Source不再写入，未写入的数据丢失。</li>
+<li>Flume不会丢失数据，但是有可能造成数据的重复，例如数据已经成功由Sink发出，但是没有接收到响应，Sink会再次发送数据，此时可能会导致数据的重复。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>大数据</category>
+        <category>flume</category>
+      </categories>
+      <tags>
+        <tag>大数据</tag>
+        <tag>flume</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>hbase</title>
+    <url>/2021/06/27/hbase/</url>
+    <content><![CDATA[<h1 id="HBase"><a href="#HBase" class="headerlink" title="HBase"></a>HBase</h1><h2 id="HBbse概述"><a href="#HBbse概述" class="headerlink" title="HBbse概述"></a>HBbse概述</h2><ul>
+<li><p>HBase是一种分布式，可扩展，，支持海量数据存储的NoSQL数据库。</p>
+</li>
+<li><p>逻辑结构</p>
+</li>
+<li><p><a href="https://imgtu.com/i/RJBhlV"><img src="https://z3.ax1x.com/2021/06/27/RJBhlV.png" alt="RJBhlV.png"></a></p>
+</li>
+<li><p>row key类似于主键</p>
+</li>
+<li><p>region在行上的一个切分，几行分一个region</p>
+</li>
+<li><p>列族：Column Qualifier。</p>
+</li>
+<li><p>store：按照region和列族可以分为一个个store</p>
+</li>
+<li><p>物理结构</p>
+<p><a href="https://imgtu.com/i/RJBomF"><img src="https://z3.ax1x.com/2021/06/27/RJBomF.png" alt="RJBomF.png"></a></p>
+</li>
+<li><p>数据模型</p>
+<p><strong>1.</strong> <em><strong>Name Space</strong></em></p>
+<p>命名空间，类似于关系型数据库的DatabBase概念，每个命名空间下有多个表。HBase有两个自带的命名空间，分别是hbase和default，hbase中存放的是HBase内置的表，default表是用户默认使用的命名空间。</p>
+<p><strong>2.</strong> <em><strong>Region</strong></em></p>
+<p>类似于关系型数据库的表概念。不同的是，HBase定义表时只需要声明列族即可，不需要声明具体的列。这意味着，往HBase写入数据时，字段可以动态、按需指定。因此，和关系型数据库相比，HBase能够轻松应对字段变更的场景。</p>
+<p><strong>3.</strong> <em><strong>Row</strong></em></p>
+<p>HBase表中的每行数据都由一个<em><strong>RowKey</strong></em>和多个<em><strong>Column</strong></em>（列）组成，数据是按照RowKey的字典顺序存储的，并且查询数据时只能根据RowKey进行检索，所以RowKey的设计十分重要。</p>
+<p><strong>4.</strong> <em><strong>Column</strong></em></p>
+<p>HBase中的每个列都由Column Family(列族)和Column Qualifier（列限定符）进行限定，例如info：name，info：age。建表时，只需指明列族，而列限定符无需预先定义。</p>
+<p><strong>5.</strong> <em><strong>Time</strong></em> <em><strong>Stamp</strong></em></p>
+<p>用于标识数据的不同版本（version），每条数据写入时，如果不指定时间戳，系统会自动为其加上该字段，其值为写入HBase的时间。</p>
+<p><strong>6.</strong> <em><strong>Cell</strong></em></p>
+<p>由{rowkey, column Family：column Qualifier, time Stamp} 唯一确定的单元。cell中的数据是没有类型的，全部是字节数组形式存贮。</p>
+</li>
+<li><p>架构</p>
+<p><a href="https://imgtu.com/i/RJDyjK"><img src="https://z3.ax1x.com/2021/06/27/RJDyjK.png" alt="RJDyjK.png"></a></p>
+</li>
+<li><p>Region Server：region的管理者</p>
+</li>
+<li><p>Master：所有Region Server的管理者</p>
+</li>
+<li><p>Zookeeper：HBase通过Zookeeper来做Master的高可用、RegionServer的监控、元数据的入口以及集群配置的维护等工作。</p>
+</li>
+<li><p>HDFS:HDFS为HBase提供最终的底层数据存储服务，同时为HBase提供高可用的支持。</p>
+</li>
+<li><p>一个RegionServer中有多个Region，每个Region中有多个store，每个Store中有一个Memstore和多个StoreFile</p>
+</li>
+</ul>
+<h2 id="HBase架构"><a href="#HBase架构" class="headerlink" title="HBase架构"></a>HBase架构</h2><p><a href="https://imgtu.com/i/RDKkkR"><img src="https://z3.ax1x.com/2021/06/30/RDKkkR.png" alt="RDKkkR.png"></a></p>
+<p>HBase分多个RegionServer，每个RegionServer内又有多个Region，每个Region中又有多个store，store中数据先写到内存，再写到SotreFile（分布式文件系统）上去。</p>
+<ul>
+<li>WAL:Write-Ahead logfile，防止写入内存后数据丢失，先写到这样一个日志文件中。类似于yarn中的edits文件。</li>
+<li>保存实际数据的物理文件，StoreFile以HFile的形式存储在HDFS上。每个Store会有一个或多个StoreFile（HFile），数据在每个StoreFile中都是有序的。</li>
+</ul>
+<h3 id="写数据流程"><a href="#写数据流程" class="headerlink" title="写数据流程"></a>写数据流程</h3><p><a href="https://imgtu.com/i/RDKXHH"><img src="https://z3.ax1x.com/2021/06/30/RDKXHH.png" alt="RDKXHH.png"></a></p>
+<p>meta表中存放了表的信息，而meta的元数据信息存放在ZK上。</p>
+<ol>
+<li><p>Client先访问zookeeper，获取hbase:meta（）表位于哪个Region Server，client如果在MetaCache中发现有该表的信息，就不会向ZK请求获取meta的位置了。</p>
+</li>
+<li><p>访问对应的Region Server，获取hbase:meta表，根据读请求的namespace:table/rowkey，查询出目标数据位于哪个Region Server中的哪个Region中。并将该table的region信息以及meta表的位置信息缓存在客户端的meta cache，方便下次访问。</p>
+</li>
+<li><p>与目标Region Server进行通讯；</p>
+</li>
+<li><p>将数据顺序写入（追加）到WAL；</p>
+</li>
+<li><p>将数据写入对应的MemStore，数据会在MemStore进行排序；</p>
+</li>
+<li><p>向客户端发送ack；</p>
+</li>
+<li><p>等达到MemStore的刷写时机后，将数据刷写到HFile（分布式存储中）。</p>
+</li>
+</ol>
+<h3 id="MemStore的刷写时机"><a href="#MemStore的刷写时机" class="headerlink" title="MemStore的刷写时机"></a>MemStore的刷写时机</h3><ul>
+<li>当某个memstroe的大小达到了<strong>hbase.hregion.memstore.flush.size</strong>（默认值128M），其所在region的所有memstore都会刷写。但是数据持续写入到memstore也不会达到128就刷，当memstore的大小达到了128*4时，会阻止继续往该memstore写数据。</li>
+<li>Java heap size 堆栈大小, 指Java 虚拟机的内存大小。在Java虚拟机中，分配多少内存用于调用对象,函数和数组。因为底层中，函数和数组的调用在计算机中是用堆栈实现。</li>
+<li>当region server中memstore的总大小达到<br><strong>java_heapsize*hbase.regionserver.global.memstore.size.upper.limit</strong>（默认值0.95），<br>Region server会把它的所有region按照其所有memstore的大小顺序（由大到小）依次进行刷写。直到region server中所有region的memstore的总大小减小到*<strong>hbase.regionserver.global.memstore.size.lower.limit</strong>以下。</li>
+<li>当region server中memstore的总大小达到<br><strong>java_heapsize*hbase.regionserver.global.memstore.size</strong>（默认值0.4）<br>时，会阻止继续往所有的memstore写数据。</li>
+<li>达到自动刷写时间。默认1h。<strong>hbase.regionserver.optionalcacheflushinterval</strong></li>
+</ul>
+<h3 id="读数据流程"><a href="#读数据流程" class="headerlink" title="读数据流程"></a>读数据流程</h3><p><a href="https://imgtu.com/i/RrMr7Q"><img src="https://z3.ax1x.com/2021/07/01/RrMr7Q.png" alt="RrMr7Q.png"></a></p>
+<ul>
+<li>与写数据流程差不多。说一下区别，去目标RegionServer读取数据时，会向Block Cache(读缓存),MemStore,StoreFile中查询数据，并将所有数据进行合并。此处所有数据是指同一条数据的不同版本（time stamp）或者不同的类型（Put/Delete）。</li>
+<li>将从文件中查询到的数据块缓存到Block Cache中。客户端从读缓存中读取相应的数据。返回ACK。</li>
+</ul>
+<h3 id="StoreFile-Compaction"><a href="#StoreFile-Compaction" class="headerlink" title="StoreFile Compaction"></a>StoreFile Compaction</h3><ul>
+<li><p>由于memstore每次刷写都会生成一个新的HFile，且同一个字段的不同版本（timestamp）和不同类型（Put/Delete）有可能会分布在不同的HFile中，因此查询时需要遍历所有的HFile。为了减少HFile的个数，以及清理掉过期和删除的数据，会进行StoreFile Compaction。</p>
+</li>
+<li><p>Compaction（合并）分为两种：分别是Minor Compaction和Major Compaction。</p>
+</li>
+<li><p>Minor Compaction会将临近的若干个较小的HFile合并成一个较大的HFile，但不会清理过期和删除的数据。默认是三个小文件会进行合并，达到一定的数量后也不会直接合并，会根据一个算法判断是否要进行合并。</p>
+</li>
+<li><p>Major Compaction会将一个Store下的所有的HFile合并成一个大HFile，并且会清理掉过期和删除的数据。比较耗费资源，默认是一星期进行一次。</p>
+</li>
+</ul>
+<h3 id="Region-Split"><a href="#Region-Split" class="headerlink" title="Region Split"></a>Region Split</h3><ul>
+<li><p>默认情况下，每个Table起初只有一个Region，随着数据的不断写入，Region会自动进行拆分。刚拆分时，两个子Region都位于当前的Region Server，但处于负载均衡的考虑，HMaster有可能会将某个Region转移给其他的Region Server。</p>
+</li>
+<li><p>分裂时机：如果当前RegionServer上只有一个Region，当这个Region中的所有Store file的总和超过2*hbase.hregion.memstore.flush.size分裂，否则按照超过hbase.hregion.max.filesize 分裂。</p>
+</li>
+<li><p>这样切分会尽量使每个Table的在每个RegionServer中的Region数量尽量一致。</p>
+</li>
+</ul>
+<h2 id="Hive与HBase集成"><a href="#Hive与HBase集成" class="headerlink" title="Hive与HBase集成"></a>Hive与HBase集成</h2><ul>
+<li>hive默认是有jar包可与HBase集成的，可以用Hive对HBase中的数据进行分析，再将分析结果又返回到HBase中，方便其它的工作对分析好的数据的使用。</li>
+</ul>
+<h2 id="Phoenix"><a href="#Phoenix" class="headerlink" title="Phoenix"></a>Phoenix</h2><ul>
+<li>Phoenix是HBase的开源SQL皮肤。可以使用标准JDBC API代替HBase客户端API来创建表，插入数据和查询HBase数据。</li>
+<li>可以用类sql语言操作hbase</li>
+<li>优势：支持索引。</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>大数据</tag>
+        <tag>flume</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2020/09/01/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo new <span class="hljs-string">&quot;My New Post&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo server<br></code></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo generate<br></code></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo deploy<br></code></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
+  </entry>
+  <entry>
     <title>Hive</title>
     <url>/2021/06/04/hive/</url>
     <content><![CDATA[<h1 id="Hive"><a href="#Hive" class="headerlink" title="Hive"></a>Hive</h1><h2 id="Hive基础知识"><a href="#Hive基础知识" class="headerlink" title="Hive基础知识"></a>Hive基础知识</h2><ul>
@@ -5831,189 +6172,6 @@ cast(&#39;1000&#39; as int)
       </tags>
   </entry>
   <entry>
-    <title>hbase</title>
-    <url>/2021/06/27/hbase/</url>
-    <content><![CDATA[<h1 id="HBase"><a href="#HBase" class="headerlink" title="HBase"></a>HBase</h1><h2 id="HBbse概述"><a href="#HBbse概述" class="headerlink" title="HBbse概述"></a>HBbse概述</h2><ul>
-<li><p>HBase是一种分布式，可扩展，，支持海量数据存储的NoSQL数据库。</p>
-</li>
-<li><p>逻辑结构</p>
-</li>
-<li><p><a href="https://imgtu.com/i/RJBhlV"><img src="https://z3.ax1x.com/2021/06/27/RJBhlV.png" alt="RJBhlV.png"></a></p>
-</li>
-<li><p>row key类似于主键</p>
-</li>
-<li><p>region在行上的一个切分，几行分一个region</p>
-</li>
-<li><p>列族：Column Qualifier。</p>
-</li>
-<li><p>store：按照region和列族可以分为一个个store</p>
-</li>
-<li><p>物理结构</p>
-<p><a href="https://imgtu.com/i/RJBomF"><img src="https://z3.ax1x.com/2021/06/27/RJBomF.png" alt="RJBomF.png"></a></p>
-</li>
-<li><p>数据模型</p>
-<p><strong>1.</strong> <em><strong>Name Space</strong></em></p>
-<p>命名空间，类似于关系型数据库的DatabBase概念，每个命名空间下有多个表。HBase有两个自带的命名空间，分别是hbase和default，hbase中存放的是HBase内置的表，default表是用户默认使用的命名空间。</p>
-<p><strong>2.</strong> <em><strong>Region</strong></em></p>
-<p>类似于关系型数据库的表概念。不同的是，HBase定义表时只需要声明列族即可，不需要声明具体的列。这意味着，往HBase写入数据时，字段可以动态、按需指定。因此，和关系型数据库相比，HBase能够轻松应对字段变更的场景。</p>
-<p><strong>3.</strong> <em><strong>Row</strong></em></p>
-<p>HBase表中的每行数据都由一个<em><strong>RowKey</strong></em>和多个<em><strong>Column</strong></em>（列）组成，数据是按照RowKey的字典顺序存储的，并且查询数据时只能根据RowKey进行检索，所以RowKey的设计十分重要。</p>
-<p><strong>4.</strong> <em><strong>Column</strong></em></p>
-<p>HBase中的每个列都由Column Family(列族)和Column Qualifier（列限定符）进行限定，例如info：name，info：age。建表时，只需指明列族，而列限定符无需预先定义。</p>
-<p><strong>5.</strong> <em><strong>Time</strong></em> <em><strong>Stamp</strong></em></p>
-<p>用于标识数据的不同版本（version），每条数据写入时，如果不指定时间戳，系统会自动为其加上该字段，其值为写入HBase的时间。</p>
-<p><strong>6.</strong> <em><strong>Cell</strong></em></p>
-<p>由{rowkey, column Family：column Qualifier, time Stamp} 唯一确定的单元。cell中的数据是没有类型的，全部是字节数组形式存贮。</p>
-</li>
-<li><p>架构</p>
-<p><a href="https://imgtu.com/i/RJDyjK"><img src="https://z3.ax1x.com/2021/06/27/RJDyjK.png" alt="RJDyjK.png"></a></p>
-</li>
-<li><p>Region Server：region的管理者</p>
-</li>
-<li><p>Master：所有Region Server的管理者</p>
-</li>
-<li><p>Zookeeper：HBase通过Zookeeper来做Master的高可用、RegionServer的监控、元数据的入口以及集群配置的维护等工作。</p>
-</li>
-<li><p>HDFS:HDFS为HBase提供最终的底层数据存储服务，同时为HBase提供高可用的支持。</p>
-</li>
-<li><p>一个RegionServer中有多个Region，每个Region中有多个store，每个Store中有一个Memstore和多个StoreFile</p>
-</li>
-</ul>
-<h2 id="HBase架构"><a href="#HBase架构" class="headerlink" title="HBase架构"></a>HBase架构</h2><p><a href="https://imgtu.com/i/RDKkkR"><img src="https://z3.ax1x.com/2021/06/30/RDKkkR.png" alt="RDKkkR.png"></a></p>
-<p>HBase分多个RegionServer，每个RegionServer内又有多个Region，每个Region中又有多个store，store中数据先写到内存，再写到SotreFile（分布式文件系统）上去。</p>
-<ul>
-<li>WAL:Write-Ahead logfile，防止写入内存后数据丢失，先写到这样一个日志文件中。类似于yarn中的edits文件。</li>
-<li>保存实际数据的物理文件，StoreFile以HFile的形式存储在HDFS上。每个Store会有一个或多个StoreFile（HFile），数据在每个StoreFile中都是有序的。</li>
-</ul>
-<h3 id="写数据流程"><a href="#写数据流程" class="headerlink" title="写数据流程"></a>写数据流程</h3><p><a href="https://imgtu.com/i/RDKXHH"><img src="https://z3.ax1x.com/2021/06/30/RDKXHH.png" alt="RDKXHH.png"></a></p>
-<p>meta表中存放了表的信息，而meta的元数据信息存放在ZK上。</p>
-<ol>
-<li><p>Client先访问zookeeper，获取hbase:meta（）表位于哪个Region Server，client如果在MetaCache中发现有该表的信息，就不会向ZK请求获取meta的位置了。</p>
-</li>
-<li><p>访问对应的Region Server，获取hbase:meta表，根据读请求的namespace:table/rowkey，查询出目标数据位于哪个Region Server中的哪个Region中。并将该table的region信息以及meta表的位置信息缓存在客户端的meta cache，方便下次访问。</p>
-</li>
-<li><p>与目标Region Server进行通讯；</p>
-</li>
-<li><p>将数据顺序写入（追加）到WAL；</p>
-</li>
-<li><p>将数据写入对应的MemStore，数据会在MemStore进行排序；</p>
-</li>
-<li><p>向客户端发送ack；</p>
-</li>
-<li><p>等达到MemStore的刷写时机后，将数据刷写到HFile（分布式存储中）。</p>
-</li>
-</ol>
-<h3 id="MemStore的刷写时机"><a href="#MemStore的刷写时机" class="headerlink" title="MemStore的刷写时机"></a>MemStore的刷写时机</h3><ul>
-<li>当某个memstroe的大小达到了<strong>hbase.hregion.memstore.flush.size</strong>（默认值128M），其所在region的所有memstore都会刷写。但是数据持续写入到memstore也不会达到128就刷，当memstore的大小达到了128*4时，会阻止继续往该memstore写数据。</li>
-<li>Java heap size 堆栈大小, 指Java 虚拟机的内存大小。在Java虚拟机中，分配多少内存用于调用对象,函数和数组。因为底层中，函数和数组的调用在计算机中是用堆栈实现。</li>
-<li>当region server中memstore的总大小达到<br><strong>java_heapsize*hbase.regionserver.global.memstore.size.upper.limit</strong>（默认值0.95），<br>Region server会把它的所有region按照其所有memstore的大小顺序（由大到小）依次进行刷写。直到region server中所有region的memstore的总大小减小到*<strong>hbase.regionserver.global.memstore.size.lower.limit</strong>以下。</li>
-<li>当region server中memstore的总大小达到<br><strong>java_heapsize*hbase.regionserver.global.memstore.size</strong>（默认值0.4）<br>时，会阻止继续往所有的memstore写数据。</li>
-<li>达到自动刷写时间。默认1h。<strong>hbase.regionserver.optionalcacheflushinterval</strong></li>
-</ul>
-<h3 id="读数据流程"><a href="#读数据流程" class="headerlink" title="读数据流程"></a>读数据流程</h3><p><a href="https://imgtu.com/i/RrMr7Q"><img src="https://z3.ax1x.com/2021/07/01/RrMr7Q.png" alt="RrMr7Q.png"></a></p>
-<ul>
-<li>与写数据流程差不多。说一下区别，去目标RegionServer读取数据时，会向Block Cache(读缓存),MemStore,StoreFile中查询数据，并将所有数据进行合并。此处所有数据是指同一条数据的不同版本（time stamp）或者不同的类型（Put/Delete）。</li>
-<li>将从文件中查询到的数据块缓存到Block Cache中。客户端从读缓存中读取相应的数据。返回ACK。</li>
-</ul>
-<h3 id="StoreFile-Compaction"><a href="#StoreFile-Compaction" class="headerlink" title="StoreFile Compaction"></a>StoreFile Compaction</h3><ul>
-<li><p>由于memstore每次刷写都会生成一个新的HFile，且同一个字段的不同版本（timestamp）和不同类型（Put/Delete）有可能会分布在不同的HFile中，因此查询时需要遍历所有的HFile。为了减少HFile的个数，以及清理掉过期和删除的数据，会进行StoreFile Compaction。</p>
-</li>
-<li><p>Compaction（合并）分为两种：分别是Minor Compaction和Major Compaction。</p>
-</li>
-<li><p>Minor Compaction会将临近的若干个较小的HFile合并成一个较大的HFile，但不会清理过期和删除的数据。默认是三个小文件会进行合并，达到一定的数量后也不会直接合并，会根据一个算法判断是否要进行合并。</p>
-</li>
-<li><p>Major Compaction会将一个Store下的所有的HFile合并成一个大HFile，并且会清理掉过期和删除的数据。比较耗费资源，默认是一星期进行一次。</p>
-</li>
-</ul>
-<h3 id="Region-Split"><a href="#Region-Split" class="headerlink" title="Region Split"></a>Region Split</h3><ul>
-<li><p>默认情况下，每个Table起初只有一个Region，随着数据的不断写入，Region会自动进行拆分。刚拆分时，两个子Region都位于当前的Region Server，但处于负载均衡的考虑，HMaster有可能会将某个Region转移给其他的Region Server。</p>
-</li>
-<li><p>分裂时机：如果当前RegionServer上只有一个Region，当这个Region中的所有Store file的总和超过2*hbase.hregion.memstore.flush.size分裂，否则按照超过hbase.hregion.max.filesize 分裂。</p>
-</li>
-<li><p>这样切分会尽量使每个Table的在每个RegionServer中的Region数量尽量一致。</p>
-</li>
-</ul>
-<h2 id="Hive与HBase集成"><a href="#Hive与HBase集成" class="headerlink" title="Hive与HBase集成"></a>Hive与HBase集成</h2><ul>
-<li>hive默认是有jar包可与HBase集成的，可以用Hive对HBase中的数据进行分析，再将分析结果又返回到HBase中，方便其它的工作对分析好的数据的使用。</li>
-</ul>
-<h2 id="Phoenix"><a href="#Phoenix" class="headerlink" title="Phoenix"></a>Phoenix</h2><ul>
-<li>Phoenix是HBase的开源SQL皮肤。可以使用标准JDBC API代替HBase客户端API来创建表，插入数据和查询HBase数据。</li>
-<li>可以用类sql语言操作hbase</li>
-<li>优势：支持索引。</li>
-</ul>
-]]></content>
-      <tags>
-        <tag>大数据</tag>
-        <tag>flume</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Hello World</title>
-    <url>/2020/09/01/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo new <span class="hljs-string">&quot;My New Post&quot;</span><br></code></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo server<br></code></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo generate<br></code></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">$ hexo deploy<br></code></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-]]></content>
-  </entry>
-  <entry>
-    <title>java8新特性</title>
-    <url>/2021/04/23/java8-new-features/</url>
-    <content><![CDATA[<h1 id="Java8新特性"><a href="#Java8新特性" class="headerlink" title="Java8新特性"></a>Java8新特性</h1><h2 id="Lambda表达式与函数式接口"><a href="#Lambda表达式与函数式接口" class="headerlink" title="Lambda表达式与函数式接口"></a>Lambda表达式与函数式接口</h2><h3 id="函数式接口"><a href="#函数式接口" class="headerlink" title="函数式接口"></a>函数式接口</h3><blockquote>
-<ol>
-<li>Consumer<T> 消费器, 作用是消费一个T类型的对象, 并没有返回.</li>
-</ol>
-<ul>
-<li>void accept(T t) : 有输入无输出</li>
-</ul>
-</blockquote>
-<hr>
-<blockquote>
-<ol start="2">
-<li>Supplier<T> 供给器, 作用是供给一个T类型的对象, 不需要参数.</li>
-</ol>
-<ul>
-<li>T get() : 无输入有输出</li>
-</ul>
-</blockquote>
-<hr>
-<blockquote>
-<ol start="3">
-<li>Function&lt;T, R&gt; 转换器, 作用是输入一个T类型对象, 经过处理, 返回的是R类型对象.</li>
-</ol>
-<ul>
-<li>R apply(T t) : 有输入有输出</li>
-</ul>
-</blockquote>
-<hr>
-<blockquote>
-<ol start="4">
-<li>Predicate<T> 判定器, 作用是输入一个T类型对象, 经过某种判断, 返回true或false</li>
-</ol>
-<ul>
-<li>boolean test(T t) : 有输入有固定输出布尔</li>
-</ul>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs Java"><span class="hljs-keyword">package</span> java8;<br><br><span class="hljs-keyword">import</span> java.util.function.Consumer;<br><span class="hljs-keyword">import</span> java.util.function.Function;<br><span class="hljs-keyword">import</span> java.util.function.Predicate;<br><span class="hljs-keyword">import</span> java.util.function.Supplier;<br><br><span class="hljs-keyword">import</span> org.junit.Test;<br><br><span class="hljs-keyword">import</span> javabean.Student;<br><br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 函数式接口</span><br><span class="hljs-comment"> * 		只有一个抽象方法的接口, 可以用<span class="hljs-doctag">@FunctionalInterface</span>修饰</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> * Consumer&lt;T&gt; 消费器, 作用是消费一个T类型的对象, 并没有返回.</span><br><span class="hljs-comment"> * 		void accept(T t) : 有输入无输出</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> * Supplier&lt;T&gt; 供给器, 作用是供给一个T类型的对象, 不需要参数.</span><br><span class="hljs-comment"> * 		T get() : 无输入有输出</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> * Function&lt;T, R&gt; 转换器, 作用是输入一个T类型对象, 经过处理, 返回的是R类型对象.</span><br><span class="hljs-comment"> * 		R apply(T t) : 有输入有输出</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> * Predicate&lt;T&gt; 判定器, 作用是输入一个T类型对象, 经过某种判断, 返回true或false</span><br><span class="hljs-comment"> * 		boolean test(T t) : 有输入有固定输出布尔</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> * 方法引用 : 接口中的抽象方法的模式(输入和输出) 和 Lambda体中的方法调用是一致时, 就可以简化写法.</span><br><span class="hljs-comment"> * 类或对象 :: 方法名</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> */</span><br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">FunctionTest</span> &#123;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">exer22</span><span class="hljs-params">()</span> &#123;<br>		<span class="hljs-comment">//Supplier&lt;Student&gt; supplier2 = () -&gt; new Student();</span><br>		Supplier&lt;Student&gt; supplier2 = Student::<span class="hljs-keyword">new</span>;<br>		System.out.println(supplier2.get());<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">test42</span><span class="hljs-params">()</span> &#123;<br>		<span class="hljs-comment">//Function&lt;Integer, String&gt; function2 = t -&gt; String.valueOf(t);</span><br>		Function&lt;Integer, String&gt; function2 = String::valueOf;<br>		System.out.println(function2.apply(<span class="hljs-number">1112</span>));<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">test32</span><span class="hljs-params">()</span> &#123;<br>		<span class="hljs-comment">//Supplier&lt;Double&gt; supplier2 = () -&gt; Math.random();</span><br>		Supplier&lt;Double&gt; supplier2 = Math::random;<br>		System.out.println(supplier2.get());<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">test12</span><span class="hljs-params">()</span> &#123;<br>		<span class="hljs-comment">//Consumer&lt;String&gt; consumer2 = t -&gt; System.out.println(t);</span><br>		Consumer&lt;String&gt; consumer2 = System.out::println;<br>		consumer2.accept(<span class="hljs-string">&quot;lkjxlkcjccc&quot;</span>);<br>	&#125;<br>	<br>	<span class="hljs-comment">// 写一个判定器, 判断一个学生是否及格</span><br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">exer4</span><span class="hljs-params">()</span> &#123;<br>		Predicate&lt;Integer&gt; predicate1 = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Predicate</span>&lt;Integer&gt;() &#123;<br>			<span class="hljs-meta">@Override</span><br>			<span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">test</span><span class="hljs-params">(Integer t)</span> &#123;<br>				<span class="hljs-keyword">return</span> t&gt;= <span class="hljs-number">60</span>;<br>			&#125;<br>		&#125;;<br>		<span class="hljs-type">boolean</span> <span class="hljs-variable">test</span> <span class="hljs-operator">=</span> predicate1.test(<span class="hljs-number">100</span>);<br>		System.out.println(test);<br>		<br>		Predicate&lt;Integer&gt; predicate2 = t -&gt; t &gt;= <span class="hljs-number">60</span>;<br>		System.out.println(predicate2.test(<span class="hljs-number">100</span>));<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">test5</span><span class="hljs-params">()</span> &#123;<br>		Predicate&lt;Integer&gt; predicate1 = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Predicate</span>&lt;Integer&gt;() &#123;<br>			<span class="hljs-meta">@Override</span><br>			<span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">test</span><span class="hljs-params">(Integer t)</span> &#123;<br>				<span class="hljs-keyword">return</span> t % <span class="hljs-number">2</span> == <span class="hljs-number">0</span>;<br>			&#125;<br>		&#125;;<br>		<span class="hljs-type">boolean</span> <span class="hljs-variable">test</span> <span class="hljs-operator">=</span> predicate1.test(<span class="hljs-number">83</span>);<br>		System.out.println(test);<br>		<br>		Predicate&lt;Integer&gt; predicate2 = t -&gt; t % <span class="hljs-number">2</span> == <span class="hljs-number">0</span>;<br>		System.out.println(predicate2.test(<span class="hljs-number">20</span>));<br>	&#125;<br>	<br>	<span class="hljs-comment">// 写一个转换器, 把学生对象转换成字符串, 内容是姓名+分数</span><br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">exer3</span><span class="hljs-params">()</span> &#123;<br>		Function&lt;Student, String&gt; function1 = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Function</span>&lt;Student, String&gt;() &#123;<br>			<span class="hljs-meta">@Override</span><br>			<span class="hljs-keyword">public</span> String <span class="hljs-title function_">apply</span><span class="hljs-params">(Student t)</span> &#123;<br>				<span class="hljs-keyword">return</span> t.getName() + <span class="hljs-string">&quot;:&quot;</span> + t.getScore();<br>			&#125;<br>		&#125;;<br>		<span class="hljs-type">String</span> <span class="hljs-variable">apply</span> <span class="hljs-operator">=</span> function1.apply(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Student</span>(<span class="hljs-number">2</span>, <span class="hljs-string">&quot;小刚&quot;</span>, <span class="hljs-number">5</span>, <span class="hljs-number">80</span>));<br>		System.out.println(apply);<br>		<br>		Function&lt;Student, String&gt; function2 = t -&gt; t.getName() + <span class="hljs-string">&quot;:&quot;</span> + t.getScore();<br>		System.out.println(function2.apply(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Student</span>(<span class="hljs-number">1</span>, <span class="hljs-string">&quot;小花&quot;</span>, <span class="hljs-number">2</span>, <span class="hljs-number">100</span>)));<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">test4</span><span class="hljs-params">()</span> &#123;<br>		Function&lt;Integer, String&gt; function1 = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Function</span>&lt;Integer, String&gt;() &#123;<br>			<span class="hljs-meta">@Override</span><br>			<span class="hljs-keyword">public</span> String <span class="hljs-title function_">apply</span><span class="hljs-params">(Integer t)</span> &#123;<br>				<span class="hljs-keyword">return</span> String.valueOf(t);<br>			&#125;<br>		&#125;;<br>		<br>		<span class="hljs-type">String</span> <span class="hljs-variable">apply</span> <span class="hljs-operator">=</span> function1.apply(<span class="hljs-number">9238</span>);<br>		System.out.println(apply);<br>		<br>		Function&lt;Integer, String&gt; function2 = t -&gt; String.valueOf(t);<br>		System.out.println(function2.apply(<span class="hljs-number">1112</span>));<br>	&#125;<br>	<br>	<span class="hljs-comment">// 写一个供给器, 每调用一次供给一个学生对象</span><br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">exer2</span><span class="hljs-params">()</span> &#123;<br>		Supplier&lt;Student&gt; supplier1 = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Supplier</span>&lt;Student&gt;() &#123;<br>			<span class="hljs-meta">@Override</span><br>			<span class="hljs-keyword">public</span> Student <span class="hljs-title function_">get</span><span class="hljs-params">()</span> &#123;<br>				<span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Student</span>();<br>			&#125;<br>		&#125;;<br>		<span class="hljs-type">Student</span> <span class="hljs-variable">student</span> <span class="hljs-operator">=</span> supplier1.get();<br>		System.out.println(student);<br>		<br>		Supplier&lt;Student&gt; supplier2 = () -&gt; <span class="hljs-keyword">new</span> <span class="hljs-title class_">Student</span>();<br>		System.out.println(supplier2.get());<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">test3</span><span class="hljs-params">()</span> &#123;<br>		Supplier&lt;Double&gt; supplier = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Supplier</span>&lt;Double&gt;() &#123;<br>			<span class="hljs-meta">@Override</span><br>			<span class="hljs-keyword">public</span> Double <span class="hljs-title function_">get</span><span class="hljs-params">()</span> &#123;<br>				<span class="hljs-keyword">return</span> Math.random();<br>			&#125;<br>		&#125;;<br>		System.out.println(supplier.get());<br>		<br>		Supplier&lt;Double&gt; supplier2 = () -&gt; Math.random();<br>		System.out.println(supplier2.get());<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">test2</span><span class="hljs-params">()</span> &#123;<br>		Supplier&lt;Integer&gt; supplier1 = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Supplier</span>&lt;Integer&gt;() &#123;<br>			<span class="hljs-meta">@Override</span><br>			<span class="hljs-keyword">public</span> Integer <span class="hljs-title function_">get</span><span class="hljs-params">()</span> &#123;<br>				<span class="hljs-keyword">return</span> <span class="hljs-number">100</span>;<br>			&#125;<br>		&#125;;<br>		<span class="hljs-type">Integer</span> <span class="hljs-variable">integer</span> <span class="hljs-operator">=</span> supplier1.get();<br>		System.out.println(integer);<br>		<br>		Supplier&lt;Integer&gt; supplier2 = () -&gt; <span class="hljs-number">100</span>;<br>		<span class="hljs-type">Integer</span> <span class="hljs-variable">integer2</span> <span class="hljs-operator">=</span> supplier2.get();<br>		System.out.println(integer2);<br>	&#125;<br>	<br>	<span class="hljs-comment">// 写一个消费器, 消费一个Student对象.</span><br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">exer1</span><span class="hljs-params">()</span> &#123;<br>		Consumer&lt;Student&gt; consumer1 = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Consumer</span>&lt;Student&gt;() &#123;<br>			<span class="hljs-meta">@Override</span><br>			<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">accept</span><span class="hljs-params">(Student t)</span> &#123;<br>				System.out.println(t);<br>			&#125;<br>		&#125;;<br>		consumer1.accept(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Student</span>());<br>		<br>		Consumer&lt;Student&gt; consumer2 = t -&gt; System.out.println(t);<br>		consumer2.accept(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Student</span>(<span class="hljs-number">1</span>, <span class="hljs-string">&quot;小花&quot;</span>, <span class="hljs-number">2</span>, <span class="hljs-number">50</span>));<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">test1</span><span class="hljs-params">()</span> &#123;<br>		Consumer&lt;String&gt; consumer1 = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Consumer</span>&lt;String&gt;() &#123;<br>			<span class="hljs-meta">@Override</span><br>			<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">accept</span><span class="hljs-params">(String t)</span> &#123;<br>				System.out.println(t);<br>			&#125;<br>		&#125;;<br>		consumer1.accept(<span class="hljs-string">&quot;alsdkjfalksdjf&quot;</span>);<br>		<br>		Consumer&lt;String&gt; consumer2 = t -&gt; System.out.println(t);<br>		consumer2.accept(<span class="hljs-string">&quot;lkjxlkcjccc&quot;</span>);<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
-<h2 id="Stream流"><a href="#Stream流" class="headerlink" title="Stream流"></a>Stream流</h2><figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs Java"><span class="hljs-keyword">package</span> java8;<br><span class="hljs-keyword">import</span> java.util.*;<br><span class="hljs-keyword">import</span> java.util.stream.Collectors;<br><span class="hljs-keyword">import</span> java.util.stream.Stream;<br><br><span class="hljs-keyword">import</span> org.junit.Test;<br><br><span class="hljs-keyword">import</span> javabean.Student;<br><span class="hljs-keyword">import</span> javabean.StudentTest;<br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * Stream : </span><br><span class="hljs-comment"> * 	1) 不保存数据, 只负责处理数据</span><br><span class="hljs-comment"> * 	2) 处理数据不会造成原始数据的变化 , 每次处理都会产生新的流</span><br><span class="hljs-comment"> * 	3) 所有操作都是延迟执行的, 只有终止操作执行时才执行中间操作</span><br><span class="hljs-comment"> * 	4) 每个流只能&quot;消费&quot;一次, 消费过后就作废.</span><br><span class="hljs-comment"> * 	5) 单向, 一次性使用, 可以支持高并发...</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> * 典型的操作 :</span><br><span class="hljs-comment"> * 	1) 创建流(获取流) </span><br><span class="hljs-comment"> * 		1) 从集合获取流, 集合.stream();</span><br><span class="hljs-comment"> * 		2) 从数组获取流, Arrays.stream(Xxx[] arr);</span><br><span class="hljs-comment"> * 		3) 基于散数据, Stream.of(T... objs)</span><br><span class="hljs-comment"> * 		4) 使用供给器, 无限流</span><br><span class="hljs-comment"> * 	2) 中间操作, 多个中间操作就形成流水线, 是延迟执行的, 中间操作可以省略</span><br><span class="hljs-comment"> * 		***filter(Predicate p) : 让流中的每个对象都经过判定器, 如果结果为true留下, 如果是false丢弃. 产生新流</span><br><span class="hljs-comment"> * 		distinct(); 把流中的数据去重并产生新流, 依据对象的hashCode和equals</span><br><span class="hljs-comment"> * 		limit(long maxSize) 限制流中的最大数据量</span><br><span class="hljs-comment"> * 		skip(long n) 跳过前n个元素</span><br><span class="hljs-comment"> * 		***map(Function f) 让流中的每个对象都转换为新对象, 所以它的结果的流全变了.</span><br><span class="hljs-comment"> * 		sorted() 把流中的对象排序 , 自然排序</span><br><span class="hljs-comment"> * 		*sorted(Comparator c) 定制排序</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> * 	3) 终止操作, 一旦中止, 所有的中间操作就开始执行, 终止操作是必须的.</span><br><span class="hljs-comment"> * 		***forEach(Consumer c) : 让流中的每个对象都经过消费器消费一下.</span><br><span class="hljs-comment"> * 		findFirst() 返回流中的第一个对象</span><br><span class="hljs-comment"> * 		**count() 计数</span><br><span class="hljs-comment"> * 		**collect(采集器) 可以把结果集采集到一个新的容器中.</span><br><span class="hljs-comment"> * 		***reduce(BinaryOperator op) 把流中的对象两两处理最后产生一个结果</span><br><span class="hljs-comment"> *	</span><br><span class="hljs-comment"> *	Optional是一容器, 里面放一个引用, 如果引用为空, 获取时直接抛异常.</span><br><span class="hljs-comment"> *	防止空指针.</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">StreamTest</span> &#123;<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">exer6</span><span class="hljs-params">()</span> &#123;<br>		List&lt;Student&gt; collect = StudentTest.getList()<br>					.stream()<br>					.distinct()<br>					.filter(t -&gt; t.getGrade() == <span class="hljs-number">3</span>)<br>					.filter(t -&gt; t.getScore() &lt; <span class="hljs-number">60</span>).sorted((o1, o2) -&gt; -(<span class="hljs-type">int</span>)(o1.getScore() - o2.getScore()))<br>					.collect(Collectors.toList());<br>		<span class="hljs-keyword">for</span> (Student student : collect) &#123;<br>			System.out.println(student);<br>		&#125;<br>	&#125;<br>	<br>	<span class="hljs-comment">// 找出全校最高分</span><br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">exer5</span><span class="hljs-params">()</span> &#123;<br>		Optional&lt;Double&gt; reduce = StudentTest.getList().stream().distinct().map(t -&gt; t.getScore()).reduce((d1, d2) -&gt; d1 &gt; d2 ? d1 : d2);<br>		<span class="hljs-type">Double</span> <span class="hljs-variable">orElse</span> <span class="hljs-operator">=</span> reduce.orElse((<span class="hljs-type">double</span>) <span class="hljs-number">999</span>);<br>		System.out.println(orElse);<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">exer4</span><span class="hljs-params">()</span> &#123;<br>		<span class="hljs-type">long</span> <span class="hljs-variable">count</span> <span class="hljs-operator">=</span> StudentTest.getList().stream().distinct().count();<br>		System.out.println(count);<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">exer3</span><span class="hljs-params">()</span> &#123;<br>		Optional&lt;Student&gt; findFirst = StudentTest.getList()<br>												.stream()<br>												.distinct()<br>												.filter(t -&gt; t.getGrade() == <span class="hljs-number">4</span>)<br>												.filter(t -&gt; t.getScore() &lt; <span class="hljs-number">60</span>).sorted((o1, o2) -&gt; -(<span class="hljs-type">int</span>)(o1.getScore() - o2.getScore()))<br>												.limit(<span class="hljs-number">2</span>).findFirst();<br>		<span class="hljs-comment">//Student student = findFirst.get();</span><br>		<span class="hljs-type">Student</span> <span class="hljs-variable">student</span> <span class="hljs-operator">=</span> findFirst.orElse(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Student</span>()); <span class="hljs-comment">// 最大化减少空指针</span><br>		System.out.println(student);<br>	&#125;<br>		<br>	<span class="hljs-comment">// 3年级没有及格的同学倒序, 取出前2个.</span><br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">exer2</span><span class="hljs-params">()</span> &#123;<br>		StudentTest.getList()<br>					.stream()<br>					.distinct()<br>					.filter(t -&gt; t.getGrade() == <span class="hljs-number">3</span>)<br>					.filter(t -&gt; t.getScore() &lt; <span class="hljs-number">60</span>).sorted((o1, o2) -&gt; -(<span class="hljs-type">int</span>)(o1.getScore() - o2.getScore()))<br>					.limit(<span class="hljs-number">2</span>).forEach(System.out::println);<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">test9</span><span class="hljs-params">()</span> &#123;<br>		StudentTest.getList().stream().distinct().sorted((t1, t2) -&gt; (<span class="hljs-type">int</span>)(t1.getScore() - t2.getScore())).forEach(System.out::println);<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">test8</span><span class="hljs-params">()</span> &#123;<br>		StudentTest.getList().stream().distinct().map(t -&gt; t.getScore()).forEach(System.out::println);<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">Test7</span><span class="hljs-params">()</span> &#123;<br>		<span class="hljs-comment">// 第6个到第10个</span><br>		StudentTest.getList().stream().distinct().skip(<span class="hljs-number">10</span>).limit(<span class="hljs-number">5</span>).forEach(System.out::println);<br>	&#125;<br>	<br>	<span class="hljs-comment">// 找出5年级姓张的同学</span><br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">exer1</span><span class="hljs-params">()</span> &#123;<br>		List&lt;Student&gt; list = StudentTest.getList();<br>		list.stream().filter(t -&gt; t.getGrade() == <span class="hljs-number">5</span>).filter(t -&gt; t.getName().startsWith(<span class="hljs-string">&quot;张&quot;</span>)).forEach(System.out::println);<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">test62</span><span class="hljs-params">()</span> &#123;<br>		List&lt;Student&gt; list = StudentTest.getList();<br>		list.stream().filter(t -&gt; t.getGrade() == <span class="hljs-number">3</span>).filter(t -&gt; t.getScore() &gt;= <span class="hljs-number">60</span>).forEach(System.out::println);<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">test6</span><span class="hljs-params">()</span> &#123;<br>		List&lt;Student&gt; list = StudentTest.getList();<br>		Stream&lt;Student&gt; stream = list.stream();<br>		Stream&lt;Student&gt; stream2 = stream.filter(t -&gt; t.getGrade() == <span class="hljs-number">3</span>);<br>		Stream&lt;Student&gt; stream3 = stream2.filter(t -&gt; t.getScore() &gt;= <span class="hljs-number">60</span>);<br>		stream3.forEach(System.out::println);<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">test5</span><span class="hljs-params">()</span> &#123;<br>		Stream.generate(Math::random).limit(<span class="hljs-number">10</span>).forEach(System.out::println);<span class="hljs-comment">// 无限流</span><br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">test4</span><span class="hljs-params">()</span> &#123;<br>		Stream&lt;Integer&gt; generate = Stream.generate(() -&gt; <span class="hljs-number">200</span>); <span class="hljs-comment">// 无限流</span><br>		generate.forEach(System.out::println);<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">test3</span><span class="hljs-params">()</span> &#123;<br>		Stream&lt;Number&gt; of = Stream.of(<span class="hljs-number">3.22</span>, <span class="hljs-number">9.33</span>, <span class="hljs-number">4.88</span>, <span class="hljs-number">4.2</span>, <span class="hljs-number">8</span>, <span class="hljs-number">9</span>);<br>		of.forEach(System.out::println);<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">test2</span><span class="hljs-params">()</span> &#123;<br>		String[] arr = &#123;<span class="hljs-string">&quot;kjsf&quot;</span>, <span class="hljs-string">&quot;qqa&quot;</span>, <span class="hljs-string">&quot;cv&quot;</span>, <span class="hljs-string">&quot;XXX&quot;</span>&#125;;<br>		Stream&lt;String&gt; stream = Arrays.stream(arr);<br>		stream.forEach(System.out::println);<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">test1</span><span class="hljs-params">()</span> &#123;<br>		List&lt;Integer&gt; list = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;Integer&gt;();<br>		<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">10</span>; i++) &#123;<br>			list.add((<span class="hljs-type">int</span>)(Math.random() * <span class="hljs-number">20</span>));<br>		&#125;<br>		System.out.println(list);<br>		<br>		Stream&lt;Integer&gt; stream = list.stream();<br>		stream.forEach(System.out::println);<br>		<br>	&#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>Java</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>kafka</title>
     <url>/2021/06/24/kafka/</url>
     <content><![CDATA[<h1 id="kafka"><a href="#kafka" class="headerlink" title="kafka"></a>kafka</h1><h2 id="Kafka概述"><a href="#Kafka概述" class="headerlink" title="Kafka概述"></a>Kafka概述</h2><ul>
@@ -6263,6 +6421,54 @@ try &#123;
       </tags>
   </entry>
   <entry>
+    <title>java8新特性</title>
+    <url>/2021/04/23/java8-new-features/</url>
+    <content><![CDATA[<h1 id="Java8新特性"><a href="#Java8新特性" class="headerlink" title="Java8新特性"></a>Java8新特性</h1><h2 id="Lambda表达式与函数式接口"><a href="#Lambda表达式与函数式接口" class="headerlink" title="Lambda表达式与函数式接口"></a>Lambda表达式与函数式接口</h2><h3 id="函数式接口"><a href="#函数式接口" class="headerlink" title="函数式接口"></a>函数式接口</h3><blockquote>
+<ol>
+<li>Consumer<T> 消费器, 作用是消费一个T类型的对象, 并没有返回.</li>
+</ol>
+<ul>
+<li>void accept(T t) : 有输入无输出</li>
+</ul>
+</blockquote>
+<hr>
+<blockquote>
+<ol start="2">
+<li>Supplier<T> 供给器, 作用是供给一个T类型的对象, 不需要参数.</li>
+</ol>
+<ul>
+<li>T get() : 无输入有输出</li>
+</ul>
+</blockquote>
+<hr>
+<blockquote>
+<ol start="3">
+<li>Function&lt;T, R&gt; 转换器, 作用是输入一个T类型对象, 经过处理, 返回的是R类型对象.</li>
+</ol>
+<ul>
+<li>R apply(T t) : 有输入有输出</li>
+</ul>
+</blockquote>
+<hr>
+<blockquote>
+<ol start="4">
+<li>Predicate<T> 判定器, 作用是输入一个T类型对象, 经过某种判断, 返回true或false</li>
+</ol>
+<ul>
+<li>boolean test(T t) : 有输入有固定输出布尔</li>
+</ul>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs Java"><span class="hljs-keyword">package</span> java8;<br><br><span class="hljs-keyword">import</span> java.util.function.Consumer;<br><span class="hljs-keyword">import</span> java.util.function.Function;<br><span class="hljs-keyword">import</span> java.util.function.Predicate;<br><span class="hljs-keyword">import</span> java.util.function.Supplier;<br><br><span class="hljs-keyword">import</span> org.junit.Test;<br><br><span class="hljs-keyword">import</span> javabean.Student;<br><br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 函数式接口</span><br><span class="hljs-comment"> * 		只有一个抽象方法的接口, 可以用<span class="hljs-doctag">@FunctionalInterface</span>修饰</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> * Consumer&lt;T&gt; 消费器, 作用是消费一个T类型的对象, 并没有返回.</span><br><span class="hljs-comment"> * 		void accept(T t) : 有输入无输出</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> * Supplier&lt;T&gt; 供给器, 作用是供给一个T类型的对象, 不需要参数.</span><br><span class="hljs-comment"> * 		T get() : 无输入有输出</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> * Function&lt;T, R&gt; 转换器, 作用是输入一个T类型对象, 经过处理, 返回的是R类型对象.</span><br><span class="hljs-comment"> * 		R apply(T t) : 有输入有输出</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> * Predicate&lt;T&gt; 判定器, 作用是输入一个T类型对象, 经过某种判断, 返回true或false</span><br><span class="hljs-comment"> * 		boolean test(T t) : 有输入有固定输出布尔</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> * 方法引用 : 接口中的抽象方法的模式(输入和输出) 和 Lambda体中的方法调用是一致时, 就可以简化写法.</span><br><span class="hljs-comment"> * 类或对象 :: 方法名</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> */</span><br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">FunctionTest</span> &#123;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">exer22</span><span class="hljs-params">()</span> &#123;<br>		<span class="hljs-comment">//Supplier&lt;Student&gt; supplier2 = () -&gt; new Student();</span><br>		Supplier&lt;Student&gt; supplier2 = Student::<span class="hljs-keyword">new</span>;<br>		System.out.println(supplier2.get());<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">test42</span><span class="hljs-params">()</span> &#123;<br>		<span class="hljs-comment">//Function&lt;Integer, String&gt; function2 = t -&gt; String.valueOf(t);</span><br>		Function&lt;Integer, String&gt; function2 = String::valueOf;<br>		System.out.println(function2.apply(<span class="hljs-number">1112</span>));<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">test32</span><span class="hljs-params">()</span> &#123;<br>		<span class="hljs-comment">//Supplier&lt;Double&gt; supplier2 = () -&gt; Math.random();</span><br>		Supplier&lt;Double&gt; supplier2 = Math::random;<br>		System.out.println(supplier2.get());<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">test12</span><span class="hljs-params">()</span> &#123;<br>		<span class="hljs-comment">//Consumer&lt;String&gt; consumer2 = t -&gt; System.out.println(t);</span><br>		Consumer&lt;String&gt; consumer2 = System.out::println;<br>		consumer2.accept(<span class="hljs-string">&quot;lkjxlkcjccc&quot;</span>);<br>	&#125;<br>	<br>	<span class="hljs-comment">// 写一个判定器, 判断一个学生是否及格</span><br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">exer4</span><span class="hljs-params">()</span> &#123;<br>		Predicate&lt;Integer&gt; predicate1 = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Predicate</span>&lt;Integer&gt;() &#123;<br>			<span class="hljs-meta">@Override</span><br>			<span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">test</span><span class="hljs-params">(Integer t)</span> &#123;<br>				<span class="hljs-keyword">return</span> t&gt;= <span class="hljs-number">60</span>;<br>			&#125;<br>		&#125;;<br>		<span class="hljs-type">boolean</span> <span class="hljs-variable">test</span> <span class="hljs-operator">=</span> predicate1.test(<span class="hljs-number">100</span>);<br>		System.out.println(test);<br>		<br>		Predicate&lt;Integer&gt; predicate2 = t -&gt; t &gt;= <span class="hljs-number">60</span>;<br>		System.out.println(predicate2.test(<span class="hljs-number">100</span>));<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">test5</span><span class="hljs-params">()</span> &#123;<br>		Predicate&lt;Integer&gt; predicate1 = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Predicate</span>&lt;Integer&gt;() &#123;<br>			<span class="hljs-meta">@Override</span><br>			<span class="hljs-keyword">public</span> <span class="hljs-type">boolean</span> <span class="hljs-title function_">test</span><span class="hljs-params">(Integer t)</span> &#123;<br>				<span class="hljs-keyword">return</span> t % <span class="hljs-number">2</span> == <span class="hljs-number">0</span>;<br>			&#125;<br>		&#125;;<br>		<span class="hljs-type">boolean</span> <span class="hljs-variable">test</span> <span class="hljs-operator">=</span> predicate1.test(<span class="hljs-number">83</span>);<br>		System.out.println(test);<br>		<br>		Predicate&lt;Integer&gt; predicate2 = t -&gt; t % <span class="hljs-number">2</span> == <span class="hljs-number">0</span>;<br>		System.out.println(predicate2.test(<span class="hljs-number">20</span>));<br>	&#125;<br>	<br>	<span class="hljs-comment">// 写一个转换器, 把学生对象转换成字符串, 内容是姓名+分数</span><br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">exer3</span><span class="hljs-params">()</span> &#123;<br>		Function&lt;Student, String&gt; function1 = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Function</span>&lt;Student, String&gt;() &#123;<br>			<span class="hljs-meta">@Override</span><br>			<span class="hljs-keyword">public</span> String <span class="hljs-title function_">apply</span><span class="hljs-params">(Student t)</span> &#123;<br>				<span class="hljs-keyword">return</span> t.getName() + <span class="hljs-string">&quot;:&quot;</span> + t.getScore();<br>			&#125;<br>		&#125;;<br>		<span class="hljs-type">String</span> <span class="hljs-variable">apply</span> <span class="hljs-operator">=</span> function1.apply(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Student</span>(<span class="hljs-number">2</span>, <span class="hljs-string">&quot;小刚&quot;</span>, <span class="hljs-number">5</span>, <span class="hljs-number">80</span>));<br>		System.out.println(apply);<br>		<br>		Function&lt;Student, String&gt; function2 = t -&gt; t.getName() + <span class="hljs-string">&quot;:&quot;</span> + t.getScore();<br>		System.out.println(function2.apply(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Student</span>(<span class="hljs-number">1</span>, <span class="hljs-string">&quot;小花&quot;</span>, <span class="hljs-number">2</span>, <span class="hljs-number">100</span>)));<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">test4</span><span class="hljs-params">()</span> &#123;<br>		Function&lt;Integer, String&gt; function1 = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Function</span>&lt;Integer, String&gt;() &#123;<br>			<span class="hljs-meta">@Override</span><br>			<span class="hljs-keyword">public</span> String <span class="hljs-title function_">apply</span><span class="hljs-params">(Integer t)</span> &#123;<br>				<span class="hljs-keyword">return</span> String.valueOf(t);<br>			&#125;<br>		&#125;;<br>		<br>		<span class="hljs-type">String</span> <span class="hljs-variable">apply</span> <span class="hljs-operator">=</span> function1.apply(<span class="hljs-number">9238</span>);<br>		System.out.println(apply);<br>		<br>		Function&lt;Integer, String&gt; function2 = t -&gt; String.valueOf(t);<br>		System.out.println(function2.apply(<span class="hljs-number">1112</span>));<br>	&#125;<br>	<br>	<span class="hljs-comment">// 写一个供给器, 每调用一次供给一个学生对象</span><br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">exer2</span><span class="hljs-params">()</span> &#123;<br>		Supplier&lt;Student&gt; supplier1 = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Supplier</span>&lt;Student&gt;() &#123;<br>			<span class="hljs-meta">@Override</span><br>			<span class="hljs-keyword">public</span> Student <span class="hljs-title function_">get</span><span class="hljs-params">()</span> &#123;<br>				<span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Student</span>();<br>			&#125;<br>		&#125;;<br>		<span class="hljs-type">Student</span> <span class="hljs-variable">student</span> <span class="hljs-operator">=</span> supplier1.get();<br>		System.out.println(student);<br>		<br>		Supplier&lt;Student&gt; supplier2 = () -&gt; <span class="hljs-keyword">new</span> <span class="hljs-title class_">Student</span>();<br>		System.out.println(supplier2.get());<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">test3</span><span class="hljs-params">()</span> &#123;<br>		Supplier&lt;Double&gt; supplier = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Supplier</span>&lt;Double&gt;() &#123;<br>			<span class="hljs-meta">@Override</span><br>			<span class="hljs-keyword">public</span> Double <span class="hljs-title function_">get</span><span class="hljs-params">()</span> &#123;<br>				<span class="hljs-keyword">return</span> Math.random();<br>			&#125;<br>		&#125;;<br>		System.out.println(supplier.get());<br>		<br>		Supplier&lt;Double&gt; supplier2 = () -&gt; Math.random();<br>		System.out.println(supplier2.get());<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">test2</span><span class="hljs-params">()</span> &#123;<br>		Supplier&lt;Integer&gt; supplier1 = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Supplier</span>&lt;Integer&gt;() &#123;<br>			<span class="hljs-meta">@Override</span><br>			<span class="hljs-keyword">public</span> Integer <span class="hljs-title function_">get</span><span class="hljs-params">()</span> &#123;<br>				<span class="hljs-keyword">return</span> <span class="hljs-number">100</span>;<br>			&#125;<br>		&#125;;<br>		<span class="hljs-type">Integer</span> <span class="hljs-variable">integer</span> <span class="hljs-operator">=</span> supplier1.get();<br>		System.out.println(integer);<br>		<br>		Supplier&lt;Integer&gt; supplier2 = () -&gt; <span class="hljs-number">100</span>;<br>		<span class="hljs-type">Integer</span> <span class="hljs-variable">integer2</span> <span class="hljs-operator">=</span> supplier2.get();<br>		System.out.println(integer2);<br>	&#125;<br>	<br>	<span class="hljs-comment">// 写一个消费器, 消费一个Student对象.</span><br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">exer1</span><span class="hljs-params">()</span> &#123;<br>		Consumer&lt;Student&gt; consumer1 = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Consumer</span>&lt;Student&gt;() &#123;<br>			<span class="hljs-meta">@Override</span><br>			<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">accept</span><span class="hljs-params">(Student t)</span> &#123;<br>				System.out.println(t);<br>			&#125;<br>		&#125;;<br>		consumer1.accept(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Student</span>());<br>		<br>		Consumer&lt;Student&gt; consumer2 = t -&gt; System.out.println(t);<br>		consumer2.accept(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Student</span>(<span class="hljs-number">1</span>, <span class="hljs-string">&quot;小花&quot;</span>, <span class="hljs-number">2</span>, <span class="hljs-number">50</span>));<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">test1</span><span class="hljs-params">()</span> &#123;<br>		Consumer&lt;String&gt; consumer1 = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Consumer</span>&lt;String&gt;() &#123;<br>			<span class="hljs-meta">@Override</span><br>			<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">accept</span><span class="hljs-params">(String t)</span> &#123;<br>				System.out.println(t);<br>			&#125;<br>		&#125;;<br>		consumer1.accept(<span class="hljs-string">&quot;alsdkjfalksdjf&quot;</span>);<br>		<br>		Consumer&lt;String&gt; consumer2 = t -&gt; System.out.println(t);<br>		consumer2.accept(<span class="hljs-string">&quot;lkjxlkcjccc&quot;</span>);<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h2 id="Stream流"><a href="#Stream流" class="headerlink" title="Stream流"></a>Stream流</h2><figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs Java"><span class="hljs-keyword">package</span> java8;<br><span class="hljs-keyword">import</span> java.util.*;<br><span class="hljs-keyword">import</span> java.util.stream.Collectors;<br><span class="hljs-keyword">import</span> java.util.stream.Stream;<br><br><span class="hljs-keyword">import</span> org.junit.Test;<br><br><span class="hljs-keyword">import</span> javabean.Student;<br><span class="hljs-keyword">import</span> javabean.StudentTest;<br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * Stream : </span><br><span class="hljs-comment"> * 	1) 不保存数据, 只负责处理数据</span><br><span class="hljs-comment"> * 	2) 处理数据不会造成原始数据的变化 , 每次处理都会产生新的流</span><br><span class="hljs-comment"> * 	3) 所有操作都是延迟执行的, 只有终止操作执行时才执行中间操作</span><br><span class="hljs-comment"> * 	4) 每个流只能&quot;消费&quot;一次, 消费过后就作废.</span><br><span class="hljs-comment"> * 	5) 单向, 一次性使用, 可以支持高并发...</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> * 典型的操作 :</span><br><span class="hljs-comment"> * 	1) 创建流(获取流) </span><br><span class="hljs-comment"> * 		1) 从集合获取流, 集合.stream();</span><br><span class="hljs-comment"> * 		2) 从数组获取流, Arrays.stream(Xxx[] arr);</span><br><span class="hljs-comment"> * 		3) 基于散数据, Stream.of(T... objs)</span><br><span class="hljs-comment"> * 		4) 使用供给器, 无限流</span><br><span class="hljs-comment"> * 	2) 中间操作, 多个中间操作就形成流水线, 是延迟执行的, 中间操作可以省略</span><br><span class="hljs-comment"> * 		***filter(Predicate p) : 让流中的每个对象都经过判定器, 如果结果为true留下, 如果是false丢弃. 产生新流</span><br><span class="hljs-comment"> * 		distinct(); 把流中的数据去重并产生新流, 依据对象的hashCode和equals</span><br><span class="hljs-comment"> * 		limit(long maxSize) 限制流中的最大数据量</span><br><span class="hljs-comment"> * 		skip(long n) 跳过前n个元素</span><br><span class="hljs-comment"> * 		***map(Function f) 让流中的每个对象都转换为新对象, 所以它的结果的流全变了.</span><br><span class="hljs-comment"> * 		sorted() 把流中的对象排序 , 自然排序</span><br><span class="hljs-comment"> * 		*sorted(Comparator c) 定制排序</span><br><span class="hljs-comment"> * </span><br><span class="hljs-comment"> * 	3) 终止操作, 一旦中止, 所有的中间操作就开始执行, 终止操作是必须的.</span><br><span class="hljs-comment"> * 		***forEach(Consumer c) : 让流中的每个对象都经过消费器消费一下.</span><br><span class="hljs-comment"> * 		findFirst() 返回流中的第一个对象</span><br><span class="hljs-comment"> * 		**count() 计数</span><br><span class="hljs-comment"> * 		**collect(采集器) 可以把结果集采集到一个新的容器中.</span><br><span class="hljs-comment"> * 		***reduce(BinaryOperator op) 把流中的对象两两处理最后产生一个结果</span><br><span class="hljs-comment"> *	</span><br><span class="hljs-comment"> *	Optional是一容器, 里面放一个引用, 如果引用为空, 获取时直接抛异常.</span><br><span class="hljs-comment"> *	防止空指针.</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">StreamTest</span> &#123;<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">exer6</span><span class="hljs-params">()</span> &#123;<br>		List&lt;Student&gt; collect = StudentTest.getList()<br>					.stream()<br>					.distinct()<br>					.filter(t -&gt; t.getGrade() == <span class="hljs-number">3</span>)<br>					.filter(t -&gt; t.getScore() &lt; <span class="hljs-number">60</span>).sorted((o1, o2) -&gt; -(<span class="hljs-type">int</span>)(o1.getScore() - o2.getScore()))<br>					.collect(Collectors.toList());<br>		<span class="hljs-keyword">for</span> (Student student : collect) &#123;<br>			System.out.println(student);<br>		&#125;<br>	&#125;<br>	<br>	<span class="hljs-comment">// 找出全校最高分</span><br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">exer5</span><span class="hljs-params">()</span> &#123;<br>		Optional&lt;Double&gt; reduce = StudentTest.getList().stream().distinct().map(t -&gt; t.getScore()).reduce((d1, d2) -&gt; d1 &gt; d2 ? d1 : d2);<br>		<span class="hljs-type">Double</span> <span class="hljs-variable">orElse</span> <span class="hljs-operator">=</span> reduce.orElse((<span class="hljs-type">double</span>) <span class="hljs-number">999</span>);<br>		System.out.println(orElse);<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">exer4</span><span class="hljs-params">()</span> &#123;<br>		<span class="hljs-type">long</span> <span class="hljs-variable">count</span> <span class="hljs-operator">=</span> StudentTest.getList().stream().distinct().count();<br>		System.out.println(count);<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">exer3</span><span class="hljs-params">()</span> &#123;<br>		Optional&lt;Student&gt; findFirst = StudentTest.getList()<br>												.stream()<br>												.distinct()<br>												.filter(t -&gt; t.getGrade() == <span class="hljs-number">4</span>)<br>												.filter(t -&gt; t.getScore() &lt; <span class="hljs-number">60</span>).sorted((o1, o2) -&gt; -(<span class="hljs-type">int</span>)(o1.getScore() - o2.getScore()))<br>												.limit(<span class="hljs-number">2</span>).findFirst();<br>		<span class="hljs-comment">//Student student = findFirst.get();</span><br>		<span class="hljs-type">Student</span> <span class="hljs-variable">student</span> <span class="hljs-operator">=</span> findFirst.orElse(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Student</span>()); <span class="hljs-comment">// 最大化减少空指针</span><br>		System.out.println(student);<br>	&#125;<br>		<br>	<span class="hljs-comment">// 3年级没有及格的同学倒序, 取出前2个.</span><br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">exer2</span><span class="hljs-params">()</span> &#123;<br>		StudentTest.getList()<br>					.stream()<br>					.distinct()<br>					.filter(t -&gt; t.getGrade() == <span class="hljs-number">3</span>)<br>					.filter(t -&gt; t.getScore() &lt; <span class="hljs-number">60</span>).sorted((o1, o2) -&gt; -(<span class="hljs-type">int</span>)(o1.getScore() - o2.getScore()))<br>					.limit(<span class="hljs-number">2</span>).forEach(System.out::println);<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">test9</span><span class="hljs-params">()</span> &#123;<br>		StudentTest.getList().stream().distinct().sorted((t1, t2) -&gt; (<span class="hljs-type">int</span>)(t1.getScore() - t2.getScore())).forEach(System.out::println);<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">test8</span><span class="hljs-params">()</span> &#123;<br>		StudentTest.getList().stream().distinct().map(t -&gt; t.getScore()).forEach(System.out::println);<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">Test7</span><span class="hljs-params">()</span> &#123;<br>		<span class="hljs-comment">// 第6个到第10个</span><br>		StudentTest.getList().stream().distinct().skip(<span class="hljs-number">10</span>).limit(<span class="hljs-number">5</span>).forEach(System.out::println);<br>	&#125;<br>	<br>	<span class="hljs-comment">// 找出5年级姓张的同学</span><br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">exer1</span><span class="hljs-params">()</span> &#123;<br>		List&lt;Student&gt; list = StudentTest.getList();<br>		list.stream().filter(t -&gt; t.getGrade() == <span class="hljs-number">5</span>).filter(t -&gt; t.getName().startsWith(<span class="hljs-string">&quot;张&quot;</span>)).forEach(System.out::println);<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">test62</span><span class="hljs-params">()</span> &#123;<br>		List&lt;Student&gt; list = StudentTest.getList();<br>		list.stream().filter(t -&gt; t.getGrade() == <span class="hljs-number">3</span>).filter(t -&gt; t.getScore() &gt;= <span class="hljs-number">60</span>).forEach(System.out::println);<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">test6</span><span class="hljs-params">()</span> &#123;<br>		List&lt;Student&gt; list = StudentTest.getList();<br>		Stream&lt;Student&gt; stream = list.stream();<br>		Stream&lt;Student&gt; stream2 = stream.filter(t -&gt; t.getGrade() == <span class="hljs-number">3</span>);<br>		Stream&lt;Student&gt; stream3 = stream2.filter(t -&gt; t.getScore() &gt;= <span class="hljs-number">60</span>);<br>		stream3.forEach(System.out::println);<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">test5</span><span class="hljs-params">()</span> &#123;<br>		Stream.generate(Math::random).limit(<span class="hljs-number">10</span>).forEach(System.out::println);<span class="hljs-comment">// 无限流</span><br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">test4</span><span class="hljs-params">()</span> &#123;<br>		Stream&lt;Integer&gt; generate = Stream.generate(() -&gt; <span class="hljs-number">200</span>); <span class="hljs-comment">// 无限流</span><br>		generate.forEach(System.out::println);<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">test3</span><span class="hljs-params">()</span> &#123;<br>		Stream&lt;Number&gt; of = Stream.of(<span class="hljs-number">3.22</span>, <span class="hljs-number">9.33</span>, <span class="hljs-number">4.88</span>, <span class="hljs-number">4.2</span>, <span class="hljs-number">8</span>, <span class="hljs-number">9</span>);<br>		of.forEach(System.out::println);<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">test2</span><span class="hljs-params">()</span> &#123;<br>		String[] arr = &#123;<span class="hljs-string">&quot;kjsf&quot;</span>, <span class="hljs-string">&quot;qqa&quot;</span>, <span class="hljs-string">&quot;cv&quot;</span>, <span class="hljs-string">&quot;XXX&quot;</span>&#125;;<br>		Stream&lt;String&gt; stream = Arrays.stream(arr);<br>		stream.forEach(System.out::println);<br>	&#125;<br>	<br>	<span class="hljs-meta">@Test</span><br>	<span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">test1</span><span class="hljs-params">()</span> &#123;<br>		List&lt;Integer&gt; list = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;Integer&gt;();<br>		<span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">10</span>; i++) &#123;<br>			list.add((<span class="hljs-type">int</span>)(Math.random() * <span class="hljs-number">20</span>));<br>		&#125;<br>		System.out.println(list);<br>		<br>		Stream&lt;Integer&gt; stream = list.stream();<br>		stream.forEach(System.out::println);<br>		<br>	&#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Java多线程基础</title>
     <url>/2021/04/20/multithreading/</url>
     <content><![CDATA[<h1 id="Java多线程"><a href="#Java多线程" class="headerlink" title="Java多线程"></a>Java多线程</h1><h2 id="1-程序，进程，线程"><a href="#1-程序，进程，线程" class="headerlink" title="1.程序，进程，线程"></a>1.程序，进程，线程</h2><blockquote>
@@ -6392,92 +6598,6 @@ try &#123;
       <tags>
         <tag>Java</tag>
         <tag>多线程</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>project_logcollect</title>
-    <url>/2021/07/04/project-logcollect/</url>
-    <content><![CDATA[<h1 id="电商采集项目搭建流程"><a href="#电商采集项目搭建流程" class="headerlink" title="电商采集项目搭建流程"></a>电商采集项目搭建流程</h1><h2 id="自动生成数据脚本"><a href="#自动生成数据脚本" class="headerlink" title="自动生成数据脚本"></a>自动生成数据脚本</h2><ul>
-<li>生成用于测试的数据</li>
-</ul>
-<h2 id="数据采集模块"><a href="#数据采集模块" class="headerlink" title="数据采集模块"></a>数据采集模块</h2><h3 id="Hadoop安装"><a href="#Hadoop安装" class="headerlink" title="Hadoop安装"></a>Hadoop安装</h3><ul>
-<li><p>在这里只说以下大致步骤以及容易出错的地方</p>
-</li>
-<li><p>配置集群之间分发数据的脚本，以及集群之间ssh免密登录</p>
-</li>
-<li><p>hadoop安装，解压就行，注意解压的目录。</p>
-</li>
-<li><p>核心文件配置：</p>
-<ul>
-<li><font color=red>core-site.xml</font>文件配置</li>
-<li><font color=red>hdfs-site.xml</font>文件配置，因为是测试，在这里设置HDFS副本数量为1，防止存储不够，浪费存储。</li>
-<li><font color=red>yran-site.xml</font>文件配置</li>
-<li><font color=red>mapred-site.xml</font>文件</li>
-<li>workers文件配置，注意不用多打空格等输入错误，里面配置hadoop的datanode节点的主机名。</li>
-</ul>
-</li>
-<li><p>第一次启动注意要先格式化namenode。bin/hdfs namenode -format</p>
-</li>
-<li><p>常见web客户端：</p>
-<ul>
-<li>hadoop100:9870。HDFS的Web界面</li>
-<li>yarn的web界面：hadoop101:8088</li>
-<li>历史服务器hadoop102:19888</li>
-</ul>
-</li>
-<li><p>单点启动关闭命令</p>
-<figure class="highlight crmsh"><table><tr><td class="code"><pre><code class="hljs crmsh"><span class="hljs-comment">#HDFS组件</span><br>hdfs --daemon <span class="hljs-literal">start</span>/<span class="hljs-literal">stop</span> namenode/datanode/secondarynamenode<br><span class="hljs-comment">#Yarn</span><br>yarn --daemon <span class="hljs-literal">start</span>/<span class="hljs-literal">stop</span>  resourcemanager/nodemanager<br><span class="hljs-comment">#历史服务器</span><br>mapred --daemon <span class="hljs-literal">start</span> historyserver<br></code></pre></td></tr></table></figure></li>
-<li><p>配置历史服务器</p>
-</li>
-<li><p>配置日志的聚集</p>
-</li>
-<li><p>集群时间同步</p>
-</li>
-<li><p>配置一下压缩</p>
-</li>
-<li><p>可以测试一下集群基础性能</p>
-<figure class="highlight awk"><table><tr><td class="code"><pre><code class="hljs awk"><br>读写性能测试<br><span class="hljs-comment">#读取HDFS集群的10个128M文件</span><br>hadoop jar <span class="hljs-regexp">/opt/m</span>odule<span class="hljs-regexp">/hadoop-3.1.3/</span>share<span class="hljs-regexp">/hadoop/m</span>apreduce/hadoop-mapreduce-client-jobclient-<span class="hljs-number">3.1</span>.<span class="hljs-number">3</span>-tests.jar TestDFSIO -read -nrFiles <span class="hljs-number">10</span> -fileSize <span class="hljs-number">128</span>MB<br><span class="hljs-comment">#删除测试数据</span><br>hadoop jar <span class="hljs-regexp">/opt/m</span>odule<span class="hljs-regexp">/hadoop-3.1.3/</span>share<span class="hljs-regexp">/hadoop/m</span>apreduce/hadoop-mapreduce-client-jobclient-<span class="hljs-number">3.1</span>.<span class="hljs-number">3</span>-tests.jar TestDFSIO -clean<br><br>运算速度测试<br><span class="hljs-comment">#使用RandomWriter来产生随机数，每个节点运行10个Map任务，每个Map产生大约1G大小的二进制随机数</span><br>hadoop jar <span class="hljs-regexp">/opt/m</span>odule<span class="hljs-regexp">/hadoop-3.1.3/</span>share<span class="hljs-regexp">/hadoop/m</span>apreduce/hadoop-mapreduce-examples-<span class="hljs-number">3.1</span>.<span class="hljs-number">3</span>.jar randomwriter random-data<br><span class="hljs-comment">#执行排序程序</span><br>hadoop jar <span class="hljs-regexp">/opt/m</span>odule<span class="hljs-regexp">/hadoop-3.1.3/</span>share<span class="hljs-regexp">/hadoop/m</span>apreduce/hadoop-mapreduce-examples-<span class="hljs-number">3.1</span>.<span class="hljs-number">3</span>.jar sort random-data sorted-data<br><span class="hljs-comment">#验证数据是否排序成功</span><br>hadoop jar <span class="hljs-regexp">/opt/m</span>odule<span class="hljs-regexp">/hadoop-3.1.3/</span>share<span class="hljs-regexp">/hadoop/m</span>apreduce/hadoop-mapreduce-client-jobclient-<span class="hljs-number">3.1</span>.<span class="hljs-number">3</span>-tests.jar testmapredsort -sortInput random-data -sortOutput sorted-data<br></code></pre></td></tr></table></figure></li>
-</ul>
-<p><a href="https://imgtu.com/i/RWzQ8f"><img src="https://z3.ax1x.com/2021/07/04/RWzQ8f.png" alt="RWzQ8f.png"></a></p>
-<h3 id="ZooKeeper安装"><a href="#ZooKeeper安装" class="headerlink" title="ZooKeeper安装"></a>ZooKeeper安装</h3><ul>
-<li><p>在/zookeeper-3.5.7/这个目录下创建zkData</p>
-</li>
-<li><p>在/zookeeper-3.5.7/zkData目录下创建一个myid的文件，myid唯一。</p>
-</li>
-<li><p>重命名/zookeeper-3.5.7/conf这个目录下的zoo_sample.cfg为zoo.cfg</p>
-</li>
-<li><p>修改数据存储路径：dataDir=/opt/module/zookeeper-3.5.7/zkData</p>
-</li>
-<li><p>cluster下增加集群配置</p>
-</li>
-</ul>
-<h3 id="Kafka"><a href="#Kafka" class="headerlink" title="Kafka"></a>Kafka</h3><ul>
-<li><p>Kafka遇到的坑：– Error while fetching metadata with correlation id : {LEADER_NOT_AVAILABLE}</p>
-<ul>
-<li><p>原因：无法识别Kafka hostname</p>
-</li>
-<li><p>解决：修改kafka/config/server.properties配置</p>
-</li>
-<li><p>配置llisteners=PLAINTEXT://hadoop100:9092</p>
-</li>
-<li><p> 配置advertised.listeners=PLAINTEXT://hadoop100:9092</p>
-</li>
-</ul>
-</li>
-<li><p>Kafka压力测试</p>
-</li>
-</ul>
-<h3 id="项目基础架构"><a href="#项目基础架构" class="headerlink" title="项目基础架构"></a>项目基础架构</h3><ul>
-<li><a href="https://imgtu.com/i/W5gHcF"><img src="https://z3.ax1x.com/2021/07/27/W5gHcF.png" alt="W5gHcF.png"></a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>项目</category>
-        <category>电商数据采集项目</category>
-      </categories>
-      <tags>
-        <tag>大数据</tag>
-        <tag>电商采集项目</tag>
       </tags>
   </entry>
   <entry>
@@ -7211,6 +7331,92 @@ end;
       </tags>
   </entry>
   <entry>
+    <title>project_logcollect</title>
+    <url>/2021/07/04/project-logcollect/</url>
+    <content><![CDATA[<h1 id="电商采集项目搭建流程"><a href="#电商采集项目搭建流程" class="headerlink" title="电商采集项目搭建流程"></a>电商采集项目搭建流程</h1><h2 id="自动生成数据脚本"><a href="#自动生成数据脚本" class="headerlink" title="自动生成数据脚本"></a>自动生成数据脚本</h2><ul>
+<li>生成用于测试的数据</li>
+</ul>
+<h2 id="数据采集模块"><a href="#数据采集模块" class="headerlink" title="数据采集模块"></a>数据采集模块</h2><h3 id="Hadoop安装"><a href="#Hadoop安装" class="headerlink" title="Hadoop安装"></a>Hadoop安装</h3><ul>
+<li><p>在这里只说以下大致步骤以及容易出错的地方</p>
+</li>
+<li><p>配置集群之间分发数据的脚本，以及集群之间ssh免密登录</p>
+</li>
+<li><p>hadoop安装，解压就行，注意解压的目录。</p>
+</li>
+<li><p>核心文件配置：</p>
+<ul>
+<li><font color=red>core-site.xml</font>文件配置</li>
+<li><font color=red>hdfs-site.xml</font>文件配置，因为是测试，在这里设置HDFS副本数量为1，防止存储不够，浪费存储。</li>
+<li><font color=red>yran-site.xml</font>文件配置</li>
+<li><font color=red>mapred-site.xml</font>文件</li>
+<li>workers文件配置，注意不用多打空格等输入错误，里面配置hadoop的datanode节点的主机名。</li>
+</ul>
+</li>
+<li><p>第一次启动注意要先格式化namenode。bin/hdfs namenode -format</p>
+</li>
+<li><p>常见web客户端：</p>
+<ul>
+<li>hadoop100:9870。HDFS的Web界面</li>
+<li>yarn的web界面：hadoop101:8088</li>
+<li>历史服务器hadoop102:19888</li>
+</ul>
+</li>
+<li><p>单点启动关闭命令</p>
+<figure class="highlight crmsh"><table><tr><td class="code"><pre><code class="hljs crmsh"><span class="hljs-comment">#HDFS组件</span><br>hdfs --daemon <span class="hljs-literal">start</span>/<span class="hljs-literal">stop</span> namenode/datanode/secondarynamenode<br><span class="hljs-comment">#Yarn</span><br>yarn --daemon <span class="hljs-literal">start</span>/<span class="hljs-literal">stop</span>  resourcemanager/nodemanager<br><span class="hljs-comment">#历史服务器</span><br>mapred --daemon <span class="hljs-literal">start</span> historyserver<br></code></pre></td></tr></table></figure></li>
+<li><p>配置历史服务器</p>
+</li>
+<li><p>配置日志的聚集</p>
+</li>
+<li><p>集群时间同步</p>
+</li>
+<li><p>配置一下压缩</p>
+</li>
+<li><p>可以测试一下集群基础性能</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><code class="hljs awk"><br>读写性能测试<br><span class="hljs-comment">#读取HDFS集群的10个128M文件</span><br>hadoop jar <span class="hljs-regexp">/opt/m</span>odule<span class="hljs-regexp">/hadoop-3.1.3/</span>share<span class="hljs-regexp">/hadoop/m</span>apreduce/hadoop-mapreduce-client-jobclient-<span class="hljs-number">3.1</span>.<span class="hljs-number">3</span>-tests.jar TestDFSIO -read -nrFiles <span class="hljs-number">10</span> -fileSize <span class="hljs-number">128</span>MB<br><span class="hljs-comment">#删除测试数据</span><br>hadoop jar <span class="hljs-regexp">/opt/m</span>odule<span class="hljs-regexp">/hadoop-3.1.3/</span>share<span class="hljs-regexp">/hadoop/m</span>apreduce/hadoop-mapreduce-client-jobclient-<span class="hljs-number">3.1</span>.<span class="hljs-number">3</span>-tests.jar TestDFSIO -clean<br><br>运算速度测试<br><span class="hljs-comment">#使用RandomWriter来产生随机数，每个节点运行10个Map任务，每个Map产生大约1G大小的二进制随机数</span><br>hadoop jar <span class="hljs-regexp">/opt/m</span>odule<span class="hljs-regexp">/hadoop-3.1.3/</span>share<span class="hljs-regexp">/hadoop/m</span>apreduce/hadoop-mapreduce-examples-<span class="hljs-number">3.1</span>.<span class="hljs-number">3</span>.jar randomwriter random-data<br><span class="hljs-comment">#执行排序程序</span><br>hadoop jar <span class="hljs-regexp">/opt/m</span>odule<span class="hljs-regexp">/hadoop-3.1.3/</span>share<span class="hljs-regexp">/hadoop/m</span>apreduce/hadoop-mapreduce-examples-<span class="hljs-number">3.1</span>.<span class="hljs-number">3</span>.jar sort random-data sorted-data<br><span class="hljs-comment">#验证数据是否排序成功</span><br>hadoop jar <span class="hljs-regexp">/opt/m</span>odule<span class="hljs-regexp">/hadoop-3.1.3/</span>share<span class="hljs-regexp">/hadoop/m</span>apreduce/hadoop-mapreduce-client-jobclient-<span class="hljs-number">3.1</span>.<span class="hljs-number">3</span>-tests.jar testmapredsort -sortInput random-data -sortOutput sorted-data<br></code></pre></td></tr></table></figure></li>
+</ul>
+<p><a href="https://imgtu.com/i/RWzQ8f"><img src="https://z3.ax1x.com/2021/07/04/RWzQ8f.png" alt="RWzQ8f.png"></a></p>
+<h3 id="ZooKeeper安装"><a href="#ZooKeeper安装" class="headerlink" title="ZooKeeper安装"></a>ZooKeeper安装</h3><ul>
+<li><p>在/zookeeper-3.5.7/这个目录下创建zkData</p>
+</li>
+<li><p>在/zookeeper-3.5.7/zkData目录下创建一个myid的文件，myid唯一。</p>
+</li>
+<li><p>重命名/zookeeper-3.5.7/conf这个目录下的zoo_sample.cfg为zoo.cfg</p>
+</li>
+<li><p>修改数据存储路径：dataDir=/opt/module/zookeeper-3.5.7/zkData</p>
+</li>
+<li><p>cluster下增加集群配置</p>
+</li>
+</ul>
+<h3 id="Kafka"><a href="#Kafka" class="headerlink" title="Kafka"></a>Kafka</h3><ul>
+<li><p>Kafka遇到的坑：– Error while fetching metadata with correlation id : {LEADER_NOT_AVAILABLE}</p>
+<ul>
+<li><p>原因：无法识别Kafka hostname</p>
+</li>
+<li><p>解决：修改kafka/config/server.properties配置</p>
+</li>
+<li><p>配置llisteners=PLAINTEXT://hadoop100:9092</p>
+</li>
+<li><p> 配置advertised.listeners=PLAINTEXT://hadoop100:9092</p>
+</li>
+</ul>
+</li>
+<li><p>Kafka压力测试</p>
+</li>
+</ul>
+<h3 id="项目基础架构"><a href="#项目基础架构" class="headerlink" title="项目基础架构"></a>项目基础架构</h3><ul>
+<li><a href="https://imgtu.com/i/W5gHcF"><img src="https://z3.ax1x.com/2021/07/27/W5gHcF.png" alt="W5gHcF.png"></a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>项目</category>
+        <category>电商数据采集项目</category>
+      </categories>
+      <tags>
+        <tag>大数据</tag>
+        <tag>电商采集项目</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>project</title>
     <url>/2021/09/29/project/</url>
     <content><![CDATA[<h1 id="项目总结"><a href="#项目总结" class="headerlink" title="项目总结"></a>项目总结</h1><h2 id="数据采集项目"><a href="#数据采集项目" class="headerlink" title="数据采集项目"></a>数据采集项目</h2><ul>
@@ -7711,27 +7917,6 @@ end;
       </categories>
       <tags>
         <tag>数据倾斜</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>sql_userful_function</title>
-    <url>/2022/06/13/sql-userful-function/</url>
-    <content><![CDATA[<h1 id="常用的SQL函数"><a href="#常用的SQL函数" class="headerlink" title="常用的SQL函数"></a>常用的SQL函数</h1><h2 id="常见的MySQL关系型数据库"><a href="#常见的MySQL关系型数据库" class="headerlink" title="常见的MySQL关系型数据库"></a>常见的MySQL关系型数据库</h2><ul>
-<li><p>date_format(date,format)</p>
-<ul>
-<li><p><strong>date</strong>参数是合法的日期，<strong>format</strong>规定日期/时间的输出格式。</p>
-</li>
-<li><p>````mysql<br>select date_format(‘2021-10-01 10:00:00’,’%Y-%m-%d %h:%i:%s’)</p>
-<figure class="highlight gherkin"><table><tr><td class="code"><pre><code class="hljs gherkin"><br>  - |<span class="hljs-string"> %a   </span>|<span class="hljs-string"> 缩写星期名                                     </span>|<br>    |<span class="hljs-string"> ---- </span>|<span class="hljs-string"> ---------------------------------------------- </span>|<br>    |<span class="hljs-string"> %b   </span>|<span class="hljs-string"> 缩写月名                                       </span>|<br>    |<span class="hljs-string"> %c   </span>|<span class="hljs-string"> 月，数值                                       </span>|<br>    |<span class="hljs-string"> %D   </span>|<span class="hljs-string"> 带有英文前缀的月中的天                         </span>|<br>    |<span class="hljs-string"> %d   </span>|<span class="hljs-string"> 月的天，数值(00-31)                            </span>|<br>    |<span class="hljs-string"> %e   </span>|<span class="hljs-string"> 月的天，数值(0-31)                             </span>|<br>    |<span class="hljs-string"> %f   </span>|<span class="hljs-string"> 微秒                                           </span>|<br>    |<span class="hljs-string"> %H   </span>|<span class="hljs-string"> 小时 (00-23)                                   </span>|<br>    |<span class="hljs-string"> %h   </span>|<span class="hljs-string"> 小时 (01-12)                                   </span>|<br>    |<span class="hljs-string"> %I   </span>|<span class="hljs-string"> 小时 (01-12)                                   </span>|<br>    |<span class="hljs-string"> %i   </span>|<span class="hljs-string"> 分钟，数值(00-59)                              </span>|<br>    |<span class="hljs-string"> %j   </span>|<span class="hljs-string"> 年的天 (001-366)                               </span>|<br>    |<span class="hljs-string"> %k   </span>|<span class="hljs-string"> 小时 (0-23)                                    </span>|<br>    |<span class="hljs-string"> %l   </span>|<span class="hljs-string"> 小时 (1-12)                                    </span>|<br>    |<span class="hljs-string"> %M   </span>|<span class="hljs-string"> 月名                                           </span>|<br>    |<span class="hljs-string"> %m   </span>|<span class="hljs-string"> 月，数值(00-12)                                </span>|<br>    |<span class="hljs-string"> %p   </span>|<span class="hljs-string"> AM 或 PM                                       </span>|<br>    |<span class="hljs-string"> %r   </span>|<span class="hljs-string"> 时间，12-小时（hh:mm:ss AM 或 PM）             </span>|<br>    |<span class="hljs-string"> %S   </span>|<span class="hljs-string"> 秒(00-59)                                      </span>|<br>    |<span class="hljs-string"> %s   </span>|<span class="hljs-string"> 秒(00-59)                                      </span>|<br>    |<span class="hljs-string"> %T   </span>|<span class="hljs-string"> 时间, 24-小时 (hh:mm:ss)                       </span>|<br>    |<span class="hljs-string"> %U   </span>|<span class="hljs-string"> 周 (00-53) 星期日是一周的第一天                </span>|<br>    |<span class="hljs-string"> %u   </span>|<span class="hljs-string"> 周 (00-53) 星期一是一周的第一天                </span>|<br>    |<span class="hljs-string"> %V   </span>|<span class="hljs-string"> 周 (01-53) 星期日是一周的第一天，与 %X 使用    </span>|<br>    |<span class="hljs-string"> %v   </span>|<span class="hljs-string"> 周 (01-53) 星期一是一周的第一天，与 %x 使用    </span>|<br>    |<span class="hljs-string"> %W   </span>|<span class="hljs-string"> 星期名                                         </span>|<br>    |<span class="hljs-string"> %w   </span>|<span class="hljs-string"> 周的天 （0=星期日, 6=星期六）                  </span>|<br>    |<span class="hljs-string"> %X   </span>|<span class="hljs-string"> 年，其中的星期日是周的第一天，4 位，与 %V 使用 </span>|<br>    |<span class="hljs-string"> %x   </span>|<span class="hljs-string"> 年，其中的星期一是周的第一天，4 位，与 %v 使用 </span>|<br>    |<span class="hljs-string"> %Y   </span>|<span class="hljs-string"> 年，4 位                                       </span>|<br>    |<span class="hljs-string"> %y   </span>|<span class="hljs-string"> 年，2 位                                       </span>|<br><br><span class="hljs-symbol">*</span> concat(str1,str2,...)    ，concat_ws(seperator,string1,string2)<br><br>  - MySQL `CONCAT()`函数需要一个或多个字符串参数，并将它们连接成一个字符串。`CONCAT()`函数需要至少一个参数，否则会引起错误。 <br>  - MySQL提供了一种特殊形式的`CONCAT()`函数：`CONCAT_WS()`函数。`CONCAT_WS()`函数将两个或多个字符串值与预定义的分隔符相连接。<br><br><span class="hljs-symbol">*</span> timediff(dt1,dt2)<br><br>  - `TIMEDIFF`函数接受两个必须为相同类型的参数，即`TIME`或`DATETIME`。 `TIMEDIFF`函数返回表示为时间值的`dt1 - dt2`的结果。<br>  - `TIMEDIFF`函数的结果是一个`TIME`值，范围是从`-838:59:59`到`838:59:59`。<br><br><span class="hljs-symbol">*</span> TIMESTAMPDIFF(unit,begin,end); <br><br>  - `TIMESTAMPDIFF`函数返回`end-begin`的结果，其中`begin`和`end`是[DATE](http://www.yiibai.com/mysql/date.html)或[DATETIME](http://www.yiibai.com/mysql/datetime.html)表达式。<br>  - `TIMESTAMPDIFF`函数允许其参数具有混合类型，例如，`begin`是`DATE`值，`end`可以是`DATETIME`值。 如果使用`DATE`值，则`TIMESTAMPDIFF`函数将其视为时间部分为`“00:00:00”`的`DATETIME`值。<br>  - `unit`参数是确定(`end-begin`)的结果的单位，表示为整数。 以下是有效单位：<br>    - MICROSECOND<br>    - SECOND<br>    - MINUTE<br>    - HOUR<br>    - DAY<br>    - WEEK<br>    - MONTH<br>    - QUARTER<br>    - YEAR<br><br><span class="hljs-symbol">*</span> 数据类型转换函数<br><br>  - cast(&#x27;2022-01-01 00:00:00&#x27; as datetime)<br>  - convert(&#x27;2021-01-01 00:00:00&#x27;,datetime)<br><br><span class="hljs-symbol">*</span> date_sub(date,INTERVAL expr type) <br><br>  - 从日期减去指定的时间间隔<br>  - <span class="hljs-symbol">*</span>date<span class="hljs-symbol">*</span> 参数是合法的日期表达式。<span class="hljs-symbol">*</span>expr<span class="hljs-symbol">*</span> 参数是您希望添加的时间间隔。<br><br><span class="hljs-symbol">*</span> DATE_ADD(date,INTERVAL expr type)<br><br>  - 从日期加上指定的时间间隔<br><br>  - <span class="hljs-symbol">*</span>date<span class="hljs-symbol">*</span> 参数是合法的日期表达式。<span class="hljs-symbol">*</span>expr<span class="hljs-symbol">*</span> 参数是您希望添加的时间间隔。<br><br>  - |<span class="hljs-string"> MICROSECOND        </span>|<br>    |<span class="hljs-string"> ------------------ </span>|<br>    |<span class="hljs-string"> SECOND             </span>|<br>    |<span class="hljs-string"> MINUTE             </span>|<br>    |<span class="hljs-string"> HOUR               </span>|<br>    |<span class="hljs-string"> DAY                </span>|<br>    |<span class="hljs-string"> WEEK               </span>|<br>    |<span class="hljs-string"> MONTH              </span>|<br>    |<span class="hljs-string"> QUARTER            </span>|<br>    |<span class="hljs-string"> YEAR               </span>|<br>    |<span class="hljs-string"> SECOND_MICROSECOND </span>|<br>    |<span class="hljs-string"> MINUTE_MICROSECOND </span>|<br>    |<span class="hljs-string"> MINUTE_SECOND      </span>|<br>    |<span class="hljs-string"> HOUR_MICROSECOND   </span>|<br>    |<span class="hljs-string"> HOUR_SECOND        </span>|<br>    |<span class="hljs-string"> HOUR_MINUTE        </span>|<br>    |<span class="hljs-string"> DAY_MICROSECOND    </span>|<br>    |<span class="hljs-string"> DAY_SECOND         </span>|<br>    |<span class="hljs-string"> DAY_MINUTE         </span>|<br>    |<span class="hljs-string"> DAY_HOUR           </span>|<br>    |<span class="hljs-string"> YEAR_MONTH         </span>|<br><br><span class="hljs-symbol">*</span> round(x,d)<br><br>  - x指要处理的数，d是指保留几位小数<br><br><span class="hljs-symbol">*</span> ifnull(expression_1,expression_2)<br><br>  - MySQL IFNULL函数是MySQL控制流函数之一，它接受两个参数，如果不是NULL，则返回第一个参数。 否则，IFNULL函数返回第二个参数。<br><br><span class="hljs-symbol">*</span> year(datetime)函数 取时间的年份<br><br><span class="hljs-symbol">*</span> month(datetime) 取月份<br><br><span class="hljs-symbol">*</span> dayofmonth() 取一个月的第几天<br><br><span class="hljs-symbol">*</span> if(expr1,expr2,expr3)函数<br><br>  - if() 类似与三元表达式，如果expr1的值为true，则返回expr2的值，如果expr1的值为false,则返回expr3的值<br><br><span class="hljs-symbol">*</span> substring_index(“待截取有用部分的字符串”，“截取数据依据的字符”，截取字符的位置N)<br><br><span class="hljs-symbol">*</span> substr(string,start,length)<br><br>  - string：表示要截取的字符串<br>  - start：规定字符串从何处开始。（1表示第一个下标）<br>  - length：可选<br><br><span class="hljs-symbol">*</span> 插入数据<br><br>  - INSERT INTO t1(field1,field2) VALUE(v001,v002)<br>  - INSERT INTO t1(field1,field2) VALUES(v101,v102),(v201,v202),(v301,v302),(v401,v402);　<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>在插入批量数据时方式2优于方式1<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span><br>  - INSERT INTO t2(field1,field2) SELECT col1,col2 FROM t1 WHERE<br>  - INSERT INTO t2 SELECT id, name, address FROM t1<br><br><span class="hljs-symbol">*</span> LENGTH( 字段名) <br><br>  - 返回字段中值的长度<br>  - mysql5.0版本以上：<br>    - UTF-8：一个汉字等于3个字节，英文是一个字节<br>    - GBK：一个汉字等于2个字节，英文是一个字节<br><br><span class="hljs-symbol">*</span> REPLACE(str,old_string,new_string);<br><br>  - 使用新的字符串替换表的列中的字符串<br><br><span class="hljs-symbol">*</span> curdate()  取时间 %Y-%m-%d<br><br><span class="hljs-symbol">*</span> curtime()  取时间 %H:%i%s<br><br><span class="hljs-symbol">*</span> |<span class="hljs-string"> NOW()               </span>|<span class="hljs-string"> CURDATE()  </span>|<span class="hljs-string"> CURTIME() </span>|<br>  |<span class="hljs-string"> :------------------ </span>|<span class="hljs-string"> :--------- </span>|<span class="hljs-string"> :-------- </span>|<br>  |<span class="hljs-string"> 2008-12-29 16:25:46 </span>|<span class="hljs-string"> 2008-12-29 </span>|<span class="hljs-string"> 16:25:46  </span>|<br><br><span class="hljs-symbol">*</span> with t as () 语句其实就是把一大堆重复用到的sql语句放在with as里面，取一个别名，后面的查询就可以用它，这样对于大批量的sql语句起到一个优化的作用，而且清楚明了<br><br>  ````sql<br>  with e as (select <span class="hljs-symbol">*</span> from scott.emp e where e.empno=4)<br>  select <span class="hljs-symbol">*</span> from e;<br>  <br>  <br>  with<br>  e as (select <span class="hljs-symbol">*</span> from scott.emp),<br>  d as (select <span class="hljs-symbol">*</span> from scott.dept)<br>  select <span class="hljs-symbol">*</span> from e, d where e.deptno = d.deptno;<br></code></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>数据库</category>
-      </categories>
-      <tags>
-        <tag>SQL</tag>
       </tags>
   </entry>
   <entry>
@@ -8271,6 +8456,27 @@ end;
       </categories>
       <tags>
         <tag>数据仓库</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>sql_userful_function</title>
+    <url>/2022/06/13/sql-userful-function/</url>
+    <content><![CDATA[<h1 id="常用的SQL函数"><a href="#常用的SQL函数" class="headerlink" title="常用的SQL函数"></a>常用的SQL函数</h1><h2 id="常见的MySQL关系型数据库"><a href="#常见的MySQL关系型数据库" class="headerlink" title="常见的MySQL关系型数据库"></a>常见的MySQL关系型数据库</h2><ul>
+<li><p>date_format(date,format)</p>
+<ul>
+<li><p><strong>date</strong>参数是合法的日期，<strong>format</strong>规定日期/时间的输出格式。</p>
+</li>
+<li><p>````mysql<br>select date_format(‘2021-10-01 10:00:00’,’%Y-%m-%d %h:%i:%s’)</p>
+<figure class="highlight gherkin"><table><tr><td class="code"><pre><code class="hljs gherkin"><br>  - |<span class="hljs-string"> %a   </span>|<span class="hljs-string"> 缩写星期名                                     </span>|<br>    |<span class="hljs-string"> ---- </span>|<span class="hljs-string"> ---------------------------------------------- </span>|<br>    |<span class="hljs-string"> %b   </span>|<span class="hljs-string"> 缩写月名                                       </span>|<br>    |<span class="hljs-string"> %c   </span>|<span class="hljs-string"> 月，数值                                       </span>|<br>    |<span class="hljs-string"> %D   </span>|<span class="hljs-string"> 带有英文前缀的月中的天                         </span>|<br>    |<span class="hljs-string"> %d   </span>|<span class="hljs-string"> 月的天，数值(00-31)                            </span>|<br>    |<span class="hljs-string"> %e   </span>|<span class="hljs-string"> 月的天，数值(0-31)                             </span>|<br>    |<span class="hljs-string"> %f   </span>|<span class="hljs-string"> 微秒                                           </span>|<br>    |<span class="hljs-string"> %H   </span>|<span class="hljs-string"> 小时 (00-23)                                   </span>|<br>    |<span class="hljs-string"> %h   </span>|<span class="hljs-string"> 小时 (01-12)                                   </span>|<br>    |<span class="hljs-string"> %I   </span>|<span class="hljs-string"> 小时 (01-12)                                   </span>|<br>    |<span class="hljs-string"> %i   </span>|<span class="hljs-string"> 分钟，数值(00-59)                              </span>|<br>    |<span class="hljs-string"> %j   </span>|<span class="hljs-string"> 年的天 (001-366)                               </span>|<br>    |<span class="hljs-string"> %k   </span>|<span class="hljs-string"> 小时 (0-23)                                    </span>|<br>    |<span class="hljs-string"> %l   </span>|<span class="hljs-string"> 小时 (1-12)                                    </span>|<br>    |<span class="hljs-string"> %M   </span>|<span class="hljs-string"> 月名                                           </span>|<br>    |<span class="hljs-string"> %m   </span>|<span class="hljs-string"> 月，数值(00-12)                                </span>|<br>    |<span class="hljs-string"> %p   </span>|<span class="hljs-string"> AM 或 PM                                       </span>|<br>    |<span class="hljs-string"> %r   </span>|<span class="hljs-string"> 时间，12-小时（hh:mm:ss AM 或 PM）             </span>|<br>    |<span class="hljs-string"> %S   </span>|<span class="hljs-string"> 秒(00-59)                                      </span>|<br>    |<span class="hljs-string"> %s   </span>|<span class="hljs-string"> 秒(00-59)                                      </span>|<br>    |<span class="hljs-string"> %T   </span>|<span class="hljs-string"> 时间, 24-小时 (hh:mm:ss)                       </span>|<br>    |<span class="hljs-string"> %U   </span>|<span class="hljs-string"> 周 (00-53) 星期日是一周的第一天                </span>|<br>    |<span class="hljs-string"> %u   </span>|<span class="hljs-string"> 周 (00-53) 星期一是一周的第一天                </span>|<br>    |<span class="hljs-string"> %V   </span>|<span class="hljs-string"> 周 (01-53) 星期日是一周的第一天，与 %X 使用    </span>|<br>    |<span class="hljs-string"> %v   </span>|<span class="hljs-string"> 周 (01-53) 星期一是一周的第一天，与 %x 使用    </span>|<br>    |<span class="hljs-string"> %W   </span>|<span class="hljs-string"> 星期名                                         </span>|<br>    |<span class="hljs-string"> %w   </span>|<span class="hljs-string"> 周的天 （0=星期日, 6=星期六）                  </span>|<br>    |<span class="hljs-string"> %X   </span>|<span class="hljs-string"> 年，其中的星期日是周的第一天，4 位，与 %V 使用 </span>|<br>    |<span class="hljs-string"> %x   </span>|<span class="hljs-string"> 年，其中的星期一是周的第一天，4 位，与 %v 使用 </span>|<br>    |<span class="hljs-string"> %Y   </span>|<span class="hljs-string"> 年，4 位                                       </span>|<br>    |<span class="hljs-string"> %y   </span>|<span class="hljs-string"> 年，2 位                                       </span>|<br><br><span class="hljs-symbol">*</span> concat(str1,str2,...)    ，concat_ws(seperator,string1,string2)<br><br>  - MySQL `CONCAT()`函数需要一个或多个字符串参数，并将它们连接成一个字符串。`CONCAT()`函数需要至少一个参数，否则会引起错误。 <br>  - MySQL提供了一种特殊形式的`CONCAT()`函数：`CONCAT_WS()`函数。`CONCAT_WS()`函数将两个或多个字符串值与预定义的分隔符相连接。<br><br><span class="hljs-symbol">*</span> timediff(dt1,dt2)<br><br>  - `TIMEDIFF`函数接受两个必须为相同类型的参数，即`TIME`或`DATETIME`。 `TIMEDIFF`函数返回表示为时间值的`dt1 - dt2`的结果。<br>  - `TIMEDIFF`函数的结果是一个`TIME`值，范围是从`-838:59:59`到`838:59:59`。<br><br><span class="hljs-symbol">*</span> TIMESTAMPDIFF(unit,begin,end); <br><br>  - `TIMESTAMPDIFF`函数返回`end-begin`的结果，其中`begin`和`end`是[DATE](http://www.yiibai.com/mysql/date.html)或[DATETIME](http://www.yiibai.com/mysql/datetime.html)表达式。<br>  - `TIMESTAMPDIFF`函数允许其参数具有混合类型，例如，`begin`是`DATE`值，`end`可以是`DATETIME`值。 如果使用`DATE`值，则`TIMESTAMPDIFF`函数将其视为时间部分为`“00:00:00”`的`DATETIME`值。<br>  - `unit`参数是确定(`end-begin`)的结果的单位，表示为整数。 以下是有效单位：<br>    - MICROSECOND<br>    - SECOND<br>    - MINUTE<br>    - HOUR<br>    - DAY<br>    - WEEK<br>    - MONTH<br>    - QUARTER<br>    - YEAR<br><br><span class="hljs-symbol">*</span> 数据类型转换函数<br><br>  - cast(&#x27;2022-01-01 00:00:00&#x27; as datetime)<br>  - convert(&#x27;2021-01-01 00:00:00&#x27;,datetime)<br><br><span class="hljs-symbol">*</span> date_sub(date,INTERVAL expr type) <br><br>  - 从日期减去指定的时间间隔<br>  - <span class="hljs-symbol">*</span>date<span class="hljs-symbol">*</span> 参数是合法的日期表达式。<span class="hljs-symbol">*</span>expr<span class="hljs-symbol">*</span> 参数是您希望添加的时间间隔。<br><br><span class="hljs-symbol">*</span> DATE_ADD(date,INTERVAL expr type)<br><br>  - 从日期加上指定的时间间隔<br><br>  - <span class="hljs-symbol">*</span>date<span class="hljs-symbol">*</span> 参数是合法的日期表达式。<span class="hljs-symbol">*</span>expr<span class="hljs-symbol">*</span> 参数是您希望添加的时间间隔。<br><br>  - |<span class="hljs-string"> MICROSECOND        </span>|<br>    |<span class="hljs-string"> ------------------ </span>|<br>    |<span class="hljs-string"> SECOND             </span>|<br>    |<span class="hljs-string"> MINUTE             </span>|<br>    |<span class="hljs-string"> HOUR               </span>|<br>    |<span class="hljs-string"> DAY                </span>|<br>    |<span class="hljs-string"> WEEK               </span>|<br>    |<span class="hljs-string"> MONTH              </span>|<br>    |<span class="hljs-string"> QUARTER            </span>|<br>    |<span class="hljs-string"> YEAR               </span>|<br>    |<span class="hljs-string"> SECOND_MICROSECOND </span>|<br>    |<span class="hljs-string"> MINUTE_MICROSECOND </span>|<br>    |<span class="hljs-string"> MINUTE_SECOND      </span>|<br>    |<span class="hljs-string"> HOUR_MICROSECOND   </span>|<br>    |<span class="hljs-string"> HOUR_SECOND        </span>|<br>    |<span class="hljs-string"> HOUR_MINUTE        </span>|<br>    |<span class="hljs-string"> DAY_MICROSECOND    </span>|<br>    |<span class="hljs-string"> DAY_SECOND         </span>|<br>    |<span class="hljs-string"> DAY_MINUTE         </span>|<br>    |<span class="hljs-string"> DAY_HOUR           </span>|<br>    |<span class="hljs-string"> YEAR_MONTH         </span>|<br><br><span class="hljs-symbol">*</span> round(x,d)<br><br>  - x指要处理的数，d是指保留几位小数<br><br><span class="hljs-symbol">*</span> ifnull(expression_1,expression_2)<br><br>  - MySQL IFNULL函数是MySQL控制流函数之一，它接受两个参数，如果不是NULL，则返回第一个参数。 否则，IFNULL函数返回第二个参数。<br><br><span class="hljs-symbol">*</span> year(datetime)函数 取时间的年份<br><br><span class="hljs-symbol">*</span> month(datetime) 取月份<br><br><span class="hljs-symbol">*</span> dayofmonth() 取一个月的第几天<br><br><span class="hljs-symbol">*</span> if(expr1,expr2,expr3)函数<br><br>  - if() 类似与三元表达式，如果expr1的值为true，则返回expr2的值，如果expr1的值为false,则返回expr3的值<br><br><span class="hljs-symbol">*</span> substring_index(“待截取有用部分的字符串”，“截取数据依据的字符”，截取字符的位置N)<br><br><span class="hljs-symbol">*</span> substr(string,start,length)<br><br>  - string：表示要截取的字符串<br>  - start：规定字符串从何处开始。（1表示第一个下标）<br>  - length：可选<br><br><span class="hljs-symbol">*</span> 插入数据<br><br>  - INSERT INTO t1(field1,field2) VALUE(v001,v002)<br>  - INSERT INTO t1(field1,field2) VALUES(v101,v102),(v201,v202),(v301,v302),(v401,v402);　<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span>在插入批量数据时方式2优于方式1<span class="hljs-symbol">*</span><span class="hljs-symbol">*</span><br>  - INSERT INTO t2(field1,field2) SELECT col1,col2 FROM t1 WHERE<br>  - INSERT INTO t2 SELECT id, name, address FROM t1<br><br><span class="hljs-symbol">*</span> LENGTH( 字段名) <br><br>  - 返回字段中值的长度<br>  - mysql5.0版本以上：<br>    - UTF-8：一个汉字等于3个字节，英文是一个字节<br>    - GBK：一个汉字等于2个字节，英文是一个字节<br><br><span class="hljs-symbol">*</span> REPLACE(str,old_string,new_string);<br><br>  - 使用新的字符串替换表的列中的字符串<br><br><span class="hljs-symbol">*</span> curdate()  取时间 %Y-%m-%d<br><br><span class="hljs-symbol">*</span> curtime()  取时间 %H:%i%s<br><br><span class="hljs-symbol">*</span> |<span class="hljs-string"> NOW()               </span>|<span class="hljs-string"> CURDATE()  </span>|<span class="hljs-string"> CURTIME() </span>|<br>  |<span class="hljs-string"> :------------------ </span>|<span class="hljs-string"> :--------- </span>|<span class="hljs-string"> :-------- </span>|<br>  |<span class="hljs-string"> 2008-12-29 16:25:46 </span>|<span class="hljs-string"> 2008-12-29 </span>|<span class="hljs-string"> 16:25:46  </span>|<br><br><span class="hljs-symbol">*</span> with t as () 语句其实就是把一大堆重复用到的sql语句放在with as里面，取一个别名，后面的查询就可以用它，这样对于大批量的sql语句起到一个优化的作用，而且清楚明了<br><br>  ````sql<br>  with e as (select <span class="hljs-symbol">*</span> from scott.emp e where e.empno=4)<br>  select <span class="hljs-symbol">*</span> from e;<br>  <br>  <br>  with<br>  e as (select <span class="hljs-symbol">*</span> from scott.emp),<br>  d as (select <span class="hljs-symbol">*</span> from scott.dept)<br>  select <span class="hljs-symbol">*</span> from e, d where e.deptno = d.deptno;<br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>数据库</category>
+      </categories>
+      <tags>
+        <tag>SQL</tag>
       </tags>
   </entry>
 </search>

@@ -187,7 +187,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      2.8k 字
+      6.2k 字
     </span>
   
 
@@ -197,7 +197,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      29
+      66
        分钟
     </span>
   
@@ -231,7 +231,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2024年2月1日 中午
+                  本文最后更新于：2024年2月20日 下午
                 
               </p>
             
@@ -270,6 +270,8 @@
 </ul>
 <h3 id="系统架构"><a href="#系统架构" class="headerlink" title="系统架构"></a>系统架构</h3><ul>
 <li><p>架构简洁，核心只有FE(Frontend),BE(Backend)或CN(Compute Node)两类进程，方便部署维护，可水平扩展，有副本机制，确保系统无单点。SR支持Mysql协议接口，支持SQL标准语法。</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://imgse.com/i/pFJGuQg"><img src="https://s11.ax1x.com/2024/02/18/pFJGuQg.png" srcset="/img/loading.gif" lazyload alt="pFJGuQg.png"></a></p>
 </li>
 <li><p>FE 节点负责元数据管理、客户端连接管理、查询计划和查询调度。每个 FE 在其内存中存储和维护完整的元数据副本，确保每个 FE 都能提供无差别的服务。</p>
 </li>
@@ -354,12 +356,157 @@
 <li><p>内部表归属于 Internal catalog 的数据库，数据保存在 StarRocks 中。内部表由行和列构成，每一行数据是一条记录。</p>
 <ul>
 <li>在 StarRocks 中，根据约束的类型将内部表分四种，分别是主键表、明细表、聚合表和更新表，适用于存储和查询多种业务场景中的数据，比如原始日志、实时数据、以及汇总数据。</li>
-<li>内部表采用分区+分桶的两级数据分布策略，实现数据均匀分布。并且分桶以多副本形式均匀分布至 BE 节点，保证数据高可用。</li>
+<li><strong>内部表采用分区+分桶的两级数据分布策略，实现数据均匀分布。并且分桶以多副本形式均匀分布至 BE 节点，保证数据高可用。</strong></li>
 </ul>
 </li>
 <li><p>外部表是 External catalog 中的表，实际数据存在外部数据源中，StarRocks 只保存表对应的元数据，您可以通过外部表查询外部数据。</p>
 </li>
+</ul>
+<h4 id="物化视图"><a href="#物化视图" class="headerlink" title="物化视图"></a>物化视图</h4><ul>
+<li><strong>物化视图是特殊的物理表，能够存储基于基表的预计算结果。</strong>当您对基表执行复杂查询时，StarRocks可以自动复用物化视图中的预计算结果，实现查询透明加速，湖仓加速和数据建模等业务需求。</li>
+<li>视图（也叫逻辑视图）是虚拟表，不存储数据，其中所展示的数据来自于基表生成的查询结果。每次在查询中引用某个视图时，都会运行定义该视图的查询。</li>
+<li>SR有权限系统，权限决定了哪些用户可以对哪些特定对象执行哪些特定的操作。SR采用两种权限模型：<strong>基于用户标识的访问控制和基于角色的访问控制</strong>。您可以将权限赋予给角色然后通过角色传递权限给用户，或直接赋予权限给用户标识。</li>
+<li>存算分离架构，数据存储功能从原来的BE中抽离，数据可持久存储在更为可靠廉价的远端对象存储（如S3（AWS S3 全名是 Simple Storage Service，简便的存储服务。亚马逊的云存储业务））或HDFS上，本地磁盘只用于缓存热数据来加速查询</li>
+</ul>
+<h3 id="表概览"><a href="#表概览" class="headerlink" title="表概览"></a>表概览</h3><ul>
+<li>表是数据存储单元。理解 StarRocks 中的表结构，以及如何设计合理的表结构，有利于优化数据组织，提高查询效率。相比于传统的数据库，StarRocks 会以列的方式存储 JSON、ARRAY 等复杂的半结构化数据，保证高效查询。</li>
+</ul>
+<h4 id="表类型"><a href="#表类型" class="headerlink" title="表类型"></a>表类型</h4><ul>
+<li>SR提供四种类型的表，包括明细表，主键表，聚合表和更新表，使用于存储多种业务数据。<ul>
+<li>明细表简单易用，表中数据不具有任何约束，相同的数据行可以重复存在。<strong>适用于存储不需要约束和预聚合的原始数据。</strong></li>
+<li>主键表能力强大，具有唯一性非空约束。<strong>该表能够支撑实时更新，部分列更新等场景的同时，保证查询性能，使用于实时查询。</strong></li>
+<li><strong>聚合表适用于存储预聚合后的数据，可以降低聚合查询时所需扫描和计算的数据量，极大的提高聚合查询的效率。</strong></li>
+<li>更新表适用于实时更新的业务场景，目前已逐渐被主键表取代。</li>
+</ul>
+</li>
+</ul>
+<h4 id="数据分布"><a href="#数据分布" class="headerlink" title="数据分布"></a>数据分布</h4><ul>
+<li>SR采用分区+分桶的两级数据分布策略，将数据均匀分布各个BE节点。查询时能够有效裁剪数据扫描量，最大限度的利用集群的并发性能。</li>
+</ul>
+<h5 id="分区"><a href="#分区" class="headerlink" title="分区"></a>分区</h5><ul>
+<li><strong>第一层级为分区，表中数据可以根据分区列（通常是时间和日期）分成一个个更小的数据管理单元。</strong>查询时，通过分区裁剪，可以减少扫描的数据量，显著优化查询性能。</li>
+<li>SR提供简单易用的<strong>表达式分区</strong>。还提供更加灵活的分区方式，<strong>Range分区和List分区</strong>。</li>
+</ul>
+<h5 id="分桶"><a href="#分桶" class="headerlink" title="分桶"></a>分桶</h5><ul>
+<li><strong>第二层级为分桶，同一个分区中的数据通过分桶，划分成更小的数据管理单元。</strong>并且分桶以多副本的形式均匀分布在BE节点上，保证数据的高可用。</li>
+<li>SR有两种分桶方式：<ul>
+<li>哈希分桶：根据数据的分桶键值，将数据划分至分桶。选择查询时经常使用的条件组成分桶键，能够有效的提高查询效率。</li>
+<li>随机分桶：随机划分数据至分桶，这种方式更加简单易用。</li>
+</ul>
+</li>
+</ul>
+<h5 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h5><ul>
+<li>支持多种数据类型，和hive差不多</li>
+</ul>
+<h5 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h5><ul>
+<li>索引是一种特殊的数据结构，相当于数据的目录。</li>
+<li>SR提供内置索引，包括前缀索引，Ordinal索引和ZoneMap索引。也支持手动创建索引，提高查询效率，包括Bitmap和Bloom Filter索引。</li>
+</ul>
+<h5 id="约束"><a href="#约束" class="headerlink" title="约束"></a>约束</h5><ul>
+<li>约束用于确保数据的完整性、一致性和准确性。主键表的 Primary Key 列具有唯一非空约束，聚合表的 Aggregate Key 列和更新表的 Unique Key 列具有唯一约束。</li>
+</ul>
+<h3 id="表类型-1"><a href="#表类型-1" class="headerlink" title="表类型"></a>表类型</h3><h4 id="基础信息"><a href="#基础信息" class="headerlink" title="基础信息"></a>基础信息</h4><ul>
+<li>四种表类型：分别是明细表 (Duplicate key table)、聚合表 (Aggregate table)、更新表 (Unique Key table) 和主键表 ( Primary Key table)。</li>
+</ul>
+<h4 id="排序键"><a href="#排序键" class="headerlink" title="排序键"></a>排序键</h4><ul>
+<li>数据导入至使用某个类型的表，会按照建表时指定的一列或多列排序后存储，这部分用于排序的列就称为排序键。排序键通常为查询时过滤条件频繁使用的一个或者多个列，用以加速查询。 明细表中，数据按照排序键 <code>DUPLICATE KEY</code> 排序，并且排序键不需要满足唯一性约束。 聚合表中，数据按照排序键 <code>AGGREGATE KEY</code> 聚合后排序，并且排序键需要满足唯一性约束。 更新表中，数据按照排序键 <code>UNIQUE KEY</code> REPLACE 后排序，并且排序键需要满足唯一性约束。 主键表支持分别定义主键和排序键，主键 <code>PRIMARY KEY</code> 需要满足唯一性和非空约束，主键相同的数据进行 REPLACE。排序键是用于排序，由 <code>ORDER BY</code> 指定 。</li>
+<li>在建表语句中，排序键必须定义在其他列之前。</li>
+<li>在创建表时，您可以将一个或多个列定义为排序键。排序键在建表语句中的出现次序，为数据存储时多重排序的次序。</li>
+<li>不支持排序键的数据类型为 BITMAP、HLL。</li>
+<li>前缀索引的长度限制为 36 字节。如果排序键中全部列的值的长度加起来超过 36 字节，则前缀索引仅会保存限制范围内排序键的若干前缀列。</li>
+<li>如果导入的数据存在重复的主键，则数据导入至不同类型的表时，存储在 StarRocks 时，则会按照如下方式进行处理：<ul>
+<li>明细表：表中会存在主键重复的数据行，并且与导入的数据是完全对应的。您可以召回所导入的全部历史数据。</li>
+<li>聚合表：表中不存在主键重复的数据行，主键满足唯一性约束。导入的数据中主键重复的数据行聚合为一行，即具有相同主键的指标列，会通过聚合函数进行聚合。您只能召回导入的全部历史数据的聚合结果，但是无法召回历史明细数据。</li>
+<li>主键表和更新表：表中不存在主键重复的数据行，主键满足唯一性约束。最新导入的数据行，替换掉其他主键重复的数据行。这两种类型的表可以视为聚合表的特殊情况，相当于在聚合表中，为表的指标列指定聚合函数为 REPLACE，REPLACE 函数返回主键相同的一组数据中的最新数据。</li>
+</ul>
+</li>
+</ul>
+<h4 id="明细表"><a href="#明细表" class="headerlink" title="明细表"></a>明细表</h4><ul>
+<li><p>明细表是默认创建的表类型。如果在建表时未指定任何key，默认创建的是明细表</p>
+</li>
+<li><p>创建表时，支持定义排序键。如果查询的过滤条件包含排序键，则 StarRocks 能够快速地过滤数据，提高查询效率。<strong>明细表适用于日志数据分析等场景，支持追加新数据，不支持修改历史数据。</strong></p>
+</li>
+<li><p>建表语句</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs sqlite">CREATE TABLE IF NOT EXISTS detail (<br>    event_time DATETIME NOT NULL COMMENT &quot;datetime of event&quot;,<br>    event_type INT NOT NULL COMMENT &quot;type of event&quot;,<br>    user_id INT COMMENT &quot;id of user&quot;,<br>    device_code INT COMMENT &quot;device code&quot;,<br>    channel INT COMMENT &quot;&quot;<br>)<br>DUPLICATE KEY(event_time, event_type)<br>DISTRIBUTED BY HASH(user_id)<br>PROPERTIES (<br>&quot;replication_num&quot; = &quot;3&quot;<br>);<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p>排序键的相关说明：</p>
+<ul>
+<li><p>在建表语句中，排序键必须定义在其他列之前。</p>
+</li>
+<li><p>排序键可以通过 <code>DUPLICATE KEY</code> 显式定义。本示例中排序键为 <code>event_time</code> 和 <code>event_type</code>。</p>
+<blockquote>
+<p>如果未指定，则默认选择表的前三列作为排序键。</p>
+</blockquote>
+</li>
+<li><p>明细表中的排序键可以为部分或全部维度列。</p>
+</li>
+</ul>
+</li>
+<li><p>建表时，支持为指标列创建 BITMAP、Bloom Filter 等索引。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="聚合表"><a href="#聚合表" class="headerlink" title="聚合表"></a>聚合表</h4><ul>
+<li><p><strong>建表时，支持定义排序键和指标列，并为指标列指定聚合函数。当多条数据具有相同的排序键时，指标列会进行聚合。</strong>在分析统计和汇总数据时，聚合表能够减少查询时所需要处理的数据，提升查询效率。</p>
+</li>
+<li><p>适用于分析统计和汇总数据</p>
+</li>
+<li><p>原理：<strong>从数据导入至数据查询阶段，聚合表内部同一排序键的数据会多次聚合</strong>，步骤：</p>
+<ol>
+<li>数据导入阶段：数据按批次导入至聚合表时，每一个批次的数据形成一个版本。在一个版本中，同一排序键的数据会进行一次聚合</li>
+<li>后台文件合并阶段（Compaction）：数据分批次多次导入至聚合表中，会生成多个版本的文件，多个版本的文件定期合并成一个大版本文件时，同一排序键的数据会进行一次聚合。</li>
+<li>查询阶段：所有版本中同一排序键的数据进行聚合，然后返回查询结果</li>
+</ol>
+</li>
+<li><p>聚合表中数据进行多次聚合，能够减少查询时所需要处理的数据量，进而提升查询的效率</p>
+</li>
+<li><p>创建表</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs sqlite">/*<br>例如需要分析某一段时间内，来自不同城市的用户，访问不同网页的总次数。则可以将网页地址 site_id、日期 date 和城市代码 city_code 作为排序键，将访问次数 pv 作为指标列，并为指标列 pv 指定聚合函数为 SUM。<br>*/<br>CREATE TABLE IF NOT EXISTS example_db.aggregate_tbl (<br>    site_id LARGEINT NOT NULL COMMENT &quot;id of site&quot;,<br>    date DATE NOT NULL COMMENT &quot;time of event&quot;,<br>    city_code VARCHAR(20) COMMENT &quot;city_code of user&quot;,<br>    pv BIGINT SUM DEFAULT &quot;0&quot; COMMENT &quot;total page views&quot;<br>)<br>AGGREGATE KEY(site_id, date, city_code)<br>DISTRIBUTED BY HASH(site_id)<br>PROPERTIES (<br>&quot;replication_num&quot; = &quot;3&quot;<br>);<br></code></pre></td></tr></table></figure></li>
+<li><p>建表时必须使用 <code>DISTRIBUTED BY HASH</code> 子句指定分桶键。分桶键的更多说明，请参见<a target="_blank" rel="noopener" href="https://docs.starrocks.io/zh/docs/table_design/Data_distribution/#%E5%88%86%E6%A1%B6">分桶</a>。</p>
+</li>
+<li><p>自 2.5.7 版本起，StarRocks 支持在建表和新增分区时自动设置分桶数量 (BUCKETS)，您无需手动设置分桶数量。更多信息，请参见 <a target="_blank" rel="noopener" href="https://docs.starrocks.io/zh/docs/table_design/Data_distribution/#%E8%AE%BE%E7%BD%AE%E5%88%86%E6%A1%B6%E6%95%B0%E9%87%8F">设置分桶数量</a>。</p>
+</li>
+<li><p>排序键的相关说明：</p>
+<ul>
+<li><p>在建表语句中，<strong>排序键必须定义在其他列之前</strong>。</p>
+</li>
+<li><p>排序键可以通过 <code>AGGREGATE KEY</code> 显式定义。</p>
+<blockquote>
+<ul>
+<li>如果 <code>AGGREGATE KEY</code> 未包含全部维度列（除指标列之外的列），则建表会失败。</li>
+<li>如果不通过 <code>AGGREGATE KEY</code> 显示定义排序键，则默认除指标列之外的列均为排序键。</li>
+</ul>
+</blockquote>
+</li>
+<li><p>排序键必须满足唯一性约束，必须包含全部维度列，并且列的值不会更新。</p>
+</li>
+</ul>
+</li>
+<li><p>指标列：通过在列名后指定聚合函数，定义该列为指标列。一般为需要汇总统计的数据。</p>
+</li>
+<li><p>聚合函数：指标列使用的聚合函数。聚合表支持的聚合函数，请参见 <a target="_blank" rel="noopener" href="https://docs.starrocks.io/zh/docs/sql-reference/sql-statements/data-definition/CREATE_TABLE/">CREATE TABLE</a>。</p>
+</li>
+<li><p>查询时，排序键在多版聚合之前就能进行过滤，而指标列的过滤在多版本聚合之后。因此建议将频繁使用的过滤字段作为排序键，在聚合前就能过滤数据，从而提升查询性能。</p>
+</li>
+<li><p>建表时，不支持为指标列创建 BITMAP、Bloom Filter 等索引。</p>
+</li>
+</ul>
+<h4 id="更新表"><a href="#更新表" class="headerlink" title="更新表"></a>更新表</h4><ul>
+<li><p>建表时，支持定义主键和指标列，查询时返回主键相同的一组数据中的最新数据。相对于明细表，更新表简化了数据导入流程，能够更好地支撑实时和频繁更新的场景。</p>
+</li>
+<li><p>建表</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs sqlite">CREATE TABLE IF NOT EXISTS orders (<br>    create_time DATE NOT NULL COMMENT &quot;create time of an order&quot;,<br>    order_id BIGINT NOT NULL COMMENT &quot;id of an order&quot;,<br>    order_state INT COMMENT &quot;state of an order&quot;,<br>    total_price BIGINT COMMENT &quot;price of an order&quot;<br>)<br>UNIQUE KEY(create_time, order_id)<br>DISTRIBUTED BY HASH(order_id)<br>PROPERTIES (<br>&quot;replication_num&quot; = &quot;3&quot;<br>); <br></code></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="主键表"><a href="#主键表" class="headerlink" title="主键表"></a>主键表</h4><ul>
+<li>主键表支持分别定义主键和排序键。数据导入至主键表时先按照排序键排序后存储。查询时返回主键相同的一组数据中的最新数据。相对于更新表，主键表在查询时不需要执行聚合操作，并且支持谓词和索引下推，能够在支持<strong>实时和频繁更新</strong>等场景的同时，提供高效查询。</li>
+<li>适用场景：<ul>
+<li><strong>实时对接事务型数据至StarRocks。</strong><a target="_blank" rel="noopener" href="https://docs.starrocks.io/zh/docs/loading/Flink_cdc_load/">通过 Flink-CDC 等工具直接对接 TP 的 Binlog</a>，实时同步增删改的数据至主键表，可以简化数据同步流程，并且相对于 Merge-On-Read 策略的更新表，查询性能能够提升 3~10 倍。</li>
+<li><strong>利用部分列更新轻松实现多流JOIN</strong>。在用户画像等分析场景中，一般会采用大宽表方式来提升多维分析的性能，同时简化数据分析师的使用模型。而这种场景中的上游数据，往往可能来自于多个不同业务（比如来自购物消费业务、快递业务、银行业务等）或系统（比如计算用户不同标签属性的机器学习系统），主键表的部分列更新功能就很好地满足这种需求，不同业务直接各自按需更新与业务相关的列即可，并且继续享受主键表的实时同步增删改数据及高效的查询性能。</li>
 <li></li>
+</ul>
+</li>
 </ul>
 
             </div>
