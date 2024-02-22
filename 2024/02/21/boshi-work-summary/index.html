@@ -20,9 +20,25 @@
   
     <meta name="baidu-site-verification" content="code-wxp4a58PBe" />
   
-  <title>标签 - java - Nevermind</title>
+  <title>boshi_work_summary - Nevermind</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.6.0/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
 
 
 
@@ -50,7 +66,7 @@
 
 
 <body>
-  <header style="height: 80vh;">
+  <header style="height: 70vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand"
@@ -144,22 +160,55 @@
 </nav>
 
     <div class="banner" id="banner" parallax=true
-         style="background: url('/img/default.png') no-repeat center center;
+         style="background: url('https://pic2.zhimg.com/v2-5b5bf59a17d6947d72b22b358b6805ca_r.jpg') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="标签 - java">
+            <span class="h2" id="subtitle" title="boshi_work_summary">
               
             </span>
 
             
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2024-02-21 11:22" pubdate>
+        2024年2月21日 上午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      228 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      2
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
           </div>
 
-          
-            <div class="scroll-down-bar">
-              <i class="iconfont icon-arrowdown"></i>
-            </div>
           
         </div>
       </div>
@@ -168,40 +217,111 @@
 
   <main>
     
-      <div class="container nopadding-x-md">
-        <div class="py-5" id="board"
-          >
-          
-          <div class="container">
-            <div class="row">
-              <div class="col-12 col-md-10 m-auto">
-                
-
-<div class="list-group">
-  <p class="h4">共计 1 篇文章</p>
-  <hr>
-  
-  
-    
       
-      <p class="h5">2021</p>
-    
-    <a href="/2021/04/22/Java-reflect/" class="list-group-item list-group-item-action">
-      <span class="archive-post-title">Java反射</span>
-      <time style="float: right;">04-22</time>
-    </a>
-  
-</div>
 
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">boshi_work_summary</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：2024年2月22日 晚上
+                
+              </p>
+            
+            <div class="markdown-body">
+              <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ul>
+<li>工作总结</li>
+</ul>
+<h2 id="数据仓库"><a href="#数据仓库" class="headerlink" title="数据仓库"></a>数据仓库</h2><h3 id="数仓分层"><a href="#数仓分层" class="headerlink" title="数仓分层"></a>数仓分层</h3><ul>
+<li><p>ODS 原始数据层</p>
+<ul>
+<li><p>基本数据存储格式</p>
+<ul>
+<li>orc+snappy</li>
+<li>parquet+lzo</li>
+</ul>
+</li>
+<li><p>数据源基本上都是来自mysql等关系型数据库</p>
+</li>
+<li><p>同步采用<strong>datax</strong>脚本同步数据</p>
+</li>
+<li><p>启信宝数据采用分区表做每日增量更新操作</p>
+<ul>
+<li>做增量更新筛选时命中时间索引字段，加速查询</li>
+<li>增量更新出现<strong>数据漂移问题</strong>，<strong>新增真实入库时间字段</strong>保证数据不会丢失</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>DW层 (临时处理层)  对每日新增数据做开窗取第一条数据，取最新的业务数据</p>
+<ul>
+<li>这种方式比较消耗时间，增加了一层数据层级，没有做分区无法找到历史数据</li>
+<li>采用制作拉链表的方式，可以找到历史数据，速度更快</li>
+</ul>
+</li>
+</ul>
+<h4 id="拉链表"><a href="#拉链表" class="headerlink" title="拉链表"></a>拉链表</h4><ul>
+<li>适用场景：缓慢变化维度</li>
+</ul>
 
-
-
-
-              </div>
             </div>
-          </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%A4%8D%E7%9B%98/">复盘</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/">项目总结</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+            </div>
+
+            
+          </article>
         </div>
       </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
     
 
     
@@ -305,9 +425,15 @@
 
 
 
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.2/dist/tocbot.min.js" ></script>
 
 
 
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
 
 
 
@@ -325,48 +451,6 @@
     (function (window, document) {
       var typing = Fluid.plugins.typing;
       var title = document.getElementById('subtitle').title;
-      
-      typing(title)
-      
-    })(window, document);
-  </script>
-
-
-
-  <script  src="/js/local-search.js" ></script>
-  <script>
-    (function () {
-      var path = "/local-search.xml";
-      $('#local-search-input').on('click', function() {
-        searchFunc(path, 'local-search-input', 'local-search-result');
-      });
-      $('#modalSearch').on('shown.bs.modal', function() {
-        $('#local-search-input').focus();
-      });
-    })()
-  </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- 主题的启动项 保持在最底部 -->
-<script  src="/js/boot.js" ></script>
-
-
-<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
-</html>
-cument.getElementById('subtitle').title;
       
       typing(title)
       
