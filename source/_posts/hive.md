@@ -877,13 +877,13 @@ difftime=1;
 ### SQL一般执行顺序
 
 1. from 确定基表
-2. join 如果一张基表不够, 再联接其他表
-3. on 如果有联接表 必须要有on
-4. where 过滤总基表中的行
-5. group by 分组, 分组依据的列.
-6. select 把分组依据的列放在select后, 再考虑要选择哪些列, 及进行哪些函数调用….
-7. having 进一步把分组后的虚表行过滤
-8. ***窗口函数***
+2. join on 如果一张基表不够, 再联接其他表,或者lateral view explode(需炸裂的列) table_name as 炸裂后的列名 
+3. where 过滤总基表中的行
+4. group by 分组, 分组依据的列.（可以开始使用select中的别名，从group 开始往后都可用）
+5. select 把分组依据的列放在select后, 再考虑要选择哪些列, 及进行哪些函数调用 sum(),count(1)等
+6. having 进一步把分组后的虚表行过滤
+7. ***窗口函数***，select中若包含over()开窗函数，**执行完非开窗函数后select等待执行完开窗函数，然后执行select完**，开窗函数通过表数据进行分区和排序，跟select查询中的字段是平行关系，不依赖查询字段。
+8. distinct
 9. order by 最终表的一个排序显示.
 10. limit
 

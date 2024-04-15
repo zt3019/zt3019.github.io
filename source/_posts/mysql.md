@@ -971,7 +971,7 @@ drop foreign key classes_ibfk_1;
 >   SELECT * FROM employees
 >   ORDER BY hire_date DESC      -- 倒序
 >   LIMIT 1 offset 2;       -- 去掉排名倒数第一第二的时间，取倒数第三;   
->   
+>     
 >   ````
 >
 >   
@@ -1338,3 +1338,20 @@ drop foreign key classes_ibfk_1;
   ````
 
   
+
+
+
+## 常见问题
+
+* [42000][1118] Row size too large. The maximum row size for the used table type, not counting BLOBs, is 65535. This includes storage overhead, check the manual. You have to change some columns to TEXT or BLOBs
+  - 行大小太大。所使用的表类型(不包括blob)的最大行大小是65535。这包括存储开销，请参阅手册。您必须将一些列更改为TEXT或blob
+* 在MYSQL数据库中**一条记录**的**最大长度是65535字节**，以下以Innodb和mysiam存储引擎为例，做了相关演示，不管任何存储引擎，都不能超过这个范围，即存储引擎支持一行存储更长的数据。
+* Inodb存储引擎，对于4K,8K,16K和32K的页面大小，限制一条记录最多使用半个页面，，64K页面比16KB页面限制稍小一些。默认情况下，Innodb页面大小是16KB
+* mysql 字符所占字节数
+  - utf-8:中文占用3个字节的存储，英文一个字节，中文三个字节。**UTF-8则包含全世界所有国家需要用到的字符。**
+  - utf8mb4最多支撑四个字节的存储，如emoji表情。中文三个字节。**utf8mb4专门用来兼容四字节的unicode。utf8mb4是utf8的超集，除了将编码改为utf8mb4外不需要做其他转换。**
+  - GBK:中英文都是双字节。**GBK包含全部中文字符**
+  - ASCII编码：一个英文字母（不分大小写）占用一个字节的空间，一个中文汉字占用两个字节的空间。
+* 结论
+  - **一条记录最大长度65535字节**是MySQL数据库Server层面的限制
+
