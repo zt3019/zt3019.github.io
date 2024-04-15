@@ -187,7 +187,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      6.4k 字
+      6.5k 字
     </span>
   
 
@@ -197,7 +197,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      81
+      83
        分钟
     </span>
   
@@ -231,7 +231,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2023年11月16日 下午
+                  本文最后更新于：2024年3月12日 上午
                 
               </p>
             
@@ -732,13 +732,13 @@
 </ul>
 <h3 id="SQL一般执行顺序"><a href="#SQL一般执行顺序" class="headerlink" title="SQL一般执行顺序"></a>SQL一般执行顺序</h3><ol>
 <li>from 确定基表</li>
-<li>join 如果一张基表不够, 再联接其他表</li>
-<li>on 如果有联接表 必须要有on</li>
+<li>join on 如果一张基表不够, 再联接其他表,或者lateral view explode(需炸裂的列) table_name as 炸裂后的列名 </li>
 <li>where 过滤总基表中的行</li>
-<li>group by 分组, 分组依据的列.</li>
-<li>select 把分组依据的列放在select后, 再考虑要选择哪些列, 及进行哪些函数调用….</li>
+<li>group by 分组, 分组依据的列.（可以开始使用select中的别名，从group 开始往后都可用）</li>
+<li>select 把分组依据的列放在select后, 再考虑要选择哪些列, 及进行哪些函数调用 sum(),count(1)等</li>
 <li>having 进一步把分组后的虚表行过滤</li>
-<li><em><strong>窗口函数</strong></em></li>
+<li><em><strong>窗口函数</strong></em>，select中若包含over()开窗函数，<strong>执行完非开窗函数后select等待执行完开窗函数，然后执行select完</strong>，开窗函数通过表数据进行分区和排序，跟select查询中的字段是平行关系，不依赖查询字段。</li>
+<li>distinct</li>
 <li>order by 最终表的一个排序显示.</li>
 <li>limit</li>
 </ol>

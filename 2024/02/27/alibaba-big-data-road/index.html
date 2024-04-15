@@ -20,7 +20,7 @@
   
     <meta name="baidu-site-verification" content="code-wxp4a58PBe" />
   
-  <title>boshi_work_summary - Nevermind</title>
+  <title>alibaba_big_data_road - Nevermind</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
 
@@ -160,12 +160,12 @@
 </nav>
 
     <div class="banner" id="banner" parallax=true
-         style="background: url('https://pic2.zhimg.com/v2-5b5bf59a17d6947d72b22b358b6805ca_r.jpg') no-repeat center center;
+         style="background: url('https://tse3-mm.cn.bing.net/th/id/OIP-C.1NJoGdE-U58R_b66i8Sh2gHaK9?w=115&h=180&c=7&r=0&o=5&pid=1.7') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="boshi_work_summary">
+            <span class="h2" id="subtitle" title="alibaba_big_data_road">
               
             </span>
 
@@ -175,8 +175,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2024-02-21 11:22" pubdate>
-        2024年2月21日 上午
+      <time datetime="2024-02-27 18:54" pubdate>
+        2024年2月27日 晚上
       </time>
     </span>
   
@@ -187,7 +187,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      1.2k 字
+      1.3k 字
     </span>
   
 
@@ -197,7 +197,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      12
+      13
        分钟
     </span>
   
@@ -227,79 +227,60 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">boshi_work_summary</h1>
+            <h1 style="display: none">alibaba_big_data_road</h1>
             
               <p class="note note-info">
                 
-                  本文最后更新于：2024年2月27日 晚上
+                  本文最后更新于：2024年3月13日 晚上
                 
               </p>
             
             <div class="markdown-body">
-              <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ul>
-<li>工作总结</li>
-</ul>
-<h2 id="数据仓库"><a href="#数据仓库" class="headerlink" title="数据仓库"></a>数据仓库</h2><h3 id="数仓分层"><a href="#数仓分层" class="headerlink" title="数仓分层"></a>数仓分层</h3><ul>
-<li><p>ODS 原始数据层</p>
-<ul>
-<li><p>基本数据存储格式</p>
-<ul>
-<li>orc+snappy</li>
-<li>parquet+lzo</li>
-</ul>
-</li>
-<li><p>数据源基本上都是来自mysql等关系型数据库</p>
-</li>
-<li><p>同步采用<strong>datax</strong>脚本同步数据</p>
-</li>
-<li><p>启信宝数据采用分区表做每日增量更新操作</p>
-<ul>
-<li>做增量更新筛选时命中时间索引字段，加速查询</li>
-<li>增量更新出现<strong>数据漂移问题</strong>，<strong>新增真实入库时间字段</strong>保证数据不会丢失</li>
+              <h1 id="《大数据之路》"><a href="#《大数据之路》" class="headerlink" title="《大数据之路》"></a>《大数据之路》</h1><h2 id="数据模型篇"><a href="#数据模型篇" class="headerlink" title="数据模型篇"></a>数据模型篇</h2><h3 id="第8章：大数据领域建模综述"><a href="#第8章：大数据领域建模综述" class="headerlink" title="第8章：大数据领域建模综述"></a>第8章：大数据领域建模综述</h3><ul>
+<li>好的数据建模会从以下几个方面带来提升：<ul>
+<li>性能：良好的数据模型可以快速查询数据，减少I/O</li>
+<li>成本：减少非必要的数据冗余，计算结果的复用，降低大数据系统中的存储和计算成本</li>
+<li>效率：提升使用数据的体验，提高使用数据的效率</li>
+<li>质量：良好的数据模型可以改善数据口径的不一致，减少数据计算错误的可能性</li>
 </ul>
 </li>
 </ul>
-</li>
-<li><p>DW层 (临时处理层)  对每日新增数据做开窗取第一条数据，取最新的业务数据</p>
-<ul>
-<li>这种方式比较消耗时间，增加了一层数据层级，没有做分区无法找到历史数据</li>
-<li>采用制作拉链表的方式，可以找到历史数据，速度更快</li>
+<h4 id="OLAP和OLTP系统"><a href="#OLAP和OLTP系统" class="headerlink" title="OLAP和OLTP系统"></a>OLAP和OLTP系统</h4><ul>
+<li>埃德加·弗兰克·科德是“<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E5%85%B3%E7%B3%BB%E6%A8%A1%E5%9E%8B/3189329?fromModule=lemma_inlink">关系模型</a>”的发明者，关系型数据数据的鼻祖，之后类似于oracle,mysql相关的产品喷涌而出。OLTP系统（OnLine Transaction Processsing 联机事务处理）主要操作是数据随机读写，一般采用3NF的实体关系模型存储数据，从而在事务处理中解决数据的冗余和一致性问题。</li>
+<li>OLAP（OnLine Analytical Processing联机分析处理）主要面向批量读写，关注在大数据下的复杂查询问题</li>
+</ul>
+<h4 id="维度模型"><a href="#维度模型" class="headerlink" title="维度模型"></a>维度模型</h4><ul>
+<li>维度模型是数据仓库领域的 Ralph Kimball 大师所倡导的，是目前数仓领域最流行的</li>
+<li>维度建模从<strong>分析决策的需求</strong>出发构建模型，为分析需求服务，因此它重点关注用户如何能更快速地完成需求分析。同时具有较好的大规模复杂查询的响应性能。其典型的代表是星形模型，以及在一些特殊场景下</li>
+<li>基本步骤<ul>
+<li>选择需要进行分析决策的业务过程。业务过程可以是单个业务事件，比如交易的支付、退款等；也可以是某个事件的状态，比如当前的账户余额等；还可以是一系列相关业务事件组成的业务流程，具体需要看我们分析的是某些事件发生情况，还是当前状态，或是事件流转效率。</li>
+<li>选择粒度。在事件分析中，我们要预判所有分析需要细分的程度，从而决定选择的粒度。粒度是维度的一个组合。</li>
+<li>识别维表。选择好粒度之后，就需要基于此粒度设计维表，包括维度属性，用于分析时进行分组和筛选。</li>
+<li>选择事实。确定分析需要衡量的指标</li>
 </ul>
 </li>
 </ul>
-<h4 id="拉链表"><a href="#拉链表" class="headerlink" title="拉链表"></a>拉链表</h4><ul>
-<li>适用场景：缓慢变化维度<ul>
-<li>在业务场景中，维度属性并不是静态的，而是随时间的变化而变化，这也体现了数据仓库的特点之一，就是反映历史变化。相对于数据增长较为快速的事实表，维度的变化是相对缓慢的。</li>
-<li>维度建模理论中，处理缓慢变化维有三种方式：<ul>
-<li>新的维度属性直接覆盖旧的维度属性，不保留历史数据</li>
-<li>增加新的维度行。</li>
-<li>增加维度列，设计时包含两列，新属性和旧属性。扩展性不好，保留历史数据有限</li>
+<h3 id="第九章：数据整合及管理体系"><a href="#第九章：数据整合及管理体系" class="headerlink" title="第九章：数据整合及管理体系"></a>第九章：数据整合及管理体系</h3><ul>
+<li>OneData 即是阿里巴巴内部进行数据整合及管理的方法体系和工具。阿里巴巴的大数据工程师在这一体系下，构建统 、规范、可共的全域数据体系，避免数据的冗余和重复建设，规避数据烟囱和不一致性，充分发挥阿里巴巴在大数据海量、多样性方面的独特优势。借助统一化数据整合及管理的方法体系，我们构建了阿里巴巴的数据公共层，并可以帮助相似的大数据项目快速落地实现。</li>
+</ul>
+<h2 id="数据管理篇"><a href="#数据管理篇" class="headerlink" title="数据管理篇"></a>数据管理篇</h2><h3 id="第12章：元数据"><a href="#第12章：元数据" class="headerlink" title="第12章：元数据"></a>第12章：元数据</h3><h4 id="技术元数据"><a href="#技术元数据" class="headerlink" title="技术元数据"></a>技术元数据</h4><ul>
+<li>技术元数据市存储关于数据仓库系统技术细节的数据，<strong>是用于开发和管理数据仓库使用的数据</strong>。常见的技术元数据有：<ul>
+<li><strong>分布式计算系统存储元数据，如表，列，分区等信息。</strong>分区信息、责任人信息、文件大小、表类型，生命周期，以及列的字段名、字段类型、字段备注、是否是分区字段等信息。</li>
+<li><strong>分布式计算系统运行元数据。</strong>如hive的Job日志，包括作业类型，实例名称，输入输出，sql，运行参数，执行时间，运行日志等信息</li>
+<li><strong>数据开发平台中的同步任务，计算任务，任务调度信息。</strong>包括数据同步的输入输出表和字段，以及同步任务本身的节点信息：计算任务主要有输入输出、任务本身的节点信息 任务调度主要有任务的依赖类型、依赖关系等，以及不同类型调度任务的运行日志等。</li>
+<li><strong>数据质量和运维相关元数据。</strong>如任务监控、运维报警、数据质量、故障等信息，包括任务监控运行日志、告警配置及运行日志、故障信息等。</li>
 </ul>
 </li>
 </ul>
-</li>
-<li>历史拉链表是通过增加维度行来实现，时间键包含两个字段，开始时间，结束时间。一般以天为粒度保留变更的维度数据。</li>
-<li>采用拉链表适用的场景：缓慢变化维度的数据，比起全量数据来说，每天的新增不会很多，比如系统的用户表。</li>
-</ul>
-<h5 id="分区方式"><a href="#分区方式" class="headerlink" title="分区方式"></a>分区方式</h5><ul>
-<li>方式一（start_date）作为分区键：缺点是查询最新数据无法走分区；<ul>
-<li>查最新数据时：<code>select * from A where end_date=&#39;99991231&#39; </code></li>
-<li>查询某一天数据时：<code>select * from A where start_date=&#39;20230227&#39;</code></li>
+<h4 id="业务元数据"><a href="#业务元数据" class="headerlink" title="业务元数据"></a>业务元数据</h4><ul>
+<li>业务元数据从业务角度描述了数据仓库中的数据。常见的元数据有：<ul>
+<li><strong>维度建模元数据，如维度及属性，业务过程，指标等规范化定义，用于更好地管理和使用数据</strong></li>
+<li><strong>数据应用元数据</strong>，如数据报表，数据产品等的配置和运行元数据。</li>
 </ul>
 </li>
-<li>方式二（适用end_date作为分区键）：缺点是查询某一天时start_date限制条件无法走</li>
 </ul>
-<h5 id="引用内容"><a href="#引用内容" class="headerlink" title="引用内容"></a>引用内容</h5><ul>
-<li>方式1（使用start_day作为分区键）：缺点是查询最新数据无法走分区；查询某一天数据时end_day限制条件无法走分区；加工历史拉链表数据时，end_day=30001231的结果数据不方便入库</li>
-<li>方式2（使用end_day作为分区键）：缺点是查询某一天数据时start_day限制条件无法走分区；优点是加工历史拉链表数据时，结果数据入库方便，直接insert overwrite覆盖分区30001231和20200201即可</li>
-<li>方式3（使用start_day和end_day作为联合分区键，start_day为父分区）：查询最新数据时需要改变下SQL语句，不然无法走分区（比如当前日期是20200401，SQL语句需改为select * from table_name where start_day &lt;= ‘20200401’ and end_day &gt; ‘20200401’，即查询某一天数据的写法）；缺点是加工历史拉链表数据时，end_day=30001231和end_day=20200201的结果数据都不方便入库；而且分区数会越来越多，一年下来最多可能产生365*364/2=66430个分区；优点是查询数据时start_day和end_day的限制条件都可以走分区</li>
-<li>方式4（使用start_day和end_day作为联合分区键，end_day为父分区）：缺点同方式3，但加工历史拉链表数据时，结果数据入库相对方便（首先将结果数据存入临时表，然后清空拉链表的分区end_day=30001231和end_day=20200201，最后将临时表数据以insert into方式入库）；优点同方式3</li>
-</ul>
-<p>综上所述，分区方式可在2和4中选择。</p>
-<ul>
-<li>选择方式2，需要考虑随着时间的推移，查询某一天的维度状态数据，消耗的计算资源会越来越多。可考虑删除或者备份部分历史数据至其他地方。</li>
-<li>选择方式4，需要考虑随着时间的推移，分区数量会越来越多。可考虑定期重构历史拉链表，比如在每个月月初强制重新开始做历史拉链表（比如在20200401时，先将end_day=30001231的数据修改为end_day=20200401，再基于最新全量快照表生成一份start_day=20200401，end_day=30001231的数据）。</li>
-<li><strong>设计历史拉链表时，需要移除变化频率高的维度属性，不然生成新拉链的概率会很高，导致无法达到节省存储的目的。</strong></li>
+<h4 id="元数据体系建设"><a href="#元数据体系建设" class="headerlink" title="元数据体系建设"></a>元数据体系建设</h4><ul>
+<li>元数据的质量直接影响到数据管理的准确性。元数据建设的目标是打通数据接入到加工，再到数据消费整个链路，规范元数据体系与模型，提供统一的元数据出口，保障元数据产出的稳定性和质量</li>
 </ul>
 
             </div>
@@ -310,7 +291,7 @@
                   <div class="post-meta mr-3">
                     <i class="iconfont icon-category"></i>
                     
-                      <a class="hover-with-bg" href="/categories/%E5%A4%8D%E7%9B%98/">复盘</a>
+                      <a class="hover-with-bg" href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a>
                     
                   </div>
                 
@@ -318,7 +299,7 @@
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
                     
-                      <a class="hover-with-bg" href="/tags/%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/">项目总结</a>
+                      <a class="hover-with-bg" href="/tags/%E4%B9%A6%E7%B1%8D/">书籍</a>
                     
                   </div>
                 
@@ -330,6 +311,23 @@
                   
                 </p>
               
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/01/03/StarRocks/">
+                        <span class="hidden-mobile">StarRocks</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
               
             </div>
 
