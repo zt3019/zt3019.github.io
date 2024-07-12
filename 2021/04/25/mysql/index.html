@@ -187,7 +187,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      8.7k 字
+      9.3k 字
     </span>
   
 
@@ -197,7 +197,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      107
+      114
        分钟
     </span>
   
@@ -231,7 +231,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2024年3月12日 晚上
+                  本文最后更新于：2024年5月10日 晚上
                 
               </p>
             
@@ -799,7 +799,7 @@
 <li><p>offset n 表示去掉n个值</p>
 </li>
 <li><p>一般用法：</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> employees<br><span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> hire_date <span class="hljs-keyword">DESC</span>      <span class="hljs-comment">-- 倒序</span><br>LIMIT <span class="hljs-number">1</span> <span class="hljs-keyword">offset</span> <span class="hljs-number">2</span>;       <span class="hljs-comment">-- 去掉排名倒数第一第二的时间，取倒数第三;   </span><br>  <br></code></pre></td></tr></table></figure></li>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> employees<br><span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> hire_date <span class="hljs-keyword">DESC</span>      <span class="hljs-comment">-- 倒序</span><br>LIMIT <span class="hljs-number">1</span> <span class="hljs-keyword">offset</span> <span class="hljs-number">2</span>;       <span class="hljs-comment">-- 去掉排名倒数第一第二的时间，取倒数第三;   </span><br>      <br></code></pre></td></tr></table></figure></li>
 </ul>
 </blockquote>
 <h2 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h2><blockquote>
@@ -973,6 +973,38 @@ end;
 <li><strong>一条记录最大长度65535字节</strong>是MySQL数据库Server层面的限制</li>
 </ul>
 </li>
+</ul>
+<ul>
+<li>utf8mb4编码集中：<ul>
+<li><strong>utf8mb4_general_ci     不区分大小写</strong> ci是case insensitive的意思</li>
+<li>utf8mb4_general_cs     区分大小写</li>
+<li>utf8mb4_bin:字符串每个字符串用二进制数据编译存储。 区分大小写，而且可以存二进制的内容</li>
+</ul>
+</li>
+<li>utf8mb4_ unicode_ ci 与 utf8mb4_ general_ ci 如何选择<br>字符除了需要存储，还需要排序或比较大小，涉及到与编码字符集对应的 排序字符集（collation）。ut8mb4对应的排序字符集常用的有 utf8mb4_unicode_ci 、 utf8mb4_general_ci ，到底采用哪个在 stackoverflow 上有个讨论， What’s the difference between utf8_general_ci and utf8_unicode_ci</li>
+<li>*主要从排序准确性和性能两方面看**：<br> <strong>准确性</strong><br> utf8mb4_unicode_ci 是基于标准的Unicode来排序和比较，能够在各种语言之间精确排序<br> utf8mb4_general_ci 没有实现Unicode排序规则，在遇到某些特殊语言或字符是，排序结果可能不是所期望的。<br> 但是在绝大多数情况下，这种特殊字符的顺序一定要那么精确吗。比如Unicode把 ? 、 ? 当成 ss 和 OE 来看；而general会把它们当成 s 、 e ，再如 àá??ā? 各自都与 A 相等。<br> <strong>性能</strong><br> utf8mb4_general_ci 在比较和排序的时候更快<br> utf8mb4_unicode_ci 在特殊情况下，Unicode排序规则为了能够处理特殊字符的情况，实现了略微复杂的排序算法。<br> 但是在绝大多数情况下，不会发生此类复杂比较。general理论上比Unicode可能快些，但相比现在的CPU来说，它远远不足以成为考虑性能的因素，索引涉及、SQL设计才是。 我个人推荐是 utf8mb4_unicode_ci ，将来 8.0 里也极有可能使用变为默认的规则。</li>
+</ul>
+<ul>
+<li>max_allowed_packet设置问题<ul>
+<li>报错信息<font color=red>packet for query is too large (5,352,304 &gt; 4,194,304)</font></li>
+<li>原因分析：<strong>mysql根据配置文件会限制server接受的数据包大小。</strong>有时候大的插入和更新会受max_allowed_packet参数限制，导致写入或者更新失败，导致项目访问异常。</li>
+<li>解决问题<ul>
+<li>show VARIABLES like ‘%max_allowed_packet%’;<ul>
+<li>查看max_allowed_packet最大允许包</li>
+</ul>
+</li>
+<li>方案1：临时修改，*<em>set global max_allowed_packet = 2</em>1024<em>1024</em>10; **（注意，这里的大小只能填写字节。重启mysql服务后，配置将会失效！）然后关闭掉这此mysql server链接，再进入查看。</li>
+<li>方案2:修改my.ini文件在[mysqld]部分加入 max_allowed_packet=大小，这里的大小可以写M<ul>
+<li>mysql –help|grep my.cnf</li>
+</ul>
+</li>
+<li>方案3：</li>
+<li><strong>官网给出的解决办法是加启动参数，找到mysql的启动脚本，把启动参数贴上</strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li></li>
 </ul>
 
             </div>

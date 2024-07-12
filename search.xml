@@ -267,29 +267,77 @@
 </li>
 <li><p> <strong>ELK 不仅仅适用于日志分析，它还可以支持其它任何数据分析和收集的场景，日志分析和收集只是更具有代表性，并非唯一性</strong>。</p>
 </li>
+<li><p><a href="https://zhuanlan.zhihu.com/p/358744225">参考链接1</a></p>
+</li>
+<li><p><a href="https://www.cnblogs.com/chenhuabin/p/13800715.html">参考链接2</a></p>
+</li>
+<li><p><a href="https://learnku.com/docs/elasticsearch73/7.3/data-in-documents-and-indices/6446">参考链接3</a></p>
+</li>
 </ul>
 <h2 id="ES核心概念"><a href="#ES核心概念" class="headerlink" title="ES核心概念"></a>ES核心概念</h2><ul>
-<li>ES是面向文档的<strong>非关系型数据库</strong></li>
-<li>elasticsearch(集群)中可以包含多个索引(数据库)，每个索引中可以包含多个类型(表)，每个类型下又包含多个文档(行)，每个文档中又包含多个字段(列)</li>
-<li>文档<ul>
+<li><p>ES是面向文档的<strong>非关系型数据库</strong></p>
+</li>
+<li><p>elasticsearch(集群)中可以包含多个索引(数据库)，每个索引中可以包含多个类型(表)，每个类型下又包含多个文档(行)，每个文档中又包含多个字段(列)</p>
+</li>
+<li><p><code>GET /zt_test/_doc/2</code></p>
+<ul>
+<li><p>zt_test：index的概念：<strong>索引是文档(Document)的容器，是一类文档的集合。</strong>三种意思：</p>
+<ul>
+<li>索引（名次）：相当于关系型数据库中的(database),索引由其名称(<strong>必须为全小写字符</strong>)进行标识</li>
+<li>索引（动词）：保存一个文档到索引（名词）的过程。类似于sql中的insert或update</li>
+<li>倒排索引：关系型数据库通过给某个字段增加一个b+树索引到指定的列，提升检索速度。es使用了一个叫做倒排索引的结构来达到相同的目的。</li>
+</ul>
+</li>
+<li><p>_doc：type的概念</p>
+<ul>
+<li><p>之前的版本中，索引和文档中间还有个类型的概念，每个索引下可以建立多个类型，文档存储时需要指定index和type。从6.0.0开始单个索引中只能有一个类型，</p>
+<p>7.0.0以后将将不建议使用，8.0.0 以后完全不支持。</p>
+<h5 id="弃用该概念的原因："><a href="#弃用该概念的原因：" class="headerlink" title="弃用该概念的原因："></a>弃用该概念的原因：</h5><p>我们虽然可以通俗的去理解Index比作 SQL 的 Database，Type比作SQL的Table。但这并不准确，因为如果在SQL中,Table 之前相互独立，同名的字段在两个表中毫无关系。</p>
+<p>但是在ES中，同一个Index 下不同的 Type 如果有同名的字段，他们会被 Luecence 当作同一个字段 ，并且他们的定义必须相同。所以我觉得Index现在更像一个表，</p>
+<p>而Type字段并没有多少意义。目前Type已经被Deprecated，在7.0开始，一个索引只能建一个Type为<code>_doc</code></p>
+</li>
+</ul>
+</li>
+<li><p>2:document的概念</p>
+<ul>
+<li><code>Document</code> Index 里面单条的记录称为Document（文档）。<strong>等同于关系型数据库表中的行</strong>。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>文档</p>
+<ul>
 <li>es是面向文档的，那么就意味着索引和收索数据的最小单位就是文档</li>
 </ul>
 </li>
-<li>类型<ul>
-<li>类型是文档的逻辑容器，就像关系型数据库一样，表格是行的容器。</li>
-<li>类型中对于字段的定义称为映射，比如name映射为字符串类型</li>
+<li><p>类型</p>
+<ul>
+<li><p>类型是文档的逻辑容器，就像关系型数据库一样，表格是行的容器。</p>
+</li>
+<li><p>类型中对于字段的定义称为映射，比如name映射为字符串类型</p>
+</li>
+<li><p><code>Type</code> 可以理解成关系数据库中Table。</p>
+<p>之前的版本中，索引和文档中间还有个类型的概念，每个索引下可以建立多个类型，文档存储时需要指定index和type。从6.0.0开始单个索引中只能有一个类型，</p>
+<p>7.0.0以后将将不建议使用，8.0.0 以后完全不支持。</p>
+<h5 id="弃用该概念的原因：-1"><a href="#弃用该概念的原因：-1" class="headerlink" title="弃用该概念的原因："></a>弃用该概念的原因：</h5><p>我们虽然可以通俗的去理解Index比作 SQL 的 Database，Type比作SQL的Table。但这并不准确，因为如果在SQL中,Table 之前相互独立，同名的字段在两个表中毫无关系。</p>
+<p>但是在ES中，同一个Index 下不同的 Type 如果有同名的字段，他们会被 Luecence 当作同一个字段 ，并且他们的定义必须相同。所以我觉得Index现在更像一个表，</p>
+<p><strong>而Type字段并没有多少意义。目前Type已经被Deprecated，在7.0开始，一个索引只能建一个Type为<code>_doc</code></strong></p>
+</li>
 </ul>
 </li>
-<li>索引<ul>
+<li><p>索引</p>
+<ul>
 <li>索引是映射类型的容器，es中的索引是一个非常大的文档集合。索引存储了映射类型的字段和其他设置。</li>
 </ul>
 </li>
-<li>物理设计<ul>
+<li><p>物理设计</p>
+<ul>
 <li>一个es集群至少有一个节点，一个节点就是一个es进程，节点可以有多个索引。如果创建索引，那么索引将会有5个分片（primary shard，又称主分片）构成的，每一个主分片会有一个副本(replica shard，又称复制分片)</li>
 <li>一个分片是一个<code>lucene</code>索引，一个包含倒排索引的文件目录，倒排索引可以使es在不扫描全部文档的情况下，可以知道哪些文档包含特定的关键字。</li>
 </ul>
 </li>
-<li>倒排索引<ul>
+<li><p>倒排索引</p>
+<ul>
 <li>elasticsearch 使用的是一种称为<code>倒排索引</code>的结构，采用<code>Lucene</code>倒排索引作为底层。这种结构适用于快速的全文搜索， 一个索引由文档中所有不重复的列表构成，对于每一个词，都有一个包含它的文档列表。</li>
 </ul>
 </li>
@@ -314,9 +362,10 @@
 <li><p>PUT /索引名/类型名/文档id {请求id}</p>
 </li>
 <li><p>````shell</p>
-<h1 id="命令解释"><a href="#命令解释" class="headerlink" title="命令解释"></a>命令解释</h1><h1 id="PUT-创建命令-test1-索引-type1-类型-1-id"><a href="#PUT-创建命令-test1-索引-type1-类型-1-id" class="headerlink" title="PUT 创建命令 test1 索引 type1 类型 1 id"></a>PUT 创建命令 test1 索引 type1 类型 1 id</h1><p>PUT /test1/type1/1<br>{<br>  “name”:”大数据梦想家”,<br>  “age”:21<br>}<br>get /test1<br>#查看test1 的结构，我们没有指定文档字段类型，但是es会默认配置类型</p>
+<h1 id="命令解释"><a href="#命令解释" class="headerlink" title="命令解释"></a>命令解释</h1><h1 id="PUT-创建命令-test1-索引-type1-类型-1-id"><a href="#PUT-创建命令-test1-索引-type1-类型-1-id" class="headerlink" title="PUT 创建命令 test1 索引 type1 类型 1 id"></a>PUT 创建命令 test1 索引 type1 类型 1 id</h1><p>#type的概念已经被高版本弃用，不在使用，写成_doc即可<br>PUT /test1/type1/1<br>{<br>  “name”:”大数据梦想家”,<br>  “age”:21<br>}</p>
+<h1 id="也可以创建一个索引，-id会自动生成一个"><a href="#也可以创建一个索引，-id会自动生成一个" class="headerlink" title="也可以创建一个索引，_id会自动生成一个"></a>也可以创建一个索引，_id会自动生成一个</h1><p>POST /zt_test/_doc/<br>{<br>  “name”:”dcx”,<br>  “age”:3208<br>}<br>get /test1<br>#查看test1 的结构，我们没有指定文档字段类型，但是es会默认配置类型</p>
 <p>get _cat/health<br>#查看集群的健康情况</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><br>- put创建索引，并设置字段类型<br><br>  ````shell<br>  PUT /test2<br>  &#123;<br>    <span class="hljs-string">&quot;mappings&quot;</span>: &#123;<br>      <span class="hljs-string">&quot;properties&quot;</span>: &#123;<br>        <span class="hljs-string">&quot;name&quot;</span>:&#123;<br>          <span class="hljs-string">&quot;type&quot;</span>:<span class="hljs-string">&quot;text&quot;</span><br>        &#125;,<br>        <span class="hljs-string">&quot;age&quot;</span>:&#123;<br>          <span class="hljs-string">&quot;type&quot;</span>:<span class="hljs-string">&quot;long&quot;</span><br>        &#125;,<br>        <span class="hljs-string">&quot;birthday&quot;</span>:&#123;<br>          <span class="hljs-string">&quot;type&quot;</span>:<span class="hljs-string">&quot;date&quot;</span><br>        &#125;<br>      &#125;<br>    &#125;<br>  &#125;<br>  <br>  PUT /test3/_doc/1<br>  &#123;<br>    <span class="hljs-string">&quot;name&quot;</span>:<span class="hljs-string">&quot;大数据梦想家&quot;</span>,<br>    <span class="hljs-string">&quot;age&quot;</span>:21,<br>    <span class="hljs-string">&quot;birthday&quot;</span>:<span class="hljs-string">&quot;2000-02-06&quot;</span><br>  &#125;<br></code></pre></td></tr></table></figure></li>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><br>- put创建索引，并设置字段类型<br><br>  ````shell<br>  PUT /test2<br>  &#123;<br>    <span class="hljs-string">&quot;mappings&quot;</span>: &#123;<br>      <span class="hljs-string">&quot;properties&quot;</span>: &#123;<br>        <span class="hljs-string">&quot;name&quot;</span>:&#123;<br>          <span class="hljs-string">&quot;type&quot;</span>:<span class="hljs-string">&quot;text&quot;</span><br>        &#125;,<br>        <span class="hljs-string">&quot;age&quot;</span>:&#123;<br>          <span class="hljs-string">&quot;type&quot;</span>:<span class="hljs-string">&quot;long&quot;</span><br>        &#125;,<br>        <span class="hljs-string">&quot;birthday&quot;</span>:&#123;<br>          <span class="hljs-string">&quot;type&quot;</span>:<span class="hljs-string">&quot;date&quot;</span><br>        &#125;<br>      &#125;<br>    &#125;<br>  &#125;<br>  <br>  PUT /test3/_doc/1<br>  &#123;<br>    <span class="hljs-string">&quot;name&quot;</span>:<span class="hljs-string">&quot;大数据梦想家&quot;</span>,<br>    <span class="hljs-string">&quot;age&quot;</span>:21,<br>    <span class="hljs-string">&quot;birthday&quot;</span>:<span class="hljs-string">&quot;2000-02-06&quot;</span><br>  &#125;<br>  <br>  <span class="hljs-comment">#查看索引结构</span><br>  GET /索引名/_mapping?pretty<br>  GET /patent_index/_mapping?pretty<br>  <br>  <span class="hljs-comment">#根据查到的结构创建索引</span><br>  <span class="hljs-comment">#settings可以设置一些配置参数</span><br>  <span class="hljs-comment">#number_of_shards：分片数量（按机器节点数量计算，创建后不能更改）</span><br>  <span class="hljs-comment">#number_of_replicas：副本数量</span><br>  PUT comprehensive_suggest_predict_v3_zt<br>  &#123;<br>    <span class="hljs-string">&quot;settings&quot;</span>: &#123;<br>      <span class="hljs-string">&quot;number_of_shards&quot;</span>: 6,<br>      <span class="hljs-string">&quot;number_of_replicas&quot;</span>: 1<br>    &#125;, <br>      <span class="hljs-string">&quot;mappings&quot;</span> : &#123;<br>        <span class="hljs-string">&quot;properties&quot;</span> : &#123;<br>          <span class="hljs-string">&quot;title&quot;</span> : &#123;<br>            <span class="hljs-string">&quot;type&quot;</span> : <span class="hljs-string">&quot;completion&quot;</span>,<br>            <span class="hljs-string">&quot;analyzer&quot;</span> : <span class="hljs-string">&quot;standard&quot;</span>,<br>            <span class="hljs-string">&quot;preserve_separators&quot;</span> : <span class="hljs-literal">true</span>,<br>            <span class="hljs-string">&quot;preserve_position_increments&quot;</span> : <span class="hljs-literal">true</span>,<br>            <span class="hljs-string">&quot;max_input_length&quot;</span> : 50,<br>            <span class="hljs-string">&quot;contexts&quot;</span> : [<br>              &#123;<br>                <span class="hljs-string">&quot;name&quot;</span> : <span class="hljs-string">&quot;tag&quot;</span>,<br>                <span class="hljs-string">&quot;type&quot;</span> : <span class="hljs-string">&quot;CATEGORY&quot;</span><br>              &#125;<br>            ]<br>          &#125;<br>        &#125;<br>      &#125;<br>  &#125;<br>  <br>  <br></code></pre></td></tr></table></figure></li>
 <li><p>更新数据</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">PUT /test3/_doc/1<br>&#123;<br>  &quot;name&quot;:&quot;大数据梦想家&quot;,<br>  &quot;age&quot;:21,<br>  &quot;birthday&quot;:&quot;2000-02-06&quot;<br>&#125;<br><span class="hljs-meta prompt_"># </span><span class="language-bash">这种put方式更新数据，如果遗漏了字段，那么数据就会被新数据覆盖，一般不用这种方式更新数据</span><br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">可以用post的方式，update数据</span><br>post /test3/_doc/1/_update<br>&#123;<br>  &quot;doc&quot;:&#123;<br>    &quot;age&quot;:24<br>  &#125;<br>&#125;<br><br><br></code></pre></td></tr></table></figure></li>
 <li><p>删除索引</p>
@@ -327,14 +376,31 @@
 <ul>
 <li><p>先创建一个索引，并添加一些样例数据</p>
 </li>
-<li><p>````shell<br>PUT /alice/user/1<br>{<br>  “name”:”爱丽丝”,<br>  “age”:21,<br>  “desc”:”在最美的年华，做最好的自己！”,<br>  “tags”:[“技术宅”,”温暖”,”思维活跃”]<br>}</p>
-<p>PUT /alice/user/2<br>{<br>  “name”:”张三”,<br>  “age”:23,<br>  “desc”:”法外狂徒”,<br>  “tags”:[“渣男”,”交友”]<br>}</p>
-<p>PUT /alice/user/3<br>{<br>  “name”:”路人甲”,<br>  “age”:24,<br>  “desc”:”不可描述”,<br>  “tags”:[“靓仔”,”网游”]<br>}</p>
-<p>PUT /alice/user/4<br>{<br>  “name”:”爱丽丝学Java”,<br>  “age”:25,<br>  “desc”:”技术成就自我！”,<br>  “tags”:[“思维敏捷”,”喜欢学习”]<br>}</p>
-<p>PUT /alice/user/5<br>{<br>  “name”:”爱丽丝学Python”,<br>  “age”:26,<br>  “desc”:”人生苦短，我用Python！”,<br>  “tags”:[“好学”,”勤奋刻苦”]<br>}</p>
-<figure class="highlight nsis"><table><tr><td class="code"><pre><code class="hljs nsis"><br>- <br><br>- <span class="hljs-string">``</span><span class="hljs-string">``</span>shell<br>  <span class="hljs-comment"># 搜索到指定 id 的文档信息</span><br>  get alice/<span class="hljs-literal">user</span>/<span class="hljs-number">1</span><br>  <span class="hljs-comment"># 条件查询_search?q=</span><br>  <span class="hljs-comment"># 一般不用这种方式</span><br>  GET alice/<span class="hljs-literal">user</span>/_search?q=<span class="hljs-keyword">name</span>:爱丽丝<br>  <br>  <span class="hljs-comment"># 查询</span><br>  get alice/<span class="hljs-literal">user</span>/_search<br>  &#123;<br>    <span class="hljs-string">&quot;query&quot;</span>:&#123;<br>      <span class="hljs-string">&quot;match&quot;</span>: &#123;<br>        <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;张三&quot;</span><br>      &#125;<br>    &#125;<br>  &#125;<br>  <span class="hljs-comment">#展示想要的字段，指定字段即可</span><br>  get alice/<span class="hljs-literal">user</span>/_search<br>  &#123;<br>    <span class="hljs-string">&quot;query&quot;</span>:&#123;<br>      <span class="hljs-string">&quot;match&quot;</span>: &#123;<br>        <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;张三&quot;</span><br>      &#125;<br>    &#125;,<br>    <span class="hljs-string">&quot;_source&quot;</span>:[<span class="hljs-string">&quot;name&quot;</span>,<span class="hljs-string">&quot;age&quot;</span>]<br>  &#125;<br></code></pre></td></tr></table></figure></li>
-<li><p>排序查询</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">排序查询，可以指定from(开始位置)，size(几条数据)</span><br>GET alice/user/_search<br>&#123;<br>  &quot;query&quot;:&#123;<br>    &quot;match&quot;: &#123;<br>      &quot;name&quot;: &quot;爱丽丝&quot;<br>    &#125;<br>  &#125;,<br>  &quot;sort&quot;: [<br>    &#123; <br>      &quot;age&quot;: &#123; <br>        &quot;order&quot;: &quot;asc&quot;<br>      &#125;<br>     &#125;<br>   ],<br>   &quot;from&quot;:0,<br>   &quot;size&quot;: 2<br>&#125;<br></code></pre></td></tr></table></figure>
+<li><p>全匹配查询：<code>GET book/_search</code></p>
+<ul>
+<li>````shell<h1 id="全匹配查询"><a href="#全匹配查询" class="headerlink" title="全匹配查询"></a>全匹配查询</h1>GET book/_search<br>{<br>  “query”: {<pre><code>&quot;match_all&quot;: &#123;&#125;
+</code></pre>
+  }<br>}<br>#size设置分页查询<br>GET book/_search<br>{<br>  “query”: {<pre><code>&quot;match_all&quot;: &#123;&#125;
+</code></pre>
+  },<br>  “size”: 100<br>}<figure class="highlight nsis"><table><tr><td class="code"><pre><code class="hljs nsis"><br>  - <br><br>- <span class="hljs-string">``</span><span class="hljs-string">``</span>shell<br>  PUT /alice/<span class="hljs-literal">user</span>/<span class="hljs-number">1</span><br>  &#123;<br>    <span class="hljs-string">&quot;name&quot;</span>:<span class="hljs-string">&quot;爱丽丝&quot;</span>,<br>    <span class="hljs-string">&quot;age&quot;</span>:<span class="hljs-number">21</span>,<br>    <span class="hljs-string">&quot;desc&quot;</span>:<span class="hljs-string">&quot;在最美的年华，做最好的自己！&quot;</span>,<br>    <span class="hljs-string">&quot;tags&quot;</span>:[<span class="hljs-string">&quot;技术宅&quot;</span>,<span class="hljs-string">&quot;温暖&quot;</span>,<span class="hljs-string">&quot;思维活跃&quot;</span>]<br>  &#125;<br>  <br>  PUT /alice/<span class="hljs-literal">user</span>/<span class="hljs-number">2</span><br>  &#123;<br>    <span class="hljs-string">&quot;name&quot;</span>:<span class="hljs-string">&quot;张三&quot;</span>,<br>    <span class="hljs-string">&quot;age&quot;</span>:<span class="hljs-number">23</span>,<br>    <span class="hljs-string">&quot;desc&quot;</span>:<span class="hljs-string">&quot;法外狂徒&quot;</span>,<br>    <span class="hljs-string">&quot;tags&quot;</span>:[<span class="hljs-string">&quot;渣男&quot;</span>,<span class="hljs-string">&quot;交友&quot;</span>]<br>  &#125;<br>  <br>  PUT /alice/<span class="hljs-literal">user</span>/<span class="hljs-number">3</span><br>  &#123;<br>    <span class="hljs-string">&quot;name&quot;</span>:<span class="hljs-string">&quot;路人甲&quot;</span>,<br>    <span class="hljs-string">&quot;age&quot;</span>:<span class="hljs-number">24</span>,<br>    <span class="hljs-string">&quot;desc&quot;</span>:<span class="hljs-string">&quot;不可描述&quot;</span>,<br>    <span class="hljs-string">&quot;tags&quot;</span>:[<span class="hljs-string">&quot;靓仔&quot;</span>,<span class="hljs-string">&quot;网游&quot;</span>]<br>  &#125;<br>  <br>  <br>  PUT /alice/<span class="hljs-literal">user</span>/<span class="hljs-number">4</span><br>  &#123;<br>    <span class="hljs-string">&quot;name&quot;</span>:<span class="hljs-string">&quot;爱丽丝学Java&quot;</span>,<br>    <span class="hljs-string">&quot;age&quot;</span>:<span class="hljs-number">25</span>,<br>    <span class="hljs-string">&quot;desc&quot;</span>:<span class="hljs-string">&quot;技术成就自我！&quot;</span>,<br>    <span class="hljs-string">&quot;tags&quot;</span>:[<span class="hljs-string">&quot;思维敏捷&quot;</span>,<span class="hljs-string">&quot;喜欢学习&quot;</span>]<br>  &#125;<br>  <br>  PUT /alice/<span class="hljs-literal">user</span>/<span class="hljs-number">5</span><br>  &#123;<br>    <span class="hljs-string">&quot;name&quot;</span>:<span class="hljs-string">&quot;爱丽丝学Python&quot;</span>,<br>    <span class="hljs-string">&quot;age&quot;</span>:<span class="hljs-number">26</span>,<br>    <span class="hljs-string">&quot;desc&quot;</span>:<span class="hljs-string">&quot;人生苦短，我用Python！&quot;</span>,<br>    <span class="hljs-string">&quot;tags&quot;</span>:[<span class="hljs-string">&quot;好学&quot;</span>,<span class="hljs-string">&quot;勤奋刻苦&quot;</span>]<br>  &#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li></li>
+<li><p>````shell</p>
+<h1 id="搜索到指定-id-的文档信息"><a href="#搜索到指定-id-的文档信息" class="headerlink" title="搜索到指定 id 的文档信息"></a>搜索到指定 id 的文档信息</h1><p>get alice/user/1</p>
+<h1 id="条件查询-search-q"><a href="#条件查询-search-q" class="headerlink" title="条件查询_search?q="></a>条件查询_search?q=</h1><h1 id="一般不用这种方式"><a href="#一般不用这种方式" class="headerlink" title="一般不用这种方式"></a>一般不用这种方式</h1><p>GET alice/user/_search?q=name:爱丽丝</p>
+<h1 id="查询"><a href="#查询" class="headerlink" title="查询"></a>查询</h1><p>get alice/user/_search<br>{<br>  “query”:{</p>
+<pre><code>&quot;match&quot;: &#123;
+  &quot;name&quot;: &quot;张三&quot;
+&#125;
+</code></pre>
+<p>  }<br>}<br>#展示想要的字段，指定字段即可<br>get alice/user/_search<br>{<br>  “query”:{</p>
+<pre><code>&quot;match&quot;: &#123;
+  &quot;name&quot;: &quot;张三&quot;
+&#125;
+</code></pre>
+<p>  },<br>  “_source”:[“name”,”age”]<br>}</p>
+<figure class="highlight nsis"><table><tr><td class="code"><pre><code class="hljs nsis"><br>- 排序查询<br><br>  <span class="hljs-string">``</span><span class="hljs-string">``</span>shell<br>  <span class="hljs-comment"># 排序查询，可以指定from(开始位置)，size(几条数据)</span><br>  GET alice/<span class="hljs-literal">user</span>/_search<br>  &#123;<br>    <span class="hljs-string">&quot;query&quot;</span>:&#123;<br>      <span class="hljs-string">&quot;match&quot;</span>: &#123;<br>        <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;爱丽丝&quot;</span><br>      &#125;<br>    &#125;,<br>    <span class="hljs-string">&quot;sort&quot;</span>: [<br>      &#123; <br>        <span class="hljs-string">&quot;age&quot;</span>: &#123; <br>          <span class="hljs-string">&quot;order&quot;</span>: <span class="hljs-string">&quot;asc&quot;</span><br>        &#125;<br>       &#125;<br>     ],<br>     <span class="hljs-string">&quot;from&quot;</span>:<span class="hljs-number">0</span>,<br>     <span class="hljs-string">&quot;size&quot;</span>: <span class="hljs-number">2</span><br>  &#125;<br></code></pre></td></tr></table></figure>
 
 <ul>
 <li>排序支持的属性<ul>
@@ -348,9 +414,9 @@
 <li><p>分页查询</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">学到这里，我们也可以看到，我们的查询条件越来越多，开始仅是简单查询，慢慢增加条件查询，增加排序，对返回结果进行限制。所以，我们可以说，对 于 elasticsearch 来说，所有的查询条件都是可插拔的。比如说，我们在查询中，仅对返回结果进行限制:</span><br><br>GET alice/user/_search<br>&#123; <br>  &quot;query&quot;:<br>  &#123;&quot;match_all&quot;: &#123;&#125;<br>  &#125;,<br>  &quot;from&quot;:0,  # 从第n条开始<br>  &quot;size&quot;:4   # 返回n条数据<br>  &#125;<br></code></pre></td></tr></table></figure></li>
 <li><p>布尔查询</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">多条件查询</span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">通过bool属性内使用must来作为查询条件</span><br>GET alice/user/_search<br>&#123;<br>  &quot;query&quot;:&#123;<br>    &quot;bool&quot;: &#123;<br>      &quot;must&quot;:[<br>         &#123;<br>          &quot;match&quot;:&#123;<br>          &quot;name&quot;:&quot;爱丽丝&quot;<br>         &#125;<br>      &#125;,<br>      &#123;<br>        &quot;match&quot;:&#123;<br>          &quot;age&quot;:25<br>          &#125;<br>        &#125;<br>      ]<br>    &#125;<br>  &#125;<br>&#125;<br><span class="hljs-meta prompt_">#</span><span class="language-bash">查询条件1或条件2</span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">should</span><br>GET alice/user/_search<br>&#123;<br>  &quot;query&quot;:&#123;<br>    &quot;bool&quot;: &#123;<br>      &quot;should&quot;:[<br>         &#123;<br>          &quot;match&quot;:&#123;<br>          &quot;name&quot;:&quot;爱丽丝&quot;<br>         &#125;<br>      &#125;,<br>      &#123;<br>        &quot;match&quot;:&#123;<br>          &quot;age&quot;:25<br>          &#125;<br>        &#125;<br>      ]<br>    &#125;<br>  &#125;<br>&#125;<br><span class="hljs-meta prompt_">#</span><span class="language-bash">查询不是的条件：must_not</span><br>GET alice/user/_search<br>&#123;<br>  &quot;query&quot;:&#123;<br>    &quot;bool&quot;: &#123;<br>      &quot;must_not&quot;:[<br>      &#123;<br>        &quot;match&quot;:&#123;<br>          &quot;age&quot;:25<br>          &#125;<br>        &#125;<br>      ]<br>    &#125;<br>  &#125;<br>&#125;<br><br><br></code></pre></td></tr></table></figure></li>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">多条件查询</span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">通过bool属性内使用must来作为查询条件</span><br>GET alice/user/_search<br>&#123;<br>  &quot;query&quot;:&#123;<br>    &quot;bool&quot;: &#123;<br>      &quot;must&quot;:[<br>         &#123;<br>          &quot;match&quot;:&#123;<br>          &quot;name&quot;:&quot;爱丽丝&quot;<br>         &#125;<br>      &#125;,<br>      &#123;<br>        &quot;match&quot;:&#123;<br>          &quot;age&quot;:25<br>          &#125;<br>        &#125;<br>      ]<br>    &#125;<br>  &#125;<br>&#125;<br><span class="hljs-meta prompt_">#</span><span class="language-bash">查询条件1或条件2</span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">should</span><br>GET alice/user/_search<br>&#123;<br>  &quot;query&quot;:&#123;<br>    &quot;bool&quot;: &#123;<br>      &quot;should&quot;:[<br>         &#123;<br>          &quot;match&quot;:&#123;<br>          &quot;name&quot;:&quot;爱丽丝&quot;<br>         &#125;<br>      &#125;,<br>      &#123;<br>        &quot;match&quot;:&#123;<br>          &quot;age&quot;:25<br>          &#125;<br>        &#125;<br>      ]<br>    &#125;<br>  &#125;<br>&#125;<br><span class="hljs-meta prompt_">#</span><span class="language-bash">查询不是的条件：must_not</span><br>GET alice/user/_search<br>&#123;<br>  &quot;query&quot;:&#123;<br>    &quot;bool&quot;: &#123;<br>      &quot;must_not&quot;:[<br>      &#123;<br>        &quot;match&quot;:&#123;<br>          &quot;age&quot;:25<br>          &#125;<br>        &#125;<br>      ]<br>    &#125;<br>  &#125;<br>&#125;<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">exists关键字存在</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">存在age字段的数据</span><br>GET alice/user/_search<br>&#123;<br>  &quot;query&quot;:&#123;<br>    &quot;bool&quot;: &#123;<br>      &quot;must_not&quot;:[<br>      &#123;<br>        &quot;exists&quot;:&#123;<br>          &quot;field&quot;:&quot;age&quot;<br>          &#125;<br>        &#125;<br>      ]<br>    &#125;<br>  &#125;<br>&#125;<br><br><br></code></pre></td></tr></table></figure></li>
 <li><p>filter过滤</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">#</span><span class="language-bash">filter进行数据过滤</span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">查询名称为爱丽丝，年龄&gt;=10and年龄&lt;=25</span><br>get alice/user/_search<br>&#123;<br>  &quot;query&quot;:&#123;<br>    &quot;bool&quot;:&#123;<br>      &quot;must&quot;:[<br>        &#123;<br>          &quot;match&quot;:&#123;<br>            &quot;name&quot;:&quot;爱丽丝&quot;<br>          &#125;<br>        &#125;<br>        ],<br>      &quot;filter&quot;: [<br>        &#123;&quot;range&quot;: &#123;<br>          &quot;age&quot;: &#123;<br>            &quot;gte&quot;: 10,<br>            &quot;lte&quot;: 25<br>          &#125;<br>        &#125;&#125;<br>      ]<br>    &#125;<br>  &#125;<br>&#125;<br><span class="hljs-meta prompt_">#</span><span class="language-bash">gt表示大于</span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">gte表示大于等于</span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">lt表示小于</span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">lte表示小于等于</span><br></code></pre></td></tr></table></figure></li>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">#</span><span class="language-bash">filter进行数据过滤</span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">查询名称为爱丽丝，年龄&gt;=10and年龄&lt;=25</span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">range查询</span><br>get alice/user/_search<br>&#123;<br>  &quot;query&quot;:&#123;<br>    &quot;bool&quot;:&#123;<br>      &quot;must&quot;:[<br>        &#123;<br>          &quot;match&quot;:&#123;<br>            &quot;name&quot;:&quot;爱丽丝&quot;<br>          &#125;<br>        &#125;<br>        ],<br>      &quot;filter&quot;: [<br>        &#123;&quot;range&quot;: &#123;<br>          &quot;age&quot;: &#123;<br>            &quot;gte&quot;: 10,<br>            &quot;lte&quot;: 25<br>          &#125;<br>        &#125;&#125;<br>      ]<br>    &#125;<br>  &#125;<br>&#125;<br><span class="hljs-meta prompt_">#</span><span class="language-bash">gt表示大于</span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">gte表示大于等于</span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">lt表示小于</span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">lte表示小于等于</span><br></code></pre></td></tr></table></figure></li>
 <li><p>短语检索</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">#</span><span class="language-bash">查询tags中包含<span class="hljs-string">&quot;男&quot;</span>的数据</span><br>GET alice/user/_search<br>&#123;<br>  &quot;query&quot;:&#123;<br>    &quot;match&quot;:&#123;<br>      &quot;tags&quot;:&quot;男&quot;<br>    &#125;<br>  &#125;<br>&#125;<br><span class="hljs-meta prompt_">#</span><span class="language-bash">匹配多个标签</span><br>GET alice/user/_search<br>&#123;<br>  &quot;query&quot;:&#123;<br>    &quot;match&quot;:&#123;<br>      &quot;tags&quot;:&quot;男 女&quot;<br>    &#125;<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
 <li><p>精确查询</p>
@@ -371,65 +437,279 @@
 <ul>
 <li><p>设置highlight属性，对查询的结果的指定字段做高亮显示</p>
 </li>
-<li><pre><code class="shell">#观察返回的结果，我们可以发现搜索相关的结果，被加上了高亮标签&lt;em&gt;
-GET alice/user/_search
-&#123;
-  &quot;query&quot;:&#123;
-     &quot;match&quot;: &#123;
-       &quot;name&quot;: &quot;爱丽丝&quot;
-     &#125;
+<li><p>````shell<br>#观察返回的结果，我们可以发现搜索相关的结果，被加上了高亮标签<em><br>GET alice/user/_search<br>{<br>  “query”:{</p>
+<pre><code> &quot;match&quot;: &#123;
+   &quot;name&quot;: &quot;爱丽丝&quot;
+ &#125;
+</code></pre>
+<p>  },<br>  “highlight”:{</p>
+<pre><code>&quot;fields&quot;: &#123;
+  &quot;name&quot;: &#123;&#125;
+&#125;
+</code></pre>
+<p>  }<br>}</p>
+<p>#自定义样式<br>GET alice/user/_search<br>{<br>  “query”:{</p>
+<pre><code> &quot;match&quot;: &#123;
+   &quot;name&quot;: &quot;爱丽丝&quot;
+ &#125;
+</code></pre>
+<p>  },<br>  “highlight”:{</p>
+<pre><code>&quot;pre_tags&quot;: &quot;&lt;b class=&#39;key&#39; style=&#39;color:red&#39;&gt;&quot;, 
+&quot;post_tags&quot;: &quot;&lt;/b&gt;&quot;,
+&quot;fields&quot;: &#123;
+  &quot;name&quot;: &#123;&#125;
+&#125;
+</code></pre>
+<p>  }<br>}</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><br><span class="hljs-comment">#### 字段类型</span><br><br>* 字符串类型<br><br>  - **text,keyword**<br><br>* 数值类型<br><br>  - **long,<span class="hljs-built_in">integer</span>,short,byte,double,<span class="hljs-built_in">float</span>,half_float,scaled_float**<br><br>* 日期类型<br><br>  - **<span class="hljs-built_in">date</span>**<br><br>  - ````shell<br>    PUT my_index<br>    &#123;<br>      <span class="hljs-string">&quot;mappings&quot;</span>: &#123;<br>        <span class="hljs-string">&quot;_doc&quot;</span>: &#123;<br>          <span class="hljs-string">&quot;properties&quot;</span>: &#123;<br>            <span class="hljs-string">&quot;date&quot;</span>: &#123;<br>              <span class="hljs-string">&quot;type&quot;</span>: <span class="hljs-string">&quot;date&quot;</span> <br>            &#125;<br>          &#125;<br>        &#125;<br>      &#125;<br>    &#125;<br>    <br>    PUT my_index/_doc/1<br>    &#123; <span class="hljs-string">&quot;date&quot;</span>: <span class="hljs-string">&quot;2015-01-01&quot;</span> &#125; <br>    <br>    PUT my_index/_doc/2<br>    &#123; <span class="hljs-string">&quot;date&quot;</span>: <span class="hljs-string">&quot;2015-01-01T12:10:30Z&quot;</span> &#125; <br>    <br>    PUT my_index/_doc/3<br>    &#123; <span class="hljs-string">&quot;date&quot;</span>: 1420070400001 &#125; <br>    <br>    GET my_index/_search<br>    &#123;<br>      <span class="hljs-string">&quot;sort&quot;</span>: &#123; <span class="hljs-string">&quot;date&quot;</span>: <span class="hljs-string">&quot;asc&quot;</span>&#125; <br>    &#125;<br>    <span class="hljs-comment">#es的date类型支持多种格式，上面的添加数据都可以</span><br>    <span class="hljs-comment">#也可以指定格式</span><br>    PUT my_index<br>    &#123;<br>      <span class="hljs-string">&quot;mappings&quot;</span>: &#123;<br>        <span class="hljs-string">&quot;_doc&quot;</span>: &#123;<br>          <span class="hljs-string">&quot;properties&quot;</span>: &#123;<br>            <span class="hljs-string">&quot;date&quot;</span>: &#123;<br>              <span class="hljs-string">&quot;type&quot;</span>:   <span class="hljs-string">&quot;date&quot;</span>,<br>              <span class="hljs-string">&quot;format&quot;</span>: <span class="hljs-string">&quot;yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis&quot;</span><br>            &#125;<br>          &#125;<br>        &#125;<br>      &#125;<br>    &#125;<br>    <span class="hljs-comment">#规定格式后，新增的数据必须符合这个格式，不然就会跑错</span><br></code></pre></td></tr></table></figure></li>
+<li><p>可用的格式</p>
+<ul>
+<li>yyyy-MM-dd HH:mm:ss</li>
+<li>yyyy-MM-dd</li>
+<li>epoch_millis (毫秒值)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>布尔值类型</p>
+<ul>
+<li><strong>boolean</strong></li>
+</ul>
+</li>
+<li><p>二进制类型</p>
+<ul>
+<li><strong>binary</strong></li>
+</ul>
+</li>
+<li><p>复杂类型</p>
+<ul>
+<li><p>Array</p>
+<ul>
+<li>在Elasticsearch中，<strong>数组不需要专用的字段数据类型</strong>。默认情况下，<strong>任何字段都可以包含零个或多个值</strong>，但是，数组中的所有值都<strong>必须具有相同的数据类型。</strong></li>
+</ul>
+</li>
+<li><p>object</p>
+<ul>
+<li><p><strong>object类型的字段，也可以有多个值</strong>，形成List<object>的数据结构。</p>
+</li>
+<li><p><strong>object不允许彼此独立地索引查询</strong></p>
+</li>
+<li><p>````shell</p>
+<h1 id="添加-属性为object的字段-field3"><a href="#添加-属性为object的字段-field3" class="headerlink" title="添加 属性为object的字段 field3"></a>添加 属性为object的字段 field3</h1><p>PUT toherotest/_mapping/_doc<br>{<br>  “properties”: {</p>
+<pre><code>&quot;field3&quot;: &#123;
+  &quot;type&quot;: &quot;object&quot;
+&#125;
+</code></pre>
+<p>  }<br>}</p>
+<h1 id="新增数据"><a href="#新增数据" class="headerlink" title="新增数据"></a>新增数据</h1><p>POST /toherotest/_doc/3<br>{<br>  “field3”:[ { “name”:”tohero1”, “age”:1 }, { “name”:”tohero2”, “age”:2 } ]<br>}</p>
+<p>POST /toherotest/_doc/4<br>{<br>  “field3”: [ { “name”:”tohero1”, “age”:2 }, { “name”:”tohero2”, “age”:1 } ]<br>}</p>
+<p>#执行查询语句<br>GET /toherotest/_doc/_search<br>{<br>  “query”: {</p>
+<pre><code>&quot;bool&quot;: &#123;
+  &quot;must&quot;: [
+    &#123;
+      &quot;term&quot;: &#123;
+        &quot;field3.name&quot;: &quot;tohero1&quot;
+      &#125;
+    &#125;,
+    &#123;
+      &quot;term&quot;: &#123;
+        &quot;field3.age&quot;: 1
+      &#125;
+    &#125;
+  ]
+&#125;
+</code></pre>
+<p>  }<br>}</p>
+<p>#查询结果<br>{<br>  “took”: 2,<br>  “timed_out”: false,<br>  “_shards”: {</p>
+<pre><code>&quot;total&quot;: 5,
+&quot;successful&quot;: 5,
+&quot;skipped&quot;: 0,
+&quot;failed&quot;: 0
+</code></pre>
+<p>  },<br>  “hits”: {</p>
+<pre><code>&quot;total&quot;: 2,
+&quot;max_score&quot;: 1.287682,
+&quot;hits&quot;: [
+  &#123;
+    &quot;_index&quot;: &quot;toherotest&quot;,
+    &quot;_type&quot;: &quot;_doc&quot;,
+    &quot;_id&quot;: &quot;4&quot;,
+    &quot;_score&quot;: 1.287682,
+    &quot;_source&quot;: &#123;
+      &quot;field3&quot;: [
+        &#123;
+          &quot;name&quot;: &quot;tohero1&quot;,
+          &quot;age&quot;: 2
+        &#125;,
+        &#123;
+          &quot;name&quot;: &quot;tohero2&quot;,
+          &quot;age&quot;: 1
+        &#125;
+      ]
+    &#125;
   &#125;,
-  &quot;highlight&quot;:&#123;
-    &quot;fields&quot;: &#123;
-      &quot;name&quot;: &#123;&#125;
+  &#123;
+    &quot;_index&quot;: &quot;toherotest&quot;,
+    &quot;_type&quot;: &quot;_doc&quot;,
+    &quot;_id&quot;: &quot;3&quot;,
+    &quot;_score&quot;: 1.287682,
+    &quot;_source&quot;: &#123;
+      &quot;field3&quot;: [
+        &#123;
+          &quot;name&quot;: &quot;tohero1&quot;,
+          &quot;age&quot;: 1
+        &#125;,
+        &#123;
+          &quot;name&quot;: &quot;tohero2&quot;,
+          &quot;age&quot;: 2
+        &#125;
+      ]
     &#125;
   &#125;
+]
+</code></pre>
+<p>  }<br>}</p>
+<p>#可以看到，两条数据都出来了<br>#得出结论：object不允许彼此独立地索引查询</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><code class="hljs awk"><br>    - 如果希望object能被独立的索引，可以考虑nested类型<br><br>  - nested<br><br>* GEO地理位置类型<br><br>  - 地图：Geo-point   （web开发常用地图类型）<br><br>  - 形状：Geo-shape<br><br>  - ````shell<br>    <span class="hljs-comment">#案例</span><br>    PUT my_index<br>    &#123;<br>      <span class="hljs-string">&quot;mappings&quot;</span>: &#123;<br>        <span class="hljs-string">&quot;_doc&quot;</span>: &#123;<br>          <span class="hljs-string">&quot;properties&quot;</span>: &#123;<br>            <span class="hljs-string">&quot;location&quot;</span>: &#123;<br>              <span class="hljs-string">&quot;type&quot;</span>: <span class="hljs-string">&quot;geo_point&quot;</span><br>            &#125;<br>          &#125;<br>        &#125;<br>      &#125;<br>    &#125;<br>    <br>    PUT my_index<span class="hljs-regexp">/_doc/</span><span class="hljs-number">1</span><br>    &#123;<br>      <span class="hljs-string">&quot;text&quot;</span>: <span class="hljs-string">&quot;Geo-point as an object&quot;</span>,<br>      <span class="hljs-string">&quot;location&quot;</span>: &#123; <br>        <span class="hljs-string">&quot;lat&quot;</span>: <span class="hljs-number">41.12</span>,<br>        <span class="hljs-string">&quot;lon&quot;</span>: -<span class="hljs-number">71.34</span><br>      &#125;<br>    &#125;<br>    <br>    PUT my_index<span class="hljs-regexp">/_doc/</span><span class="hljs-number">2</span><br>    &#123;<br>      <span class="hljs-string">&quot;text&quot;</span>: <span class="hljs-string">&quot;Geo-point as a string&quot;</span>,<br>      <span class="hljs-string">&quot;location&quot;</span>: <span class="hljs-string">&quot;41.12,-71.34&quot;</span> <br>    &#125;<br>    <br>    PUT my_index<span class="hljs-regexp">/_doc/</span><span class="hljs-number">3</span><br>    &#123;<br>      <span class="hljs-string">&quot;text&quot;</span>: <span class="hljs-string">&quot;Geo-point as a geohash&quot;</span>,<br>      <span class="hljs-string">&quot;location&quot;</span>: <span class="hljs-string">&quot;drm3btev3e86&quot;</span> <br>    &#125;<br>    <br>    PUT my_index<span class="hljs-regexp">/_doc/</span><span class="hljs-number">4</span><br>    &#123;<br>      <span class="hljs-string">&quot;text&quot;</span>: <span class="hljs-string">&quot;Geo-point as an array&quot;</span>,<br>      <span class="hljs-string">&quot;location&quot;</span>: [ -<span class="hljs-number">71.34</span>, <span class="hljs-number">41.12</span> ] <br>    &#125;<br>    <br>    <span class="hljs-comment">#查询某个点方圆200km</span><br>    GET <span class="hljs-regexp">/my_locations/</span>_search<br>    &#123;<br>        <span class="hljs-string">&quot;query&quot;</span>: &#123;<br>            <span class="hljs-string">&quot;bool&quot;</span> : &#123;<br>                <span class="hljs-string">&quot;must&quot;</span> : &#123;<br>                    <span class="hljs-string">&quot;match_all&quot;</span> : &#123;&#125;<br>                &#125;,<br>                <span class="hljs-string">&quot;filter&quot;</span> : &#123;<br>                    <span class="hljs-string">&quot;geo_distance&quot;</span> : &#123;<br>                        <span class="hljs-string">&quot;distance&quot;</span> : <span class="hljs-string">&quot;200km&quot;</span>,<br>                        <span class="hljs-string">&quot;pin.location&quot;</span> : &#123;<br>                            <span class="hljs-string">&quot;lat&quot;</span> : <span class="hljs-number">40</span>,<br>                            <span class="hljs-string">&quot;lon&quot;</span> : -<span class="hljs-number">70</span><br>                        &#125;<br>                    &#125;<br>                &#125;<br>            &#125;<br>        &#125;<br>    &#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li></li>
+</ul>
+</li>
+<li><p>还有一些其他的类型参考<a href="https://zhuanlan.zhihu.com/p/136981393">链接</a></p>
+</li>
+</ul>
+<h3 id="创建别名"><a href="#创建别名" class="headerlink" title="创建别名"></a>创建别名</h3><ul>
+<li><p><strong>创建别名有很多种方法，可以创建索引同时创建别名，也可以在创建索引后创建，既可以让别名指向多个索引，也可以让别名指向一个索引的部分数据，甚至指向一个字段</strong></p>
+</li>
+<li><p>合理的使用别名可以方便进行索引的更新切换</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">#</span><span class="language-bash">创建一个索引进行测试</span><br>PUT /zt_user/_doc/1<br>&#123;<br>  &quot;birth-year&quot;:2000<br>&#125;<br><br><br>PUT /zt_user/_doc/2<br>&#123;<br>  &quot;birth-year&quot;:2001<br>&#125;<br><br>PUT /zt_user/_doc/3<br>&#123;<br>  &quot;birth-year&quot;:2004<br>&#125;<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">zt_user2</span><br>PUT /zt_user2/_doc/1<br>&#123;<br>  &quot;birth-year&quot;:2000<br>&#125;<br></code></pre></td></tr></table></figure></li>
+<li><p><strong>创建索引同时创建别名</strong></p>
+<ul>
+<li>````shell#创建一个索引，并同时创建别名<br>#一个名叫myusers的索引，直接指向zt_user<br>#一个名叫2000的索引，过滤birth-year=2000的数据<br>PUT /zt_user<br>{<br>  “mappings”: {<pre><code>&quot;properties&quot;: &#123;
+  &quot;birth-year&quot;:&#123;
+    &quot;type&quot;: &quot;integer&quot;
+  &#125;
 &#125;
-
-#自定义样式
-GET alice/user/_search
-&#123;
-  &quot;query&quot;:&#123;
-     &quot;match&quot;: &#123;
-       &quot;name&quot;: &quot;爱丽丝&quot;
-     &#125;
-  &#125;,
-  &quot;highlight&quot;:&#123;
-    &quot;pre_tags&quot;: &quot;&lt;b class=&#39;key&#39; style=&#39;color:red&#39;&gt;&quot;, 
-    &quot;post_tags&quot;: &quot;&lt;/b&gt;&quot;,
-    &quot;fields&quot;: &#123;
-      &quot;name&quot;: &#123;&#125;
+</code></pre>
+  },<br>  “aliases”: {<pre><code>&quot;myusers&quot;: &#123;&#125;,
+&quot;2000&quot;:&#123;
+  &quot;filter&quot;: &#123;
+    &quot;term&quot;: &#123;
+      &quot;birth-year&quot;: 2000
     &#125;
   &#125;
 &#125;
 </code></pre>
+  }<br>}<figure class="highlight ruby"><table><tr><td class="code"><pre><code class="hljs ruby"><br>- **创建索引后创建别名**<br><br>  - <span class="hljs-string">``</span><span class="hljs-string">``</span>shell<br>    <span class="hljs-comment"># 创建一个名为2004的别名，过滤birth-year=2004的数据</span><br>    <span class="hljs-variable constant_">PUT</span> /zt_user/_alias/<span class="hljs-number">2004</span> <br>    &#123;<br>      <span class="hljs-string">&quot;filter&quot;</span>: &#123;<br>        <span class="hljs-string">&quot;term&quot;</span>: &#123;<br>          <span class="hljs-string">&quot;birth-year&quot;</span>: <span class="hljs-number">2004</span><br>        &#125;<br>      &#125;<br>    &#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p><strong>创建字段别名</strong></p>
+<ul>
+<li><p>````shell</p>
+<h1 id="字段设置别名，例如为username设置一个别名为name"><a href="#字段设置别名，例如为username设置一个别名为name" class="headerlink" title="字段设置别名，例如为username设置一个别名为name"></a>字段设置别名，例如为username设置一个别名为name</h1><p>PUT /zt_user1<br>{<br>  “mappings”: {</p>
+<pre><code>&quot;properties&quot;: &#123;
+  &quot;username&quot;:&#123;
+    &quot;type&quot;: &quot;keyword&quot;
+  &#125;,
+  &quot;name&quot;:&#123;
+    &quot;type&quot;:&quot;alias&quot;,
+    &quot;path&quot;:&quot;username&quot;
+&#125;
+&#125;
+</code></pre>
+<p>  }<br>}</p>
+<figure class="highlight clean"><table><tr><td class="code"><pre><code class="hljs clean"><br>### 修改删除别名<br><br>* **为同一索引创建多个别名**<br><br>  - ````shell<br>    # 创建别名<br>    POST /_aliases<br>    &#123;<br>      <span class="hljs-string">&quot;actions&quot;</span>: [<br>        &#123;<br>          <span class="hljs-string">&quot;add&quot;</span>: &#123;<br>            <span class="hljs-string">&quot;index&quot;</span>: <span class="hljs-string">&quot;zt_user&quot;</span>,<br>            <span class="hljs-string">&quot;alias&quot;</span>: <span class="hljs-string">&quot;zt_user_copy1&quot;</span><br>          &#125;<br>        &#125;,<br>        &#123;<br>          <span class="hljs-string">&quot;add&quot;</span>: &#123;<br>            <span class="hljs-string">&quot;index&quot;</span>: <span class="hljs-string">&quot;zt_user&quot;</span>,<br>            <span class="hljs-string">&quot;alias&quot;</span>: <span class="hljs-string">&quot;zt_user_copy2&quot;</span><br>          &#125;<br>        &#125;<br>      ]<br>    &#125;<br></code></pre></td></tr></table></figure></li>
+<li></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p><strong>删除一个别名</strong></p>
+<ul>
+<li>````shell<br>#删除一个别名<br>POST /_aliases<br>{<br>  “actions”: [<pre><code>&#123;
+  &quot;remove&quot;: &#123;
+    &quot;index&quot;: &quot;zt_user&quot;,
+    &quot;alias&quot;: &quot;zt_user_copy2&quot;
+  &#125;
+&#125;
+</code></pre>
+  ]<br>}<figure class="highlight dockerfile"><table><tr><td class="code"><pre><code class="hljs dockerfile"><br>* **重命名一个别名**<br><br>  - 重命名操作，先remove再执行<span class="hljs-keyword">add</span><span class="language-bash">，而且这一操作是原子操作</span><br><br>  - ````<span class="hljs-keyword">shell</span><span class="language-bash"></span><br><span class="language-bash">    POST /_aliases</span><br>    &#123;<br>      <span class="hljs-string">&quot;actions&quot;</span>: [<br>        &#123;<br>          <span class="hljs-string">&quot;remove&quot;</span>: &#123;<br>            <span class="hljs-string">&quot;index&quot;</span>: <span class="hljs-string">&quot;zt_user&quot;</span>,<br>            <span class="hljs-string">&quot;alias&quot;</span>: <span class="hljs-string">&quot;zt_user_copy1&quot;</span><br>          &#125;<br>        &#125;,<br>        &#123;<br>          <span class="hljs-string">&quot;add&quot;</span>: &#123;<br>            <span class="hljs-string">&quot;index&quot;</span>: <span class="hljs-string">&quot;zt_user&quot;</span>,<br>            <span class="hljs-string">&quot;alias&quot;</span>: <span class="hljs-string">&quot;zt_user_copy2&quot;</span><br>          &#125;<br>        &#125;<br>      ]<br>    &#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p><strong>创建一个别名指向多个索引</strong></p>
+<ul>
+<li><p><code>indices</code>:index的复数</p>
+</li>
+<li><p>````shell<br>POST /_aliases<br>{<br>  “actions”: [</p>
+<pre><code>&#123;
+  &quot;add&quot;: &#123;
+    &quot;indices&quot;: [&quot;zt_user&quot;,&quot;zt_user2&quot;],
+    &quot;alias&quot;: &quot;zt_user_copy&quot;
+  &#125;
+&#125;
+</code></pre>
+<p>  ]<br>}</p>
+<figure class="highlight prolog"><table><tr><td class="code"><pre><code class="hljs prolog"><br>  - <br><br>* **创建有过滤条件的别名**<br><br>  - <span class="hljs-string">``</span><span class="hljs-string">``</span>shell<br>    <span class="hljs-symbol">POST</span> /<span class="hljs-symbol">_aliases</span><br>    &#123;<br>      <span class="hljs-string">&quot;actions&quot;</span>: [<br>        &#123;<br>          <span class="hljs-string">&quot;add&quot;</span>: &#123;<br>            <span class="hljs-string">&quot;index&quot;</span>: <span class="hljs-string">&quot;zt_user&quot;</span>,<br>            <span class="hljs-string">&quot;alias&quot;</span>: <span class="hljs-string">&quot;zt_user_copy&quot;</span>,<br>            <span class="hljs-string">&quot;filter&quot;</span>: &#123;<span class="hljs-string">&quot;term&quot;</span>: &#123; <span class="hljs-string">&quot;birth-year&quot;</span>:<span class="hljs-number">2000</span> &#125;&#125;<br>          &#125;<br>        &#125;<br>      ]<br>    &#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p><strong>创建可写入别名</strong></p>
+<ul>
+<li><p>如果一个别名单独指向一个索引，那么使用别名进行写入操作是不会有问题的，但是，一个别名指向多个索引时，是不能进行写入操作的，因为es不知道将文档写入到哪一个索引。<strong>可以在创建别名时设置为可写来解决问题</strong></p>
+</li>
+<li><p>尽量不要这么弄吧，感觉很乱qaq…</p>
+</li>
+<li><p>````shell<br>POST /_aliases<br>{<br>  “actions”: [</p>
+<pre><code>&#123;
+  &quot;add&quot;: &#123;
+    &quot;index&quot;: &quot;zt_user&quot;,
+    &quot;alias&quot;: &quot;zt_user_copy&quot;,
+    &quot;is_write_index&quot;:true
+  &#125;
+&#125;,
+&#123;
+  &quot;add&quot;: &#123;
+    &quot;index&quot;: &quot;zt_user2&quot;,
+    &quot;alias&quot;: &quot;zt_user_copy&quot;
+  &#125;
+&#125;
+</code></pre>
+<p>  ]<br>}</p>
+<figure class="highlight ruby"><table><tr><td class="code"><pre><code class="hljs ruby"><br>  - <br><br><span class="hljs-comment">### 查看别名信息</span><br><br>* **查看别名是否存在**<br>  - <span class="hljs-string">``</span><span class="hljs-variable constant_">HEAD</span> /_alias/myusers<span class="hljs-string">``</span><br>* **查看别名信息**<br>  - <span class="hljs-string">``</span><span class="hljs-variable constant_">GET</span> /_cat/aliases/myusers<span class="hljs-string">``</span> 查看指定别名<br>  - <span class="hljs-string">``</span><span class="hljs-variable constant_">GET</span> /_cat/aliases<span class="hljs-string">``</span>查看集群中所有别名<br><br><span class="hljs-comment">### 聚合（Aggregations）</span><br><br>* 聚合框架有助于基于搜索查询提供聚合数据。它基于称为聚合的简单构建块，可以进行组合以构建复杂的数据摘要。<br><br>* 列一些比较常见的聚合查询<br><br>  <span class="hljs-string">``</span><span class="hljs-string">``</span>shell<br>  <span class="hljs-comment"># 过滤数据一部分数据</span><br>  <span class="hljs-comment"># 利用聚合aggs:求project_money的平均值</span><br>  <span class="hljs-variable constant_">POST</span> /policy_enterprise_detail_all/_search<br>  &#123;<br>    <span class="hljs-string">&quot;size&quot;</span>: <span class="hljs-number">0</span>,<br>    <span class="hljs-string">&quot;query&quot;</span>: &#123;<br>      <span class="hljs-string">&quot;bool&quot;</span>: &#123;<br>        <span class="hljs-string">&quot;must&quot;</span>: [<br>          &#123;<span class="hljs-string">&quot;match&quot;</span>: &#123;<br>            <span class="hljs-string">&quot;city_id&quot;</span>: <span class="hljs-string">&quot;4401&quot;</span><br>          &#125;&#125;<br>        ]<br>      &#125;<br>    &#125;, <br>    <span class="hljs-string">&quot;aggs&quot;</span>: &#123;<br>      <span class="hljs-string">&quot;avg_money&quot;</span>: &#123;<br>        <span class="hljs-string">&quot;avg&quot;</span>: &#123;<span class="hljs-string">&quot;field&quot;</span>: <span class="hljs-string">&quot;project_money&quot;</span>&#125;<br>      &#125;<br>    &#125;<br>  &#125;<br></code></pre></td></tr></table></figure></li>
+<li><p>地理边界聚合</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">PUT /museums<br>&#123;<br>    &quot;mappings&quot;: &#123;<br>        &quot;properties&quot;: &#123;<br>            &quot;location&quot;: &#123;<br>                &quot;type&quot;: &quot;geo_point&quot;<br>            &#125;<br>        &#125;<br>    &#125;<br>&#125;<br><br>POST /museums/_bulk?refresh<br>&#123;&quot;index&quot;:&#123;&quot;_id&quot;:1&#125;&#125;<br>&#123;&quot;location&quot;: &quot;52.374081,4.912350&quot;, &quot;name&quot;: &quot;NEMO Science Museum&quot;&#125;<br>&#123;&quot;index&quot;:&#123;&quot;_id&quot;:2&#125;&#125;<br>&#123;&quot;location&quot;: &quot;52.369219,4.901618&quot;, &quot;name&quot;: &quot;Museum Het Rembrandthuis&quot;&#125;<br>&#123;&quot;index&quot;:&#123;&quot;_id&quot;:3&#125;&#125;<br>&#123;&quot;location&quot;: &quot;52.371667,4.914722&quot;, &quot;name&quot;: &quot;Nederlands Scheepvaartmuseum&quot;&#125;<br>&#123;&quot;index&quot;:&#123;&quot;_id&quot;:4&#125;&#125;<br>&#123;&quot;location&quot;: &quot;51.222900,4.405200&quot;, &quot;name&quot;: &quot;Letterenhuis&quot;&#125;<br>&#123;&quot;index&quot;:&#123;&quot;_id&quot;:5&#125;&#125;<br>&#123;&quot;location&quot;: &quot;48.861111,2.336389&quot;, &quot;name&quot;: &quot;Musée du Louvre&quot;&#125;<br>&#123;&quot;index&quot;:&#123;&quot;_id&quot;:6&#125;&#125;<br>&#123;&quot;location&quot;: &quot;48.860000,2.327000&quot;, &quot;name&quot;: &quot;Musée d&#x27;Orsay&quot;&#125;<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">地理边界聚合</span><br>POST /museums/_search?size=0<br>&#123;<br>    &quot;query&quot; : &#123;<br>        &quot;match&quot; : &#123; &quot;name&quot; : &quot;musée&quot; &#125;<br>    &#125;,<br>    &quot;aggs&quot; : &#123;<br>        &quot;viewport&quot; : &#123;<br>            &quot;geo_bounds&quot; : &#123;<br>                &quot;field&quot; : &quot;location&quot;, <br>                &quot;wrap_longitude&quot; : true <br>            &#125;<br>        &#125;<br>    &#125;<br>&#125;<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">地理重心聚合</span><br>POST /museums/_search?size=0<br>&#123;<br>    &quot;aggs&quot; : &#123;<br>        &quot;centroid&quot; : &#123;<br>            &quot;geo_centroid&quot; : &#123;<br>                &quot;field&quot; : &quot;location&quot; <br>            &#125;<br>        &#125;<br>    &#125;<br>&#125;<br><br><br></code></pre></td></tr></table></figure></li>
+<li><p>最大聚合</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">POST /sales/_search?size=0<br>&#123;<br>    &quot;aggs&quot; : &#123;<br>        &quot;max_price&quot; : &#123; &quot;max&quot; : &#123; &quot;field&quot; : &quot;price&quot; &#125; &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+<li><p>最小聚合</p>
+<ul>
+<li><code>min</code></li>
+</ul>
+</li>
+<li><p>计数</p>
+<ul>
+<li><code>value_count</code></li>
+</ul>
+</li>
+<li><p>统计聚合</p>
+<ul>
+<li><p><code>多值</code>指标聚合，可根据从聚合文档中提取的数值计算统计信息。这些值可以从文档中的特定数字字段中提取，也可以由提供的脚本生成。</p>
+</li>
+<li><p>返回的信息包括<code>min</code>，<code>max</code>，<code>sum</code>，<code>count</code> 和 <code>avg</code>。</p>
+</li>
+<li><p>````shell<br>POST /exams/_search?size=0<br>{</p>
+<pre><code>&quot;aggs&quot; : &#123;
+    &quot;grades_stats&quot; : &#123; &quot;stats&quot; : &#123; &quot;field&quot; : &quot;grade&quot; &#125; &#125;
+&#125;
+</code></pre>
+<p>}</p>
+<figure class="highlight ada"><table><tr><td class="code"><pre><code class="hljs ada"><br>- 过滤器聚合<br><br>  ````shell<br>  POST /sales/_search?size=<span class="hljs-number">0</span><br>  &#123;<br>      <span class="hljs-string">&quot;aggs&quot;</span> : &#123;<br>          <span class="hljs-string">&quot;t_shirts&quot;</span> : &#123;<br>              <span class="hljs-string">&quot;filter&quot;</span> : &#123; &quot;<span class="hljs-type">term</span><span class="hljs-string">&quot;: &#123; &quot;</span><span class="hljs-keyword">type</span><span class="hljs-string">&quot;: &quot;</span>t-shirt<span class="hljs-string">&quot; &#125; &#125;,</span><br><span class="hljs-string">              &quot;</span>aggs<span class="hljs-string">&quot; : &#123;</span><br><span class="hljs-string">                  &quot;</span>avg_price<span class="hljs-string">&quot; : &#123; &quot;</span>avg<span class="hljs-string">&quot; : &#123; &quot;</span>field<span class="hljs-string">&quot; : &quot;</span>price<span class="hljs-string">&quot; &#125; &#125;</span><br><span class="hljs-string">              &#125;</span><br><span class="hljs-string">          &#125;</span><br><span class="hljs-string">      &#125;</span><br><span class="hljs-string">  &#125;</span><br></code></pre></td></tr></table></figure></li>
+</ul>
 </li>
 </ul>
 </li>
 </ul>
-<h4 id="字段类型"><a href="#字段类型" class="headerlink" title="字段类型"></a>字段类型</h4><ul>
-<li>字符串类型<ul>
-<li><strong>text,keyword</strong></li>
-</ul>
-</li>
-<li>数值类型<ul>
-<li><strong>long,integer,short,byte,double,float,half_float,scaled_float</strong></li>
-</ul>
-</li>
-<li>日期类型<ul>
-<li><strong>date</strong></li>
-</ul>
-</li>
-<li>布尔值类型<ul>
-<li><strong>boolean</strong></li>
-</ul>
-</li>
-<li>二进制类型<ul>
-<li><strong>binary</strong></li>
-</ul>
-</li>
-<li>还有一些其他的类型参考<a href="https://zhuanlan.zhihu.com/p/136981393">链接</a></li>
-</ul>
+<h3 id="常用操作"><a href="#常用操作" class="headerlink" title="常用操作"></a>常用操作</h3><figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash"> 查询数据量</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">根据etl_time聚合数量</span><br>GET policy_index_all/_search<br>&#123;<br>  &quot;size&quot;: 0,<br>  &quot;aggs&quot;: &#123;<br>    &quot;by_etltime&quot;: &#123;<br>      &quot;terms&quot;: &#123;<br>        &quot;field&quot;: &quot;etl_time&quot;  <br>      &#125;,<br>      &quot;aggs&quot;: &#123;<br>        &quot;docs_count&quot;: &#123;<br>          &quot;value_count&quot;: &#123;<br>            &quot;field&quot;: &quot;_id&quot; <br>          &#125;<br>        &#125;  <br>      &#125;<br>    &#125;<br>  &#125;<br>&#125;<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">直接查询所有数量</span><br>GET policy_index_all/_search<br>&#123;<br>  &quot;size&quot;: 0, <br>  &quot;aggs&quot;: &#123;<br>    &quot;total_docs&quot;: &#123;<br>      &quot;value_count&quot;: &#123;<br>        &quot;field&quot;: &quot;_id&quot;<br>      &#125;<br>    &#125;<br>  &#125;<br>&#125;<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">删除数据</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">删除小于yyyy-MM-<span class="hljs-built_in">dd</span>的数据</span><br>POST policy_index_all/_delete_by_query<br>&#123;<br>  &quot;query&quot;: &#123;<br>    &quot;range&quot;: &#123;<br>      &quot;etl_time&quot;: &#123;<br>        &quot;lt&quot;: &quot;2023-12-04&quot;<br>      &#125;<br>    &#125;<br>  &#125;<br>&#125;<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">删除etl_time为空的</span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">删除etl_time不存在的数据</span><br>POST policy_index_all/_delete_by_query<br>&#123;<br>  &quot;query&quot;: &#123;<br>    &quot;bool&quot;: &#123;<br>      &quot;must_not&quot;: &#123;<br>        &quot;exists&quot;: &#123;<br>          &quot;field&quot;: &quot;etl_time&quot;<br>        &#125;<br>      &#125;<br>    &#125;<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
 ]]></content>
       <categories>
         <category>大数据</category>
@@ -536,7 +816,7 @@ GET alice/user/_search
 </li>
 <li><p>第二步：和新创建的远程github仓库进行关联</p>
 <ul>
-<li>````bash<br>git remote add origin <a href="mailto:&#103;&#105;&#116;&#64;&#x67;&#x69;&#x74;&#104;&#x75;&#x62;&#x2e;&#99;&#111;&#x6d;">&#103;&#105;&#116;&#64;&#x67;&#x69;&#x74;&#104;&#x75;&#x62;&#x2e;&#99;&#111;&#x6d;</a>:zt3019/learngit.git<figure class="highlight crmsh"><table><tr><td class="code"><pre><code class="hljs crmsh"><br>- 第三步：将本地库的所有内容推送到远程库上<br><br>  - ````bash<br>    <span class="hljs-comment">#添加关联后，远程库的名字叫origin，这是git的默认叫法，也可以修改</span><br>    git push -u origin <span class="hljs-keyword">master</span><br>    <span class="hljs-title">#由于远程库是空的，我们第一次推送master</span>分支时，加上了-u参数，Git不但会把本地的<span class="hljs-literal">master</span>分支内容推送的远程新的<span class="hljs-literal">master</span>分支，还会把本地的<span class="hljs-literal">master</span>分支和远程的<span class="hljs-literal">master</span>分支关联起来，在以后的推送或者拉取时就可以简化命令。<br></code></pre></td></tr></table></figure></li>
+<li>````bash<br>git remote add origin <a href="mailto:&#103;&#x69;&#x74;&#x40;&#x67;&#105;&#x74;&#104;&#117;&#x62;&#x2e;&#x63;&#x6f;&#x6d;">&#103;&#x69;&#x74;&#x40;&#x67;&#105;&#x74;&#104;&#117;&#x62;&#x2e;&#x63;&#x6f;&#x6d;</a>:zt3019/learngit.git<figure class="highlight crmsh"><table><tr><td class="code"><pre><code class="hljs crmsh"><br>- 第三步：将本地库的所有内容推送到远程库上<br><br>  - ````bash<br>    <span class="hljs-comment">#添加关联后，远程库的名字叫origin，这是git的默认叫法，也可以修改</span><br>    git push -u origin <span class="hljs-keyword">master</span><br>    <span class="hljs-title">#由于远程库是空的，我们第一次推送master</span>分支时，加上了-u参数，Git不但会把本地的<span class="hljs-literal">master</span>分支内容推送的远程新的<span class="hljs-literal">master</span>分支，还会把本地的<span class="hljs-literal">master</span>分支和远程的<span class="hljs-literal">master</span>分支关联起来，在以后的推送或者拉取时就可以简化命令。<br></code></pre></td></tr></table></figure></li>
 </ul>
 </li>
 <li><p>在这之后，需要提交代码到远程库只需要执行push命令</p>
@@ -1036,7 +1316,9 @@ copyToLocal#与get完全一样
 <li><p>HDFS架构-联邦架构</p>
 <ul>
 <li><img src="C:\Users\Hasee\AppData\Roaming\Typora\typora-user-images\image-20211220153640114.png" alt="image-20211220153640114"></li>
-<li>解决namenode的压力过大的问题。</li>
+<li>解决单个namenode的压力过大的问题。</li>
+<li>扩展namenode，每个NN共用一个集群里的存储资源，每个NameNode都可以单独对外提供服务。</li>
+<li>集群规模特别大时，可采用HA(高可用)+Federation(联邦)的部署方案</li>
 </ul>
 </li>
 </ul>
@@ -1073,7 +1355,7 @@ copyToLocal#与get完全一样
 <li><p>Driver(本地集群模式)</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.zt3019.wordcount;<br><br><span class="hljs-keyword">import</span> org.apache.hadoop.conf.Configuration;<br><span class="hljs-keyword">import</span> org.apache.hadoop.fs.Path;<br><span class="hljs-keyword">import</span> org.apache.hadoop.io.IntWritable;<br><span class="hljs-keyword">import</span> org.apache.hadoop.io.Text;<br><span class="hljs-keyword">import</span> org.apache.hadoop.mapreduce.Job;<br><span class="hljs-keyword">import</span> org.apache.hadoop.mapreduce.lib.input.FileInputFormat;<br><span class="hljs-keyword">import</span> org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;<br><br><span class="hljs-keyword">import</span> java.io.IOException;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">WordCountDriver</span>&#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> IOException, ClassNotFoundException, InterruptedException &#123;<br>        <span class="hljs-type">Configuration</span> <span class="hljs-variable">configuration</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Configuration</span>();<br>        <span class="hljs-comment">//配置yarn集群运行</span><br>        <span class="hljs-comment">//core-site.xml配置文件</span><br>        configuration.set(<span class="hljs-string">&quot;fs.defaultFS&quot;</span>, <span class="hljs-string">&quot;hdfs://hadoop100:8020&quot;</span>);<br>        <span class="hljs-comment">//MapRedece-site.xml配置文件</span><br>        configuration.set(<span class="hljs-string">&quot;mapreduce.framework.name&quot;</span>,<span class="hljs-string">&quot;yarn&quot;</span>);<br>        <span class="hljs-comment">//是否允许向linux提交任务</span><br>        configuration.set(<span class="hljs-string">&quot;mapreduce.app-submission.cross-platform&quot;</span>,<span class="hljs-string">&quot;true&quot;</span>);<br>        configuration.set(<span class="hljs-string">&quot;yarn.resourcemanager.hostname&quot;</span>,<span class="hljs-string">&quot;hadoop102&quot;</span>);<br>        <span class="hljs-comment">//1.获取job实例</span><br>        Job job= Job.getInstance(configuration);<br>        <span class="hljs-comment">//2.设置jar包</span><br>        job.setJarByClass(WordCountDriver.class);<br>        <span class="hljs-comment">//3.设置Mapper和Reducer</span><br>        job.setMapperClass(WordCountMapper.class);<br>        job.setReducerClass(WordCountReducer.class);<br>        <span class="hljs-comment">//4.设置Map和Reduce的输出类型</span><br>        <span class="hljs-comment">//设置Map的输出类型</span><br>        job.setMapOutputKeyClass(Text.class);<br>        job.setMapOutputValueClass(IntWritable.class);<br>        <span class="hljs-comment">//设置Reduce的输出类型</span><br>        job.setOutputKeyClass(Text.class);<br>        job.setOutputValueClass(IntWritable.class);<br>        <span class="hljs-comment">//5.设置输入输出文件</span><br>        FileInputFormat.setInputPaths(job,<span class="hljs-keyword">new</span> <span class="hljs-title class_">Path</span>(args[<span class="hljs-number">0</span>]));<br>        FileOutputFormat.setOutputPath(job,<span class="hljs-keyword">new</span> <span class="hljs-title class_">Path</span>(args[<span class="hljs-number">1</span>]));<br>        <span class="hljs-comment">//6.提交job</span><br>        <span class="hljs-comment">//提交任务得到运行结果，成功或者失败</span><br>        <span class="hljs-comment">//提交流程都在这个方法中，一些job的配置都可以在上面设置。</span><br>        <span class="hljs-type">boolean</span> <span class="hljs-variable">b</span> <span class="hljs-operator">=</span> job.waitForCompletion(<span class="hljs-literal">true</span>);<br>        System.exit(b ? <span class="hljs-number">0</span>:<span class="hljs-number">1</span>);<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure></li>
 <li><p>提交到集群上运行，先maven打包，</p>
-<figure class="highlight scss"><table><tr><td class="code"><pre><code class="hljs scss">yarn jar 包名 主类引用(reference) args<span class="hljs-selector-attr">[0]</span>(输入路径) args<span class="hljs-selector-attr">[1]</span>(s)<br></code></pre></td></tr></table></figure></li>
+<figure class="highlight scss"><table><tr><td class="code"><pre><code class="hljs scss">yarn jar 包名 主类引用(reference) args<span class="hljs-selector-attr">[0]</span>(输入路径) args<span class="hljs-selector-attr">[1]</span>(输出路径)<br></code></pre></td></tr></table></figure></li>
 </ul>
 <h3 id="Hadoop压缩"><a href="#Hadoop压缩" class="headerlink" title="Hadoop压缩"></a>Hadoop压缩</h3><ul>
 <li><table>
@@ -1870,6 +2152,411 @@ copyToLocal#与get完全一样
       </tags>
   </entry>
   <entry>
+    <title>JavaWeb</title>
+    <url>/2021/05/26/JavaWeb/</url>
+    <content><![CDATA[<h1 id="JavaWeb"><a href="#JavaWeb" class="headerlink" title="JavaWeb"></a>JavaWeb</h1><h2 id="网页的组成"><a href="#网页的组成" class="headerlink" title="网页的组成"></a>网页的组成</h2><ul>
+<li>结构（HTML)<ul>
+<li>超文本标记语言</li>
+<li>网页的主要内容通过html来实现</li>
+<li>用来写网页的语言</li>
+</ul>
+</li>
+<li>表现（CSS)<ul>
+<li>层叠样式表</li>
+<li>网页的字体颜色、背景色、背景图片等通过它来实现</li>
+<li>用来美化网页</li>
+</ul>
+</li>
+<li>行为（JavaScript/jQuery）<ul>
+<li>用来实现网页上的一下动态的效果</li>
+</ul>
+</li>
+<li>一个良好的网页要求结构、表现、行为三者分离</li>
+</ul>
+<h2 id="HTML"><a href="#HTML" class="headerlink" title="HTML"></a>HTML</h2><ul>
+<li><p>常用的标签</p>
+<ul>
+<li><p>标题标签</p>
+<ul>
+<li>一共六个（h1到h6）</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span><br>    一级标题<br><span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">h2</span>&gt;</span><br>    二级标题<br><span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span><br>...<br><span class="hljs-tag">&lt;<span class="hljs-name">h6</span>&gt;</span><br>    六级标题<br><span class="hljs-tag">&lt;/<span class="hljs-name">h6</span>&gt;</span><br></code></pre></td></tr></table></figure></li>
+<li><p>超链接</p>
+<ul>
+<li><p>通过a标签创建一个超链接</p>
+<ul>
+<li>通过a标签中的href属性指定要跳转的页面的地址</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;设置要跳转的页面的地址&quot;</span>&gt;</span>我是超链接<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>表格</p>
+<ul>
+<li>通过table标签创建一个表格<ul>
+<li>表格中的行通过tr标签来表示<ul>
+<li>表格中的表头通过th标签来表示</li>
+<li>表格中的列（单元格）通过td标签来标签<ul>
+<li>通过rowspan属性跨行合并单元格</li>
+<li>通过colspan属性跨列合并单元格</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">table</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span><br>    	<span class="hljs-tag">&lt;<span class="hljs-name">th</span>&gt;</span>姓名<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">th</span>&gt;</span>性别<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">th</span>&gt;</span>年龄<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span><br>    	<span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>盖伦<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>男<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>19<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">table</span>&gt;</span><br></code></pre></td></tr></table></figure></li>
+<li><p>表单</p>
+<ul>
+<li>使用form标签创建一个表单<ul>
+<li>通过action属性指定要提交的服务器的地址</li>
+<li>通过method属性指定提交的请求方式</li>
+<li>通过input标签创建表单项<ul>
+<li>type值是text的是文本框</li>
+<li>type值是password的是密码框</li>
+<li>type值是submit的是提交按钮</li>
+<li>type值不可用任意指定，通过alt+/根据提示选择</li>
+<li>必须给input指定name属性值<ul>
+<li>name属性值可用任意指定</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-comment">&lt;!-- 通过form标签创建一个表单 </span><br><span class="hljs-comment">		action属性：设置要提交的服务器的地址</span><br><span class="hljs-comment">		method属性：设置请求方式</span><br><span class="hljs-comment">			get：将发送一个GET请求，此时用户输入的数据是通过浏览器的地址栏进行传输</span><br><span class="hljs-comment">			post：将发送一个POST请求，此时用户输入的数据通过HTTP协议中请求报文中的请求体进行传输</span><br><span class="hljs-comment">	--&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">action</span>=<span class="hljs-string">&quot;success.html&quot;</span> <span class="hljs-attr">method</span>=<span class="hljs-string">&quot;post&quot;</span>&gt;</span><br>		<span class="hljs-comment">&lt;!-- </span><br><span class="hljs-comment">			表单中的表单项通过input标签来创建，表单项的类型通过type属性来指定；</span><br><span class="hljs-comment">			必须给表单项指定name属性值，用户输入的数据通过name属性值进行携带，并以键值对的形式发送到</span><br><span class="hljs-comment">			服务器，多个键值对之间使用 &amp;符号分隔，例如：username=admin&amp;password=123456</span><br><span class="hljs-comment">		 --&gt;</span><br>		用户名称：<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">br</span>&gt;</span><br>		用户密码：<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;password&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;password&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">br</span>&gt;</span><br>		<span class="hljs-comment">&lt;!-- 提交按钮上显示的文字通过value指定 --&gt;</span><br>		<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;submit&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;登录&quot;</span>&gt;</span><br>	<span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<h2 id="CSS"><a href="#CSS" class="headerlink" title="CSS"></a>CSS</h2><ul>
+<li><p>CSS样式可用书写的位置</p>
+<ul>
+<li><p>1）写在标签的style属性中</p>
+<ul>
+<li>结构与表现相耦合，不建议使用</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;color: red;font-size: &quot;</span>&gt;</span>我是一个段落<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span><br></code></pre></td></tr></table></figure></li>
+<li><p>2）写在style标签中，style标签放在head标签中</p>
+<ul>
+<li>开发测试阶段使用这种方式</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">style</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text/css&quot;</span>&gt;</span><span class="language-css"></span><br><span class="language-css">	<span class="hljs-selector-id">#rd</span>&#123;</span><br><span class="language-css">		<span class="hljs-attribute">color</span>: <span class="hljs-number">#FBA</span></span><br><span class="language-css">	&#125;</span><br><span class="language-css"></span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span><br></code></pre></td></tr></table></figure></li>
+<li><p>3）引入外部的css文件</p>
+<ul>
+<li>项目上线后使用这种方式</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;stylesheet&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text/css&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;style.css&quot;</span> /&gt;</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>CSS种的基本选择器</p>
+<ul>
+<li>标签选择器</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="code"><pre><code class="hljs css"><span class="hljs-selector-tag">h1</span> &#123;<br>	<span class="hljs-attribute">color</span>: red<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>ID选择器<ul>
+<li>格式：#id属性值</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="code"><pre><code class="hljs css"><span class="hljs-selector-id">#p1</span> &#123;<br>	<span class="hljs-attribute">color</span>: green<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>类选择器<ul>
+<li>格式：.class属性值</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="code"><pre><code class="hljs css"><span class="hljs-selector-class">.p2</span> &#123;<br>	<span class="hljs-attribute">color</span>: blue<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>分组选择器</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="code"><pre><code class="hljs css"><span class="hljs-selector-id">#p1</span>, <span class="hljs-selector-class">.p2</span> &#123;<br>	<span class="hljs-attribute">font-size</span>: <span class="hljs-number">20px</span><br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="JavaScript"><a href="#JavaScript" class="headerlink" title="JavaScript"></a>JavaScript</h2><ul>
+<li><p>JavaScript可用书写的位置跟CSS类似，一共三种方式</p>
+</li>
+<li><p>变量</p>
+<ul>
+<li>通过var关键字声明一个变量</li>
+<li>在使用变量的过程种可用给它赋任意值</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">var</span> a; a=<span class="hljs-number">123</span>; a=<span class="hljs-string">&quot;hello&quot;</span>;a=函数；a=对象；<br><span class="hljs-keyword">var</span> a = <span class="hljs-string">&quot;javascript&quot;</span>;<br></code></pre></td></tr></table></figure></li>
+<li><p>函数</p>
+<ul>
+<li>通过function关键字声明一个函数</li>
+<li>在声明函数时不需要指定返回值的类型及形参的类型</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">//方式一：</span><br><span class="hljs-comment">//不带参数的函数</span><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">fun</span>(<span class="hljs-params"></span>)&#123;<br>    <span class="hljs-comment">//函数体</span><br>&#125;<br><span class="hljs-keyword">function</span> <span class="hljs-title function_">sum</span>(<span class="hljs-params">a,b</span>)&#123;<br>    <span class="hljs-keyword">return</span> a + b;<br>&#125;<br><span class="hljs-comment">//方式二：</span><br><span class="hljs-keyword">var</span> sum2 = <span class="hljs-keyword">function</span>(<span class="hljs-params">a,b,c</span>)&#123;<br>    <span class="hljs-keyword">return</span> a + b + c;<br>&#125;<br><span class="hljs-comment">//我们通常是通过方式二这种方式将一个函数赋给对象的事件属性</span><br></code></pre></td></tr></table></figure></li>
+<li><p>DOM</p>
+<ul>
+<li>全称：Document Object Model，文档对象模型</li>
+<li>DOM种常用的属性和方法<ul>
+<li>document.getElementById(“id属性值”)<ul>
+<li>根据标签的id属性值获取一个具体的标签对象</li>
+</ul>
+</li>
+<li>对象.innerHTML<ul>
+<li>获取或设置成对出现的标签中的文本内容<ul>
+<li>对象.innerHTML<ul>
+<li>获取文本内容</li>
+</ul>
+</li>
+<li>对象.innerHTML=”new valule”<ul>
+<li>设置文本内容</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>在jQuery中与之对应的是text()/html()方法</li>
+</ul>
+</li>
+<li>对象.onclick<ul>
+<li>给对象绑定单击事件</li>
+<li>在jQuery中与之对应的是click()方法</li>
+</ul>
+</li>
+<li>对象.onfocus<ul>
+<li>给对象绑定获取焦点事件</li>
+<li>在jQuery中与之对应的是focus()方法</li>
+</ul>
+</li>
+<li>对象.onblur<ul>
+<li>给对象绑定失去焦点的事件</li>
+<li>在jQuery中与之对应的是blur()方法</li>
+</ul>
+</li>
+<li>对象.onchange<ul>
+<li>给对象内容改变的事件</li>
+<li>在jQuery中与之对应的是change()方法</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Servlet"><a href="#Servlet" class="headerlink" title="Servlet"></a>Servlet</h2><ul>
+<li>Servlet是服务器端的一个组件，用来处理用户的请求</li>
+<li>直接new一个Sersvlet，然后配置映射的请求地址即可</li>
+<li>doGet和doPost方法中的两个参数request和response的作用<ul>
+<li>request的作用<ul>
+<li>获取请求参数</li>
+<li>转发</li>
+<li>它是一个域对象</li>
+</ul>
+</li>
+<li>response的作用<ul>
+<li>给浏览器响应一个字符串或一个页面</li>
+<li>重定向</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//处理GET请求的方法</span><br>	<span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">doGet</span><span class="hljs-params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="hljs-keyword">throws</span> ServletException, IOException &#123;<br>		System.out.println(<span class="hljs-string">&quot;doGet方法被调用&quot;</span>);<br>		<span class="hljs-comment">//request的作用</span><br>		<span class="hljs-comment">//1.获取请求参数</span><br>		<span class="hljs-comment">/*</span><br><span class="hljs-comment">		 * GET请求的请求中文乱码问题的解决方案：</span><br><span class="hljs-comment">		 * 在Tomcat的配置文件server.xml中的第一个Connector标签中添加属性URIEncoding=&quot;UTF-8&quot;</span><br><span class="hljs-comment">		 */</span><br>		<span class="hljs-type">String</span> <span class="hljs-variable">username</span> <span class="hljs-operator">=</span> request.getParameter(<span class="hljs-string">&quot;username&quot;</span>);<br>		<span class="hljs-type">String</span> <span class="hljs-variable">password</span> <span class="hljs-operator">=</span> request.getParameter(<span class="hljs-string">&quot;password&quot;</span>);<br>		System.out.println(username);<br>		System.out.println(password);<br>		<span class="hljs-comment">//2.转发</span><br>		<span class="hljs-comment">//获取转发器</span><br>		<span class="hljs-type">RequestDispatcher</span> <span class="hljs-variable">requestDispatcher</span> <span class="hljs-operator">=</span> request.getRequestDispatcher(<span class="hljs-string">&quot;WEB-INF/success.html&quot;</span>);<br>		<span class="hljs-comment">//进行请求的转发</span><br>		requestDispatcher.forward(request, response);<br>		<span class="hljs-comment">//3.request是一个域对象（下回分解）</span><br>	&#125;<br>	<span class="hljs-comment">//处理POST请求的方法</span><br>	<span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">doPost</span><span class="hljs-params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="hljs-keyword">throws</span> ServletException, IOException &#123;<br>		System.out.println(<span class="hljs-string">&quot;doPost方法被调用&quot;</span>);<br>		<span class="hljs-comment">/*</span><br><span class="hljs-comment">		 * POST请求的请求中文乱码问题的解决方案：</span><br><span class="hljs-comment">		 * 在第一次获取请求参数之前，通过request设置字符集位UTF-8</span><br><span class="hljs-comment">		 */</span><br>		request.setCharacterEncoding(<span class="hljs-string">&quot;UTF-8&quot;</span>);<br>		<span class="hljs-type">String</span> <span class="hljs-variable">username</span> <span class="hljs-operator">=</span> request.getParameter(<span class="hljs-string">&quot;username&quot;</span>);<br>		<span class="hljs-type">String</span> <span class="hljs-variable">password</span> <span class="hljs-operator">=</span> request.getParameter(<span class="hljs-string">&quot;password&quot;</span>);<br>		System.out.println(username);<br>		System.out.println(password);<br>		<span class="hljs-comment">//response的作用</span><br>		<span class="hljs-comment">//1.给浏览器响应一个字符串或一个页面</span><br>		<span class="hljs-comment">/*</span><br><span class="hljs-comment">		 * 响应中文乱码的解决方案：</span><br><span class="hljs-comment">		 * 	在获取流之前设置内容的类型，内容的类型中包含UTF-8字符集</span><br><span class="hljs-comment">		 */</span><br>		response.setContentType(<span class="hljs-string">&quot;text/html;charset=UTF-8&quot;</span>);<br>		<span class="hljs-type">PrintWriter</span> <span class="hljs-variable">writer</span> <span class="hljs-operator">=</span> response.getWriter();<br><span class="hljs-comment">//		writer.write(&quot;Response Success!&quot;);</span><br><span class="hljs-comment">//		writer.write(&quot;响应成功！&quot;);</span><br><span class="hljs-comment">//		writer.write(&quot;&lt;!DOCTYPE html&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;&lt;html&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;&lt;head&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;&lt;meta charset=\&quot;UTF-8\&quot;&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;&lt;title&gt;Insert title here&lt;/title&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;&lt;/head&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;&lt;body&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;	&lt;h1&gt;请求处理成功！&lt;/h1&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;&lt;/body&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;&lt;/html&gt;&quot;);</span><br>		<span class="hljs-comment">//2.重定向</span><br>		response.sendRedirect(<span class="hljs-string">&quot;WEB-INF/success.html&quot;</span>);<br>		<br>		<span class="hljs-comment">/*</span><br><span class="hljs-comment">		 * 转发与重定向的区别：</span><br><span class="hljs-comment">		 * 	1.转发浏览器发送一次请求；重定向浏览器发送两次请求</span><br><span class="hljs-comment">		 * 	2.转发浏览器地址栏地址无变化；重定向浏览器地址栏地址有变化</span><br><span class="hljs-comment">		 * 	3.转发可以访问WEB-INF目录下的资源；重定向不可以访问WEB-INF目录下的资源</span><br><span class="hljs-comment">		 * 	4.转发可以共享request域中的数据；重定向不可以共享request域中的数据</span><br><span class="hljs-comment">		 */</span><br>	&#125;<br><br></code></pre></td></tr></table></figure>
+
+<h2 id="JSP"><a href="#JSP" class="headerlink" title="JSP"></a>JSP</h2><ul>
+<li><p>JSP必须运行服务器上，它本质上是一个Servlet</p>
+</li>
+<li><p>HTML和Servlet能实现的功能JSP都可用实现</p>
+</li>
+<li><p>JSP中的基本语法</p>
+<ul>
+<li>JSP脚本片段<ul>
+<li>格式：&lt;%   %&gt;</li>
+<li>作用：在里面写Java代码</li>
+</ul>
+</li>
+<li>JSP表达式<ul>
+<li>格式：&lt;%=  %&gt;</li>
+<li>作用：用来输出对象</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight jsp"><table><tr><td class="code"><pre><code class="hljs jsp">&lt;%<br>		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span> ; i &lt; <span class="hljs-number">10</span> ; i++)&#123;<br>			<span class="hljs-comment">//out.print(&quot;伊朗要干美国了！&quot;);</span><br>	%&gt;<br>	&lt;h1&gt;伊朗要干美国了！&lt;/h1&gt;<br>	&lt;%	<br>		&#125;<br>	%&gt;<br><br> &lt;%=<span class="hljs-string">&quot;我是通过JSP表达式输出的&quot;</span> %&gt;<br></code></pre></td></tr></table></figure></li>
+<li><p>四个域</p>
+<ul>
+<li>page域<ul>
+<li>范围：当前页面</li>
+<li>对应的域对象：pageContext</li>
+<li>域对象的类型：PageContext</li>
+</ul>
+</li>
+<li>request域<ul>
+<li>范围：当前请求（一次请求）</li>
+<li>对应的域对象：request</li>
+<li>域对象的类型：HttpServletRequest</li>
+</ul>
+</li>
+<li>session<ul>
+<li>范围：当前会话（一次会话）</li>
+<li>对应的域对象：session</li>
+<li>域对象的类型：HttpSession</li>
+</ul>
+</li>
+<li>application域<ul>
+<li>范围：当前Web应用</li>
+<li>对应的域对象：application</li>
+<li>域对象的类型：ServletContext</li>
+</ul>
+</li>
+<li>四个域对象都有以下三个方法<ul>
+<li>void setAttribute(String key , Object value)</li>
+<li>Object getAttribute(String key)</li>
+<li>void removeAttribute(String key)</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight jsp"><table><tr><td class="code"><pre><code class="hljs jsp">&lt;!-- 在当前页面中分别向四个域中添加四个属性 --&gt;<br>	 &lt;%<br>	 	pageContext.setAttribute(<span class="hljs-string">&quot;pageKey&quot;</span>, <span class="hljs-string">&quot;pageValue&quot;</span>);<br>	 	request.setAttribute(<span class="hljs-string">&quot;reqKey&quot;</span>, <span class="hljs-string">&quot;reqValue&quot;</span>);<br>	 	session.setAttribute(<span class="hljs-string">&quot;sessKey&quot;</span>, <span class="hljs-string">&quot;sessValue&quot;</span>);<br>	 	application.setAttribute(<span class="hljs-string">&quot;appKey&quot;</span>, <span class="hljs-string">&quot;appValue&quot;</span>);<br>	 %&gt;<br>	 &lt;h1&gt;在当前页面中分别获取四个域中的属性值&lt;/h1&gt;<br>	 page域中的属性值是：&lt;%=pageContext.getAttribute(<span class="hljs-string">&quot;pageKey&quot;</span>) %&gt;&lt;br&gt;<br>	 request域中的属性值是：&lt;%=request.getAttribute(<span class="hljs-string">&quot;reqKey&quot;</span>) %&gt;&lt;br&gt;<br>	 session域中的属性值是：&lt;%=session.getAttribute(<span class="hljs-string">&quot;sessKey&quot;</span>) %&gt;&lt;br&gt;<br>	 application域中的属性值是：&lt;%=application.getAttribute(<span class="hljs-string">&quot;appKey&quot;</span>) %&gt;&lt;br&gt;<br></code></pre></td></tr></table></figure></li>
+<li><p>EL</p>
+<ul>
+<li>EL全称是Expression Language，是JSP的内置表达式</li>
+<li>格式：${表达式}</li>
+<li>作用：主要用来获取域对象中的属性值，用来代替JSP的表达式</li>
+<li>EL表达式获取数据时才输出，获取不到数据则什么也不输出</li>
+<li>EL中的四个Scope对象<ul>
+<li>pageScope<ul>
+<li>获取page域中的属性值</li>
+</ul>
+</li>
+<li>requestScope<ul>
+<li>获取request域中的属性值</li>
+</ul>
+</li>
+<li>sessionScope<ul>
+<li>获取session域中的属性值</li>
+</ul>
+</li>
+<li>applicationScope<ul>
+<li>获取application域中的属性值</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight jsp"><table><tr><td class="code"><pre><code class="hljs jsp">&lt;%<br>	 	<span class="hljs-type">Date</span> <span class="hljs-variable">date</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>();<br>	 	<span class="hljs-comment">//分别向四个域中添加四个属性</span><br>	 	pageContext.setAttribute(<span class="hljs-string">&quot;date&quot;</span>, date+<span class="hljs-string">&quot;-&quot;</span>);<br>	 	request.setAttribute(<span class="hljs-string">&quot;date&quot;</span>, date+<span class="hljs-string">&quot;--&quot;</span>);<br>	 	session.setAttribute(<span class="hljs-string">&quot;date&quot;</span>, date+<span class="hljs-string">&quot;---&quot;</span>);<br>	 	application.setAttribute(<span class="hljs-string">&quot;date&quot;</span>, date+<span class="hljs-string">&quot;----&quot;</span>);<br>	 %&gt;<br>	 通过JSP表达式获取域对象中的属性值：&lt;%=pageContext.getAttribute(<span class="hljs-string">&quot;date&quot;</span>) %&gt;&lt;br&gt;<br>	 通过EL表达式获取域对象中的属性值：$&#123;date &#125;&lt;br&gt;<br>	 通过EL表达式获取request域中的属性值：$&#123;requestScope.date &#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="Ajax"><a href="#Ajax" class="headerlink" title="Ajax"></a>Ajax</h2><ul>
+<li><p>全称：Asynchronous JavaScript And XML，通过JavaScript发送请求，使用XML作为响应数据，后来XML已经被另外一种数据格式JSON所替代</p>
+</li>
+<li><p>同步请求和异步请求的区别</p>
+<ul>
+<li>同步请求<ul>
+<li>发送请求之后必须等待服务器的响应成功之后才能发送其他请求，有一个等待的过程</li>
+<li>响应成功之后会刷新整个页面</li>
+</ul>
+</li>
+<li>异步请求<ul>
+<li>发送请求之后无需等待服务器的响应即可发送其他请求</li>
+<li>响应成功之后不会刷新整个页面，可用局部更新页面中的内容</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>如果通过jQuery发送ajax请求</p>
+<ul>
+<li><p>使用$.ajax()方法发送Ajax请求</p>
+<ul>
+<li>ajax()方法中的常用选项<ul>
+<li>url<ul>
+<li>必须的。用来设置请求地址，值是一个字符串</li>
+</ul>
+</li>
+<li>type<ul>
+<li>可选的。用来设置请求方式。GET或POST，默认是GET，值是一个字符串</li>
+</ul>
+</li>
+<li>data<ul>
+<li>可选的。用来设置请求参数，值是一个字符串</li>
+</ul>
+</li>
+<li>success<ul>
+<li>可选的。用来设置一个回调函数，当响应成功之后系统会自动调用该函数，响应数据会以参数的形式传入到该函数中</li>
+</ul>
+</li>
+<li>dataType<ul>
+<li>可选的。用来设置响应数据的类型，如 text、json等</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript">$.<span class="hljs-title function_">ajax</span>(&#123;<br>				<span class="hljs-attr">url</span>:<span class="hljs-string">&quot;AjaxServlet&quot;</span>,<br>				<span class="hljs-attr">type</span>:<span class="hljs-string">&quot;get&quot;</span>,<br>				<span class="hljs-attr">data</span>:<span class="hljs-string">&quot;username=admin&amp;password=123456&quot;</span>,<br>				<span class="hljs-attr">success</span>:<span class="hljs-keyword">function</span>(<span class="hljs-params">res</span>)&#123;<br>					<span class="hljs-comment">//将响应数据设置到span标签中</span><br>					$(<span class="hljs-string">&quot;#msg&quot;</span>).<span class="hljs-title function_">text</span>(res);<br>				&#125;,<br>				<span class="hljs-attr">dataType</span>:<span class="hljs-string">&quot;text&quot;</span><br>			&#125;);<br></code></pre></td></tr></table></figure></li>
+<li><p>JSON</p>
+<ul>
+<li>JOSN格式<ul>
+<li>JSON对象</li>
+<li>JSON数组</li>
+</ul>
+</li>
+<li>JSON中接受的数据类型<ul>
+<li>字符串</li>
+<li>数字</li>
+<li>null</li>
+<li>布尔类型</li>
+<li>数组</li>
+<li>对象</li>
+</ul>
+</li>
+<li>在JS中JSON对象和JSON字符串之间的转换<ul>
+<li>JSON对象转JSON字符串<ul>
+<li>JSON.stringify(JSON对象)</li>
+</ul>
+</li>
+<li>JSON字符串转JSON对象<ul>
+<li>JSON.parse(JSON字符串)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">//JSON的格式：</span><br>	<span class="hljs-comment">//1.JSON对象</span><br>	<span class="hljs-comment">//属性名必须使用双引号括起来；属性名和属性值之间使用冒号分隔；多个属性之间使用逗号分隔</span><br>	<span class="hljs-keyword">var</span> jsonObj = &#123;<span class="hljs-string">&quot;name&quot;</span>:<span class="hljs-string">&quot;孙悟空&quot;</span>,<span class="hljs-string">&quot;age&quot;</span>:<span class="hljs-number">520</span>&#125;;<br><span class="hljs-comment">// 	alert(jsonObj);</span><br>	<span class="hljs-comment">//2.JSON数组</span><br>	<span class="hljs-keyword">var</span> jsonArry = [<span class="hljs-string">&quot;猪八戒&quot;</span>,<span class="hljs-number">1500</span>,<span class="hljs-literal">true</span>,<span class="hljs-literal">null</span>,jsonObj];<br>	<span class="hljs-comment">//获取jsonArry中的jsonObj中的age属性值</span><br><span class="hljs-comment">// 	alert(jsonArry[4].age);</span><br>	<br>	<span class="hljs-comment">//在JS中将JSON对象转换为JSON字符串</span><br>	<span class="hljs-keyword">var</span> objToStr = <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(jsonObj);<br><span class="hljs-comment">// 	alert(objToStr);</span><br>	<span class="hljs-comment">//声明一个JSON字符串</span><br>	<span class="hljs-keyword">var</span> jsonStr = <span class="hljs-string">&#x27;&#123;&quot;name&quot;:&quot;唐僧&quot;,&quot;age&quot;:18&#125;&#x27;</span>;<br><span class="hljs-comment">// 	alert(jsonStr);</span><br>	<span class="hljs-comment">//在JS中将JSON字符串转换为JSON对象</span><br>	<span class="hljs-keyword">var</span> strToObj = <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">parse</span>(jsonStr);<br><span class="hljs-comment">// 	alert(strToObj.name);</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p>在Java中对象与JSON字符串之间的转换</p>
+<ul>
+<li><p>借助于第三方工具json-lib、jackson、gson等可用将Java对象转换为JSON字符串，也可用将JSON字符串转换回Java对象</p>
+</li>
+<li><p>通常是前端发送一个Ajax请求，在后台查询到对象之后将对象转换为JOSN字符串响应到前端</p>
+</li>
+<li><p>通过发送Ajax请求接收JSON格式的响应数据</p>
+<ul>
+<li>前端代码</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">//发送Ajax请求接收JSON格式的响应数据</span><br>			$.<span class="hljs-title function_">ajax</span>(&#123;<br>				<span class="hljs-attr">url</span>:<span class="hljs-string">&quot;JSONServlet&quot;</span>,<br>				<span class="hljs-attr">success</span>:<span class="hljs-keyword">function</span>(<span class="hljs-params">res</span>)&#123;<br>					<span class="hljs-title function_">alert</span>(res.<span class="hljs-property">id</span>);<br>				&#125;,<br>				<span class="hljs-attr">dataType</span>:<span class="hljs-string">&quot;json&quot;</span><br>			&#125;);<br></code></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li>后端代码</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">doGet</span><span class="hljs-params">(HttpServletRequest request, HttpServletResponse response)</span><br>			<span class="hljs-keyword">throws</span> ServletException, IOException &#123;<br>		response.setContentType(<span class="hljs-string">&quot;text/html;charset=UTF-8&quot;</span>);<br>		<span class="hljs-comment">//假设从数据库中查询到员工的信息</span><br>		<span class="hljs-type">Employee</span> <span class="hljs-variable">employee</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Employee</span>(<span class="hljs-number">1</span>, <span class="hljs-string">&quot;张三&quot;</span>, <span class="hljs-string">&quot;zhangsan@atguigu.com&quot;</span>);<br>		<span class="hljs-comment">//创建Gson对象</span><br>		<span class="hljs-type">Gson</span> <span class="hljs-variable">gson</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Gson</span>();<br>		<span class="hljs-comment">//将Employee对象转换为JSON字符串</span><br>		<span class="hljs-type">String</span> <span class="hljs-variable">json</span> <span class="hljs-operator">=</span> gson.toJson(employee);<br>		System.out.println(json);<br>		<span class="hljs-comment">//给浏览器响应一个JSON格式的字符串</span><br>		response.getWriter().write(json);<br>	&#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Java</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Linux</title>
     <url>/2021/05/11/Linux/</url>
     <content><![CDATA[<h1 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h1><h2 id="vim的三种模式"><a href="#vim的三种模式" class="headerlink" title="vim的三种模式"></a>vim的三种模式</h2><h3 id="一般模式"><a href="#一般模式" class="headerlink" title="一般模式"></a>一般模式</h3><ul>
@@ -2383,411 +3070,6 @@ copyToLocal#与get完全一样
       </tags>
   </entry>
   <entry>
-    <title>JavaWeb</title>
-    <url>/2021/05/26/JavaWeb/</url>
-    <content><![CDATA[<h1 id="JavaWeb"><a href="#JavaWeb" class="headerlink" title="JavaWeb"></a>JavaWeb</h1><h2 id="网页的组成"><a href="#网页的组成" class="headerlink" title="网页的组成"></a>网页的组成</h2><ul>
-<li>结构（HTML)<ul>
-<li>超文本标记语言</li>
-<li>网页的主要内容通过html来实现</li>
-<li>用来写网页的语言</li>
-</ul>
-</li>
-<li>表现（CSS)<ul>
-<li>层叠样式表</li>
-<li>网页的字体颜色、背景色、背景图片等通过它来实现</li>
-<li>用来美化网页</li>
-</ul>
-</li>
-<li>行为（JavaScript/jQuery）<ul>
-<li>用来实现网页上的一下动态的效果</li>
-</ul>
-</li>
-<li>一个良好的网页要求结构、表现、行为三者分离</li>
-</ul>
-<h2 id="HTML"><a href="#HTML" class="headerlink" title="HTML"></a>HTML</h2><ul>
-<li><p>常用的标签</p>
-<ul>
-<li><p>标题标签</p>
-<ul>
-<li>一共六个（h1到h6）</li>
-</ul>
-<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span><br>    一级标题<br><span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">h2</span>&gt;</span><br>    二级标题<br><span class="hljs-tag">&lt;/<span class="hljs-name">h2</span>&gt;</span><br>...<br><span class="hljs-tag">&lt;<span class="hljs-name">h6</span>&gt;</span><br>    六级标题<br><span class="hljs-tag">&lt;/<span class="hljs-name">h6</span>&gt;</span><br></code></pre></td></tr></table></figure></li>
-<li><p>超链接</p>
-<ul>
-<li><p>通过a标签创建一个超链接</p>
-<ul>
-<li>通过a标签中的href属性指定要跳转的页面的地址</li>
-</ul>
-<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;设置要跳转的页面的地址&quot;</span>&gt;</span>我是超链接<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span><br></code></pre></td></tr></table></figure></li>
-</ul>
-</li>
-<li><p>表格</p>
-<ul>
-<li>通过table标签创建一个表格<ul>
-<li>表格中的行通过tr标签来表示<ul>
-<li>表格中的表头通过th标签来表示</li>
-<li>表格中的列（单元格）通过td标签来标签<ul>
-<li>通过rowspan属性跨行合并单元格</li>
-<li>通过colspan属性跨列合并单元格</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">table</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span><br>    	<span class="hljs-tag">&lt;<span class="hljs-name">th</span>&gt;</span>姓名<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">th</span>&gt;</span>性别<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">th</span>&gt;</span>年龄<span class="hljs-tag">&lt;/<span class="hljs-name">th</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">tr</span>&gt;</span><br>    	<span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>盖伦<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>男<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">td</span>&gt;</span>19<span class="hljs-tag">&lt;/<span class="hljs-name">td</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">tr</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">table</span>&gt;</span><br></code></pre></td></tr></table></figure></li>
-<li><p>表单</p>
-<ul>
-<li>使用form标签创建一个表单<ul>
-<li>通过action属性指定要提交的服务器的地址</li>
-<li>通过method属性指定提交的请求方式</li>
-<li>通过input标签创建表单项<ul>
-<li>type值是text的是文本框</li>
-<li>type值是password的是密码框</li>
-<li>type值是submit的是提交按钮</li>
-<li>type值不可用任意指定，通过alt+/根据提示选择</li>
-<li>必须给input指定name属性值<ul>
-<li>name属性值可用任意指定</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-comment">&lt;!-- 通过form标签创建一个表单 </span><br><span class="hljs-comment">		action属性：设置要提交的服务器的地址</span><br><span class="hljs-comment">		method属性：设置请求方式</span><br><span class="hljs-comment">			get：将发送一个GET请求，此时用户输入的数据是通过浏览器的地址栏进行传输</span><br><span class="hljs-comment">			post：将发送一个POST请求，此时用户输入的数据通过HTTP协议中请求报文中的请求体进行传输</span><br><span class="hljs-comment">	--&gt;</span><br>	<span class="hljs-tag">&lt;<span class="hljs-name">form</span> <span class="hljs-attr">action</span>=<span class="hljs-string">&quot;success.html&quot;</span> <span class="hljs-attr">method</span>=<span class="hljs-string">&quot;post&quot;</span>&gt;</span><br>		<span class="hljs-comment">&lt;!-- </span><br><span class="hljs-comment">			表单中的表单项通过input标签来创建，表单项的类型通过type属性来指定；</span><br><span class="hljs-comment">			必须给表单项指定name属性值，用户输入的数据通过name属性值进行携带，并以键值对的形式发送到</span><br><span class="hljs-comment">			服务器，多个键值对之间使用 &amp;符号分隔，例如：username=admin&amp;password=123456</span><br><span class="hljs-comment">		 --&gt;</span><br>		用户名称：<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;username&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">br</span>&gt;</span><br>		用户密码：<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;password&quot;</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;password&quot;</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">br</span>&gt;</span><br>		<span class="hljs-comment">&lt;!-- 提交按钮上显示的文字通过value指定 --&gt;</span><br>		<span class="hljs-tag">&lt;<span class="hljs-name">input</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;submit&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;登录&quot;</span>&gt;</span><br>	<span class="hljs-tag">&lt;/<span class="hljs-name">form</span>&gt;</span><br></code></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ul>
-<h2 id="CSS"><a href="#CSS" class="headerlink" title="CSS"></a>CSS</h2><ul>
-<li><p>CSS样式可用书写的位置</p>
-<ul>
-<li><p>1）写在标签的style属性中</p>
-<ul>
-<li>结构与表现相耦合，不建议使用</li>
-</ul>
-<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">p</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;color: red;font-size: &quot;</span>&gt;</span>我是一个段落<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span><br></code></pre></td></tr></table></figure></li>
-<li><p>2）写在style标签中，style标签放在head标签中</p>
-<ul>
-<li>开发测试阶段使用这种方式</li>
-</ul>
-<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">style</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text/css&quot;</span>&gt;</span><span class="language-css"></span><br><span class="language-css">	<span class="hljs-selector-id">#rd</span>&#123;</span><br><span class="language-css">		<span class="hljs-attribute">color</span>: <span class="hljs-number">#FBA</span></span><br><span class="language-css">	&#125;</span><br><span class="language-css"></span><span class="hljs-tag">&lt;/<span class="hljs-name">style</span>&gt;</span><br></code></pre></td></tr></table></figure></li>
-<li><p>3）引入外部的css文件</p>
-<ul>
-<li>项目上线后使用这种方式</li>
-</ul>
-<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;stylesheet&quot;</span> <span class="hljs-attr">type</span>=<span class="hljs-string">&quot;text/css&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;style.css&quot;</span> /&gt;</span><br></code></pre></td></tr></table></figure></li>
-</ul>
-</li>
-<li><p>CSS种的基本选择器</p>
-<ul>
-<li>标签选择器</li>
-</ul>
-<figure class="highlight css"><table><tr><td class="code"><pre><code class="hljs css"><span class="hljs-selector-tag">h1</span> &#123;<br>	<span class="hljs-attribute">color</span>: red<br>&#125;<br></code></pre></td></tr></table></figure>
-
-
-
-<ul>
-<li>ID选择器<ul>
-<li>格式：#id属性值</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight css"><table><tr><td class="code"><pre><code class="hljs css"><span class="hljs-selector-id">#p1</span> &#123;<br>	<span class="hljs-attribute">color</span>: green<br>&#125;<br></code></pre></td></tr></table></figure>
-
-
-
-<ul>
-<li>类选择器<ul>
-<li>格式：.class属性值</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight css"><table><tr><td class="code"><pre><code class="hljs css"><span class="hljs-selector-class">.p2</span> &#123;<br>	<span class="hljs-attribute">color</span>: blue<br>&#125;<br></code></pre></td></tr></table></figure>
-
-
-
-<ul>
-<li>分组选择器</li>
-</ul>
-<figure class="highlight css"><table><tr><td class="code"><pre><code class="hljs css"><span class="hljs-selector-id">#p1</span>, <span class="hljs-selector-class">.p2</span> &#123;<br>	<span class="hljs-attribute">font-size</span>: <span class="hljs-number">20px</span><br>&#125;<br></code></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="JavaScript"><a href="#JavaScript" class="headerlink" title="JavaScript"></a>JavaScript</h2><ul>
-<li><p>JavaScript可用书写的位置跟CSS类似，一共三种方式</p>
-</li>
-<li><p>变量</p>
-<ul>
-<li>通过var关键字声明一个变量</li>
-<li>在使用变量的过程种可用给它赋任意值</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-keyword">var</span> a; a=<span class="hljs-number">123</span>; a=<span class="hljs-string">&quot;hello&quot;</span>;a=函数；a=对象；<br><span class="hljs-keyword">var</span> a = <span class="hljs-string">&quot;javascript&quot;</span>;<br></code></pre></td></tr></table></figure></li>
-<li><p>函数</p>
-<ul>
-<li>通过function关键字声明一个函数</li>
-<li>在声明函数时不需要指定返回值的类型及形参的类型</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">//方式一：</span><br><span class="hljs-comment">//不带参数的函数</span><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">fun</span>(<span class="hljs-params"></span>)&#123;<br>    <span class="hljs-comment">//函数体</span><br>&#125;<br><span class="hljs-keyword">function</span> <span class="hljs-title function_">sum</span>(<span class="hljs-params">a,b</span>)&#123;<br>    <span class="hljs-keyword">return</span> a + b;<br>&#125;<br><span class="hljs-comment">//方式二：</span><br><span class="hljs-keyword">var</span> sum2 = <span class="hljs-keyword">function</span>(<span class="hljs-params">a,b,c</span>)&#123;<br>    <span class="hljs-keyword">return</span> a + b + c;<br>&#125;<br><span class="hljs-comment">//我们通常是通过方式二这种方式将一个函数赋给对象的事件属性</span><br></code></pre></td></tr></table></figure></li>
-<li><p>DOM</p>
-<ul>
-<li>全称：Document Object Model，文档对象模型</li>
-<li>DOM种常用的属性和方法<ul>
-<li>document.getElementById(“id属性值”)<ul>
-<li>根据标签的id属性值获取一个具体的标签对象</li>
-</ul>
-</li>
-<li>对象.innerHTML<ul>
-<li>获取或设置成对出现的标签中的文本内容<ul>
-<li>对象.innerHTML<ul>
-<li>获取文本内容</li>
-</ul>
-</li>
-<li>对象.innerHTML=”new valule”<ul>
-<li>设置文本内容</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>在jQuery中与之对应的是text()/html()方法</li>
-</ul>
-</li>
-<li>对象.onclick<ul>
-<li>给对象绑定单击事件</li>
-<li>在jQuery中与之对应的是click()方法</li>
-</ul>
-</li>
-<li>对象.onfocus<ul>
-<li>给对象绑定获取焦点事件</li>
-<li>在jQuery中与之对应的是focus()方法</li>
-</ul>
-</li>
-<li>对象.onblur<ul>
-<li>给对象绑定失去焦点的事件</li>
-<li>在jQuery中与之对应的是blur()方法</li>
-</ul>
-</li>
-<li>对象.onchange<ul>
-<li>给对象内容改变的事件</li>
-<li>在jQuery中与之对应的是change()方法</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="Servlet"><a href="#Servlet" class="headerlink" title="Servlet"></a>Servlet</h2><ul>
-<li>Servlet是服务器端的一个组件，用来处理用户的请求</li>
-<li>直接new一个Sersvlet，然后配置映射的请求地址即可</li>
-<li>doGet和doPost方法中的两个参数request和response的作用<ul>
-<li>request的作用<ul>
-<li>获取请求参数</li>
-<li>转发</li>
-<li>它是一个域对象</li>
-</ul>
-</li>
-<li>response的作用<ul>
-<li>给浏览器响应一个字符串或一个页面</li>
-<li>重定向</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-comment">//处理GET请求的方法</span><br>	<span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">doGet</span><span class="hljs-params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="hljs-keyword">throws</span> ServletException, IOException &#123;<br>		System.out.println(<span class="hljs-string">&quot;doGet方法被调用&quot;</span>);<br>		<span class="hljs-comment">//request的作用</span><br>		<span class="hljs-comment">//1.获取请求参数</span><br>		<span class="hljs-comment">/*</span><br><span class="hljs-comment">		 * GET请求的请求中文乱码问题的解决方案：</span><br><span class="hljs-comment">		 * 在Tomcat的配置文件server.xml中的第一个Connector标签中添加属性URIEncoding=&quot;UTF-8&quot;</span><br><span class="hljs-comment">		 */</span><br>		<span class="hljs-type">String</span> <span class="hljs-variable">username</span> <span class="hljs-operator">=</span> request.getParameter(<span class="hljs-string">&quot;username&quot;</span>);<br>		<span class="hljs-type">String</span> <span class="hljs-variable">password</span> <span class="hljs-operator">=</span> request.getParameter(<span class="hljs-string">&quot;password&quot;</span>);<br>		System.out.println(username);<br>		System.out.println(password);<br>		<span class="hljs-comment">//2.转发</span><br>		<span class="hljs-comment">//获取转发器</span><br>		<span class="hljs-type">RequestDispatcher</span> <span class="hljs-variable">requestDispatcher</span> <span class="hljs-operator">=</span> request.getRequestDispatcher(<span class="hljs-string">&quot;WEB-INF/success.html&quot;</span>);<br>		<span class="hljs-comment">//进行请求的转发</span><br>		requestDispatcher.forward(request, response);<br>		<span class="hljs-comment">//3.request是一个域对象（下回分解）</span><br>	&#125;<br>	<span class="hljs-comment">//处理POST请求的方法</span><br>	<span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">doPost</span><span class="hljs-params">(HttpServletRequest request, HttpServletResponse response)</span> <span class="hljs-keyword">throws</span> ServletException, IOException &#123;<br>		System.out.println(<span class="hljs-string">&quot;doPost方法被调用&quot;</span>);<br>		<span class="hljs-comment">/*</span><br><span class="hljs-comment">		 * POST请求的请求中文乱码问题的解决方案：</span><br><span class="hljs-comment">		 * 在第一次获取请求参数之前，通过request设置字符集位UTF-8</span><br><span class="hljs-comment">		 */</span><br>		request.setCharacterEncoding(<span class="hljs-string">&quot;UTF-8&quot;</span>);<br>		<span class="hljs-type">String</span> <span class="hljs-variable">username</span> <span class="hljs-operator">=</span> request.getParameter(<span class="hljs-string">&quot;username&quot;</span>);<br>		<span class="hljs-type">String</span> <span class="hljs-variable">password</span> <span class="hljs-operator">=</span> request.getParameter(<span class="hljs-string">&quot;password&quot;</span>);<br>		System.out.println(username);<br>		System.out.println(password);<br>		<span class="hljs-comment">//response的作用</span><br>		<span class="hljs-comment">//1.给浏览器响应一个字符串或一个页面</span><br>		<span class="hljs-comment">/*</span><br><span class="hljs-comment">		 * 响应中文乱码的解决方案：</span><br><span class="hljs-comment">		 * 	在获取流之前设置内容的类型，内容的类型中包含UTF-8字符集</span><br><span class="hljs-comment">		 */</span><br>		response.setContentType(<span class="hljs-string">&quot;text/html;charset=UTF-8&quot;</span>);<br>		<span class="hljs-type">PrintWriter</span> <span class="hljs-variable">writer</span> <span class="hljs-operator">=</span> response.getWriter();<br><span class="hljs-comment">//		writer.write(&quot;Response Success!&quot;);</span><br><span class="hljs-comment">//		writer.write(&quot;响应成功！&quot;);</span><br><span class="hljs-comment">//		writer.write(&quot;&lt;!DOCTYPE html&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;&lt;html&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;&lt;head&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;&lt;meta charset=\&quot;UTF-8\&quot;&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;&lt;title&gt;Insert title here&lt;/title&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;&lt;/head&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;&lt;body&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;	&lt;h1&gt;请求处理成功！&lt;/h1&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;&lt;/body&gt;\r\n&quot; + </span><br><span class="hljs-comment">//				&quot;&lt;/html&gt;&quot;);</span><br>		<span class="hljs-comment">//2.重定向</span><br>		response.sendRedirect(<span class="hljs-string">&quot;WEB-INF/success.html&quot;</span>);<br>		<br>		<span class="hljs-comment">/*</span><br><span class="hljs-comment">		 * 转发与重定向的区别：</span><br><span class="hljs-comment">		 * 	1.转发浏览器发送一次请求；重定向浏览器发送两次请求</span><br><span class="hljs-comment">		 * 	2.转发浏览器地址栏地址无变化；重定向浏览器地址栏地址有变化</span><br><span class="hljs-comment">		 * 	3.转发可以访问WEB-INF目录下的资源；重定向不可以访问WEB-INF目录下的资源</span><br><span class="hljs-comment">		 * 	4.转发可以共享request域中的数据；重定向不可以共享request域中的数据</span><br><span class="hljs-comment">		 */</span><br>	&#125;<br><br></code></pre></td></tr></table></figure>
-
-<h2 id="JSP"><a href="#JSP" class="headerlink" title="JSP"></a>JSP</h2><ul>
-<li><p>JSP必须运行服务器上，它本质上是一个Servlet</p>
-</li>
-<li><p>HTML和Servlet能实现的功能JSP都可用实现</p>
-</li>
-<li><p>JSP中的基本语法</p>
-<ul>
-<li>JSP脚本片段<ul>
-<li>格式：&lt;%   %&gt;</li>
-<li>作用：在里面写Java代码</li>
-</ul>
-</li>
-<li>JSP表达式<ul>
-<li>格式：&lt;%=  %&gt;</li>
-<li>作用：用来输出对象</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight jsp"><table><tr><td class="code"><pre><code class="hljs jsp">&lt;%<br>		<span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> <span class="hljs-variable">i</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span> ; i &lt; <span class="hljs-number">10</span> ; i++)&#123;<br>			<span class="hljs-comment">//out.print(&quot;伊朗要干美国了！&quot;);</span><br>	%&gt;<br>	&lt;h1&gt;伊朗要干美国了！&lt;/h1&gt;<br>	&lt;%	<br>		&#125;<br>	%&gt;<br><br> &lt;%=<span class="hljs-string">&quot;我是通过JSP表达式输出的&quot;</span> %&gt;<br></code></pre></td></tr></table></figure></li>
-<li><p>四个域</p>
-<ul>
-<li>page域<ul>
-<li>范围：当前页面</li>
-<li>对应的域对象：pageContext</li>
-<li>域对象的类型：PageContext</li>
-</ul>
-</li>
-<li>request域<ul>
-<li>范围：当前请求（一次请求）</li>
-<li>对应的域对象：request</li>
-<li>域对象的类型：HttpServletRequest</li>
-</ul>
-</li>
-<li>session<ul>
-<li>范围：当前会话（一次会话）</li>
-<li>对应的域对象：session</li>
-<li>域对象的类型：HttpSession</li>
-</ul>
-</li>
-<li>application域<ul>
-<li>范围：当前Web应用</li>
-<li>对应的域对象：application</li>
-<li>域对象的类型：ServletContext</li>
-</ul>
-</li>
-<li>四个域对象都有以下三个方法<ul>
-<li>void setAttribute(String key , Object value)</li>
-<li>Object getAttribute(String key)</li>
-<li>void removeAttribute(String key)</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight jsp"><table><tr><td class="code"><pre><code class="hljs jsp">&lt;!-- 在当前页面中分别向四个域中添加四个属性 --&gt;<br>	 &lt;%<br>	 	pageContext.setAttribute(<span class="hljs-string">&quot;pageKey&quot;</span>, <span class="hljs-string">&quot;pageValue&quot;</span>);<br>	 	request.setAttribute(<span class="hljs-string">&quot;reqKey&quot;</span>, <span class="hljs-string">&quot;reqValue&quot;</span>);<br>	 	session.setAttribute(<span class="hljs-string">&quot;sessKey&quot;</span>, <span class="hljs-string">&quot;sessValue&quot;</span>);<br>	 	application.setAttribute(<span class="hljs-string">&quot;appKey&quot;</span>, <span class="hljs-string">&quot;appValue&quot;</span>);<br>	 %&gt;<br>	 &lt;h1&gt;在当前页面中分别获取四个域中的属性值&lt;/h1&gt;<br>	 page域中的属性值是：&lt;%=pageContext.getAttribute(<span class="hljs-string">&quot;pageKey&quot;</span>) %&gt;&lt;br&gt;<br>	 request域中的属性值是：&lt;%=request.getAttribute(<span class="hljs-string">&quot;reqKey&quot;</span>) %&gt;&lt;br&gt;<br>	 session域中的属性值是：&lt;%=session.getAttribute(<span class="hljs-string">&quot;sessKey&quot;</span>) %&gt;&lt;br&gt;<br>	 application域中的属性值是：&lt;%=application.getAttribute(<span class="hljs-string">&quot;appKey&quot;</span>) %&gt;&lt;br&gt;<br></code></pre></td></tr></table></figure></li>
-<li><p>EL</p>
-<ul>
-<li>EL全称是Expression Language，是JSP的内置表达式</li>
-<li>格式：${表达式}</li>
-<li>作用：主要用来获取域对象中的属性值，用来代替JSP的表达式</li>
-<li>EL表达式获取数据时才输出，获取不到数据则什么也不输出</li>
-<li>EL中的四个Scope对象<ul>
-<li>pageScope<ul>
-<li>获取page域中的属性值</li>
-</ul>
-</li>
-<li>requestScope<ul>
-<li>获取request域中的属性值</li>
-</ul>
-</li>
-<li>sessionScope<ul>
-<li>获取session域中的属性值</li>
-</ul>
-</li>
-<li>applicationScope<ul>
-<li>获取application域中的属性值</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight jsp"><table><tr><td class="code"><pre><code class="hljs jsp">&lt;%<br>	 	<span class="hljs-type">Date</span> <span class="hljs-variable">date</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Date</span>();<br>	 	<span class="hljs-comment">//分别向四个域中添加四个属性</span><br>	 	pageContext.setAttribute(<span class="hljs-string">&quot;date&quot;</span>, date+<span class="hljs-string">&quot;-&quot;</span>);<br>	 	request.setAttribute(<span class="hljs-string">&quot;date&quot;</span>, date+<span class="hljs-string">&quot;--&quot;</span>);<br>	 	session.setAttribute(<span class="hljs-string">&quot;date&quot;</span>, date+<span class="hljs-string">&quot;---&quot;</span>);<br>	 	application.setAttribute(<span class="hljs-string">&quot;date&quot;</span>, date+<span class="hljs-string">&quot;----&quot;</span>);<br>	 %&gt;<br>	 通过JSP表达式获取域对象中的属性值：&lt;%=pageContext.getAttribute(<span class="hljs-string">&quot;date&quot;</span>) %&gt;&lt;br&gt;<br>	 通过EL表达式获取域对象中的属性值：$&#123;date &#125;&lt;br&gt;<br>	 通过EL表达式获取request域中的属性值：$&#123;requestScope.date &#125;<br></code></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="Ajax"><a href="#Ajax" class="headerlink" title="Ajax"></a>Ajax</h2><ul>
-<li><p>全称：Asynchronous JavaScript And XML，通过JavaScript发送请求，使用XML作为响应数据，后来XML已经被另外一种数据格式JSON所替代</p>
-</li>
-<li><p>同步请求和异步请求的区别</p>
-<ul>
-<li>同步请求<ul>
-<li>发送请求之后必须等待服务器的响应成功之后才能发送其他请求，有一个等待的过程</li>
-<li>响应成功之后会刷新整个页面</li>
-</ul>
-</li>
-<li>异步请求<ul>
-<li>发送请求之后无需等待服务器的响应即可发送其他请求</li>
-<li>响应成功之后不会刷新整个页面，可用局部更新页面中的内容</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>如果通过jQuery发送ajax请求</p>
-<ul>
-<li><p>使用$.ajax()方法发送Ajax请求</p>
-<ul>
-<li>ajax()方法中的常用选项<ul>
-<li>url<ul>
-<li>必须的。用来设置请求地址，值是一个字符串</li>
-</ul>
-</li>
-<li>type<ul>
-<li>可选的。用来设置请求方式。GET或POST，默认是GET，值是一个字符串</li>
-</ul>
-</li>
-<li>data<ul>
-<li>可选的。用来设置请求参数，值是一个字符串</li>
-</ul>
-</li>
-<li>success<ul>
-<li>可选的。用来设置一个回调函数，当响应成功之后系统会自动调用该函数，响应数据会以参数的形式传入到该函数中</li>
-</ul>
-</li>
-<li>dataType<ul>
-<li>可选的。用来设置响应数据的类型，如 text、json等</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript">$.<span class="hljs-title function_">ajax</span>(&#123;<br>				<span class="hljs-attr">url</span>:<span class="hljs-string">&quot;AjaxServlet&quot;</span>,<br>				<span class="hljs-attr">type</span>:<span class="hljs-string">&quot;get&quot;</span>,<br>				<span class="hljs-attr">data</span>:<span class="hljs-string">&quot;username=admin&amp;password=123456&quot;</span>,<br>				<span class="hljs-attr">success</span>:<span class="hljs-keyword">function</span>(<span class="hljs-params">res</span>)&#123;<br>					<span class="hljs-comment">//将响应数据设置到span标签中</span><br>					$(<span class="hljs-string">&quot;#msg&quot;</span>).<span class="hljs-title function_">text</span>(res);<br>				&#125;,<br>				<span class="hljs-attr">dataType</span>:<span class="hljs-string">&quot;text&quot;</span><br>			&#125;);<br></code></pre></td></tr></table></figure></li>
-<li><p>JSON</p>
-<ul>
-<li>JOSN格式<ul>
-<li>JSON对象</li>
-<li>JSON数组</li>
-</ul>
-</li>
-<li>JSON中接受的数据类型<ul>
-<li>字符串</li>
-<li>数字</li>
-<li>null</li>
-<li>布尔类型</li>
-<li>数组</li>
-<li>对象</li>
-</ul>
-</li>
-<li>在JS中JSON对象和JSON字符串之间的转换<ul>
-<li>JSON对象转JSON字符串<ul>
-<li>JSON.stringify(JSON对象)</li>
-</ul>
-</li>
-<li>JSON字符串转JSON对象<ul>
-<li>JSON.parse(JSON字符串)</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">//JSON的格式：</span><br>	<span class="hljs-comment">//1.JSON对象</span><br>	<span class="hljs-comment">//属性名必须使用双引号括起来；属性名和属性值之间使用冒号分隔；多个属性之间使用逗号分隔</span><br>	<span class="hljs-keyword">var</span> jsonObj = &#123;<span class="hljs-string">&quot;name&quot;</span>:<span class="hljs-string">&quot;孙悟空&quot;</span>,<span class="hljs-string">&quot;age&quot;</span>:<span class="hljs-number">520</span>&#125;;<br><span class="hljs-comment">// 	alert(jsonObj);</span><br>	<span class="hljs-comment">//2.JSON数组</span><br>	<span class="hljs-keyword">var</span> jsonArry = [<span class="hljs-string">&quot;猪八戒&quot;</span>,<span class="hljs-number">1500</span>,<span class="hljs-literal">true</span>,<span class="hljs-literal">null</span>,jsonObj];<br>	<span class="hljs-comment">//获取jsonArry中的jsonObj中的age属性值</span><br><span class="hljs-comment">// 	alert(jsonArry[4].age);</span><br>	<br>	<span class="hljs-comment">//在JS中将JSON对象转换为JSON字符串</span><br>	<span class="hljs-keyword">var</span> objToStr = <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">stringify</span>(jsonObj);<br><span class="hljs-comment">// 	alert(objToStr);</span><br>	<span class="hljs-comment">//声明一个JSON字符串</span><br>	<span class="hljs-keyword">var</span> jsonStr = <span class="hljs-string">&#x27;&#123;&quot;name&quot;:&quot;唐僧&quot;,&quot;age&quot;:18&#125;&#x27;</span>;<br><span class="hljs-comment">// 	alert(jsonStr);</span><br>	<span class="hljs-comment">//在JS中将JSON字符串转换为JSON对象</span><br>	<span class="hljs-keyword">var</span> strToObj = <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">parse</span>(jsonStr);<br><span class="hljs-comment">// 	alert(strToObj.name);</span><br></code></pre></td></tr></table></figure>
-
-<ul>
-<li><p>在Java中对象与JSON字符串之间的转换</p>
-<ul>
-<li><p>借助于第三方工具json-lib、jackson、gson等可用将Java对象转换为JSON字符串，也可用将JSON字符串转换回Java对象</p>
-</li>
-<li><p>通常是前端发送一个Ajax请求，在后台查询到对象之后将对象转换为JOSN字符串响应到前端</p>
-</li>
-<li><p>通过发送Ajax请求接收JSON格式的响应数据</p>
-<ul>
-<li>前端代码</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">//发送Ajax请求接收JSON格式的响应数据</span><br>			$.<span class="hljs-title function_">ajax</span>(&#123;<br>				<span class="hljs-attr">url</span>:<span class="hljs-string">&quot;JSONServlet&quot;</span>,<br>				<span class="hljs-attr">success</span>:<span class="hljs-keyword">function</span>(<span class="hljs-params">res</span>)&#123;<br>					<span class="hljs-title function_">alert</span>(res.<span class="hljs-property">id</span>);<br>				&#125;,<br>				<span class="hljs-attr">dataType</span>:<span class="hljs-string">&quot;json&quot;</span><br>			&#125;);<br></code></pre></td></tr></table></figure>
-
-
-
-<ul>
-<li>后端代码</li>
-</ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">doGet</span><span class="hljs-params">(HttpServletRequest request, HttpServletResponse response)</span><br>			<span class="hljs-keyword">throws</span> ServletException, IOException &#123;<br>		response.setContentType(<span class="hljs-string">&quot;text/html;charset=UTF-8&quot;</span>);<br>		<span class="hljs-comment">//假设从数据库中查询到员工的信息</span><br>		<span class="hljs-type">Employee</span> <span class="hljs-variable">employee</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Employee</span>(<span class="hljs-number">1</span>, <span class="hljs-string">&quot;张三&quot;</span>, <span class="hljs-string">&quot;zhangsan@atguigu.com&quot;</span>);<br>		<span class="hljs-comment">//创建Gson对象</span><br>		<span class="hljs-type">Gson</span> <span class="hljs-variable">gson</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Gson</span>();<br>		<span class="hljs-comment">//将Employee对象转换为JSON字符串</span><br>		<span class="hljs-type">String</span> <span class="hljs-variable">json</span> <span class="hljs-operator">=</span> gson.toJson(employee);<br>		System.out.println(json);<br>		<span class="hljs-comment">//给浏览器响应一个JSON格式的字符串</span><br>		response.getWriter().write(json);<br>	&#125;<br></code></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Java</category>
-      </categories>
-      <tags>
-        <tag>Java</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Scala</title>
     <url>/2021/08/10/Scala/</url>
     <content><![CDATA[<h1 id="Scala"><a href="#Scala" class="headerlink" title="Scala"></a>Scala</h1><h2 id="Scala简介"><a href="#Scala简介" class="headerlink" title="Scala简介"></a>Scala简介</h2><ul>
@@ -3227,7 +3509,7 @@ copyToLocal#与get完全一样
 <ul>
 <li><a href="https://imgtu.com/i/hdg2U1"><img src="https://z3.ax1x.com/2021/08/31/hdg2U1.png" alt="hdg2U1.png"></a></li>
 <li><a href="https://imgtu.com/i/hwccGV"><img src="https://z3.ax1x.com/2021/09/01/hwccGV.png" alt="hwccGV.png"></a></li>
-<li>任务从客户端发送到ReourceManager，RM指定一个NM创建一个AppMster进程，创建spark的一个Driver线程，Driver线程将任务分配到其它的NM，其它的NodeManager申请container，container会创建spark的一个excutor线程，RDD根据会根据分区进行一系列transformations转换定义，也会在一些情况下有shuffer过程，程序不会立刻执行，而是直到调用action触发调用RDD的计算。</li>
+<li>任务从客户端发送到ReourceManager，RM指定一个NM创建一个AppMster进程，创建spark的一个Driver线程，Driver线程将任务分配到其它的NM，其它的NodeManager申请container，container会创建spark的一个excutor线程，RDD会根据分区进行一系列transformations转换定义，也会在一些情况下有shuffer过程，程序不会立刻执行，而是直到调用action触发调用RDD的计算。</li>
 </ul>
 </li>
 </ul>
@@ -3744,55 +4026,11 @@ copyToLocal#与get完全一样
       </tags>
   </entry>
   <entry>
-    <title>algorithm</title>
-    <url>/2021/10/04/algorithm/</url>
-    <content><![CDATA[<h1 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h1><h2 id="动态规划"><a href="#动态规划" class="headerlink" title="动态规划"></a>动态规划</h2><ul>
-<li>首先，动态规划问题一般形式就是求最值，求解动态规划的核心问题是穷举。</li>
-<li>由于动态规划这类问题基本存在<strong>重叠子问题</strong>，如果暴力求解的话效率会很低，所以需要<strong>备忘录或者DP table</strong>来优化穷举过程。</li>
-<li>动态规划问题一定会具备<strong>最优子结构</strong>，这样就能通过子问题求解原问题。要符合最优子结构，子问题之间必须相互独立。</li>
-<li>正确的<strong>状态转移方程</strong>才能正确的求解。</li>
-<li>求解动态规划的一般办法：<ul>
-<li>确定基础案例，也就是最简单的子问题。</li>
-<li>确定状态，也就是原问题和子问题中会变化的量</li>
-<li>确定选择，也就是导致状态变化的行为</li>
-<li>明确dp 数组的含义</li>
-</ul>
-</li>
-</ul>
-<h2 id="排序算法"><a href="#排序算法" class="headerlink" title="排序算法"></a>排序算法</h2><ul>
-<li>常见排序算法的时间复杂度，稳定性<ul>
-<li><a href="https://imgtu.com/i/5KSEnO"><img src="https://z3.ax1x.com/2021/10/13/5KSEnO.png" alt="5KSEnO.png"></a></li>
-</ul>
-</li>
-</ul>
-<h2 id="大数取余算法"><a href="#大数取余算法" class="headerlink" title="大数取余算法"></a>大数取余算法</h2><ul>
-<li>场景：当一个数很大时，大到基本类型都放不下，这时我们需要用String来存储数字。那么怎么进行取余操作呢？</li>
-<li>我们根据一个例子来看看：<ul>
-<li><a href="https://imgtu.com/i/5KlnOS"><img src="https://z3.ax1x.com/2021/10/13/5KlnOS.png" alt="5KlnOS.png"></a></li>
-<li>计算过程<ul>
-<li>第一位数字4： 4%3=1；</li>
-<li>第二位数字4：（1*10+4）%3=2</li>
-<li>第三位数字3：（2*10+3）%3=2</li>
-</ul>
-</li>
-<li>最终的结果是最后一步计算得到的余数2.</li>
-</ul>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>算法</category>
-      </categories>
-      <tags>
-        <tag>算法</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>StarRocks</title>
     <url>/2024/01/03/StarRocks/</url>
     <content><![CDATA[<h1 id="StarRocks"><a href="#StarRocks" class="headerlink" title="StarRocks"></a>StarRocks</h1><h2 id="基础介绍"><a href="#基础介绍" class="headerlink" title="基础介绍"></a>基础介绍</h2><ul>
 <li>社区还是很活跃的，贴一下官方文档：<a href="https://docs.starrocks.io/zh/docs/introduction/StarRocks_intro/">StarRocks官方文档</a></li>
-<li>官方描述：StarRocks 是一款高性能分析型数据仓库，使用向量化、MPP 架构、CBO、智能物化视图、可实时更新的列式存储引擎等技术实现多维、实时、高并发的数据分析。StarRocks 既支持从各类实时和离线的数据源高效导入数据，也支持直接分析数据湖上各种格式的数据。StarRocks 兼容 MySQL 协议，可使用 MySQL 客户端和常用 BI 工具对接。同时 StarRocks 具备水平扩展，高可用、高可靠、易运维等特性。广泛应用于实时数仓、OLAP 报表、数据湖分析等场景。</li>
+<li>官方描述：StarRocks 是一款高性能分析型数据库，使用向量化、MPP 架构、CBO、智能物化视图、可实时更新的列式存储引擎等技术实现多维、实时、高并发的数据分析。StarRocks 既支持从各类实时和离线的数据源高效导入数据，也支持直接分析数据湖上各种格式的数据。StarRocks 兼容 MySQL 协议，可使用 MySQL 客户端和常用 BI 工具对接。同时 StarRocks 具备水平扩展，高可用、高可靠、易运维等特性。广泛应用于实时数仓、OLAP 报表、数据湖分析等场景。</li>
 <li>StarRocks 是新一代极速全场景 MPP (Massively Parallel Processing) 数据库。StarRocks 的愿景是能够让用户的数据分析变得更加简单和敏捷。</li>
 <li>StarRocks 架构简洁，采用了全面向量化引擎，并配备全新设计的 CBO (Cost Based Optimizer) 优化器，查询速度（尤其是多表关联查询）远超同类产品。</li>
 </ul>
@@ -3818,28 +4056,35 @@ copyToLocal#与get完全一样
 </li>
 <li>统一分析：<ul>
 <li>通过使用一套系统解决多维分析、高并发查询、预计算、实时分析查询等场景，降低系统复杂度和多技术栈开发与维护成本。</li>
-<li>使用 StarRocks 统一管理数据湖和数据仓库，将高并发和实时性要求很高的业务放在 StarRocks 中分析，也可以使用 External Catalog 和外部表进行数据湖上的分析。</li>
+<li><strong>使用 StarRocks 统一管理数据湖和数据仓库，将高并发和实时性要求很高的业务放在 StarRocks 中分析，也可以使用 External Catalog 和外部表进行数据湖上的分析。</strong></li>
 </ul>
 </li>
 </ul>
 <h3 id="系统架构"><a href="#系统架构" class="headerlink" title="系统架构"></a>系统架构</h3><ul>
-<li><p>架构简洁，核心只有FE(Frontend),BE(Backend)或CN(Compute Node)两类进程，方便部署维护，可水平扩展，有副本机制，确保系统无单点。SR支持Mysql协议接口，支持SQL标准语法。</p>
+<li>架构简洁，核心只有FE(Frontend),BE(Backend)或CN(Compute Node)两类进程，方便部署维护，可水平扩展，有副本机制，确保系统无单点。SR支持Mysql协议接口，支持SQL标准语法。</li>
+<li><a href="https://imgse.com/i/pFJGuQg"><img src="https://s11.ax1x.com/2024/02/18/pFJGuQg.png" alt="pFJGuQg.png"></a></li>
+<li><strong>FE 节点负责元数据管理、客户端连接管理、查询计划和查询调度。每个 FE 在其内存中存储和维护完整的元数据副本，确保每个 FE 都能提供无差别的服务。</strong></li>
+<li>CN 节点在存算分离或存算一体集群中负责执行查询。</li>
+<li>BE 节点在存算一体集群中负责数据存储和执行查询。<ul>
+<li><strong>执行sql时，一条sql 语句首先会按照语义规划成逻辑单元，然后再按照数据的分布情况拆分成具体的物理执行单元。物理执行单元会在对应的BE节点上执行，实现本地计算，避免数据的传输与拷贝，加速查询</strong></li>
+</ul>
 </li>
-<li><p><a href="https://imgse.com/i/pFJGuQg"><img src="https://s11.ax1x.com/2024/02/18/pFJGuQg.png" alt="pFJGuQg.png"></a></p>
-</li>
-<li><p>FE 节点负责元数据管理、客户端连接管理、查询计划和查询调度。每个 FE 在其内存中存储和维护完整的元数据副本，确保每个 FE 都能提供无差别的服务。</p>
-</li>
-<li><p>CN 节点在存算分离或存算一体集群中负责执行查询。</p>
-</li>
-<li><p>BE 节点在存算一体集群中负责数据存储和执行查询。</p>
-</li>
-<li><p>从存算一体(shared-nothing)进化到存算分离(shared-data)</p>
-<ul>
+<li>从存算一体(shared-nothing)进化到存算分离(shared-data)<ul>
 <li>3.0 版本之前使用存算一体架构，BE 同时负责数据存储和计算，数据访问和分析都在本地进行，提供极速的查询分析体验。</li>
 <li>3.0 版本开始引入存算分离架构，数据存储功能从原来的 BE 中抽离，BE 节点升级为无状态的 CN 节点。数据可持久存储在远端对象存储或 HDFS 上，CN 本地磁盘只用于缓存热数据来加速查询。存算分离架构下支持动态增删计算节点，实现秒级的扩缩容能力。</li>
 <li>存算分离支持的存储系统：兼容 AWS S3 协议的对象存储系统；Azure Blob Storage；传统数据中心部署的 HDFS</li>
 </ul>
 </li>
+</ul>
+<h4 id="数据管理"><a href="#数据管理" class="headerlink" title="数据管理"></a>数据管理</h4><ul>
+<li><p>SR采用列式存储，采用分区分桶机制进行数据管理。<strong>一张表可以被划分成多个分区，一个分区内的数据可以根据一列或者多列进行分桶，将数据切分成多个Tablet。</strong>tablet是SR中最小的数据管理单元，每个tablet都会以多副本的形式存储在不同的BE节点中。用户可以指定Tablet 的个数和大小，SR会管理好每个Tablet 副本的分布信息。（<strong>Tablet实际就是数据分桶</strong>）</p>
+</li>
+<li><p>下面是StarRocks 的数据划分以及 Tablet 多副本机制。表按照日期划分为 4 个分区，第一个分区进一步切分成 4 个 Tablet。每个 Tablet 使用 3 副本进行备份，分布在 3 个不同的 BE 节点上。</p>
+<ul>
+<li><a href="https://imgse.com/i/pk4ps8x"><img src="https://s21.ax1x.com/2024/07/12/pk4ps8x.png" alt="pk4ps8x.png"></a></li>
+</ul>
+</li>
+<li></li>
 <li><p>解释一下catlog的作用，以Flink Catalog为例：</p>
 <ul>
 <li><p>Catalog 提供了一个统一的 API 来管理元数据，并使其可以从表 API 和 SQL 查询语句中来访问。</p>
@@ -4122,8 +4367,8 @@ property3 tinyint NOT NULL
 </li>
 <li>选择分桶键<ul>
 <li>假设存在列同时满足高基数和经常作为查询条件，则建议您选择其为分桶键，进行哈希分桶。若不存在这样的列，根据查询进行判断<ul>
-<li>如果查询复杂，建议选择高基数的列为分桶键，保证数据在各个分桶中尽量均衡，提高资源利用率。</li>
-<li>如果查询比较简单，则建议选择经常作为查询条件的列为分桶键，提高查询效率</li>
+<li><strong>如果查询复杂，建议选择高基数的列为分桶键，保证数据在各个分桶中尽量均衡，提高资源利用率。</strong></li>
+<li><strong>如果查询比较简单，则建议选择经常作为查询条件的列为分桶键，提高查询效率</strong></li>
 </ul>
 </li>
 <li>如果数据倾斜很严重，可以选择多个列作为数据的分桶键，建议不超过三个列</li>
@@ -4131,7 +4376,7 @@ property3 tinyint NOT NULL
 </li>
 <li>设置分桶数<ul>
 <li>自 2.5.7 版本起，StarRocks 支持根据机器资源和数据量自动设置分区中分桶数量。</li>
-<li>如果表单个分区原始数据规模预计<strong>超过 100 GB</strong>，建议您手动设置分区中分桶数量。</li>
+<li>如果表单个分区原始数据规模预计<strong>超过 100 GB</strong>，建议您手动设置分区中分桶数量。如果需要<strong>开启并行扫描 Tablet</strong>，则您需要确保系统变量 <code>enable_tablet_internal_parallel</code> 全局生效 <code>SET GLOBAL enable_tablet_internal_parallel = true;</code>。<strong>首先预估每个分区的数据量，然后按照每10GB原始数据一个Tablet计算，从而确定分桶数量</strong></li>
 </ul>
 </li>
 <li>最佳实践<ul>
@@ -4157,7 +4402,7 @@ property3 tinyint NOT NULL
 <tbody><tr>
 <td><code>expression</code></td>
 <td>是</td>
-<td>目前仅支持 <a href="https://docs.starrocks.io/zh/docs/sql-reference/sql-functions/date-time-functions/date_trunc/">date_trunc</a> 和 <a href="https://docs.starrocks.io/zh/docs/sql-reference/sql-functions/date-time-functions/time_slice/">time_slice</a> 函数。并且如果您使用 <code>time_slice</code> 函数，则可以不传入参数 <code>boundary</code>，因为在该场景中该参数默认且仅支持为 <code>floor</code>，不支持为 <code>ceil</code>。</td>
+<td>目前仅支持 <a href="https://docs.starrocks.io/zh/docs/3.1/sql-reference/sql-functions/date-time-functions/date_trunc/">date_trunc</a> 和 <a href="https://docs.starrocks.io/zh/docs/3.1/sql-reference/sql-functions/date-time-functions/time_slice/">time_slice</a> 函数。并且如果您使用 <code>time_slice</code> 函数，则可以不传入参数 <code>boundary</code>，因为在该场景中该参数默认且仅支持为 <code>floor</code>，不支持为 <code>ceil</code>。</td>
 </tr>
 <tr>
 <td><code>time_unit</code></td>
@@ -4179,7 +4424,8 @@ user_name VARCHAR(32) DEFAULT &#39;&#39;,
 pv BIGINT DEFAULT &#39;0&#39;
 </code></pre>
 <p>)<br>DUPLICATE KEY(event_day, site_id, city_code, user_name)<br>PARTITION BY date_trunc(‘day’, event_day)<br>DISTRIBUTED BY HASH(event_day, site_id);</p>
-<figure class="highlight bnf"><table><tr><td class="code"><pre><code class="hljs bnf"><br>* <br><br>##### 列表达式分区<br><br>* 语法<br><br>  ````sqlite<br>  PARTITION BY expression<br>  <br>  expression ::=<br>      ( <span class="hljs-attribute">&lt;partition_columns&gt;</span> )<br>      <br>  partition_columns ::=<br>      <span class="hljs-attribute">&lt;column&gt;</span>, [ <span class="hljs-attribute">&lt;column&gt;</span> [,...] ]<br></code></pre></td></tr></table></figure></li>
+<p>– 分区生命周期管理，即仅保留最近一段时间的分区，删除历史分区，可以使用partition_live_number设置只保留最近多少数量的分区</p>
+<figure class="highlight autohotkey"><table><tr><td class="code"><pre><code class="hljs autohotkey">  <br>* 在导入的过程中 StarRocks 根据导入数据已经自动创建了一些分区，但是由于某些原因导入作业最终失败，则在当前版本中，已经自动创建的分区并不会由于导入失败而自动删除。<br><br>* StarRocks 自动创建分区数量上限默认为 <span class="hljs-number">4096</span>，由 FE 配置参数 `max_automatic_partition_number` 决定。该参数可以防止您由于误操作而创建大量分区。<br><br>* 分区命名规则：如果存在多个分区列，则不同分区列的值以下划线（_）连接。例如：存在有两个分区列 `dt` 和 `city`，均为字符串类型，导入一条数据 `2022-<span class="hljs-number">04</span>-<span class="hljs-number">01</span>`, `beijing`，则自动创建的分区名称为 `p20220401_beijing`。<br><br>##### 列表达式分区<br><br>* 语法<br><br>  ````sqlite<br>  PARTITION BY expression<br>  <br><span class="hljs-title">  expression :</span>:=<br>      ( &lt;partition_columns&gt; )<br>      <br><span class="hljs-title">  partition_columns :</span>:=<br>      &lt;column&gt;, [ &lt;column&gt; [,...] ]<br></code></pre></td></tr></table></figure></li>
 <li></li>
 <li><table>
 <thead>
@@ -4192,7 +4438,12 @@ pv BIGINT DEFAULT &#39;0&#39;
 <tbody><tr>
 <td><code>partition_columns</code></td>
 <td>是</td>
-<td>分区列。 支持为字符串（不支持 BINARY）、日期、整数和布尔值。不支持分区列的值为 <code>NULL</code>。导入后自动创建的一个分区中只能包含各分区列的一个值，如果需要包含各分区列的多值，请使用 <a href="https://docs.starrocks.io/zh/docs/table_design/list_partitioning/">List 分区</a>。</td>
+<td>分区列。 支持为字符串（不支持 BINARY）、日期、整数和布尔值。不支持分区列的值为 <code>NULL</code>。导入后自动创建的一个分区中只能包含各分区列的一个值，如果需要包含各分区列的多值，请使用 <a href="https://docs.starrocks.io/zh/docs/3.1/table_design/list_partitioning/">List 分区</a>。</td>
+</tr>
+<tr>
+<td><code>partition_live_number</code></td>
+<td>否</td>
+<td>保留多少数量的分区。比较这些分区包含的值，定期删除值小的分区，保留值大的。后台会定时调度任务来管理分区数量，调度间隔可以通过 FE 动态参数 <code>dynamic_partition_check_interval_seconds</code> 配置，默认为 600 秒，即 10 分钟。 <strong>说明</strong> 如果分区列里是字符串类型的值，则比较分区名称的字典序，定期保留排在前面的分区，删除排在后面的分区。</td>
 </tr>
 </tbody></table>
 </li>
@@ -4222,8 +4473,7 @@ dt varchar(20) not null
 &quot;dynamic_partition.history_partition_num&quot; = &quot;0&quot;
 </code></pre>
 <p>);</p>
-<figure class="highlight pgsql"><table><tr><td class="code"><pre><code class="hljs pgsql"><br>* <br><br>#### 临时分区<br><br>* 可以在一张已经定义分区规则的分区表上，创建临时分区，并为这些临时分区设定单独的数据分布策略<br><br>* ````sqlite<br>  <span class="hljs-keyword">ALTER</span> <span class="hljs-keyword">TABLE</span> &lt;<span class="hljs-built_in">table_name</span>&gt; <br>  <span class="hljs-keyword">ADD</span> <span class="hljs-keyword">TEMPORARY</span> <span class="hljs-keyword">PARTITION</span> &lt;temporary_partition_name&gt; <span class="hljs-keyword">VALUES</span> [(&quot;value1&quot;), &#123;<span class="hljs-keyword">MAXVALUE</span>|(&quot;value2&quot;)&#125;)]<br>  [(partition_desc)]<br>  [DISTRIBUTED <span class="hljs-keyword">BY</span> HASH(&lt;bucket_key&gt;)];<br></code></pre></td></tr></table></figure></li>
-<li></li>
+<figure class="highlight pgsql"><table><tr><td class="code"><pre><code class="hljs pgsql"><br>#### 临时分区<br><br>* 可以在一张已经定义分区规则的分区表上，创建临时分区，并为这些临时分区设定单独的数据分布策略<br><br>* ````sqlite<br>  <span class="hljs-keyword">ALTER</span> <span class="hljs-keyword">TABLE</span> &lt;<span class="hljs-built_in">table_name</span>&gt; <br>  <span class="hljs-keyword">ADD</span> <span class="hljs-keyword">TEMPORARY</span> <span class="hljs-keyword">PARTITION</span> &lt;temporary_partition_name&gt; <span class="hljs-keyword">VALUES</span> [(&quot;value1&quot;), &#123;<span class="hljs-keyword">MAXVALUE</span>|(&quot;value2&quot;)&#125;)]<br>  [(partition_desc)]<br>  [DISTRIBUTED <span class="hljs-keyword">BY</span> HASH(&lt;bucket_key&gt;)];<br></code></pre></td></tr></table></figure></li>
 </ul>
 <h3 id="索引-1"><a href="#索引-1" class="headerlink" title="索引"></a>索引</h3><ul>
 <li>SR自动创建的索引，称为内置索引，包括前缀索引，Ordinal索引，ZoneMap索引<ul>
@@ -4558,6 +4808,53 @@ Timestamp varbinary
       </categories>
       <tags>
         <tag>大数据</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>algorithm</title>
+    <url>/2021/10/04/algorithm/</url>
+    <content><![CDATA[<h1 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h1><h2 id="动态规划"><a href="#动态规划" class="headerlink" title="动态规划"></a>动态规划</h2><ul>
+<li>首先，动态规划问题一般形式就是求最值，求解动态规划的核心问题是穷举。</li>
+<li>由于动态规划这类问题基本存在<strong>重叠子问题</strong>，如果暴力求解的话效率会很低，所以需要<strong>备忘录或者DP table</strong>来优化穷举过程。</li>
+<li>动态规划问题一定会具备<strong>最优子结构</strong>，这样就能通过子问题求解原问题。要符合最优子结构，子问题之间必须相互独立。</li>
+<li>正确的<strong>状态转移方程</strong>才能正确的求解。</li>
+<li>求解动态规划的一般办法：<ul>
+<li>确定基础案例，也就是最简单的子问题。</li>
+<li>确定状态，也就是原问题和子问题中会变化的量</li>
+<li>确定选择，也就是导致状态变化的行为</li>
+<li>明确dp 数组的含义</li>
+</ul>
+</li>
+</ul>
+<h2 id="排序算法"><a href="#排序算法" class="headerlink" title="排序算法"></a>排序算法</h2><ul>
+<li>常见排序算法的时间复杂度，稳定性<ul>
+<li><a href="https://imgtu.com/i/5KSEnO"><img src="https://z3.ax1x.com/2021/10/13/5KSEnO.png" alt="5KSEnO.png"></a></li>
+</ul>
+</li>
+</ul>
+<h2 id="大数取余算法"><a href="#大数取余算法" class="headerlink" title="大数取余算法"></a>大数取余算法</h2><ul>
+<li>场景：当一个数很大时，大到基本类型都放不下，这时我们需要用String来存储数字。那么怎么进行取余操作呢？</li>
+<li>我们根据一个例子来看看：<ul>
+<li><a href="https://imgtu.com/i/5KlnOS"><img src="https://z3.ax1x.com/2021/10/13/5KlnOS.png" alt="5KlnOS.png"></a></li>
+<li>计算过程<ul>
+<li>第一位数字4： 4%3=1；</li>
+<li>第二位数字4：（1*10+4）%3=2</li>
+<li>第三位数字3：（2*10+3）%3=2</li>
+</ul>
+</li>
+<li>最终的结果是最后一步计算得到的余数2.</li>
+</ul>
+</li>
+</ul>
+<h2 id="KMP"><a href="#KMP" class="headerlink" title="KMP"></a>KMP</h2><ul>
+<li></li>
+</ul>
+]]></content>
+      <categories>
+        <category>算法</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
       </tags>
   </entry>
   <entry>
@@ -7282,92 +7579,6 @@ try &#123;
       </tags>
   </entry>
   <entry>
-    <title>project_logcollect</title>
-    <url>/2021/07/04/project-logcollect/</url>
-    <content><![CDATA[<h1 id="电商采集项目搭建流程"><a href="#电商采集项目搭建流程" class="headerlink" title="电商采集项目搭建流程"></a>电商采集项目搭建流程</h1><h2 id="自动生成数据脚本"><a href="#自动生成数据脚本" class="headerlink" title="自动生成数据脚本"></a>自动生成数据脚本</h2><ul>
-<li>生成用于测试的数据</li>
-</ul>
-<h2 id="数据采集模块"><a href="#数据采集模块" class="headerlink" title="数据采集模块"></a>数据采集模块</h2><h3 id="Hadoop安装"><a href="#Hadoop安装" class="headerlink" title="Hadoop安装"></a>Hadoop安装</h3><ul>
-<li><p>在这里只说以下大致步骤以及容易出错的地方</p>
-</li>
-<li><p>配置集群之间分发数据的脚本，以及集群之间ssh免密登录</p>
-</li>
-<li><p>hadoop安装，解压就行，注意解压的目录。</p>
-</li>
-<li><p>核心文件配置：</p>
-<ul>
-<li><font color=red>core-site.xml</font>文件配置</li>
-<li><font color=red>hdfs-site.xml</font>文件配置，因为是测试，在这里设置HDFS副本数量为1，防止存储不够，浪费存储。</li>
-<li><font color=red>yran-site.xml</font>文件配置</li>
-<li><font color=red>mapred-site.xml</font>文件</li>
-<li>workers文件配置，注意不用多打空格等输入错误，里面配置hadoop的datanode节点的主机名。</li>
-</ul>
-</li>
-<li><p>第一次启动注意要先格式化namenode。bin/hdfs namenode -format</p>
-</li>
-<li><p>常见web客户端：</p>
-<ul>
-<li>hadoop100:9870。HDFS的Web界面</li>
-<li>yarn的web界面：hadoop101:8088</li>
-<li>历史服务器hadoop102:19888</li>
-</ul>
-</li>
-<li><p>单点启动关闭命令</p>
-<figure class="highlight crmsh"><table><tr><td class="code"><pre><code class="hljs crmsh"><span class="hljs-comment">#HDFS组件</span><br>hdfs --daemon <span class="hljs-literal">start</span>/<span class="hljs-literal">stop</span> namenode/datanode/secondarynamenode<br><span class="hljs-comment">#Yarn</span><br>yarn --daemon <span class="hljs-literal">start</span>/<span class="hljs-literal">stop</span>  resourcemanager/nodemanager<br><span class="hljs-comment">#历史服务器</span><br>mapred --daemon <span class="hljs-literal">start</span> historyserver<br></code></pre></td></tr></table></figure></li>
-<li><p>配置历史服务器</p>
-</li>
-<li><p>配置日志的聚集</p>
-</li>
-<li><p>集群时间同步</p>
-</li>
-<li><p>配置一下压缩</p>
-</li>
-<li><p>可以测试一下集群基础性能</p>
-<figure class="highlight awk"><table><tr><td class="code"><pre><code class="hljs awk"><br>读写性能测试<br><span class="hljs-comment">#读取HDFS集群的10个128M文件</span><br>hadoop jar <span class="hljs-regexp">/opt/m</span>odule<span class="hljs-regexp">/hadoop-3.1.3/</span>share<span class="hljs-regexp">/hadoop/m</span>apreduce/hadoop-mapreduce-client-jobclient-<span class="hljs-number">3.1</span>.<span class="hljs-number">3</span>-tests.jar TestDFSIO -read -nrFiles <span class="hljs-number">10</span> -fileSize <span class="hljs-number">128</span>MB<br><span class="hljs-comment">#删除测试数据</span><br>hadoop jar <span class="hljs-regexp">/opt/m</span>odule<span class="hljs-regexp">/hadoop-3.1.3/</span>share<span class="hljs-regexp">/hadoop/m</span>apreduce/hadoop-mapreduce-client-jobclient-<span class="hljs-number">3.1</span>.<span class="hljs-number">3</span>-tests.jar TestDFSIO -clean<br><br>运算速度测试<br><span class="hljs-comment">#使用RandomWriter来产生随机数，每个节点运行10个Map任务，每个Map产生大约1G大小的二进制随机数</span><br>hadoop jar <span class="hljs-regexp">/opt/m</span>odule<span class="hljs-regexp">/hadoop-3.1.3/</span>share<span class="hljs-regexp">/hadoop/m</span>apreduce/hadoop-mapreduce-examples-<span class="hljs-number">3.1</span>.<span class="hljs-number">3</span>.jar randomwriter random-data<br><span class="hljs-comment">#执行排序程序</span><br>hadoop jar <span class="hljs-regexp">/opt/m</span>odule<span class="hljs-regexp">/hadoop-3.1.3/</span>share<span class="hljs-regexp">/hadoop/m</span>apreduce/hadoop-mapreduce-examples-<span class="hljs-number">3.1</span>.<span class="hljs-number">3</span>.jar sort random-data sorted-data<br><span class="hljs-comment">#验证数据是否排序成功</span><br>hadoop jar <span class="hljs-regexp">/opt/m</span>odule<span class="hljs-regexp">/hadoop-3.1.3/</span>share<span class="hljs-regexp">/hadoop/m</span>apreduce/hadoop-mapreduce-client-jobclient-<span class="hljs-number">3.1</span>.<span class="hljs-number">3</span>-tests.jar testmapredsort -sortInput random-data -sortOutput sorted-data<br></code></pre></td></tr></table></figure></li>
-</ul>
-<p><a href="https://imgtu.com/i/RWzQ8f"><img src="https://z3.ax1x.com/2021/07/04/RWzQ8f.png" alt="RWzQ8f.png"></a></p>
-<h3 id="ZooKeeper安装"><a href="#ZooKeeper安装" class="headerlink" title="ZooKeeper安装"></a>ZooKeeper安装</h3><ul>
-<li><p>在/zookeeper-3.5.7/这个目录下创建zkData</p>
-</li>
-<li><p>在/zookeeper-3.5.7/zkData目录下创建一个myid的文件，myid唯一。</p>
-</li>
-<li><p>重命名/zookeeper-3.5.7/conf这个目录下的zoo_sample.cfg为zoo.cfg</p>
-</li>
-<li><p>修改数据存储路径：dataDir=/opt/module/zookeeper-3.5.7/zkData</p>
-</li>
-<li><p>cluster下增加集群配置</p>
-</li>
-</ul>
-<h3 id="Kafka"><a href="#Kafka" class="headerlink" title="Kafka"></a>Kafka</h3><ul>
-<li><p>Kafka遇到的坑：– Error while fetching metadata with correlation id : {LEADER_NOT_AVAILABLE}</p>
-<ul>
-<li><p>原因：无法识别Kafka hostname</p>
-</li>
-<li><p>解决：修改kafka/config/server.properties配置</p>
-</li>
-<li><p>配置llisteners=PLAINTEXT://hadoop100:9092</p>
-</li>
-<li><p> 配置advertised.listeners=PLAINTEXT://hadoop100:9092</p>
-</li>
-</ul>
-</li>
-<li><p>Kafka压力测试</p>
-</li>
-</ul>
-<h3 id="项目基础架构"><a href="#项目基础架构" class="headerlink" title="项目基础架构"></a>项目基础架构</h3><ul>
-<li><a href="https://imgtu.com/i/W5gHcF"><img src="https://z3.ax1x.com/2021/07/27/W5gHcF.png" alt="W5gHcF.png"></a></li>
-</ul>
-]]></content>
-      <categories>
-        <category>项目</category>
-        <category>电商数据采集项目</category>
-      </categories>
-      <tags>
-        <tag>大数据</tag>
-        <tag>电商采集项目</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>MySQL</title>
     <url>/2021/04/25/mysql/</url>
     <content><![CDATA[<h1 id="MySQL"><a href="#MySQL" class="headerlink" title="MySQL"></a>MySQL</h1><h2 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h2><p><img src="https://pic2.zhimg.com/9bb3acbba65f349299df27a93286ffb1_r.jpg" alt="Mysql架构"></p>
@@ -7933,7 +8144,7 @@ try &#123;
 <li><p>offset n 表示去掉n个值</p>
 </li>
 <li><p>一般用法：</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> employees<br><span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> hire_date <span class="hljs-keyword">DESC</span>      <span class="hljs-comment">-- 倒序</span><br>LIMIT <span class="hljs-number">1</span> <span class="hljs-keyword">offset</span> <span class="hljs-number">2</span>;       <span class="hljs-comment">-- 去掉排名倒数第一第二的时间，取倒数第三;   </span><br>  <br></code></pre></td></tr></table></figure></li>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> employees<br><span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> hire_date <span class="hljs-keyword">DESC</span>      <span class="hljs-comment">-- 倒序</span><br>LIMIT <span class="hljs-number">1</span> <span class="hljs-keyword">offset</span> <span class="hljs-number">2</span>;       <span class="hljs-comment">-- 去掉排名倒数第一第二的时间，取倒数第三;   </span><br>      <br></code></pre></td></tr></table></figure></li>
 </ul>
 </blockquote>
 <h2 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h2><blockquote>
@@ -8108,12 +8319,306 @@ end;
 </ul>
 </li>
 </ul>
+<ul>
+<li>utf8mb4编码集中：<ul>
+<li><strong>utf8mb4_general_ci     不区分大小写</strong> ci是case insensitive的意思</li>
+<li>utf8mb4_general_cs     区分大小写</li>
+<li>utf8mb4_bin:字符串每个字符串用二进制数据编译存储。 区分大小写，而且可以存二进制的内容</li>
+</ul>
+</li>
+<li>utf8mb4_ unicode_ ci 与 utf8mb4_ general_ ci 如何选择<br>字符除了需要存储，还需要排序或比较大小，涉及到与编码字符集对应的 排序字符集（collation）。ut8mb4对应的排序字符集常用的有 utf8mb4_unicode_ci 、 utf8mb4_general_ci ，到底采用哪个在 stackoverflow 上有个讨论， What’s the difference between utf8_general_ci and utf8_unicode_ci</li>
+<li>*主要从排序准确性和性能两方面看**：<br> <strong>准确性</strong><br> utf8mb4_unicode_ci 是基于标准的Unicode来排序和比较，能够在各种语言之间精确排序<br> utf8mb4_general_ci 没有实现Unicode排序规则，在遇到某些特殊语言或字符是，排序结果可能不是所期望的。<br> 但是在绝大多数情况下，这种特殊字符的顺序一定要那么精确吗。比如Unicode把 ? 、 ? 当成 ss 和 OE 来看；而general会把它们当成 s 、 e ，再如 àá??ā? 各自都与 A 相等。<br> <strong>性能</strong><br> utf8mb4_general_ci 在比较和排序的时候更快<br> utf8mb4_unicode_ci 在特殊情况下，Unicode排序规则为了能够处理特殊字符的情况，实现了略微复杂的排序算法。<br> 但是在绝大多数情况下，不会发生此类复杂比较。general理论上比Unicode可能快些，但相比现在的CPU来说，它远远不足以成为考虑性能的因素，索引涉及、SQL设计才是。 我个人推荐是 utf8mb4_unicode_ci ，将来 8.0 里也极有可能使用变为默认的规则。</li>
+</ul>
+<ul>
+<li>max_allowed_packet设置问题<ul>
+<li>报错信息<font color=red>packet for query is too large (5,352,304 &gt; 4,194,304)</font></li>
+<li>原因分析：<strong>mysql根据配置文件会限制server接受的数据包大小。</strong>有时候大的插入和更新会受max_allowed_packet参数限制，导致写入或者更新失败，导致项目访问异常。</li>
+<li>解决问题<ul>
+<li>show VARIABLES like ‘%max_allowed_packet%’;<ul>
+<li>查看max_allowed_packet最大允许包</li>
+</ul>
+</li>
+<li>方案1：临时修改，*<em>set global max_allowed_packet = 2</em>1024<em>1024</em>10; **（注意，这里的大小只能填写字节。重启mysql服务后，配置将会失效！）然后关闭掉这此mysql server链接，再进入查看。</li>
+<li>方案2:修改my.ini文件在[mysqld]部分加入 max_allowed_packet=大小，这里的大小可以写M<ul>
+<li>mysql –help|grep my.cnf</li>
+</ul>
+</li>
+<li>方案3：</li>
+<li><strong>官网给出的解决办法是加启动参数，找到mysql的启动脚本，把启动参数贴上</strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li></li>
+</ul>
 ]]></content>
       <categories>
         <category>数据库</category>
       </categories>
       <tags>
         <tag>数据库</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>project_logcollect</title>
+    <url>/2021/07/04/project-logcollect/</url>
+    <content><![CDATA[<h1 id="电商采集项目搭建流程"><a href="#电商采集项目搭建流程" class="headerlink" title="电商采集项目搭建流程"></a>电商采集项目搭建流程</h1><h2 id="自动生成数据脚本"><a href="#自动生成数据脚本" class="headerlink" title="自动生成数据脚本"></a>自动生成数据脚本</h2><ul>
+<li>生成用于测试的数据</li>
+</ul>
+<h2 id="数据采集模块"><a href="#数据采集模块" class="headerlink" title="数据采集模块"></a>数据采集模块</h2><h3 id="Hadoop安装"><a href="#Hadoop安装" class="headerlink" title="Hadoop安装"></a>Hadoop安装</h3><ul>
+<li><p>在这里只说以下大致步骤以及容易出错的地方</p>
+</li>
+<li><p>配置集群之间分发数据的脚本，以及集群之间ssh免密登录</p>
+</li>
+<li><p>hadoop安装，解压就行，注意解压的目录。</p>
+</li>
+<li><p>核心文件配置：</p>
+<ul>
+<li><font color=red>core-site.xml</font>文件配置</li>
+<li><font color=red>hdfs-site.xml</font>文件配置，因为是测试，在这里设置HDFS副本数量为1，防止存储不够，浪费存储。</li>
+<li><font color=red>yran-site.xml</font>文件配置</li>
+<li><font color=red>mapred-site.xml</font>文件</li>
+<li>workers文件配置，注意不用多打空格等输入错误，里面配置hadoop的datanode节点的主机名。</li>
+</ul>
+</li>
+<li><p>第一次启动注意要先格式化namenode。bin/hdfs namenode -format</p>
+</li>
+<li><p>常见web客户端：</p>
+<ul>
+<li>hadoop100:9870。HDFS的Web界面</li>
+<li>yarn的web界面：hadoop101:8088</li>
+<li>历史服务器hadoop102:19888</li>
+</ul>
+</li>
+<li><p>单点启动关闭命令</p>
+<figure class="highlight crmsh"><table><tr><td class="code"><pre><code class="hljs crmsh"><span class="hljs-comment">#HDFS组件</span><br>hdfs --daemon <span class="hljs-literal">start</span>/<span class="hljs-literal">stop</span> namenode/datanode/secondarynamenode<br><span class="hljs-comment">#Yarn</span><br>yarn --daemon <span class="hljs-literal">start</span>/<span class="hljs-literal">stop</span>  resourcemanager/nodemanager<br><span class="hljs-comment">#历史服务器</span><br>mapred --daemon <span class="hljs-literal">start</span> historyserver<br></code></pre></td></tr></table></figure></li>
+<li><p>配置历史服务器</p>
+</li>
+<li><p>配置日志的聚集</p>
+</li>
+<li><p>集群时间同步</p>
+</li>
+<li><p>配置一下压缩</p>
+</li>
+<li><p>可以测试一下集群基础性能</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><code class="hljs awk"><br>读写性能测试<br><span class="hljs-comment">#读取HDFS集群的10个128M文件</span><br>hadoop jar <span class="hljs-regexp">/opt/m</span>odule<span class="hljs-regexp">/hadoop-3.1.3/</span>share<span class="hljs-regexp">/hadoop/m</span>apreduce/hadoop-mapreduce-client-jobclient-<span class="hljs-number">3.1</span>.<span class="hljs-number">3</span>-tests.jar TestDFSIO -read -nrFiles <span class="hljs-number">10</span> -fileSize <span class="hljs-number">128</span>MB<br><span class="hljs-comment">#删除测试数据</span><br>hadoop jar <span class="hljs-regexp">/opt/m</span>odule<span class="hljs-regexp">/hadoop-3.1.3/</span>share<span class="hljs-regexp">/hadoop/m</span>apreduce/hadoop-mapreduce-client-jobclient-<span class="hljs-number">3.1</span>.<span class="hljs-number">3</span>-tests.jar TestDFSIO -clean<br><br>运算速度测试<br><span class="hljs-comment">#使用RandomWriter来产生随机数，每个节点运行10个Map任务，每个Map产生大约1G大小的二进制随机数</span><br>hadoop jar <span class="hljs-regexp">/opt/m</span>odule<span class="hljs-regexp">/hadoop-3.1.3/</span>share<span class="hljs-regexp">/hadoop/m</span>apreduce/hadoop-mapreduce-examples-<span class="hljs-number">3.1</span>.<span class="hljs-number">3</span>.jar randomwriter random-data<br><span class="hljs-comment">#执行排序程序</span><br>hadoop jar <span class="hljs-regexp">/opt/m</span>odule<span class="hljs-regexp">/hadoop-3.1.3/</span>share<span class="hljs-regexp">/hadoop/m</span>apreduce/hadoop-mapreduce-examples-<span class="hljs-number">3.1</span>.<span class="hljs-number">3</span>.jar sort random-data sorted-data<br><span class="hljs-comment">#验证数据是否排序成功</span><br>hadoop jar <span class="hljs-regexp">/opt/m</span>odule<span class="hljs-regexp">/hadoop-3.1.3/</span>share<span class="hljs-regexp">/hadoop/m</span>apreduce/hadoop-mapreduce-client-jobclient-<span class="hljs-number">3.1</span>.<span class="hljs-number">3</span>-tests.jar testmapredsort -sortInput random-data -sortOutput sorted-data<br></code></pre></td></tr></table></figure></li>
+</ul>
+<p><a href="https://imgtu.com/i/RWzQ8f"><img src="https://z3.ax1x.com/2021/07/04/RWzQ8f.png" alt="RWzQ8f.png"></a></p>
+<h3 id="ZooKeeper安装"><a href="#ZooKeeper安装" class="headerlink" title="ZooKeeper安装"></a>ZooKeeper安装</h3><ul>
+<li><p>在/zookeeper-3.5.7/这个目录下创建zkData</p>
+</li>
+<li><p>在/zookeeper-3.5.7/zkData目录下创建一个myid的文件，myid唯一。</p>
+</li>
+<li><p>重命名/zookeeper-3.5.7/conf这个目录下的zoo_sample.cfg为zoo.cfg</p>
+</li>
+<li><p>修改数据存储路径：dataDir=/opt/module/zookeeper-3.5.7/zkData</p>
+</li>
+<li><p>cluster下增加集群配置</p>
+</li>
+</ul>
+<h3 id="Kafka"><a href="#Kafka" class="headerlink" title="Kafka"></a>Kafka</h3><ul>
+<li><p>Kafka遇到的坑：– Error while fetching metadata with correlation id : {LEADER_NOT_AVAILABLE}</p>
+<ul>
+<li><p>原因：无法识别Kafka hostname</p>
+</li>
+<li><p>解决：修改kafka/config/server.properties配置</p>
+</li>
+<li><p>配置llisteners=PLAINTEXT://hadoop100:9092</p>
+</li>
+<li><p> 配置advertised.listeners=PLAINTEXT://hadoop100:9092</p>
+</li>
+</ul>
+</li>
+<li><p>Kafka压力测试</p>
+</li>
+</ul>
+<h3 id="项目基础架构"><a href="#项目基础架构" class="headerlink" title="项目基础架构"></a>项目基础架构</h3><ul>
+<li><a href="https://imgtu.com/i/W5gHcF"><img src="https://z3.ax1x.com/2021/07/27/W5gHcF.png" alt="W5gHcF.png"></a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>项目</category>
+        <category>电商数据采集项目</category>
+      </categories>
+      <tags>
+        <tag>大数据</tag>
+        <tag>电商采集项目</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>project</title>
+    <url>/2021/09/29/project/</url>
+    <content><![CDATA[<h1 id="项目总结"><a href="#项目总结" class="headerlink" title="项目总结"></a>项目总结</h1><h2 id="数据采集项目"><a href="#数据采集项目" class="headerlink" title="数据采集项目"></a>数据采集项目</h2><ul>
+<li>项目框架版本：<ul>
+<li>hadoop 3.1.3<ul>
+<li>Hadoop本身不支持LZO压缩，需要下载并重新编译hadoop-lzo</li>
+<li>在core-site.xml增加配置支持LZO压缩</li>
+<li>创建LZO索引，LZO压缩文件可切片的特性依赖于其索引</li>
+</ul>
+</li>
+<li>flume 1.9</li>
+<li>kafka 2.41</li>
+<li>Zookeeper 3.5.7</li>
+<li>hive 3.1.2</li>
+<li>spark 2.1.1</li>
+</ul>
+</li>
+<li>项目架构<ul>
+<li><a href="https://imgtu.com/i/4fmBm8"><img src="https://z3.ax1x.com/2021/09/28/4fmBm8.png" alt="4fmBm8.png"></a></li>
+</ul>
+</li>
+</ul>
+<h3 id="日志数据采集平台"><a href="#日志数据采集平台" class="headerlink" title="日志数据采集平台"></a>日志数据采集平台</h3><ul>
+<li><p>埋点用户行为数据的形式：</p>
+<ul>
+<li>存储在文件中</li>
+<li>分为启动日志数据（启动日志=公共字段+启动事件数据）和事件日志数据</li>
+</ul>
+</li>
+<li><p>埋点用户行为数据：（数据流动路径）</p>
+<ul>
+<li><p>生产flume数据流向</p>
+</li>
+<li><p><img src="file:///C:\Users\Hasee\AppData\Local\Temp\ksohtml\wps747A.tmp.jpg" alt="img"></p>
+</li>
+</ul>
+</li>
+<li><p>生产flume</p>
+<ul>
+<li><p>为什么用Kafka，基于磁盘，当数据峰值来临时可以消峰，暂时存储在Kafka中，防止太多数据涌入HDFS导致Hadoop 宕机。</p>
+</li>
+<li><p>采用TaiDirSource:支持断点续传，多目录。数据可能会重复，后续再处理</p>
+</li>
+<li><p>采用Kafka Channel：速度高于 MemoryChannel + KafkaSink</p>
+</li>
+<li><p>flume具体配置，flume配置文件一般命名成数据的走向形式，例如：file-flume-kafka.conf</p>
+</li>
+<li><p>flume 五步走：(具体配置查看官网的各个组件不同的案例)</p>
+<ul>
+<li>定义Source，Channel, Sink组件</li>
+<li>配置Source</li>
+<li>配置Channel</li>
+<li>配置Sink</li>
+<li>配置三者之间的关系</li>
+</ul>
+</li>
+<li><p>配置拦截器</p>
+<ul>
+<li><p>打包，然后放到flume/lib/目录下 </p>
+</li>
+<li><p>ETL拦截器</p>
+<ul>
+<li>过滤时间戳不合法和Json数据不完整的数据。</li>
+<li>实现Interceptor接口，重写initialize(),intercept()，close()方法，实现一个静态内部类，返回定义的拦截器对象。intercept()重载了两个，分别表示单event处理，多event处理（多event处理一般只需要在里面调用单event处理就行了）</li>
+<li>启动日志判断是否是以“{”开头“}”结尾</li>
+<li>判断事件日志的格式：<ul>
+<li>1.是否是时间戳+logs，</li>
+<li>2.时间戳是否是合法的时间戳：时间戳长度是否为13，NumberUtils.isDigits() :判断字符串中是否全为数字</li>
+<li>logs是否以“{” 开头，“}” 结尾</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>日志类型区分拦截器</p>
+<ul>
+<li>主要是为了给ChannelSelector配置mutiplexing根据event头，将启动日志和事件日志分开，进入不同的KafkaTopic。</li>
+<li>在intercept()方法中，getHeaders()，再根据body中的数据判断为启动日志还是事件日志，分别给头加上不同的标识，要与配置的flume 文件匹配。headers.put(“topic”,”topic_start”);headers.put(“topic”,”topic_event”);</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>生产flume配置</p>
+<figure class="highlight ini"><table><tr><td class="code"><pre><code class="hljs ini"><span class="hljs-attr">a1.sources</span>=r1<br><span class="hljs-attr">a1.channels</span>=c1 c2<br><br><span class="hljs-comment"># configure source</span><br><span class="hljs-attr">a1.sources.r1.type</span> = TAILDIR<br><span class="hljs-attr">a1.sources.r1.positionFile</span> = /opt/module/flume/test/log_position.json<br><span class="hljs-attr">a1.sources.r1.filegroups</span> = f1<br><span class="hljs-attr">a1.sources.r1.filegroups.f1</span> = /tmp/logs/app.+<br><span class="hljs-attr">a1.sources.r1.fileHeader</span> = <span class="hljs-literal">true</span><br><span class="hljs-attr">a1.sources.r1.channels</span> = c1 c2<br><br><span class="hljs-comment">#interceptor</span><br><span class="hljs-attr">a1.sources.r1.interceptors</span> =  i1 i2<br><span class="hljs-attr">a1.sources.r1.interceptors.i1.type</span> = com.zt.flume.interceptor.LogETLInterceptor<span class="hljs-variable">$Builder</span><br><span class="hljs-attr">a1.sources.r1.interceptors.i2.type</span> = com.zt.flume.interceptor.LogTypeInterceptor<span class="hljs-variable">$Builder</span><br><span class="hljs-comment">#配置多路复用，根据header的不同去往不同的channel</span><br><span class="hljs-attr">a1.sources.r1.selector.type</span> = multiplexing<br><span class="hljs-attr">a1.sources.r1.selector.header</span> = topic<br><span class="hljs-attr">a1.sources.r1.selector.mapping.topic_start</span> = c1<br><span class="hljs-attr">a1.sources.r1.selector.mapping.topic_event</span> = c2<br><br><span class="hljs-comment"># configure channel</span><br><span class="hljs-attr">a1.channels.c1.type</span> = org.apache.flume.channel.kafka.KafkaChannel<br><span class="hljs-attr">a1.channels.c1.kafka.bootstrap.servers</span> = hadoop100:<span class="hljs-number">9092</span>,hadoop101:<span class="hljs-number">9092</span>,hadoop102:<span class="hljs-number">9092</span><br><span class="hljs-attr">a1.channels.c1.kafka.topic</span> = topic_start<br><span class="hljs-comment">#配置parseAsFlumeEvent为false，不让header信息传到Kafka中去，只传输body中的数据</span><br><span class="hljs-attr">a1.channels.c1.parseAsFlumeEvent</span> = <span class="hljs-literal">false</span><br><span class="hljs-attr">a1.channels.c1.kafka.consumer.group.id</span> = flume-consumer<br><br><span class="hljs-attr">a1.channels.c2.type</span> = org.apache.flume.channel.kafka.KafkaChannel<br><span class="hljs-attr">a1.channels.c2.kafka.bootstrap.servers</span> = hadoop100:<span class="hljs-number">9092</span>,hadoop101:<span class="hljs-number">9092</span>,hadoop102:<span class="hljs-number">9092</span><br><span class="hljs-attr">a1.channels.c2.kafka.topic</span> = topic_event<br><span class="hljs-attr">a1.channels.c2.parseAsFlumeEvent</span> = <span class="hljs-literal">false</span><br><span class="hljs-attr">a1.channels.c2.kafka.consumer.group.id</span> = flume-consumer<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>–conf/-c:表示配置文件存储来conf/目录</li>
+<li>–name/-n:表示给agent起名为a1</li>
+<li>–conf-file/-f：flume本次读取的配置文件</li>
+<li>-Dflume.root.logger=INFO,console ：-D表示flume运行时动态修改flume.root.logger参数属性值，并将控制台日志打印级别设置为INFO级别。日志级别包括:log、info、warn、error。</li>
+<li>flume-ng agent –conf-file /opt/module/flume/conf/file-flume-kafka.conf –name a1 -Dflume.root.logger=INFO,LOGFILE</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>消费flume</p>
+<ul>
+<li><p><a href="https://imgtu.com/i/4fWyEq"><img src="https://z3.ax1x.com/2021/09/28/4fWyEq.png" alt="4fWyEq.png"></a></p>
+</li>
+<li><p>flume agent里面的组件更多的时候代表的是逻辑上的概念。比如两个KafkaChannel ,但是Kafka集群却可以有很多。</p>
+</li>
+<li><p>采用Kafka Source  FileChannel  HDFS Sink的方式传输数据</p>
+<figure class="highlight ini"><table><tr><td class="code"><pre><code class="hljs ini"><span class="hljs-comment">## 组件</span><br><span class="hljs-attr">a1.sources</span>=r1 r2<br><span class="hljs-attr">a1.channels</span>=c1 c2<br><span class="hljs-attr">a1.sinks</span>=k1 k2<br><br><span class="hljs-comment">## source1</span><br><span class="hljs-attr">a1.sources.r1.type</span> = org.apache.flume.source.kafka.KafkaSource<br><span class="hljs-comment">#一次传出event的条数</span><br><span class="hljs-attr">a1.sources.r1.batchSize</span> = <span class="hljs-number">5000</span><br><span class="hljs-attr">a1.sources.r1.batchDurationMillis</span> = <span class="hljs-number">2000</span><br><span class="hljs-attr">a1.sources.r1.kafka.bootstrap.servers</span> = hadoop100:<span class="hljs-number">9092</span>,hadoop101:<span class="hljs-number">9092</span>,hadoop102:<span class="hljs-number">9092</span><br><span class="hljs-attr">a1.sources.r1.kafka.topics</span>=topic_start<br><br><span class="hljs-comment">## source2</span><br><span class="hljs-attr">a1.sources.r2.type</span> = org.apache.flume.source.kafka.KafkaSource<br><span class="hljs-attr">a1.sources.r2.batchSize</span> = <span class="hljs-number">5000</span><br><span class="hljs-attr">a1.sources.r2.batchDurationMillis</span> = <span class="hljs-number">2000</span><br><span class="hljs-attr">a1.sources.r2.kafka.bootstrap.servers</span> = hadoop100:<span class="hljs-number">9092</span>,hadoop101:<span class="hljs-number">9092</span>,hadoop102:<span class="hljs-number">9092</span><br><span class="hljs-attr">a1.sources.r2.kafka.topics</span>=topic_event<br><br><span class="hljs-comment">## channel1</span><br><span class="hljs-attr">a1.channels.c1.type</span> = file<br><span class="hljs-attr">a1.channels.c1.checkpointDir</span> = /opt/module/flume/checkpoint/behavior1<br><span class="hljs-attr">a1.channels.c1.dataDirs</span> = /opt/module/flume/data/behavior1/<br><span class="hljs-attr">a1.channels.c1.maxFileSize</span> = <span class="hljs-number">2146435071</span><br><span class="hljs-attr">a1.channels.c1.capacity</span> = <span class="hljs-number">1000000</span><br><span class="hljs-attr">a1.channels.c1.keep-alive</span> = <span class="hljs-number">6</span><br><br><span class="hljs-comment">## channel2</span><br><span class="hljs-attr">a1.channels.c2.type</span> = file<br><span class="hljs-attr">a1.channels.c2.checkpointDir</span> = /opt/module/flume/checkpoint/behavior2<br><span class="hljs-attr">a1.channels.c2.dataDirs</span> = /opt/module/flume/data/behavior2/<br><span class="hljs-attr">a1.channels.c2.maxFileSize</span> = <span class="hljs-number">2146435071</span><br><span class="hljs-attr">a1.channels.c2.capacity</span> = <span class="hljs-number">1000000</span><br><span class="hljs-attr">a1.channels.c2.keep-alive</span> = <span class="hljs-number">6</span><br><br><span class="hljs-comment">## sink1</span><br><span class="hljs-attr">a1.sinks.k1.type</span> = hdfs<br><span class="hljs-attr">a1.sinks.k1.hdfs.path</span> = /origin_data/gmall/log/topic_start/%Y-%m-%d<br><span class="hljs-attr">a1.sinks.k1.hdfs.filePrefix</span> = logstart-<br><br><span class="hljs-comment">##sink2</span><br><span class="hljs-attr">a1.sinks.k2.type</span> = hdfs<br><span class="hljs-attr">a1.sinks.k2.hdfs.path</span> = /origin_data/gmall/log/topic_event/%Y-%m-%d<br><span class="hljs-attr">a1.sinks.k2.hdfs.filePrefix</span> = logevent-<br><br><span class="hljs-comment">## 不要产生大量小文件</span><br><span class="hljs-attr">a1.sinks.k1.hdfs.rollInterval</span> = <span class="hljs-number">10</span><br><span class="hljs-attr">a1.sinks.k1.hdfs.rollSize</span> = <span class="hljs-number">134217728</span><br><span class="hljs-attr">a1.sinks.k1.hdfs.rollCount</span> = <span class="hljs-number">0</span><br><br><span class="hljs-attr">a1.sinks.k2.hdfs.rollInterval</span> = <span class="hljs-number">10</span><br><span class="hljs-attr">a1.sinks.k2.hdfs.rollSize</span> = <span class="hljs-number">134217728</span><br><span class="hljs-attr">a1.sinks.k2.hdfs.rollCount</span> = <span class="hljs-number">0</span><br><br><span class="hljs-comment">## 控制输出文件是原生文件。</span><br><span class="hljs-attr">a1.sinks.k1.hdfs.fileType</span> = CompressedStream <br><span class="hljs-attr">a1.sinks.k2.hdfs.fileType</span> = CompressedStream <br><br><span class="hljs-attr">a1.sinks.k1.hdfs.codeC</span> = lzop<br><span class="hljs-attr">a1.sinks.k2.hdfs.codeC</span> = lzop<br><br><span class="hljs-comment">## 三者之间的关系</span><br><span class="hljs-attr">a1.sources.r1.channels</span> = c1<br><span class="hljs-attr">a1.sinks.k1.channel</span>= c1<br><br><span class="hljs-attr">a1.sources.r2.channels</span> = c2<br><span class="hljs-attr">a1.sinks.k2.channel</span>= c2<br></code></pre></td></tr></table></figure></li>
+<li><p>HDFS Sink产生小文件问题 </p>
+<ul>
+<li><p>a1.sinks.k1.hdfs.rollInterval = 10  多久生产一个新文件10s</p>
+<p>a1.sinks.k1.hdfs.rollSize = 134217728  设置每个文件的滚动大小128M</p>
+<p>a1.sinks.k1.hdfs.rollCount = 0    文件的滚动与Event数量无关  never roll based on number of events)</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="业务数据采集平台"><a href="#业务数据采集平台" class="headerlink" title="业务数据采集平台"></a>业务数据采集平台</h3><ul>
+<li>电商常识<ul>
+<li>SKU（库存量基本单位），每种产品均对应有唯一的SKU号</li>
+<li>SPU（商品信息聚合的最小单位）</li>
+<li>iPhoneX手机就是SPU。一台银色、128G内存的、支持联通网络的iPhoneX，就是SKU。</li>
+</ul>
+</li>
+<li>电商业务表结构<ul>
+<li><a href="https://imgtu.com/i/4hPENt"><img src="https://z3.ax1x.com/2021/09/28/4hPENt.png" alt="4hPENt.png"></a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>同步策略</p>
+<ul>
+<li>数据同步策略类型包括：全量同步策略，增量同步策略，新增及变化同步策略，特殊同步策略</li>
+<li>全量表：存储完整的数据<ul>
+<li>每日全量，就是每天存储一份完整数据，作为一个分区</li>
+<li>适用于表数据量不大，且每天会有新数据插入，也会有旧数据修改的场景</li>
+</ul>
+</li>
+<li>增量表：存储新增加的数据<ul>
+<li>每日增量，就是每天存储一份增量数据，作为一个分区</li>
+<li>适用于表数据量大，且每天只会有新数据插入的场景</li>
+</ul>
+</li>
+<li>新增及变化表：存储新增加的数据和变化的数据<ul>
+<li>每日新增及变化，就是存储创建时间和操作时间都是今天的数据。</li>
+<li>适用场景，表的数据量大，既会有新增，又会有变化</li>
+</ul>
+</li>
+<li>特殊表：只需要存储一次<ul>
+<li>某些特殊的维度表，可不必遵循上述同步策略</li>
+<li>客观世界维度：没有变化的客观世界维度（性别，地区，名族，政治成分，鞋子尺码）可以只存一份固定值。</li>
+<li>日期维度：日期维度可以一次性导入一年或若干年的数据</li>
+<li>地区维度：省份表，地区表</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>业务数据导入HDFS</p>
+<ul>
+<li><p>分析表同步策略</p>
+<p><a href="https://imgtu.com/i/4hiS5q"><img src="https://z3.ax1x.com/2021/09/28/4hiS5q.png" alt="4hiS5q.png"></a></p>
+<ul>
+<li>活动参与商品表没有放入ods层</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>根据不同的同步策略，编写脚本把数据导入到HDFS中去。采用sqoop将数据传入，采用LZO压缩</li>
+</ul>
+]]></content>
+      <categories>
+        <category>项目</category>
+      </categories>
+      <tags>
+        <tag>项目</tag>
       </tags>
   </entry>
   <entry>
@@ -8366,182 +8871,6 @@ end;
       <tags>
         <tag>大数据</tag>
         <tag>shell</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>project</title>
-    <url>/2021/09/29/project/</url>
-    <content><![CDATA[<h1 id="项目总结"><a href="#项目总结" class="headerlink" title="项目总结"></a>项目总结</h1><h2 id="数据采集项目"><a href="#数据采集项目" class="headerlink" title="数据采集项目"></a>数据采集项目</h2><ul>
-<li>项目框架版本：<ul>
-<li>hadoop 3.1.3<ul>
-<li>Hadoop本身不支持LZO压缩，需要下载并重新编译hadoop-lzo</li>
-<li>在core-site.xml增加配置支持LZO压缩</li>
-<li>创建LZO索引，LZO压缩文件可切片的特性依赖于其索引</li>
-</ul>
-</li>
-<li>flume 1.9</li>
-<li>kafka 2.41</li>
-<li>Zookeeper 3.5.7</li>
-<li>hive 3.1.2</li>
-<li>spark 2.1.1</li>
-</ul>
-</li>
-<li>项目架构<ul>
-<li><a href="https://imgtu.com/i/4fmBm8"><img src="https://z3.ax1x.com/2021/09/28/4fmBm8.png" alt="4fmBm8.png"></a></li>
-</ul>
-</li>
-</ul>
-<h3 id="日志数据采集平台"><a href="#日志数据采集平台" class="headerlink" title="日志数据采集平台"></a>日志数据采集平台</h3><ul>
-<li><p>埋点用户行为数据的形式：</p>
-<ul>
-<li>存储在文件中</li>
-<li>分为启动日志数据（启动日志=公共字段+启动事件数据）和事件日志数据</li>
-</ul>
-</li>
-<li><p>埋点用户行为数据：（数据流动路径）</p>
-<ul>
-<li><p>生产flume数据流向</p>
-</li>
-<li><p><img src="file:///C:\Users\Hasee\AppData\Local\Temp\ksohtml\wps747A.tmp.jpg" alt="img"></p>
-</li>
-</ul>
-</li>
-<li><p>生产flume</p>
-<ul>
-<li><p>为什么用Kafka，基于磁盘，当数据峰值来临时可以消峰，暂时存储在Kafka中，防止太多数据涌入HDFS导致Hadoop 宕机。</p>
-</li>
-<li><p>采用TaiDirSource:支持断点续传，多目录。数据可能会重复，后续再处理</p>
-</li>
-<li><p>采用Kafka Channel：速度高于 MemoryChannel + KafkaSink</p>
-</li>
-<li><p>flume具体配置，flume配置文件一般命名成数据的走向形式，例如：file-flume-kafka.conf</p>
-</li>
-<li><p>flume 五步走：(具体配置查看官网的各个组件不同的案例)</p>
-<ul>
-<li>定义Source，Channel, Sink组件</li>
-<li>配置Source</li>
-<li>配置Channel</li>
-<li>配置Sink</li>
-<li>配置三者之间的关系</li>
-</ul>
-</li>
-<li><p>配置拦截器</p>
-<ul>
-<li><p>打包，然后放到flume/lib/目录下 </p>
-</li>
-<li><p>ETL拦截器</p>
-<ul>
-<li>过滤时间戳不合法和Json数据不完整的数据。</li>
-<li>实现Interceptor接口，重写initialize(),intercept()，close()方法，实现一个静态内部类，返回定义的拦截器对象。intercept()重载了两个，分别表示单event处理，多event处理（多event处理一般只需要在里面调用单event处理就行了）</li>
-<li>启动日志判断是否是以“{”开头“}”结尾</li>
-<li>判断事件日志的格式：<ul>
-<li>1.是否是时间戳+logs，</li>
-<li>2.时间戳是否是合法的时间戳：时间戳长度是否为13，NumberUtils.isDigits() :判断字符串中是否全为数字</li>
-<li>logs是否以“{” 开头，“}” 结尾</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>日志类型区分拦截器</p>
-<ul>
-<li>主要是为了给ChannelSelector配置mutiplexing根据event头，将启动日志和事件日志分开，进入不同的KafkaTopic。</li>
-<li>在intercept()方法中，getHeaders()，再根据body中的数据判断为启动日志还是事件日志，分别给头加上不同的标识，要与配置的flume 文件匹配。headers.put(“topic”,”topic_start”);headers.put(“topic”,”topic_event”);</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>生产flume配置</p>
-<figure class="highlight ini"><table><tr><td class="code"><pre><code class="hljs ini"><span class="hljs-attr">a1.sources</span>=r1<br><span class="hljs-attr">a1.channels</span>=c1 c2<br><br><span class="hljs-comment"># configure source</span><br><span class="hljs-attr">a1.sources.r1.type</span> = TAILDIR<br><span class="hljs-attr">a1.sources.r1.positionFile</span> = /opt/module/flume/test/log_position.json<br><span class="hljs-attr">a1.sources.r1.filegroups</span> = f1<br><span class="hljs-attr">a1.sources.r1.filegroups.f1</span> = /tmp/logs/app.+<br><span class="hljs-attr">a1.sources.r1.fileHeader</span> = <span class="hljs-literal">true</span><br><span class="hljs-attr">a1.sources.r1.channels</span> = c1 c2<br><br><span class="hljs-comment">#interceptor</span><br><span class="hljs-attr">a1.sources.r1.interceptors</span> =  i1 i2<br><span class="hljs-attr">a1.sources.r1.interceptors.i1.type</span> = com.zt.flume.interceptor.LogETLInterceptor<span class="hljs-variable">$Builder</span><br><span class="hljs-attr">a1.sources.r1.interceptors.i2.type</span> = com.zt.flume.interceptor.LogTypeInterceptor<span class="hljs-variable">$Builder</span><br><span class="hljs-comment">#配置多路复用，根据header的不同去往不同的channel</span><br><span class="hljs-attr">a1.sources.r1.selector.type</span> = multiplexing<br><span class="hljs-attr">a1.sources.r1.selector.header</span> = topic<br><span class="hljs-attr">a1.sources.r1.selector.mapping.topic_start</span> = c1<br><span class="hljs-attr">a1.sources.r1.selector.mapping.topic_event</span> = c2<br><br><span class="hljs-comment"># configure channel</span><br><span class="hljs-attr">a1.channels.c1.type</span> = org.apache.flume.channel.kafka.KafkaChannel<br><span class="hljs-attr">a1.channels.c1.kafka.bootstrap.servers</span> = hadoop100:<span class="hljs-number">9092</span>,hadoop101:<span class="hljs-number">9092</span>,hadoop102:<span class="hljs-number">9092</span><br><span class="hljs-attr">a1.channels.c1.kafka.topic</span> = topic_start<br><span class="hljs-comment">#配置parseAsFlumeEvent为false，不让header信息传到Kafka中去，只传输body中的数据</span><br><span class="hljs-attr">a1.channels.c1.parseAsFlumeEvent</span> = <span class="hljs-literal">false</span><br><span class="hljs-attr">a1.channels.c1.kafka.consumer.group.id</span> = flume-consumer<br><br><span class="hljs-attr">a1.channels.c2.type</span> = org.apache.flume.channel.kafka.KafkaChannel<br><span class="hljs-attr">a1.channels.c2.kafka.bootstrap.servers</span> = hadoop100:<span class="hljs-number">9092</span>,hadoop101:<span class="hljs-number">9092</span>,hadoop102:<span class="hljs-number">9092</span><br><span class="hljs-attr">a1.channels.c2.kafka.topic</span> = topic_event<br><span class="hljs-attr">a1.channels.c2.parseAsFlumeEvent</span> = <span class="hljs-literal">false</span><br><span class="hljs-attr">a1.channels.c2.kafka.consumer.group.id</span> = flume-consumer<br></code></pre></td></tr></table></figure>
-
-<ul>
-<li>–conf/-c:表示配置文件存储来conf/目录</li>
-<li>–name/-n:表示给agent起名为a1</li>
-<li>–conf-file/-f：flume本次读取的配置文件</li>
-<li>-Dflume.root.logger=INFO,console ：-D表示flume运行时动态修改flume.root.logger参数属性值，并将控制台日志打印级别设置为INFO级别。日志级别包括:log、info、warn、error。</li>
-<li>flume-ng agent –conf-file /opt/module/flume/conf/file-flume-kafka.conf –name a1 -Dflume.root.logger=INFO,LOGFILE</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>消费flume</p>
-<ul>
-<li><p><a href="https://imgtu.com/i/4fWyEq"><img src="https://z3.ax1x.com/2021/09/28/4fWyEq.png" alt="4fWyEq.png"></a></p>
-</li>
-<li><p>flume agent里面的组件更多的时候代表的是逻辑上的概念。比如两个KafkaChannel ,但是Kafka集群却可以有很多。</p>
-</li>
-<li><p>采用Kafka Source  FileChannel  HDFS Sink的方式传输数据</p>
-<figure class="highlight ini"><table><tr><td class="code"><pre><code class="hljs ini"><span class="hljs-comment">## 组件</span><br><span class="hljs-attr">a1.sources</span>=r1 r2<br><span class="hljs-attr">a1.channels</span>=c1 c2<br><span class="hljs-attr">a1.sinks</span>=k1 k2<br><br><span class="hljs-comment">## source1</span><br><span class="hljs-attr">a1.sources.r1.type</span> = org.apache.flume.source.kafka.KafkaSource<br><span class="hljs-comment">#一次传出event的条数</span><br><span class="hljs-attr">a1.sources.r1.batchSize</span> = <span class="hljs-number">5000</span><br><span class="hljs-attr">a1.sources.r1.batchDurationMillis</span> = <span class="hljs-number">2000</span><br><span class="hljs-attr">a1.sources.r1.kafka.bootstrap.servers</span> = hadoop100:<span class="hljs-number">9092</span>,hadoop101:<span class="hljs-number">9092</span>,hadoop102:<span class="hljs-number">9092</span><br><span class="hljs-attr">a1.sources.r1.kafka.topics</span>=topic_start<br><br><span class="hljs-comment">## source2</span><br><span class="hljs-attr">a1.sources.r2.type</span> = org.apache.flume.source.kafka.KafkaSource<br><span class="hljs-attr">a1.sources.r2.batchSize</span> = <span class="hljs-number">5000</span><br><span class="hljs-attr">a1.sources.r2.batchDurationMillis</span> = <span class="hljs-number">2000</span><br><span class="hljs-attr">a1.sources.r2.kafka.bootstrap.servers</span> = hadoop100:<span class="hljs-number">9092</span>,hadoop101:<span class="hljs-number">9092</span>,hadoop102:<span class="hljs-number">9092</span><br><span class="hljs-attr">a1.sources.r2.kafka.topics</span>=topic_event<br><br><span class="hljs-comment">## channel1</span><br><span class="hljs-attr">a1.channels.c1.type</span> = file<br><span class="hljs-attr">a1.channels.c1.checkpointDir</span> = /opt/module/flume/checkpoint/behavior1<br><span class="hljs-attr">a1.channels.c1.dataDirs</span> = /opt/module/flume/data/behavior1/<br><span class="hljs-attr">a1.channels.c1.maxFileSize</span> = <span class="hljs-number">2146435071</span><br><span class="hljs-attr">a1.channels.c1.capacity</span> = <span class="hljs-number">1000000</span><br><span class="hljs-attr">a1.channels.c1.keep-alive</span> = <span class="hljs-number">6</span><br><br><span class="hljs-comment">## channel2</span><br><span class="hljs-attr">a1.channels.c2.type</span> = file<br><span class="hljs-attr">a1.channels.c2.checkpointDir</span> = /opt/module/flume/checkpoint/behavior2<br><span class="hljs-attr">a1.channels.c2.dataDirs</span> = /opt/module/flume/data/behavior2/<br><span class="hljs-attr">a1.channels.c2.maxFileSize</span> = <span class="hljs-number">2146435071</span><br><span class="hljs-attr">a1.channels.c2.capacity</span> = <span class="hljs-number">1000000</span><br><span class="hljs-attr">a1.channels.c2.keep-alive</span> = <span class="hljs-number">6</span><br><br><span class="hljs-comment">## sink1</span><br><span class="hljs-attr">a1.sinks.k1.type</span> = hdfs<br><span class="hljs-attr">a1.sinks.k1.hdfs.path</span> = /origin_data/gmall/log/topic_start/%Y-%m-%d<br><span class="hljs-attr">a1.sinks.k1.hdfs.filePrefix</span> = logstart-<br><br><span class="hljs-comment">##sink2</span><br><span class="hljs-attr">a1.sinks.k2.type</span> = hdfs<br><span class="hljs-attr">a1.sinks.k2.hdfs.path</span> = /origin_data/gmall/log/topic_event/%Y-%m-%d<br><span class="hljs-attr">a1.sinks.k2.hdfs.filePrefix</span> = logevent-<br><br><span class="hljs-comment">## 不要产生大量小文件</span><br><span class="hljs-attr">a1.sinks.k1.hdfs.rollInterval</span> = <span class="hljs-number">10</span><br><span class="hljs-attr">a1.sinks.k1.hdfs.rollSize</span> = <span class="hljs-number">134217728</span><br><span class="hljs-attr">a1.sinks.k1.hdfs.rollCount</span> = <span class="hljs-number">0</span><br><br><span class="hljs-attr">a1.sinks.k2.hdfs.rollInterval</span> = <span class="hljs-number">10</span><br><span class="hljs-attr">a1.sinks.k2.hdfs.rollSize</span> = <span class="hljs-number">134217728</span><br><span class="hljs-attr">a1.sinks.k2.hdfs.rollCount</span> = <span class="hljs-number">0</span><br><br><span class="hljs-comment">## 控制输出文件是原生文件。</span><br><span class="hljs-attr">a1.sinks.k1.hdfs.fileType</span> = CompressedStream <br><span class="hljs-attr">a1.sinks.k2.hdfs.fileType</span> = CompressedStream <br><br><span class="hljs-attr">a1.sinks.k1.hdfs.codeC</span> = lzop<br><span class="hljs-attr">a1.sinks.k2.hdfs.codeC</span> = lzop<br><br><span class="hljs-comment">## 三者之间的关系</span><br><span class="hljs-attr">a1.sources.r1.channels</span> = c1<br><span class="hljs-attr">a1.sinks.k1.channel</span>= c1<br><br><span class="hljs-attr">a1.sources.r2.channels</span> = c2<br><span class="hljs-attr">a1.sinks.k2.channel</span>= c2<br></code></pre></td></tr></table></figure></li>
-<li><p>HDFS Sink产生小文件问题 </p>
-<ul>
-<li><p>a1.sinks.k1.hdfs.rollInterval = 10  多久生产一个新文件10s</p>
-<p>a1.sinks.k1.hdfs.rollSize = 134217728  设置每个文件的滚动大小128M</p>
-<p>a1.sinks.k1.hdfs.rollCount = 0    文件的滚动与Event数量无关  never roll based on number of events)</p>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="业务数据采集平台"><a href="#业务数据采集平台" class="headerlink" title="业务数据采集平台"></a>业务数据采集平台</h3><ul>
-<li>电商常识<ul>
-<li>SKU（库存量基本单位），每种产品均对应有唯一的SKU号</li>
-<li>SPU（商品信息聚合的最小单位）</li>
-<li>iPhoneX手机就是SPU。一台银色、128G内存的、支持联通网络的iPhoneX，就是SKU。</li>
-</ul>
-</li>
-<li>电商业务表结构<ul>
-<li><a href="https://imgtu.com/i/4hPENt"><img src="https://z3.ax1x.com/2021/09/28/4hPENt.png" alt="4hPENt.png"></a></li>
-</ul>
-</li>
-</ul>
-<ul>
-<li><p>同步策略</p>
-<ul>
-<li>数据同步策略类型包括：全量同步策略，增量同步策略，新增及变化同步策略，特殊同步策略</li>
-<li>全量表：存储完整的数据<ul>
-<li>每日全量，就是每天存储一份完整数据，作为一个分区</li>
-<li>适用于表数据量不大，且每天会有新数据插入，也会有旧数据修改的场景</li>
-</ul>
-</li>
-<li>增量表：存储新增加的数据<ul>
-<li>每日增量，就是每天存储一份增量数据，作为一个分区</li>
-<li>适用于表数据量大，且每天只会有新数据插入的场景</li>
-</ul>
-</li>
-<li>新增及变化表：存储新增加的数据和变化的数据<ul>
-<li>每日新增及变化，就是存储创建时间和操作时间都是今天的数据。</li>
-<li>适用场景，表的数据量大，既会有新增，又会有变化</li>
-</ul>
-</li>
-<li>特殊表：只需要存储一次<ul>
-<li>某些特殊的维度表，可不必遵循上述同步策略</li>
-<li>客观世界维度：没有变化的客观世界维度（性别，地区，名族，政治成分，鞋子尺码）可以只存一份固定值。</li>
-<li>日期维度：日期维度可以一次性导入一年或若干年的数据</li>
-<li>地区维度：省份表，地区表</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>业务数据导入HDFS</p>
-<ul>
-<li><p>分析表同步策略</p>
-<p><a href="https://imgtu.com/i/4hiS5q"><img src="https://z3.ax1x.com/2021/09/28/4hiS5q.png" alt="4hiS5q.png"></a></p>
-<ul>
-<li>活动参与商品表没有放入ods层</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<ul>
-<li>根据不同的同步策略，编写脚本把数据导入到HDFS中去。采用sqoop将数据传入，采用LZO压缩</li>
-</ul>
-]]></content>
-      <categories>
-        <category>项目</category>
-      </categories>
-      <tags>
-        <tag>项目</tag>
       </tags>
   </entry>
   <entry>

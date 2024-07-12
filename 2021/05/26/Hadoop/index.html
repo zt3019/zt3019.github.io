@@ -197,7 +197,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      89
+      90
        分钟
     </span>
   
@@ -231,7 +231,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2023年11月16日 下午
+                  本文最后更新于：2024年6月4日 中午
                 
               </p>
             
@@ -392,7 +392,9 @@ copyToLocal#与get完全一样
 <li><p>HDFS架构-联邦架构</p>
 <ul>
 <li><img src="C:\Users\Hasee\AppData\Roaming\Typora\typora-user-images\image-20211220153640114.png" srcset="/img/loading.gif" lazyload alt="image-20211220153640114"></li>
-<li>解决namenode的压力过大的问题。</li>
+<li>解决单个namenode的压力过大的问题。</li>
+<li>扩展namenode，每个NN共用一个集群里的存储资源，每个NameNode都可以单独对外提供服务。</li>
+<li>集群规模特别大时，可采用HA(高可用)+Federation(联邦)的部署方案</li>
 </ul>
 </li>
 </ul>
@@ -429,7 +431,7 @@ copyToLocal#与get完全一样
 <li><p>Driver(本地集群模式)</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.zt3019.wordcount;<br><br><span class="hljs-keyword">import</span> org.apache.hadoop.conf.Configuration;<br><span class="hljs-keyword">import</span> org.apache.hadoop.fs.Path;<br><span class="hljs-keyword">import</span> org.apache.hadoop.io.IntWritable;<br><span class="hljs-keyword">import</span> org.apache.hadoop.io.Text;<br><span class="hljs-keyword">import</span> org.apache.hadoop.mapreduce.Job;<br><span class="hljs-keyword">import</span> org.apache.hadoop.mapreduce.lib.input.FileInputFormat;<br><span class="hljs-keyword">import</span> org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;<br><br><span class="hljs-keyword">import</span> java.io.IOException;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">WordCountDriver</span>&#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> IOException, ClassNotFoundException, InterruptedException &#123;<br>        <span class="hljs-type">Configuration</span> <span class="hljs-variable">configuration</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Configuration</span>();<br>        <span class="hljs-comment">//配置yarn集群运行</span><br>        <span class="hljs-comment">//core-site.xml配置文件</span><br>        configuration.set(<span class="hljs-string">&quot;fs.defaultFS&quot;</span>, <span class="hljs-string">&quot;hdfs://hadoop100:8020&quot;</span>);<br>        <span class="hljs-comment">//MapRedece-site.xml配置文件</span><br>        configuration.set(<span class="hljs-string">&quot;mapreduce.framework.name&quot;</span>,<span class="hljs-string">&quot;yarn&quot;</span>);<br>        <span class="hljs-comment">//是否允许向linux提交任务</span><br>        configuration.set(<span class="hljs-string">&quot;mapreduce.app-submission.cross-platform&quot;</span>,<span class="hljs-string">&quot;true&quot;</span>);<br>        configuration.set(<span class="hljs-string">&quot;yarn.resourcemanager.hostname&quot;</span>,<span class="hljs-string">&quot;hadoop102&quot;</span>);<br>        <span class="hljs-comment">//1.获取job实例</span><br>        Job job= Job.getInstance(configuration);<br>        <span class="hljs-comment">//2.设置jar包</span><br>        job.setJarByClass(WordCountDriver.class);<br>        <span class="hljs-comment">//3.设置Mapper和Reducer</span><br>        job.setMapperClass(WordCountMapper.class);<br>        job.setReducerClass(WordCountReducer.class);<br>        <span class="hljs-comment">//4.设置Map和Reduce的输出类型</span><br>        <span class="hljs-comment">//设置Map的输出类型</span><br>        job.setMapOutputKeyClass(Text.class);<br>        job.setMapOutputValueClass(IntWritable.class);<br>        <span class="hljs-comment">//设置Reduce的输出类型</span><br>        job.setOutputKeyClass(Text.class);<br>        job.setOutputValueClass(IntWritable.class);<br>        <span class="hljs-comment">//5.设置输入输出文件</span><br>        FileInputFormat.setInputPaths(job,<span class="hljs-keyword">new</span> <span class="hljs-title class_">Path</span>(args[<span class="hljs-number">0</span>]));<br>        FileOutputFormat.setOutputPath(job,<span class="hljs-keyword">new</span> <span class="hljs-title class_">Path</span>(args[<span class="hljs-number">1</span>]));<br>        <span class="hljs-comment">//6.提交job</span><br>        <span class="hljs-comment">//提交任务得到运行结果，成功或者失败</span><br>        <span class="hljs-comment">//提交流程都在这个方法中，一些job的配置都可以在上面设置。</span><br>        <span class="hljs-type">boolean</span> <span class="hljs-variable">b</span> <span class="hljs-operator">=</span> job.waitForCompletion(<span class="hljs-literal">true</span>);<br>        System.exit(b ? <span class="hljs-number">0</span>:<span class="hljs-number">1</span>);<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure></li>
 <li><p>提交到集群上运行，先maven打包，</p>
-<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs scss">yarn jar 包名 主类引用(reference) args<span class="hljs-selector-attr">[0]</span>(输入路径) args<span class="hljs-selector-attr">[1]</span>(s)<br></code></pre></td></tr></table></figure></li>
+<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs scss">yarn jar 包名 主类引用(reference) args<span class="hljs-selector-attr">[0]</span>(输入路径) args<span class="hljs-selector-attr">[1]</span>(输出路径)<br></code></pre></td></tr></table></figure></li>
 </ul>
 <h3 id="Hadoop压缩"><a href="#Hadoop压缩" class="headerlink" title="Hadoop压缩"></a>Hadoop压缩</h3><ul>
 <li><table>
