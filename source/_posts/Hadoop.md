@@ -185,7 +185,9 @@ public void testCopyFromLocalFile() throws IOException, InterruptedException, UR
 * HDFS架构-联邦架构
 
   - ![image-20211220153640114](C:\Users\Hasee\AppData\Roaming\Typora\typora-user-images\image-20211220153640114.png)
-  - 解决namenode的压力过大的问题。
+  - 解决单个namenode的压力过大的问题。
+  - 扩展namenode，每个NN共用一个集群里的存储资源，每个NameNode都可以单独对外提供服务。
+  - 集群规模特别大时，可采用HA(高可用)+Federation(联邦)的部署方案
 
 ## DataNode
 
@@ -355,7 +357,7 @@ public void testCopyFromLocalFile() throws IOException, InterruptedException, UR
 * 提交到集群上运行，先maven打包，
 
   ````
-  yarn jar 包名 主类引用(reference) args[0](输入路径) args[1](s)
+  yarn jar 包名 主类引用(reference) args[0](输入路径) args[1](输出路径)
   ````
 
 

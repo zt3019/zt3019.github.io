@@ -971,7 +971,7 @@ drop foreign key classes_ibfk_1;
 >   SELECT * FROM employees
 >   ORDER BY hire_date DESC      -- 倒序
 >   LIMIT 1 offset 2;       -- 去掉排名倒数第一第二的时间，取倒数第三;   
->     
+>         
 >   ````
 >
 >   
@@ -1355,3 +1355,35 @@ drop foreign key classes_ibfk_1;
 * 结论
   - **一条记录最大长度65535字节**是MySQL数据库Server层面的限制
 
+
+
+* utf8mb4编码集中：
+  - **utf8mb4_general_ci     不区分大小写** ci是case insensitive的意思
+  - utf8mb4_general_cs     区分大小写
+  - utf8mb4_bin:字符串每个字符串用二进制数据编译存储。 区分大小写，而且可以存二进制的内容
+*  utf8mb4_ unicode_ ci 与 utf8mb4_ general_ ci 如何选择
+  字符除了需要存储，还需要排序或比较大小，涉及到与编码字符集对应的 排序字符集（collation）。ut8mb4对应的排序字符集常用的有 utf8mb4_unicode_ci 、 utf8mb4_general_ci ，到底采用哪个在 stackoverflow 上有个讨论， What’s the difference between utf8_general_ci and utf8_unicode_ci
+  **主要从排序准确性和性能两方面看**：
+    **准确性**
+    utf8mb4_unicode_ci 是基于标准的Unicode来排序和比较，能够在各种语言之间精确排序
+    utf8mb4_general_ci 没有实现Unicode排序规则，在遇到某些特殊语言或字符是，排序结果可能不是所期望的。
+    但是在绝大多数情况下，这种特殊字符的顺序一定要那么精确吗。比如Unicode把 ? 、 ? 当成 ss 和 OE 来看；而general会把它们当成 s 、 e ，再如 àá??ā? 各自都与 A 相等。
+    **性能**
+    utf8mb4_general_ci 在比较和排序的时候更快
+    utf8mb4_unicode_ci 在特殊情况下，Unicode排序规则为了能够处理特殊字符的情况，实现了略微复杂的排序算法。
+    但是在绝大多数情况下，不会发生此类复杂比较。general理论上比Unicode可能快些，但相比现在的CPU来说，它远远不足以成为考虑性能的因素，索引涉及、SQL设计才是。 我个人推荐是 utf8mb4_unicode_ci ，将来 8.0 里也极有可能使用变为默认的规则。
+
+
+
+* max_allowed_packet设置问题
+  - 报错信息<font color=red>packet for query is too large (5,352,304 > 4,194,304)</font>
+  - 原因分析：**mysql根据配置文件会限制server接受的数据包大小。**有时候大的插入和更新会受max_allowed_packet参数限制，导致写入或者更新失败，导致项目访问异常。
+  - 解决问题
+    - show VARIABLES like '%max_allowed_packet%';
+      - 查看max_allowed_packet最大允许包
+    - 方案1：临时修改，**set global max_allowed_packet = 2*1024*1024*10; **（注意，这里的大小只能填写字节。重启mysql服务后，配置将会失效！）然后关闭掉这此mysql server链接，再进入查看。
+    - 方案2:修改my.ini文件在[mysqld]部分加入 max_allowed_packet=大小，这里的大小可以写M
+      - mysql --help|grep my.cnf
+    - 方案3：
+    - **官网给出的解决办法是加启动参数，找到mysql的启动脚本，把启动参数贴上**
+* 

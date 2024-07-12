@@ -40,3 +40,9 @@ banner_img: https://tse1-mm.cn.bing.net/th/id/OIP-C.ltWNx-qIm5gQLLrUxTu5HgHaEt?p
     - 第二位数字4：（1*10+4）%3=2
     - 第三位数字3：（2*10+3）%3=2
   - 最终的结果是最后一步计算得到的余数2.
+
+
+
+## KMP
+
+* 

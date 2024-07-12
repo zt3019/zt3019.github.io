@@ -14,7 +14,7 @@ banner_img: https://tse4-mm.cn.bing.net/th/id/OIP-C.WB-odJpxpYgl5OkJXUXU-gHaHa?r
 ## 基础介绍
 
 * 社区还是很活跃的，贴一下官方文档：[StarRocks官方文档](https://docs.starrocks.io/zh/docs/introduction/StarRocks_intro/)
-* 官方描述：StarRocks 是一款高性能分析型数据仓库，使用向量化、MPP 架构、CBO、智能物化视图、可实时更新的列式存储引擎等技术实现多维、实时、高并发的数据分析。StarRocks 既支持从各类实时和离线的数据源高效导入数据，也支持直接分析数据湖上各种格式的数据。StarRocks 兼容 MySQL 协议，可使用 MySQL 客户端和常用 BI 工具对接。同时 StarRocks 具备水平扩展，高可用、高可靠、易运维等特性。广泛应用于实时数仓、OLAP 报表、数据湖分析等场景。
+* 官方描述：StarRocks 是一款高性能分析型数据库，使用向量化、MPP 架构、CBO、智能物化视图、可实时更新的列式存储引擎等技术实现多维、实时、高并发的数据分析。StarRocks 既支持从各类实时和离线的数据源高效导入数据，也支持直接分析数据湖上各种格式的数据。StarRocks 兼容 MySQL 协议，可使用 MySQL 客户端和常用 BI 工具对接。同时 StarRocks 具备水平扩展，高可用、高可靠、易运维等特性。广泛应用于实时数仓、OLAP 报表、数据湖分析等场景。
 * StarRocks 是新一代极速全场景 MPP (Massively Parallel Processing) 数据库。StarRocks 的愿景是能够让用户的数据分析变得更加简单和敏捷。
 * StarRocks 架构简洁，采用了全面向量化引擎，并配备全新设计的 CBO (Cost Based Optimizer) 优化器，查询速度（尤其是多表关联查询）远超同类产品。
 
@@ -35,25 +35,28 @@ banner_img: https://tse4-mm.cn.bing.net/th/id/OIP-C.WB-odJpxpYgl5OkJXUXU-gHaHa?r
   - SaaS 行业面向用户分析报表
 * 统一分析：
   - 通过使用一套系统解决多维分析、高并发查询、预计算、实时分析查询等场景，降低系统复杂度和多技术栈开发与维护成本。
-  - 使用 StarRocks 统一管理数据湖和数据仓库，将高并发和实时性要求很高的业务放在 StarRocks 中分析，也可以使用 External Catalog 和外部表进行数据湖上的分析。
+  - **使用 StarRocks 统一管理数据湖和数据仓库，将高并发和实时性要求很高的业务放在 StarRocks 中分析，也可以使用 External Catalog 和外部表进行数据湖上的分析。**
 
 ### 系统架构
 
 * 架构简洁，核心只有FE(Frontend),BE(Backend)或CN(Compute Node)两类进程，方便部署维护，可水平扩展，有副本机制，确保系统无单点。SR支持Mysql协议接口，支持SQL标准语法。
-
 * [![pFJGuQg.png](https://s11.ax1x.com/2024/02/18/pFJGuQg.png)](https://imgse.com/i/pFJGuQg)
-
-* FE 节点负责元数据管理、客户端连接管理、查询计划和查询调度。每个 FE 在其内存中存储和维护完整的元数据副本，确保每个 FE 都能提供无差别的服务。
-
+* **FE 节点负责元数据管理、客户端连接管理、查询计划和查询调度。每个 FE 在其内存中存储和维护完整的元数据副本，确保每个 FE 都能提供无差别的服务。**
 * CN 节点在存算分离或存算一体集群中负责执行查询。
-
 * BE 节点在存算一体集群中负责数据存储和执行查询。
-
+  - **执行sql时，一条sql 语句首先会按照语义规划成逻辑单元，然后再按照数据的分布情况拆分成具体的物理执行单元。物理执行单元会在对应的BE节点上执行，实现本地计算，避免数据的传输与拷贝，加速查询**
 * 从存算一体(shared-nothing)进化到存算分离(shared-data)
   - 3.0 版本之前使用存算一体架构，BE 同时负责数据存储和计算，数据访问和分析都在本地进行，提供极速的查询分析体验。
   - 3.0 版本开始引入存算分离架构，数据存储功能从原来的 BE 中抽离，BE 节点升级为无状态的 CN 节点。数据可持久存储在远端对象存储或 HDFS 上，CN 本地磁盘只用于缓存热数据来加速查询。存算分离架构下支持动态增删计算节点，实现秒级的扩缩容能力。
   - 存算分离支持的存储系统：兼容 AWS S3 协议的对象存储系统；Azure Blob Storage；传统数据中心部署的 HDFS
-  
+
+#### 数据管理
+
+* SR采用列式存储，采用分区分桶机制进行数据管理。**一张表可以被划分成多个分区，一个分区内的数据可以根据一列或者多列进行分桶，将数据切分成多个Tablet。**tablet是SR中最小的数据管理单元，每个tablet都会以多副本的形式存储在不同的BE节点中。用户可以指定Tablet 的个数和大小，SR会管理好每个Tablet 副本的分布信息。（**Tablet实际就是数据分桶**）
+* 下面是StarRocks 的数据划分以及 Tablet 多副本机制。表按照日期划分为 4 个分区，第一个分区进一步切分成 4 个 Tablet。每个 Tablet 使用 3 副本进行备份，分布在 3 个不同的 BE 节点上。
+  - [![pk4ps8x.png](https://s21.ax1x.com/2024/07/12/pk4ps8x.png)](https://imgse.com/i/pk4ps8x)
+* 
+
 * 解释一下catlog的作用，以Flink Catalog为例：
 
   - Catalog 提供了一个统一的 API 来管理元数据，并使其可以从表 API 和 SQL 查询语句中来访问。
@@ -427,12 +430,12 @@ banner_img: https://tse4-mm.cn.bing.net/th/id/OIP-C.WB-odJpxpYgl5OkJXUXU-gHaHa?r
   - 均匀分布数据。**通过选取较高基数（唯一值的数量较多）的列作为分桶键，能更均匀的分布数据到每一个分桶中。**
 * 选择分桶键
   - 假设存在列同时满足高基数和经常作为查询条件，则建议您选择其为分桶键，进行哈希分桶。若不存在这样的列，根据查询进行判断
-    - 如果查询复杂，建议选择高基数的列为分桶键，保证数据在各个分桶中尽量均衡，提高资源利用率。
-    - 如果查询比较简单，则建议选择经常作为查询条件的列为分桶键，提高查询效率
+    - **如果查询复杂，建议选择高基数的列为分桶键，保证数据在各个分桶中尽量均衡，提高资源利用率。**
+    - **如果查询比较简单，则建议选择经常作为查询条件的列为分桶键，提高查询效率**
   - 如果数据倾斜很严重，可以选择多个列作为数据的分桶键，建议不超过三个列
 * 设置分桶数
   - 自 2.5.7 版本起，StarRocks 支持根据机器资源和数据量自动设置分区中分桶数量。
-  - 如果表单个分区原始数据规模预计**超过 100 GB**，建议您手动设置分区中分桶数量。
+  - 如果表单个分区原始数据规模预计**超过 100 GB**，建议您手动设置分区中分桶数量。如果需要**开启并行扫描 Tablet**，则您需要确保系统变量 `enable_tablet_internal_parallel` 全局生效 `SET GLOBAL enable_tablet_internal_parallel = true;`。**首先预估每个分区的数据量，然后按照每10GB原始数据一个Tablet计算，从而确定分桶数量**
 * 最佳实践
   - **数据倾斜：**如果业务场景中单独采用倾斜度大的列做分桶，很大程度会导致访问数据倾斜，那么建议采用多列组合的方式进行数据分桶。
   - **高并发：**分区和分桶应该尽量覆盖查询语句所带的条件，这样可以有效减少扫描数据，提高并发。
@@ -457,7 +460,7 @@ banner_img: https://tse4-mm.cn.bing.net/th/id/OIP-C.WB-odJpxpYgl5OkJXUXU-gHaHa?r
 
 * | 参数               | 是否必填 | 说明                                                         |
   | ------------------ | -------- | ------------------------------------------------------------ |
-  | `expression`       | 是       | 目前仅支持 [date_trunc](https://docs.starrocks.io/zh/docs/sql-reference/sql-functions/date-time-functions/date_trunc/) 和 [time_slice](https://docs.starrocks.io/zh/docs/sql-reference/sql-functions/date-time-functions/time_slice/) 函数。并且如果您使用 `time_slice` 函数，则可以不传入参数 `boundary`，因为在该场景中该参数默认且仅支持为 `floor`，不支持为 `ceil`。 |
+  | `expression`       | 是       | 目前仅支持 [date_trunc](https://docs.starrocks.io/zh/docs/3.1/sql-reference/sql-functions/date-time-functions/date_trunc/) 和 [time_slice](https://docs.starrocks.io/zh/docs/3.1/sql-reference/sql-functions/date-time-functions/time_slice/) 函数。并且如果您使用 `time_slice` 函数，则可以不传入参数 `boundary`，因为在该场景中该参数默认且仅支持为 `floor`，不支持为 `ceil`。 |
   | `time_unit`        | 是       | 分区粒度，目前仅支持为 `hour`、`day`、`month` 或 `year`，暂时不支持为 `week`。如果分区粒度为 `hour`，则仅支持分区列为 DATETIME 类型，不支持为 DATE 类型。 |
   | `partition_column` | 是       | 分区列。 仅支持为日期类型（DATE 或 DATETIME），不支持为其它类型。如果使用 `date_trunc` 函数，则分区列支持为 DATE 或 DATETIME 类型。如果使用 `time_slice` 函数，则分区列仅支持为 DATETIME 类型。分区列的值支持为 `NULL`。如果分区列是 DATE 类型，则范围支持为 [0000-01-01 ~ 9999-12-31]。如果分区列是 DATETIME 类型，则范围支持为 [0000-01-01 01:01:01 ~ 9999-12-31 23:59:59]。目前仅支持指定一个分区列，不支持指定多个分区列。 |
 
@@ -472,9 +475,15 @@ banner_img: https://tse4-mm.cn.bing.net/th/id/OIP-C.WB-odJpxpYgl5OkJXUXU-gHaHa?r
   DUPLICATE KEY(event_day, site_id, city_code, user_name)
   PARTITION BY date_trunc('day', event_day)
   DISTRIBUTED BY HASH(event_day, site_id);
+  
+  -- 分区生命周期管理，即仅保留最近一段时间的分区，删除历史分区，可以使用partition_live_number设置只保留最近多少数量的分区
   ````
+  
+* 在导入的过程中 StarRocks 根据导入数据已经自动创建了一些分区，但是由于某些原因导入作业最终失败，则在当前版本中，已经自动创建的分区并不会由于导入失败而自动删除。
 
-* 
+* StarRocks 自动创建分区数量上限默认为 4096，由 FE 配置参数 `max_automatic_partition_number` 决定。该参数可以防止您由于误操作而创建大量分区。
+
+* 分区命名规则：如果存在多个分区列，则不同分区列的值以下划线（_）连接。例如：存在有两个分区列 `dt` 和 `city`，均为字符串类型，导入一条数据 `2022-04-01`, `beijing`，则自动创建的分区名称为 `p20220401_beijing`。
 
 ##### 列表达式分区
 
@@ -491,10 +500,11 @@ banner_img: https://tse4-mm.cn.bing.net/th/id/OIP-C.WB-odJpxpYgl5OkJXUXU-gHaHa?r
   ````
 
 * 
-
-* | 参数                | 是否必填 | 参数                                                         |
-  | ------------------- | -------- | ------------------------------------------------------------ |
-  | `partition_columns` | 是       | 分区列。 支持为字符串（不支持 BINARY）、日期、整数和布尔值。不支持分区列的值为 `NULL`。导入后自动创建的一个分区中只能包含各分区列的一个值，如果需要包含各分区列的多值，请使用 [List 分区](https://docs.starrocks.io/zh/docs/table_design/list_partitioning/)。 |
+  
+* | 参数                    | 是否必填 | 参数                                                         |
+  | ----------------------- | -------- | ------------------------------------------------------------ |
+  | `partition_columns`     | 是       | 分区列。 支持为字符串（不支持 BINARY）、日期、整数和布尔值。不支持分区列的值为 `NULL`。导入后自动创建的一个分区中只能包含各分区列的一个值，如果需要包含各分区列的多值，请使用 [List 分区](https://docs.starrocks.io/zh/docs/3.1/table_design/list_partitioning/)。 |
+  | `partition_live_number` | 否       | 保留多少数量的分区。比较这些分区包含的值，定期删除值小的分区，保留值大的。后台会定时调度任务来管理分区数量，调度间隔可以通过 FE 动态参数 `dynamic_partition_check_interval_seconds` 配置，默认为 600 秒，即 10 分钟。 **说明** 如果分区列里是字符串类型的值，则比较分区名称的字典序，定期保留排在前面的分区，删除排在后面的分区。 |
 
 * ````sqlite
   CREATE TABLE t_recharge_detail1 (
@@ -574,8 +584,6 @@ banner_img: https://tse4-mm.cn.bing.net/th/id/OIP-C.WB-odJpxpYgl5OkJXUXU-gHaHa?r
   );
   ````
 
-* 
-
 #### 临时分区
 
 * 可以在一张已经定义分区规则的分区表上，创建临时分区，并为这些临时分区设定单独的数据分布策略
@@ -586,8 +594,6 @@ banner_img: https://tse4-mm.cn.bing.net/th/id/OIP-C.WB-odJpxpYgl5OkJXUXU-gHaHa?r
   [(partition_desc)]
   [DISTRIBUTED BY HASH(<bucket_key>)];
   ````
-
-* 
 
 ### 索引
 

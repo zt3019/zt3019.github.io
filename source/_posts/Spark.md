@@ -64,7 +64,7 @@ banner_img: https://tse2-mm.cn.bing.net/th/id/OIP-C.qT_Q9Q7uOiar_hB8I0GKjgHaEN?p
 
   - [![hdg2U1.png](https://z3.ax1x.com/2021/08/31/hdg2U1.png)](https://imgtu.com/i/hdg2U1)
   - [![hwccGV.png](https://z3.ax1x.com/2021/09/01/hwccGV.png)](https://imgtu.com/i/hwccGV)
-  - 任务从客户端发送到ReourceManager，RM指定一个NM创建一个AppMster进程，创建spark的一个Driver线程，Driver线程将任务分配到其它的NM，其它的NodeManager申请container，container会创建spark的一个excutor线程，RDD根据会根据分区进行一系列transformations转换定义，也会在一些情况下有shuffer过程，程序不会立刻执行，而是直到调用action触发调用RDD的计算。
+  - 任务从客户端发送到ReourceManager，RM指定一个NM创建一个AppMster进程，创建spark的一个Driver线程，Driver线程将任务分配到其它的NM，其它的NodeManager申请container，container会创建spark的一个excutor线程，RDD会根据分区进行一系列transformations转换定义，也会在一些情况下有shuffer过程，程序不会立刻执行，而是直到调用action触发调用RDD的计算。
 
 ### RDD编程
 
