@@ -733,9 +733,58 @@ banner_img: https://tse4-mm.cn.bing.net/th/id/OIP-C.WB-odJpxpYgl5OkJXUXU-gHaHa?r
 
 * SR支持通过以下方式从HDFS导入数据
   - 使用INSERT+`FILES()`进行同步导入
+  
+    ````sqlite
+    CREATE TABLE tmp.xinjiang AS
+    SELECT * FROM FILES
+    (
+        "path" = "hdfs://192.168.0.156:8020/warehouse/tablespace/external/hive/temp.db/xinjiang/*",
+        "format" = "orc",
+        "hadoop.security.authentication" = "simple",
+        "username" = "<hdfs_username>",
+        "password" = "<hdfs_password>"
+    );
+    
+    SELECT * FROM information_schema.loads ORDER BY JOB_ID DESC;
+    
+    SELECT * FROM information_schema.loads where label='insert_e0876288-4353-11ef-9ab8-000c291d2710';
+    ````
+  
+    
+  
   - 使用Broker Load进行异步导入
+  
+    ````sqlite
+    案例：
+    /*Hive2SR同步示例*/
+    /*1、每次同步需换label*/
+    LOAD LABEL dwd.dwd_policy_etp_project_library_enterprise_ref_df2
+    (/*2、如下填写Hive对应的hdfs地址，需使用外部表，建表时需要注意，管理表存在权限问题*/
+    DATA INFILE("hdfs://192.168.0.156:8020/warehouse/tablespace/external/hive/dwd.db/dwd_policy_etp_project_library_enterprise_ref_wf/*")/*确认目前active的hdfs路径*/
+    INTO TABLE dwd_policy_etp_project_library_enterprise_ref_df
+    COLUMNS TERMINATED BY "|^|"
+    FORMAT AS "orc"
+    (eid, project_id, province_code,city_code,area_code,project_name,score,match_items_ids)/*填写SR表字段顺序映射到hive对应hive的字段名称*/
+    /*set可以设置sr字段名和hive字段的映射*/
+    set(
+        eid=eid,
+        project_id=project_id,
+        province_code=province_code,
+        city_code=city_code,
+        area_code=area_code,
+        project_name=project_name,
+        score=score,
+        match_item_ids=match_items_ids
+    )
+    )
+    WITH BROKER 'hdfs_broker';
+    
+    /*查看同步状态*/
+    use dwd;
+    show load where label = 'dwd_policy_etp_project_library_enterprise_ref_df2';
+    ````
+  
   - 使用Pipe进行持续的异步导入
-* 一般使用INSERT+FILES的方式，比较简单，但是目前只支持Parquet和ORC格式。超大数据如100GB，1TB以上的数据，建议使用Pipe
 
 #### INSERT+FILES的优势
 
@@ -867,12 +916,13 @@ banner_img: https://tse4-mm.cn.bing.net/th/id/OIP-C.WB-odJpxpYgl5OkJXUXU-gHaHa?r
 
   - 在使用external catalog查询数据时，SR会用到外部数据源的两个组件：
 
-    - 元数据服务：用于将元数据暴露出来供SR的FE进行查询规划。
-    - 存储系统：用于存储数据。数据文件以不同的格式存储在分布式文件系统或对象存储系统中。当FE将生成的查询计划分发给各个BE后，各个BE会并行扫描存储系统中的目标数据，并执行计算返回查询结果。
+    - **元数据服务**：用于将元数据暴露出来供SR的FE进行查询规划。
+    - **存储系统**：用于存储数据。数据文件以不同的格式存储在分布式文件系统或对象存储系统中。当FE将生成的查询计划分发给各个BE后，各个BE会并行扫描存储系统中的目标数据，并执行计算返回查询结果。
 
 ### 外部表
 
 * StarRocks 支持以外部表 (External Table) 的形式，接入其他数据源。外部表指的是保存在其他数据源中的数据表，而 StartRocks 只保存表对应的元数据，并直接向外部表所在数据源发起查询。目前 StarRocks 已支持的第三方数据源包括 MySQL、StarRocks、Elasticsearch、Apache Hive™、Apache Iceberg 和 Apache Hudi。**对于 StarRocks 数据源，现阶段只支持 Insert 写入，不支持读取，对于其他数据源，现阶段只支持读取，还不支持写入**。
+* 推荐使用JDBC catalog，Hive catalog等
 
 ### 文件外部表
 
@@ -896,6 +946,8 @@ banner_img: https://tse4-mm.cn.bing.net/th/id/OIP-C.WB-odJpxpYgl5OkJXUXU-gHaHa?r
 
 
 ### Data Cache
+
+* 在数据湖分析场景中，SR作为OLAP查询引擎需要扫描HDFS或者其他的外部存储系统，查询实际读取的文件数量越多，I/O开销也越大。为提高查询外部存储系统数据的性能，Data Cache功能可以将外部存储系统的原始数据按照一定策略切分成多个block后，缓存至Starrocks本地的BE节点，避免重复的远端数据拉取开销，实现热点数据查询分析性能的进一步提升。
 
 * StarRocks 以 BE 节点的内存和磁盘作为缓存的存储介质，支持全内存缓存或者内存+磁盘的两级缓存。
 
@@ -925,6 +977,23 @@ banner_img: https://tse4-mm.cn.bing.net/th/id/OIP-C.WB-odJpxpYgl5OkJXUXU-gHaHa?r
   - `DataCacheReadBytes`：从内存和磁盘中读取的数据量。
   - `DataCacheWriteBytes`：从外部存储系统加载到内存和磁盘的数据量。
   - `BytesRead`：总共读取的数据量，包括从内存、磁盘以及外部存储读取的数据量。
+
+#### Data Cache预热
+
+* Data Cache预热是主动填充cache的过程，提前将想要查询的数据放到cache中，是基于Data Cache的扩展。
+
+* 适用场景
+
+  - 缓存的磁盘容量大于待预热的数据量
+  - 缓存盘的数据访问空间比较稳定。
+
+  ````sqlite
+  CACHE SELECT <column_name> [, ...]
+  FROM [<catalog_name>.][<db_name>.]<table_name> [WHERE <boolean_expression>]
+  [PROPERTIES("verbose"="true")]
+  ````
+
+* CACHE SELECT 可以和 [SUBMIT TASK](https://docs.starrocks.io/zh/docs/sql-reference/sql-statements/data-manipulation/SUBMIT_TASK/) 结合(v3.3后的版本)，实现周期性的预热。
 
 
 
@@ -1120,6 +1189,84 @@ banner_img: https://tse4-mm.cn.bing.net/th/id/OIP-C.WB-odJpxpYgl5OkJXUXU-gHaHa?r
   - **基于 External Catalog 构建物化视图**：您可以通过该特性加速数据湖中的查询。
   - **复杂表达式改写**：支持在表达式中调用函数和算术运算，满足复杂分析和计算需求。
 
+##### join改写
+
+* StarRocks 支持改写具有各种类型 Join 的查询
+* StarRocks 异步物化视图的多表聚合查询改写支持所有聚合函数，包括 bitmap_union、hll_union 和 percentile_union 等
+
+##### 聚合改写
+
+* 聚合上卷改写
+
+  - StarRocks 支持通过聚合上卷改写查询，即 StarRocks 可以使用通过 GROUP BY a,b 子句创建的异步物化视图改写带有 GROUP BY a 子句的聚合查询
+
+* 聚合下推
+
+  - 从 v3.3.0 版本开始，StarRocks 支持物化视图查询改写的聚合下推功能
+
+* count distinct改写
+
+  - StarRocks 支持将 COUNT DISTINCT 计算改写为 BITMAP 类型的计算，从而使用物化视图实现高性能、精确的去重。
+
+  - ````sqlite
+    CREATE MATERIALIZED VIEW distinct_mv
+    DISTRIBUTED BY hash(lo_orderkey)
+    AS
+    SELECT lo_orderkey, bitmap_union(to_bitmap(lo_custkey)) AS distinct_customer
+    FROM lineorder
+    GROUP BY lo_orderkey;
+    
+    -- 上面的物化视图可以改写下面的查询
+    SELECT lo_orderkey, count(distinct lo_custkey) 
+    FROM lineorder 
+    GROUP BY lo_orderkey;
+    ````
+
+  - 
+
+##### 嵌套物化视图改写
+
+* StarRocks 支持使用嵌套物化视图改写查询。
+
+##### Union改写
+
+* 谓词Union改写：当物化视图的谓词范围是查询的谓词范围的子集时，可以使用 UNION 操作改写查询。
+
+  - ````sqlite
+    CREATE MATERIALIZED VIEW agg_mv4
+    DISTRIBUTED BY hash(lo_orderkey)
+    AS
+    SELECT 
+      lo_orderkey, 
+      sum(lo_revenue) AS total_revenue, 
+      max(lo_discount) AS max_discount 
+    FROM lineorder
+    WHERE lo_orderkey < 300000000
+    GROUP BY lo_orderkey;
+    
+    -- 该物化视图可以改写以下查询
+    select 
+      lo_orderkey, 
+      sum(lo_revenue) AS total_revenue, 
+      max(lo_discount) AS max_discount 
+    FROM lineorder
+    GROUP BY lo_orderkey;
+    ````
+
+* 分区Union改写：假设基于分区表创建了一个分区物化视图。当查询扫描的分区范围是物化视图最新分区范围的超集时，查询可被 UNION 改写。
+
+##### 基于视图的物化视图查询改写
+
+- 自 v3.1.0 起，StarRocks 支持基于视图创建物化视图。如果基于视图的查询为 SPJG 类型，StarRocks 将会内联展开查询，然后进行改写。默认情况下，对视图的查询会自动展开为对视图的基表的查询，然后进行透明匹配和改写。
+
+##### 基于External Catalog构建物化视图
+
+* StarRocks 支持基于 Hive Catalog、Hudi Catalog、Iceberg Catalog 和 Paimon Catalog 的外部数据源上构建异步物化视图，并支持透明地改写查询。基于 External Catalog 的物化视图支持大多数查询改写功能
+
+##### 验证查询是否改写
+
+* 可以使用 EXPLAIN 语句查看对应 Query Plan。如果其中 OlapScanNode 项目下的 TABLE 为对应异步物化视图名称，则表示该查询已基于异步物化视图改写。
+
 #### 使用物化视图加速数据湖查询
 
 * StarRocks 提供了开箱即用的数据湖查询功能，非常适用于对湖中的数据进行探查式查询分析。在大多数情况下，[Data Cache](https://docs.starrocks.io/zh/docs/data_source/data_cache/) 可以提供 Block 级文件缓存，避免由远程存储抖动和大量I/O操作引起的性能下降。
@@ -1163,6 +1310,21 @@ banner_img: https://tse4-mm.cn.bing.net/th/id/OIP-C.WB-odJpxpYgl5OkJXUXU-gHaHa?r
   - **透明查询改写**
 
     查询可以仅基于最新的物化视图分区进行透明改写。过期的分区不会参与查询计划，相应查询将在基表上直接执行，从而确保数据的一致性。
+    
+  - ````sqlite
+    CREATE MATERIALIZED VIEW <name>
+    REFRESH ASYNC
+    PARTITION BY 
+        [
+            <base_table_column> | 
+            date_trunc(<granularity>, <base_table_column>) |
+            time_slice(<base_table_column>, <granularity>) | 
+            date_slice(<base_table_column>, <granularity>)
+        ]
+    AS <query>
+    ````
+
+  - 
 
 * 使用限制
   - 分区物化视图只能在分区基表（通常是事实表）上创建。您需要通过映射基表和物化视图之间的分区关系建立两者之间的协同关系。
@@ -1418,6 +1580,9 @@ banner_img: https://tse4-mm.cn.bing.net/th/id/OIP-C.WB-odJpxpYgl5OkJXUXU-gHaHa?r
 
 #### 使用Bitmap实现精确去重
 
+* bitmap就是利用所谓 BitMap 就是用一个 bit 位来标记某个元素对应的 value，而 key 即是这个元素。由于采用bit为单位来存储数据，因此在可以大大的节省存储空间。
+  - Bitmap 去重能够准确计算一个数据集中不重复元素的数量，相比传统的 Count Distinct，可以节省存储空间、加速计算。**例如，给定一个数组 A，其取值范围为 [0, n)，可采用 (n+7)/8 的字节长度的 bitmap 对该数组去重。即将所有 bit 初始化为 0，然后以数组 A 中元素的取值作为 bit 的下标，并将 bit 置为 1，那么 bitmap 中 1 的个数即为数组 A 中不同元素 (Count Distinct) 的数量。**
+
 * Bitmap index 和 Bitmap 去重二者虽然都使用 Bitmap 技术，但引入原因和解决的问题完全不同。前者用于低基数的枚举型列的等值条件过滤，后者则用于计算一组数据行的指标列的不重复元素的个数。
 * 从 StarRocks 2.3 版本开始，所有数据模型表的指标列均支持设置为 BITMAP 类型，但是所有数据模型表的不支持[排序键](https://docs.starrocks.io/zh/docs/3.0/table_design/Sort_key/)为 BITMAP 类型。
 * 建表时，指定指标列类型为 BITMAP，使用 [BITMAP_UNION](https://docs.starrocks.io/zh/docs/3.0/sql-reference/sql-functions/bitmap-functions/bitmap_union/) 函数进行聚合。
@@ -1475,3 +1640,12 @@ banner_img: https://tse4-mm.cn.bing.net/th/id/OIP-C.WB-odJpxpYgl5OkJXUXU-gHaHa?r
 * 目前bitmap类型不支持除整数类型之外的类型，如果想对string等类型作为bitmap的输入，则需要构建全局字典
 
 #### 使用HyperLogLog实现近似去重
+
+* HLL 是一种近似去重算法，在部分对去重精度要求不高的场景下，您可以选择使用 HLL 算法减轻数据去重分析的计算压力。根据数据集大小以及所采用的哈希函数的类型，HLL 算法的误差可控制在 1% 至 10% 左右。
+
+#### 使用 AUTO INCREMENT 列构建全局字典以加速精确去重计算和 Join
+
+* 阶段一： 创建全局字典并构建 STRING 值和 INTEGER 值之间的映射关系。字典中 key 列为 STRING 类型，value 列为 INTEGER 类型且为自增列。每次导入数据时候，系统都会自动为每个 STRING 值生成一个表内全局唯一的 ID，如此就建立了 STRING 值和 INTEGER 值之间的映射关系。
+* 阶段二：将订单数据和全局字典的映射关系导入至目标表。
+* 阶段三：后续查询分析时基于目标表的 INTEGER 列来计算精确去重或 Join，可以显著提高性能。
+* 阶段四：为了进一步优化性能，您还可以在 INTEGER 列上使用 bitmap 函数来进一步加速计算精确去重。
