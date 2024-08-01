@@ -184,7 +184,7 @@ public void testCopyFromLocalFile() throws IOException, InterruptedException, UR
 
 * HDFS架构-联邦架构
 
-  - ![image-20211220153640114](C:\Users\Hasee\AppData\Roaming\Typora\typora-user-images\image-20211220153640114.png)
+  - ![image-20211220153640114](C:\Users\Hasee\AppData\Roaming\Typora\typora-user-images\image-2021122015364011 4.png)
   - 解决单个namenode的压力过大的问题。
   - 扩展namenode，每个NN共用一个集群里的存储资源，每个NameNode都可以单独对外提供服务。
   - 集群规模特别大时，可采用HA(高可用)+Federation(联邦)的部署方案
@@ -547,7 +547,7 @@ public void testCopyFromLocalFile() throws IOException, InterruptedException, UR
     3. 多个溢出的文件会被合成大的溢出文件(溢写到磁盘耗时间，耗资源)
     4. 在溢出过程和合并过程中，都调用Partitiner进行分区和针对Key 进行排序，在环形缓冲区中溢出时进行快速排序，在合并时进行归并排序。
     5. ReduceTask根据自己的分区号，去各个MapTask机器上取相应的结果分区数据
-    6. ReduceTask 会取到同一个分区的来自不同MapTask 的结果文件，ReduceTask会将这些文件再进行合并（归并排序）
+    6. ReduceTask 会取到来自不同MapTask 的同一个分区结果文件，ReduceTask会将这些文件再进行合并（归并排序）
     7. 合并成大文件后，shuffle过程结束，后面进入ReduceTask的逻辑运算过程（从文件中取出一个一个的键值对Gruop，调用用户自定义的reduce()方法）
 
 
