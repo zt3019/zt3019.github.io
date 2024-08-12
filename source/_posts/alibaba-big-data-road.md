@@ -275,7 +275,11 @@ banner_img: https://tse3-mm.cn.bing.net/th/id/OIP-C.1NJoGdE-U58R_b66i8Sh2gHaK9?w
 
 ### 第十一章事实表设计
 
+#### 11.1 事实表基础
 
+##### 11.1.1 事实表特性
+
+* 
 
 
 
