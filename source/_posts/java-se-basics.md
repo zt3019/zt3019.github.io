@@ -106,7 +106,75 @@ banner_img: https://static.javatpoint.com/core/images/what-is-core-java2.png
             }
     ````
 
-  - 
+* 案例
 
+* ````java
+  package com.example;
   
+  import org.apache.commons.lang.StringUtils;
+  
+  import java.sql.*;
+  
+  /**
+   * @Author: ZouTao
+   * @Description: TODO
+   * @Date: 2024/8/9 16:11
+   * @Version: 1.0
+   */
+  
+  public class HiveJDBC {
+      /**
+       * @Author ZouTao
+       * @Date 2024/8/9 16:15
+       * @Description This is description of method
+       * @Param [args]
+       * @Return void
+       * @Since version 1.0
+       */
+  
+      public static void main(String[] args) throws SQLException {
+          Connection conn = null;
+          Statement stmt = null;
+          ResultSet rs = null;
+          try {
+              //1.加载数据库驱动
+              Class.forName("org.apache.hive.jdbc.HiveDriver");
+              //2.获取数据库连接
+              String url = "jdbc:hive2://192.168.0.136:2181,192.168.0.143:2181,192.168.0.150:2181/;serviceDiscoveryMode=zooKeeper;zooKeeperNamespace=hiveserver2";
+              String username = "hive";
+              String password = "Dr.Tech*2023";
+              conn = DriverManager.getConnection(url, username, password);
+              //3.通过数据库连接获取Statement对象
+              stmt = conn.createStatement();
+              //4.通过Statement对象执行sql
+              String sql="select policy_id,policy_name,publish_time from dwd.dwd_policy_main_policy_info_df where publish_time>=\"2024-08-08\" limit 2";
+  //            String sql2="show create table dwd.dwd_policy_main_policy_info_df";
+              rs=stmt.executeQuery(sql);
+              //5.操作返回的ResultSet结果
+              while (rs.next()){
+                  System.out.println(rs.getLong(1));
+                  System.out.println(rs.getString(2));
+              }
+          } catch (Exception e) {
+              e.printStackTrace();
+          } finally {
+              //6.关闭资源
+              if(rs!=null){
+                  rs.close();
+              }
+              if(stmt!=null){
+                  stmt.close();
+              }
+              if(conn!=null){
+                  conn.close();
+              }
+          }
+  
+  
+      }
+  }
+  
+  ````
+
+* 
 
