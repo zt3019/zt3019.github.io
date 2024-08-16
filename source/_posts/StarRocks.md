@@ -1115,6 +1115,8 @@ banner_img: https://tse4-mm.cn.bing.net/th/id/OIP-C.WB-odJpxpYgl5OkJXUXU-gHaHa?r
   REFRESH MATERIALIZED VIEW order_mv;
   -- 同步调用刷新任务。
   REFRESH MATERIALIZED VIEW order_mv WITH SYNC MODE;
+  -- 强制刷新物化视图
+  refresh MATERIALIZED VIEW tmp.zt_test force;
   
   -- 修改异步物化视图
   -- 启用被禁用的异步物化视图（将物化视图的状态设置为 Active）
@@ -1649,3 +1651,18 @@ banner_img: https://tse4-mm.cn.bing.net/th/id/OIP-C.WB-odJpxpYgl5OkJXUXU-gHaHa?r
 * 阶段二：将订单数据和全局字典的映射关系导入至目标表。
 * 阶段三：后续查询分析时基于目标表的 INTEGER 列来计算精确去重或 Join，可以显著提高性能。
 * 阶段四：为了进一步优化性能，您还可以在 INTEGER 列上使用 bitmap 函数来进一步加速计算精确去重。
+
+
+
+
+
+### 常见问题
+
+* 关于StarRocks的字符串类型的一些问题：
+  1.SR字符串的单位是字节。varchar(255)，表示只能存255字节的数据。
+  2.但是对于中文字符来说，一个中文字符占了三个字节。所以同样varchar(255)的情况下，mysql会比SR多存很多个中文字符。
+  3.创建物化视图时，当SR varcha(255)存不下的时候，该条数据会被舍弃。
+  4.还有一个就是SR的string类型，最大字节数是65533，即varchar(65533)。如果长度超长，用中台同步数据不会丢失，但是该字段为空。
+  5.自 StarRocks 2.1 版本开始，varchar(M) M的取值范围为 [1, 1048576]。M是字节数
+  所以后续可能要特别注意中文字符串丢数据或者缺失数据的情况。
+* 
