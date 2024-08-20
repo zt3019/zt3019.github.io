@@ -599,8 +599,15 @@ banner_img: https://tse2-mm.cn.bing.net/th/id/OIP-C.R1Bi3fNDyYjLsXdg9OqoIAHaEo?r
 
 * 网络不好的时候用http提交或者拉取代码会失败，可以考虑使用ssh的方式
 
+  - 设置 远程仓库的提交链接：
+  - git remote set-url origin git@github.com:zt3019/zt3019.github.io.git
+  
   - ````bash
+    -- ssh方式
     git pull git@github.com:zt3019/zt3019.github.io.git
     git push git@github.com:zt3019/zt3019.github.io.git
+    -- https方式
+    git pull https://github.com/zt3019/zt3019.github.io
+    git push https://github.com/zt3019/zt3019.github.io
+    
     ````
-
