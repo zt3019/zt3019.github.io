@@ -187,7 +187,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      8 字
+      558 字
     </span>
   
 
@@ -197,7 +197,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      1
+      9
        分钟
     </span>
   
@@ -231,12 +231,122 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2024年8月5日 下午
+                  本文最后更新于：2024年8月13日 下午
                 
               </p>
             
             <div class="markdown-body">
-              <h1 id="Java-SE基础"><a href="#Java-SE基础" class="headerlink" title="Java SE基础"></a>Java SE基础</h1><h2 id="基本入门"><a href="#基本入门" class="headerlink" title="基本入门"></a>基本入门</h2>
+              <h1 id="Java-SE基础"><a href="#Java-SE基础" class="headerlink" title="Java SE基础"></a>Java SE基础</h1><h2 id="第六章：集合"><a href="#第六章：集合" class="headerlink" title="第六章：集合"></a>第六章：集合</h2><h3 id="6-1集合概述"><a href="#6-1集合概述" class="headerlink" title="6.1集合概述"></a>6.1集合概述</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://imgse.com/i/pkxH3V0"><img src="https://s21.ax1x.com/2024/08/07/pkxH3V0.png" srcset="/img/loading.gif" lazyload alt="pkxH3V0.png"></a></li>
+</ul>
+<h2 id=""><a href="#" class="headerlink" title=""></a></h2><ul>
+<li><a target="_blank" rel="noopener" href="https://imgse.com/i/pkzOw28"><img src="https://s21.ax1x.com/2024/08/09/pkzOw28.png" srcset="/img/loading.gif" lazyload alt="pkzOw28.png"></a></li>
+<li>JDBC常用API</li>
+<li><a target="_blank" rel="noopener" href="https://imgse.com/i/pkzO6Vs"><img src="https://s21.ax1x.com/2024/08/09/pkzO6Vs.png" srcset="/img/loading.gif" lazyload alt="pkzO6Vs.png"></a></li>
+<li><a target="_blank" rel="noopener" href="https://imgse.com/i/pkzOf2T"><img src="https://s21.ax1x.com/2024/08/09/pkzOf2T.png" srcset="/img/loading.gif" lazyload alt="pkzOf2T.png"></a></li>
+<li><a target="_blank" rel="noopener" href="https://imgse.com/i/pkzjmp6"><img src="https://s21.ax1x.com/2024/08/09/pkzjmp6.png" srcset="/img/loading.gif" lazyload alt="pkzjmp6.png"></a></li>
+<li><a target="_blank" rel="noopener" href="https://imgse.com/i/pkzj8AA"><img src="https://s21.ax1x.com/2024/08/09/pkzj8AA.png" srcset="/img/loading.gif" lazyload alt="pkzj8AA.png"></a></li>
+<li><a target="_blank" rel="noopener" href="https://imgse.com/i/pkzjt9P"><img src="https://s21.ax1x.com/2024/08/09/pkzjt9P.png" srcset="/img/loading.gif" lazyload alt="pkzjt9P.png"></a></li>
+</ul>
+<h3 id="一般步骤"><a href="#一般步骤" class="headerlink" title="一般步骤"></a>一般步骤</h3><ul>
+<li><p>1.加载数据库驱动</p>
+<ul>
+<li>````java<br>Class.forName(“DriverName”)<figure class="highlight qml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs qml"><br>* <span class="hljs-number">2.</span>通过DriverManager获取数据库连接<br><br>  - <span class="hljs-string">``</span><span class="hljs-string">``</span>java<br>    Connection conn = DriverManager.getConnection(<span class="hljs-built_in">url</span>, username, password);<span class="hljs-comment">//建立和数据库的连接对象</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>3.通过Connection对象获取Statement对象（执行sql后返回一个结果对象）</p>
+<ul>
+<li>````java<br>Statement stmt = conn.createStatement();//创建Statement对象<figure class="highlight pgsql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs pgsql"><br>* <span class="hljs-number">4.</span>使用<span class="hljs-keyword">Statement</span>执行<span class="hljs-keyword">SQL</span>语句<br><br>  - ````java<br>    ResultSet rs = stmt.executeQuery(<span class="hljs-keyword">sql</span>);//使用<span class="hljs-keyword">Statement</span>执行<span class="hljs-keyword">SQL</span>语句，返回一个ResultSet结果集对象<br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>5.操作ResultSet结果集</p>
+<ul>
+<li>````java<br>/*<br>可以操作返回的ResultSet结果集对象<br>*/<br>while (rs.next()) {<pre><code>            int oid = rs.getInt(&quot;oid&quot;);
+            int oid2 = rs.getInt(1);
+            String credit_code = rs.getString(&quot;credit_code&quot;);
+            String stand_name = rs.getString(&quot;stand_name&quot;);
+            String source = rs.getString(&quot;source&quot;);
+            String source2 = rs.getString(4);
+
+            System.out.println(oid + &quot;    |   &quot; + credit_code + &quot; |   &quot; + stand_name + &quot;  |   &quot; + source + &quot;  |   &quot;);
+            System.out.println(oid2);
+            System.out.println(source2);
+        &#125;
+</code></pre>
+<figure class="highlight d"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs d"><br>* <span class="hljs-number">6.</span>关闭连接，释放资源<br><br>  - <span class="hljs-string">``</span><span class="hljs-string">``</span>java<br>    <span class="hljs-comment">/*</span><br><span class="hljs-comment">    每次操作数据库结束后都要进行关闭数据库连接，释放资源，以重复利用资源。通常关闭顺序是与打开顺序相反的。</span><br><span class="hljs-comment">    */</span><br>    <span class="hljs-keyword">finally</span> &#123;<br>                <span class="hljs-keyword">if</span> (rs != <span class="hljs-literal">null</span>) &#123;<br>                    rs.close();<br>                &#125;<br>                <span class="hljs-keyword">if</span> (stmt != <span class="hljs-literal">null</span>) &#123;<br>                    stmt.close();<br>                &#125;<br>                <span class="hljs-keyword">if</span> (conn != <span class="hljs-literal">null</span>) &#123;<br>                    conn.close();<br>                &#125;<br>            &#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>案例</p>
+</li>
+<li><pre><code class="java">package com.example;
+
+import org.apache.commons.lang.StringUtils;
+
+import java.sql.*;
+
+/**
+ * @Author: ZouTao
+ * @Description: TODO
+ * @Date: 2024/8/9 16:11
+ * @Version: 1.0
+ */
+
+public class HiveJDBC &#123;
+    /**
+     * @Author ZouTao
+     * @Date 2024/8/9 16:15
+     * @Description This is description of method
+     * @Param [args]
+     * @Return void
+     * @Since version 1.0
+     */
+
+    public static void main(String[] args) throws SQLException &#123;
+        Connection conn = null;
+        Statement stmt = null;
+        ResultSet rs = null;
+        try &#123;
+            //1.加载数据库驱动
+            Class.forName(&quot;org.apache.hive.jdbc.HiveDriver&quot;);
+            //2.获取数据库连接
+            String url = &quot;jdbc:hive2://192.168.0.136:2181,192.168.0.143:2181,192.168.0.150:2181/;serviceDiscoveryMode=zooKeeper;zooKeeperNamespace=hiveserver2&quot;;
+            String username = &quot;hive&quot;;
+            String password = &quot;Dr.Tech*2023&quot;;
+            conn = DriverManager.getConnection(url, username, password);
+            //3.通过数据库连接获取Statement对象
+            stmt = conn.createStatement();
+            //4.通过Statement对象执行sql
+            String sql=&quot;select policy_id,policy_name,publish_time from dwd.dwd_policy_main_policy_info_df where publish_time&gt;=\&quot;2024-08-08\&quot; limit 2&quot;;
+//            String sql2=&quot;show create table dwd.dwd_policy_main_policy_info_df&quot;;
+            rs=stmt.executeQuery(sql);
+            //5.操作返回的ResultSet结果
+            while (rs.next())&#123;
+                System.out.println(rs.getLong(1));
+                System.out.println(rs.getString(2));
+            &#125;
+        &#125; catch (Exception e) &#123;
+            e.printStackTrace();
+        &#125; finally &#123;
+            //6.关闭资源
+            if(rs!=null)&#123;
+                rs.close();
+            &#125;
+            if(stmt!=null)&#123;
+                stmt.close();
+            &#125;
+            if(conn!=null)&#123;
+                conn.close();
+            &#125;
+        &#125;
+
+
+    &#125;
+&#125;
+</code></pre>
+</li>
+<li></li>
+</ul>
+
             </div>
             <hr>
             <div>

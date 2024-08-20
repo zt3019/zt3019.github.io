@@ -187,7 +187,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      21.6k 字
+      21.8k 字
     </span>
   
 
@@ -197,7 +197,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      252
+      254
        分钟
     </span>
   
@@ -231,7 +231,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2024年7月18日 下午
+                  本文最后更新于：2024年8月15日 下午
                 
               </p>
             
@@ -983,7 +983,7 @@ Timestamp varbinary
 <li><p>嵌套物化视图：<strong>即基于异步物化视图构建新的异步物化视图。每个异步物化视图的刷新方式仅影响当前物化视图。</strong>建议嵌套不要超过三层</p>
 </li>
 <li><p>案例</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs sqlite">-- 基于查询语句创建异步物化视图<br>CREATE MATERIALIZED VIEW order_mv<br>DISTRIBUTED BY HASH(`order_id`)<br>REFRESH ASYNC START(&#x27;2022-09-01 10:00:00&#x27;) EVERY (interval 1 day)<br>AS SELECT<br>    order_list.order_id,<br>    sum(goods.price) as total<br>FROM order_list INNER JOIN goods ON goods.item_id1 = order_list.item_id2<br>GROUP BY order_id;<br><br>-- 手动刷新物化视图<br>-- 异步调用刷新任务。<br>REFRESH MATERIALIZED VIEW order_mv;<br>-- 同步调用刷新任务。<br>REFRESH MATERIALIZED VIEW order_mv WITH SYNC MODE;<br><br>-- 修改异步物化视图<br>-- 启用被禁用的异步物化视图（将物化视图的状态设置为 Active）<br>ALTER MATERIALIZED VIEW order_mv ACTIVE;<br>-- 修改异步物化视图名称为 order_total<br>ALTER MATERIALIZED VIEW order_mv RENAME order_total;<br>-- 修改异步物化视图的最大刷新间隔为 2 天<br>ALTER MATERIALIZED VIEW order_mv REFRESH ASYNC EVERY(INTERVAL 2 DAY);<br><br>-- 查看异步物化视图<br>SHOW MATERIALIZED VIEWS;<br>SHOW MATERIALIZED VIEWS WHERE NAME = &quot;order_mv&quot;;<br>SHOW MATERIALIZED VIEWS WHERE NAME LIKE &quot;order%&quot;;<br><br>-- 查看异步物化视图创建语句<br>SHOW CREATE MATERIALIZED VIEW order_mv;<br><br>-- 删除异步物化视图<br>DROP MATERIALIZED VIEW order_mv;<br></code></pre></td></tr></table></figure></li>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs sqlite">-- 基于查询语句创建异步物化视图<br>CREATE MATERIALIZED VIEW order_mv<br>DISTRIBUTED BY HASH(`order_id`)<br>REFRESH ASYNC START(&#x27;2022-09-01 10:00:00&#x27;) EVERY (interval 1 day)<br>AS SELECT<br>    order_list.order_id,<br>    sum(goods.price) as total<br>FROM order_list INNER JOIN goods ON goods.item_id1 = order_list.item_id2<br>GROUP BY order_id;<br><br>-- 手动刷新物化视图<br>-- 异步调用刷新任务。<br>REFRESH MATERIALIZED VIEW order_mv;<br>-- 同步调用刷新任务。<br>REFRESH MATERIALIZED VIEW order_mv WITH SYNC MODE;<br>-- 强制刷新物化视图<br>refresh MATERIALIZED VIEW tmp.zt_test force;<br><br>-- 修改异步物化视图<br>-- 启用被禁用的异步物化视图（将物化视图的状态设置为 Active）<br>ALTER MATERIALIZED VIEW order_mv ACTIVE;<br>-- 修改异步物化视图名称为 order_total<br>ALTER MATERIALIZED VIEW order_mv RENAME order_total;<br>-- 修改异步物化视图的最大刷新间隔为 2 天<br>ALTER MATERIALIZED VIEW order_mv REFRESH ASYNC EVERY(INTERVAL 2 DAY);<br><br>-- 查看异步物化视图<br>SHOW MATERIALIZED VIEWS;<br>SHOW MATERIALIZED VIEWS WHERE NAME = &quot;order_mv&quot;;<br>SHOW MATERIALIZED VIEWS WHERE NAME LIKE &quot;order%&quot;;<br><br>-- 查看异步物化视图创建语句<br>SHOW CREATE MATERIALIZED VIEW order_mv;<br><br>-- 删除异步物化视图<br>DROP MATERIALIZED VIEW order_mv;<br></code></pre></td></tr></table></figure></li>
 </ul>
 <h4 id="使用物化视图进行数据建模"><a href="#使用物化视图进行数据建模" class="headerlink" title="使用物化视图进行数据建模"></a>使用物化视图进行数据建模</h4><ul>
 <li><p>异步物化视图的能力</p>
@@ -1099,6 +1099,10 @@ Timestamp varbinary
 <li>阶段二：将订单数据和全局字典的映射关系导入至目标表。</li>
 <li>阶段三：后续查询分析时基于目标表的 INTEGER 列来计算精确去重或 Join，可以显著提高性能。</li>
 <li>阶段四：为了进一步优化性能，您还可以在 INTEGER 列上使用 bitmap 函数来进一步加速计算精确去重。</li>
+</ul>
+<h3 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h3><ul>
+<li>关于StarRocks的字符串类型的一些问题：<br>1.SR字符串的单位是字节。varchar(255)，表示只能存255字节的数据。<br>2.但是对于中文字符来说，一个中文字符占了三个字节。所以同样varchar(255)的情况下，mysql会比SR多存很多个中文字符。<br>3.创建物化视图时，当SR varcha(255)存不下的时候，该条数据会被舍弃。<br>4.还有一个就是SR的string类型，最大字节数是65533，即varchar(65533)。如果长度超长，用中台同步数据不会丢失，但是该字段为空。<br>5.自 StarRocks 2.1 版本开始，varchar(M) M的取值范围为 [1, 1048576]。M是字节数<br>所以后续可能要特别注意中文字符串丢数据或者缺失数据的情况。</li>
+<li></li>
 </ul>
 
             </div>

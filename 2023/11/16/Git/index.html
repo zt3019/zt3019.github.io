@@ -187,7 +187,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      6.1k 字
+      6.2k 字
     </span>
   
 
@@ -197,7 +197,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      70
+      72
        分钟
     </span>
   
@@ -231,7 +231,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2024年2月20日 晚上
+                  本文最后更新于：2024年8月20日 下午
                 
               </p>
             
@@ -331,7 +331,7 @@
 </li>
 <li><p>第二步：和新创建的远程github仓库进行关联</p>
 <ul>
-<li>````bash<br>git remote add origin <a href="mailto:&#x67;&#105;&#x74;&#x40;&#x67;&#x69;&#x74;&#104;&#117;&#98;&#x2e;&#x63;&#111;&#109;">&#x67;&#105;&#x74;&#x40;&#x67;&#x69;&#x74;&#104;&#117;&#98;&#x2e;&#x63;&#111;&#109;</a>:zt3019/learngit.git<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs crmsh"><br>- 第三步：将本地库的所有内容推送到远程库上<br><br>  - ````bash<br>    <span class="hljs-comment">#添加关联后，远程库的名字叫origin，这是git的默认叫法，也可以修改</span><br>    git push -u origin <span class="hljs-keyword">master</span><br>    <span class="hljs-title">#由于远程库是空的，我们第一次推送master</span>分支时，加上了-u参数，Git不但会把本地的<span class="hljs-literal">master</span>分支内容推送的远程新的<span class="hljs-literal">master</span>分支，还会把本地的<span class="hljs-literal">master</span>分支和远程的<span class="hljs-literal">master</span>分支关联起来，在以后的推送或者拉取时就可以简化命令。<br></code></pre></td></tr></table></figure></li>
+<li>````bash<br>git remote add origin <a href="mailto:&#103;&#x69;&#116;&#x40;&#x67;&#105;&#x74;&#104;&#x75;&#98;&#x2e;&#99;&#x6f;&#109;">&#103;&#x69;&#116;&#x40;&#x67;&#105;&#x74;&#104;&#x75;&#98;&#x2e;&#99;&#x6f;&#109;</a>:zt3019/learngit.git<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs crmsh"><br>- 第三步：将本地库的所有内容推送到远程库上<br><br>  - ````bash<br>    <span class="hljs-comment">#添加关联后，远程库的名字叫origin，这是git的默认叫法，也可以修改</span><br>    git push -u origin <span class="hljs-keyword">master</span><br>    <span class="hljs-title">#由于远程库是空的，我们第一次推送master</span>分支时，加上了-u参数，Git不但会把本地的<span class="hljs-literal">master</span>分支内容推送的远程新的<span class="hljs-literal">master</span>分支，还会把本地的<span class="hljs-literal">master</span>分支和远程的<span class="hljs-literal">master</span>分支关联起来，在以后的推送或者拉取时就可以简化命令。<br></code></pre></td></tr></table></figure></li>
 </ul>
 </li>
 <li><p>在这之后，需要提交代码到远程库只需要执行push命令</p>
@@ -504,24 +504,12 @@
 </li>
 <li><p>可以配置一下<code>.gitignore</code>文件，减少一些非必要文件的上传</p>
 <ul>
-<li><pre><code class="bash">.DS_Store
-Thumbs.db
-db.json
-*.log
-node_modules/
-public/
-.deploy*/
-</code></pre>
-</li>
+<li>````bash<br>.DS_Store<br>Thumbs.db<br>db.json<br><em>.log<br>node_modules/<br>public/<br>.deploy</em>/<figure class="highlight dsconfig"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs dsconfig"><br>* 如果已经<span class="hljs-string">clone</span>过主题文件，那么需要把<span class="hljs-string">theme</span>主题文件夹里的 .<span class="hljs-string">git</span> 也删除。因为<span class="hljs-string">git</span>不能嵌套上传，最好是显示隐藏文件，检查一下有没有，否则上传的时候会出错，导致你的主题文件无法上传，这样你的配置在别的电脑上就用不了了。<br>* 最后将<span class="hljs-string">clone</span>并修改之后的文件夹推送到远程库<br><br><span class="hljs-comment">## 问题记录</span><br><br>* 网络不好的时候用<span class="hljs-string">http</span>提交或者拉取代码会失败，可以考虑使用<span class="hljs-string">ssh</span>的方式<br><br>  - 设置 远程仓库的提交链接：<br>  - <span class="hljs-string">git</span> <span class="hljs-string">remote</span> <span class="hljs-built_in">set-url</span> <span class="hljs-string">origin</span> <span class="hljs-string">git</span>@<span class="hljs-string">github</span>.<span class="hljs-string">com:zt3019/</span><span class="hljs-string">zt3019</span>.<span class="hljs-string">github</span>.<span class="hljs-string">io</span>.<span class="hljs-string">git</span><br>  <br>  - ````<span class="hljs-string">bash</span><br>    -- <span class="hljs-string">ssh</span>方式<br>    <span class="hljs-string">git</span> <span class="hljs-string">pull</span> <span class="hljs-string">git</span>@<span class="hljs-string">github</span>.<span class="hljs-string">com:zt3019/</span><span class="hljs-string">zt3019</span>.<span class="hljs-string">github</span>.<span class="hljs-string">io</span>.<span class="hljs-string">git</span><br>    <span class="hljs-string">git</span> <span class="hljs-string">push</span> <span class="hljs-string">git</span>@<span class="hljs-string">github</span>.<span class="hljs-string">com:zt3019/</span><span class="hljs-string">zt3019</span>.<span class="hljs-string">github</span>.<span class="hljs-string">io</span>.<span class="hljs-string">git</span><br>    -- <span class="hljs-string">https</span>方式<br>    <span class="hljs-string">git</span> <span class="hljs-string">pull</span> <span class="hljs-string">https</span>://<span class="hljs-string">github</span>.<span class="hljs-string">com</span>/<span class="hljs-string">zt3019</span>/<span class="hljs-string">zt3019</span>.<span class="hljs-string">github</span>.<span class="hljs-string">io</span><br>    <span class="hljs-string">git</span> <span class="hljs-string">push</span> <span class="hljs-string">https</span>://<span class="hljs-string">github</span>.<span class="hljs-string">com</span>/<span class="hljs-string">zt3019</span>/<span class="hljs-string">zt3019</span>.<span class="hljs-string">github</span>.<span class="hljs-string">io</span><br>    <br></code></pre></td></tr></table></figure></li>
 </ul>
 </li>
 </ul>
 </li>
 </ol>
-<ul>
-<li>如果已经clone过主题文件，那么需要把theme主题文件夹里的 .git 也删除。因为git不能嵌套上传，最好是显示隐藏文件，检查一下有没有，否则上传的时候会出错，导致你的主题文件无法上传，这样你的配置在别的电脑上就用不了了。</li>
-<li>最后将clone并修改之后的文件夹推送到远程库</li>
-</ul>
 
             </div>
             <hr>
