@@ -971,7 +971,7 @@ drop foreign key classes_ibfk_1;
 >   SELECT * FROM employees
 >   ORDER BY hire_date DESC      -- 倒序
 >   LIMIT 1 offset 2;       -- 去掉排名倒数第一第二的时间，取倒数第三;   
->         
+>           
 >   ````
 >
 >   
@@ -1386,4 +1386,67 @@ drop foreign key classes_ibfk_1;
       - mysql --help|grep my.cnf
     - 方案3：
     - **官网给出的解决办法是加启动参数，找到mysql的启动脚本，把启动参数贴上**
-* 
+  
+* mysql TIMESTAMP类型自动设置默认值的问题
+
+  - 在实际生成中发现，为null的数据同步到mysql后变成了当前的时间，建表语句却并未指定默认值。
+
+  - 复现
+
+  - ````mysql
+    CREATE TABLE dim.dim_test2
+    (
+        `id`              BIGINT COMMENT '主键',
+        `enterprise_name` TEXT COMMENT '算法识别涉及企业，逗号拼接',
+        `type`            TEXT COMMENT '算法识别资讯类型（科技资讯，其他）',
+        `source`          VARCHAR(255) COMMENT '来源',
+        `article_content` TEXT COMMENT '文章内容',
+        `update_time`     TIMESTAMP  COMMENT '更新时间',
+        `title`           VARCHAR(255) COMMENT '标题',
+        `origin_link`     VARCHAR(500) COMMENT '原文链接',
+        `biz_unique_id`   VARCHAR(255) COMMENT '业务唯一id',
+        `publish_time`    TIMESTAMP  COMMENT '发布时间',
+        `evaluate`        TEXT COMMENT '算法分析新闻影响（正/负面、中立）'
+    ) ENGINE = InnoDB
+      DEFAULT CHARSET = utf8mb4 COMMENT ='资讯新闻信息表';
+      
+      
+      show create table dim.dim_test2;
+      
+      -- show create table 后的结果
+    
+      CREATE TABLE `dim_test2` (
+      `id` bigint(20) DEFAULT NULL COMMENT '主键',
+      `enterprise_name` text COMMENT '算法识别涉及企业，逗号拼接',
+      `type` text COMMENT '算法识别资讯类型（科技资讯，其他）',
+      `source` varchar(255) DEFAULT NULL COMMENT '来源',
+      `article_content` text COMMENT '文章内容',
+      `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+      `title` varchar(255) DEFAULT NULL COMMENT '标题',
+      `origin_link` varchar(500) DEFAULT NULL COMMENT '原文链接',
+      `biz_unique_id` varchar(255) DEFAULT NULL COMMENT '业务唯一id',
+      `publish_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '发布时间',
+      `evaluate` text COMMENT '算法分析新闻影响（正/负面、中立）'
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='资讯新闻信息表'
+    
+    -- 解决办法：将timestamp的字段默认值设置为null
+    CREATE TABLE dim.dim_test2
+    (
+        `id`              BIGINT COMMENT '主键',
+        `enterprise_name` TEXT COMMENT '算法识别涉及企业，逗号拼接',
+        `type`            TEXT COMMENT '算法识别资讯类型（科技资讯，其他）',
+        `source`          VARCHAR(255) COMMENT '来源',
+        `article_content` TEXT COMMENT '文章内容',
+        `update_time`     TIMESTAMP null default null COMMENT '更新时间',
+        `title`           VARCHAR(255) COMMENT '标题',
+        `origin_link`     VARCHAR(500) COMMENT '原文链接',
+        `biz_unique_id`   VARCHAR(255) COMMENT '业务唯一id',
+        `publish_time`    TIMESTAMP null default null COMMENT '发布时间',
+        `evaluate`        TEXT COMMENT '算法分析新闻影响（正/负面、中立）'
+    ) ENGINE = InnoDB
+      DEFAULT CHARSET = utf8mb4 COMMENT ='资讯新闻信息表';
+    ````
+
+  - 可以发现TIMESTAMP默认加上了 NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+
+  - 为防止这种情况，可以将timestamp的字段默认值设置为null。

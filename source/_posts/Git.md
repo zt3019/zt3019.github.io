@@ -595,3 +595,12 @@ banner_img: https://tse2-mm.cn.bing.net/th/id/OIP-C.R1Bi3fNDyYjLsXdg9OqoIAHaEo?r
 * 如果已经clone过主题文件，那么需要把theme主题文件夹里的 .git 也删除。因为git不能嵌套上传，最好是显示隐藏文件，检查一下有没有，否则上传的时候会出错，导致你的主题文件无法上传，这样你的配置在别的电脑上就用不了了。
 * 最后将clone并修改之后的文件夹推送到远程库
 
+## 问题记录
+
+* 网络不好的时候用http提交或者拉取代码会失败，可以考虑使用ssh的方式
+
+  - ````bash
+    git pull git@github.com:zt3019/zt3019.github.io.git
+    git push git@github.com:zt3019/zt3019.github.io.git
+    ````
+
