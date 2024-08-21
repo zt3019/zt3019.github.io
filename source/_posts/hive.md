@@ -51,7 +51,7 @@ banner_img: https://tse4-mm.cn.bing.net/th/id/OIP.0YDh0T1VxxssqKBcgGX7AgHaEK?w=2
      1. 包括解析器（SQL Parser）:将SQL字符串转换成抽象语法树AST
      2. 编译器（Physical Plan）：将AST编译生成逻辑执行计划。
      3. 优化器（Query Optimizer）：对逻辑执行计划进行优化。
-     4. 执行器（Execution）：把逻辑执行计划转换成可以运行的物理计划。对于Hive来说，就是MR/Spark。
+     4. 执行器（Execution）：把逻辑执行计划转换成可以运行的物理计划。对于Hive来说，就是MR/Spark/Tez。
 
 * Tez引擎
 
@@ -152,7 +152,7 @@ SQL>SET AUTOCOMMIT ON；
 
 * 创建语句，location就相当于数据库，他们之间是有映射关系的
 
-  ````mysql
+  ````hive
   CREATE DATABASE [IF NOT EXISTS] database_name
   [COMMENT database_comment]
   [LOCATION hdfs_path]
@@ -181,7 +181,7 @@ SQL>SET AUTOCOMMIT ON；
 
 * 创建表
 
-  ````mysql
+  ````hive
   CREATE [EXTERNAL] TABLE [IF NOT EXISTS] table_name 
   [(col_name data_type [COMMENT col_comment], ...)] 
   [COMMENT table_comment] 
@@ -217,7 +217,7 @@ SQL>SET AUTOCOMMIT ON；
 
   - 修改内部表student2为外部表
 
-    ````mysql
+    ````hive
     修改内部表student2为外部表
     alter table student2 set tblproperties('EXTERNAL'='TRUE');
     
@@ -231,7 +231,7 @@ SQL>SET AUTOCOMMIT ON；
 
 * <font color=red>Hive中的分区就是分目录</font>，把一个大的数据集根据业务需要分割成小的数据集。
 
-  - ````mysql
+  - ````hive
     create table dept_partition(deptno int, dname string, loc string
     )
     partitioned by (month string)
@@ -257,7 +257,7 @@ SQL>SET AUTOCOMMIT ON；
   
   - 支持二级分区
   
-    ````mysql
+    ````hive
     create table dept_partition2(
                    deptno int, dname string, loc string
                    )
@@ -269,23 +269,27 @@ SQL>SET AUTOCOMMIT ON；
   
 * 修改表
 
-  ````mysql
+  ````hive
+  -- 修改表注释
+  ALTER TABLE 表名 SET TBLPROPERTIES('comment' = '表注释内容');
+  -- 修改表名
   ALTER TABLE table_name RENAME TO new_table_name
-  --更新列
+  -- 更新列
   ALTER TABLE table_name CHANGE [COLUMN] col_old_name col_new_name column_type [COMMENT col_comment] [FIRST|AFTER column_name]
-  --增加和替换列
+  -- 增加和替换列
   ALTER TABLE table_name ADD|REPLACE COLUMNS (col_name data_type [COMMENT col_comment], ...) 
-  --删除表
+  -- REPLACE 则是表示替换表中所有字段（修改不修改的列都需要写上）。
+  -- 删除表
   drop table dept_partition;
   ````
-
+  
   
 
 ## DML
 
 * 数据导入
 
-  ````mysql
+  ````hive
   --创建语句
   create table student(id string, name string) row format delimited fields terminated by '\t';
   --1.load导入数据
@@ -301,7 +305,7 @@ SQL>SET AUTOCOMMIT ON；
 
   
 
-  ````mysql
+  ````hive
   --2.通过查询语句向表中插入数据（Insert）
    create table student_par(id int, name string) partitioned by (month string) row format delimited fields terminated by '\t';
    
@@ -332,7 +336,7 @@ SQL>SET AUTOCOMMIT ON；
 
 * 数据导出(不重要)
 
-  ````mysql
+  ````hive
   --1. Insert导出
   --将查询结果导出到本地
   insert overwrite local directory '/opt/module/datas/export/student'
@@ -355,7 +359,7 @@ SQL>SET AUTOCOMMIT ON；
 
 * 清除数据
 
-  ````mysql
+  ````hive
   --Truncate只能删除管理表（内部表），不能删除外部表中数据
   --只删除数据，不删除本身
   truncate table student;
@@ -405,9 +409,9 @@ SQL>SET AUTOCOMMIT ON；
 
   - UDF函数：一个输入一个输出 select substring(ename,1,1) from emp;（从ｅname的1开始，取一个字符）用户定义（普通）函数，只对单行数值产生作用。实现：继承UDF，实现evaluate()方法
   - UDAF函数：多个输入，一个输出 select count(*) cnt from emp;用户定义聚合函数，可对多行数据产生作用；等同与SQL中常用的SUM()，AVG()，也是聚合函数；
-  - UDTF函数：一个输入，多个输出。用户定义表生成函数。用来解决输入一行输出多行；实现：继承GenericUDTF，实现close(),initialize(),process()方法
+  - UDTF函数：一个输入，多个输出。用户定义表生成函数。用来解决输入一行输出多行；实现：继承GenericUDTF，实现initialize(),process(),close()方法
 
-  ````mysql
+  ````hive
   --1．求总行数（count）
   select count(*) cnt from emp;
   --2．求工资的最大值（max）
@@ -448,7 +452,7 @@ SQL>SET AUTOCOMMIT ON；
     | A [NOT] LIKE B          | STRING 类型    | B是一个SQL下的简单正则表达式，也叫通配符模式，如果A与其匹配的话，则返回TRUE；反之返回FALSE。B的表达式说明如下：‘x%’表示A必须以字母‘x’开头，‘%x’表示A必须以字母’x’结尾，而‘%x%’表示A包含有字母’x’,可以位于开头，结尾或者字符串中间。如果使用NOT关键字则可达到相反的效果。 |
     | A RLIKE B, A REGEXP B   | STRING 类型    | B是基于java的正则表达式，如果A与其匹配，则返回TRUE；反之返回FALSE。匹配使用的是JDK中的正则表达式接口实现的，因为正则也依据其中的规则。例如，正则表达式必须和整个字符串A相匹配，而不是只需与其字符串匹配。 |
 
-```mysql
+```hive
 --通配符字符串匹配　% _
 --%匹配任意串，_匹配任意字符
 --查询以A开头的员工
@@ -476,7 +480,7 @@ select * from emp where ename rlike "^A";
 
 3. 逻辑运算符（AND，OR，NOT）
 
-   ````mysql
+   ````hive
    select * from emp where sal>1000 and deptno=30;
    select * from emp where sal>1000 or deptno=30;
    select * from emp where deptno not IN(30, 20);
@@ -494,7 +498,7 @@ select * from emp where ename rlike "^A";
 
   
 
-* ````mysql
+* ````hive
   --计算emp表每个部门的平均工资
   select t.deptno, avg(t.sal) avg_sal from emp t group by t.deptno
   --求每个部门的平均薪水大于2000的部门
@@ -511,7 +515,7 @@ select * from emp where ename rlike "^A";
   - 右外连接
   - 满外连接
 
-  ````mysql
+  ````hive
   select
       e.empno,
       e.ename,
@@ -530,7 +534,7 @@ select * from emp where ename rlike "^A";
 
 * 多表连接
 
-  ````mysql
+  ````hive
   SELECT 
       e.ename,
       d.dname, 
@@ -562,7 +566,7 @@ select * from emp where ename rlike "^A";
 * DESC（descend）: 降序
 * sort by:局部排序（sort by 为每个reduce产生一个排序文件。每个Reduce内部进行排序，对全局结果来说不是排序）
 
-````mysql
+````hive
 --一般需求不会要求给所有的数据排序，而要求知道前几
 --求工资前10的人，Map会先求局部前10
 select *
@@ -592,7 +596,7 @@ offset X 跳过X条数据
 
 * ***distribute by***类似MR中partition（自定义分区），进行分区，结合sort by使用。 
 
-  ````mysql
+  ````hive
   --指定局部排序的分区字段
   select * from emp
   distribute by empno
@@ -616,7 +620,7 @@ offset X 跳过X条数据
 
 * 分区：把多个数据，分成文件夹管理
 
-  ````mysql
+  ````hive
   create table stu_buck(id int, name string)
   clustered by(id) 
   into 4 buckets
@@ -629,10 +633,10 @@ offset X 跳过X条数据
 
 * 对于非常大的数据集，有时用户需要使用的是一个具有代表性的查询结果而不是全部结果。Hive可以通过对表进行抽样来满足这个需求。
 
-  ````mysql
+  ````hive
   select * from stu_buck tablesample(bucket 1 out of 4 on id);
   --tablesample是抽样语句，语法：TABLESAMPLE(BUCKET x OUT OF y) 
-  --y必须是table总bucket数的倍数或者因子。hive根据y的大小，决定抽样的比例
+  --y必须是table总bucket数的倍数或者因子(因子就是所有可以整除这个数的数,不包括这个数自身)。hive根据y的大小，决定抽样的比例
   把数据按照bucket分成y份，取其中的第x份
   ````
 
@@ -642,7 +646,7 @@ offset X 跳过X条数据
 
 #### 常用函数
 
-```mysql
+```hive
 hive中查询函数
 show functions
 show functions like "collect*"
@@ -654,7 +658,7 @@ select comm, nvl(comm, -1) from emp;
 
 
 
-```mysql
+```hive
 --case when
 --统计不同部门男女各有多少人
 select
@@ -670,7 +674,7 @@ group by
 
 
 
-```mysql
+```hive
 在 Group by 子句中，Select 查询的列，要么需要是 Group by 中的列，要么得是用聚合函数（比如 sum、count 等）加工过的列。不支持直接引用非 Group by 的列。这一点和 MySQL 有所区别。Hive 错误 Expression not in GROUP BY key的原因。
 --行转列
 collect_list(x),聚合成一个数组，聚合函数
@@ -688,7 +692,7 @@ group by
 
 
 
-```mysql
+```hive
 --列转行
 --explode(a)函数
 --如果传入的是一个数组，则将其分成多行
@@ -717,7 +721,7 @@ lateral view
 
   n FOLLOWING：往后n行数据
 
-  UNBOUNDED：起点，UNBOUNDED PRECEDING 表示从前面的起点， UNBOUNDED FOLLOWING表示到后面的终点
+  UNBOUNDED：UNBOUNDED PRECEDING 表示从前面的起点， UNBOUNDED FOLLOWING表示到后面的终点
 
   LAG(col,n,default_val)：往前第n行数据
 
@@ -727,7 +731,7 @@ lateral view
 
   percent_rank()将数据按百分比分
 
-```mysql
+```hive
 --聚合
 select name,count(*) over () 
 from business 
@@ -735,7 +739,7 @@ where substring(orderdate,1,7) = '2017-04'
 group by name;
 ```
 
-```mysql
+```hive
 --各种聚合
 select name,orderdate,cost, 
 sum(cost) over() as sample1,--所有行相加 
@@ -748,7 +752,7 @@ sum(cost) over(partition by name order by orderdate rows between current row and
 from business;
 ```
 
-```mysql
+```hive
 --结合其他函数使用
 select
     name, orderdate, cost, 
@@ -760,7 +764,7 @@ from
     business;
 ```
 
-```mysql
+```hive
 --ntile
 Ntile(group_num) 将所有记录分成group_num个组，每组序号一样
 SELECT
@@ -778,8 +782,9 @@ WHERE
 	n = 1;
 ```
 
-```mysql
---percent_rank
+```hive
+-- percent_rank
+-- percent_rank() 含义就是 当前行-1 / 当前组总行数-1
 select
 	name,
 	orderdate,
@@ -790,7 +795,7 @@ from
 	business;
 ```
 
-```mysql
+```hive
 --rank
 rank()排序，相同的一样排名，数字按照实际的来，类似于高考排名
 dense_rank() 相同的一样排名，数字按照排名的数字来
@@ -812,29 +817,29 @@ from
 
 #### 日期函数
 
-```mysql
+```hive
 --current_date 返回当前日期
 select current_date();
 ```
 
-```mysql
---日期的加减
---今天开始90天以后的日期
+```hive
+-- 日期的加减
+-- 今天开始90天以后的日期
 select date_add(current_date(), 90);
---今天开始90天以前的日期
+-- 今天开始90天以前的日期
 select date_sub(current_date(), 90);
 ```
 
-```mysql
+```hive
 --日期差
 SELECT datediff(CURRENT_DATE(), "1990-06-04");
 ```
 
 习题：有哪些顾客连续两天来过我的店，数据是business表
 
-````mysql
---习题
-selec
+````hive
+--习题:连续登录
+-- 有哪些顾客连续两天来过我的店，数据是business表
 
 --time1下一次购买商品的时间
 select
@@ -882,7 +887,7 @@ difftime=1;
 4. group by 分组, 分组依据的列.（可以开始使用select中的别名，从group 开始往后都可用）
 5. select 把分组依据的列放在select后, 再考虑要选择哪些列, 及进行哪些函数调用 sum(),count(1)等
 6. having 进一步把分组后的虚表行过滤
-7. ***窗口函数***，select中若包含over()开窗函数，**执行完非开窗函数后select等待执行完开窗函数，然后执行select完**，开窗函数通过表数据进行分区和排序，跟select查询中的字段是平行关系，不依赖查询字段。
+7. ***窗口函数***，select中若包含over()开窗函数，**执行完非开窗函数后，select等待执行完开窗函数，然后执行select完**，开窗函数通过表数据进行分区和排序，跟select查询中的字段是平行关系，不依赖查询字段。
 8. distinct
 9. order by 最终表的一个排序显示.
 10. limit
