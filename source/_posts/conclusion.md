@@ -473,8 +473,6 @@ banner_img: https://tse1-mm.cn.bing.net/th/id/OIP-C.B6pZ8N_dG3MNAYppM-zX0AHaEo?w
     
     ````
 
-    
-
 * 自定义函数
 
   - UDF  解析公共字段（定义类  继承UDF，重写evaluate 方法）
@@ -519,7 +517,7 @@ banner_img: https://tse1-mm.cn.bing.net/th/id/OIP-C.B6pZ8N_dG3MNAYppM-zX0AHaEo?w
     - TEZ
     - SPARK
   
-  - union，union all会去重
+  - union会去重，union all 不会去重
   
   - hive数据倾斜
   
