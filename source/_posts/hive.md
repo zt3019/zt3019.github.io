@@ -892,3 +892,104 @@ difftime=1;
 9. order by 最终表的一个排序显示.
 10. limit
 
+## 调优
+
+### 小文件优化
+
+* 常用的一些hive参数设置，可以做为一些通用的优化手段。但是对于没有效果的的sql代码还是需要具体情况具体分析
+
+* ````hive
+  -- 执行Map前进行小文件合并
+  set hive.input.format=org.apache.hadoop.hive.ql.io.CombineHiveInputFormat;
+  -- 填的数都为byte数
+  -- 每个Map最大输入大小(这个值决定了合并后文件的数量)
+  set mapred.max.split.size=128000000;
+  -- 每个map最小输入大小
+  set mapred.min.split.size=10000000;
+  
+  -- 上面的参数配置同时也要考虑到：1.文件的格式是否可以切分；2.是否开启了压缩等因素
+  
+  -- 一个节点上split的至少的大小(这个值决定了多个DataNode上的文件是否需要合并)
+  set mapred.min.split.size.per.node=100000000;
+  
+  -- 一个机架下split的至少的大小(这个值决定了多个机架上的文件是否需要合并)
+  set mapred.min.split.size.per.rack=100000000;
+  
+  -- 这四个参数是有优先级的，一般来说优先级如下：
+  -- max.split.size <= min.split.size <= min.size.per.node <= min.size.per.rack
+  
+  -- 要想达到控制map任务个数的效果，要按照优先级合理配置参数的值
+  -- 一般来说按照上面配置参数后可以到达map数约等于文件大小/128 个（但是要注意文件是否压缩，是否可切分等情况）
+  /**
+  -- map数量由三个方面决定
+  1.文件个数
+  2.文件大小
+  3.blocksize
+  -- 因为map端一般都会默认开启聚合小文件的参数，所以文件个数我们先不考虑
+  -- 一般情况下，粗略计算任务map个数=文件大小/blocksize
+  */
+  
+  
+  -- 设置map端输出进行合并，默认为true
+  set hive.merge.mapfiles = true;
+  
+  -- 设置reduce端输出进行合并，默认为false
+  set hive.merge.mapredfiles = true;
+  
+  -- 设置合并文件的大小
+  set hive.merge.size.per.task = 128000000;
+  
+  -- 当输出文件的平均大小小于该值时，启动一个独立的MapReduce任务进行文件merge。
+  set hive.merge.smallfiles.avgsize=16000000;
+  
+  -- 每个reducer任务处理的数据量
+  set hive.exec.reducers.bytes.per.reducer=128000000;
+  -- 4999 每个任务的最大reducer数量
+  hive.exec.reducers.max=4999;
+  
+  -- reduce任务个数一般等于map输出的文件大小/hive.exec.reducers.bytes.per.reduce 的值。（也要考虑文件是否压缩的情况）
+  
+  -- 或者指定设置reduce个数。-1表示不指定
+  set mapreduce.job.reduces=-1;
+  /**
+  一些情况指定设置reduce个数，是无效的
+  1.order by 最终只会生成一个reduce
+  2.map端输出的数据量很小
+  */
+  ````
+
+* distribute by处理已有的小文件
+
+* ````hive
+  insert overwrite table 目标表 [partition(hour=...)] select * from 目标表 
+  distribute by floor( rand() * 具体最后落地生成多少个文件数);
+  distribute by `floor`(rand() * 5)
+  /**
+  rand()函数生成一个介于0（包含）和1（不包含）之间的随机浮点数。
+  这个随机数乘以5，得到一个介于0（包含）和5（不包含）之间的随机浮点数。
+  floor()函数取这个浮点数的整数部分，结果将是0、1、2、3或4中的一个。
+  因此，floor(rand() * 5)将生成一个随机整数，这个整数用作分发的键，将数据随机分配到5个reducer中的一个。
+  */
+  
+  /**
+  作用
+  数据随机化：如果你想要随机地将数据分发到reducer上，这可能是有用的。例如，如果你正在进行随机采样或者想要确保数据在reducer之间均匀分布。
+  测试：在测试Hive查询或MapReduce作业时，随机分配数据可以帮助你检查代码是否能够正确处理不同的reducer分配情况。
+  负载均衡：如果某个键的值非常倾斜（即大部分数据都属于同一个键），使用随机分配可以帮助平衡reducer之间的负载。
+  
+  注意：
+  需要注意的是，使用rand()可能会导致性能问题，因为每个输入行都会调用rand()函数，这可能会增加计算的开销。此外，这种方法可能会导致数据分布不均匀，因为随机性意味着无法保证每个reducer获得相同数量的数据。在使用这种方法时，应该考虑到这些潜在的问题。
+  */
+  ````
+
+* concatenate 命令
+
+  - ````hive
+    alter table test [partition(...)] concatenate
+    
+    
+    alter table ods.ods_qxb_t_report_details_di partition(ds='20240328') concatenate;
+    -- 这种方法仅仅适用于orc格式存储的表
+    -- 只能内部表使用
+    -- Concatenate/Merge can only be performed on managed tables
+    ````
