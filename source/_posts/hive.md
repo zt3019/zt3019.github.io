@@ -896,6 +896,15 @@ difftime=1;
 
 ### 小文件优化
 
+* 小文件的产生：
+  - 动态分区插入数据，产生大量小文件，导致map数量剧增
+  - reduce个数等于输出的文件个数，如果reduce个数多同时文件大小小的话就会产业很多小文件
+  - **用datax同步数据时，设则多线程，如果数据量不大的情况下，生成了小文件**
+  
+* 带来的问题：
+  - 小文件会导致开启很多很多map，一个map开一个JVM执行，所以这些任务的初始化，启动，执行会浪费大量的资源，严重影响性能。
+  - 小文件也会占用NameNode元数据的内存，如果太多小文件的话，会占用很多的NameNode的内存
+
 * 常用的一些hive参数设置，可以做为一些通用的优化手段。但是对于没有效果的的sql代码还是需要具体情况具体分析
 
 * ````hive
@@ -954,9 +963,37 @@ difftime=1;
   /**
   一些情况指定设置reduce个数，是无效的
   1.order by 最终只会生成一个reduce
+  2.笛卡尔积，笛卡尔积也是全局聚合，只能一个reduce处理
   2.map端输出的数据量很小
   */
   ````
+  
+* 预防小文件的一个基础通用配置，可以默认放在sql前面
+
+  ````hive
+  -- 设置Hive输入,执行map前进行小文件合并
+  set hive.input.format=org.apache.hadoop.hive.ql.io.CombineHiveInputFormat;
+  -- 每个map最大输入大小
+  set mapred.max.split.size=256000000;
+  -- 每个map最小输入大小
+  set mapred.min.split.size=128000000;
+  --节点上最小分片大小,每个节点处理的最小split
+  set mapred.min.split.size.per.node=128000000;
+  -- 机架上最小分片大小,决定不同机架的DataNode上文件是都进行合并。每个机架处理的最小split
+  set mapred.min.split.size.per.rack=128000000;
+  
+  --输出合并
+  -- 设置map端输出进行合并，默认为true
+  set hive.merge.mapfiles = true;
+  -- 设置reduce端输出进行合并，默认为false
+  set hive.merge.mapredfiles = true;
+  -- 小于这个值会开启一个独立的mapreduce任务进行小文件合并,默认16m
+  set hive.merge.smallfiles.avgsize=16000000;
+  -- 合并后的文件大小,默认256m,推荐128m,一个hdfs分块的大小
+  set hive.merge.size.per.task=128000000;
+  ````
+
+  
 
 * distribute by处理已有的小文件
 
@@ -993,3 +1030,35 @@ difftime=1;
     -- 只能内部表使用
     -- Concatenate/Merge can only be performed on managed tables
     ````
+
+### 常见参数调优
+
+* ````hive
+  -- 修改引擎
+  set hive.execution.engine=tez;
+  -- 用于避免小文件的场景或者task特别多的场景，这类场景大多数执行时间都很短，因为hive调起mapreduce任务，JVM的启动过程会造成很大的开销，尤其是job有成千上万个task任务时，JVM重用可以使得JVM实例在同一个job中重新使用N次
+  set mapred.job.reuse.jvm.num.tasks=10; --10为重用个数
+  ````
+
+* 数据倾斜
+
+  - 表现：任务进度长时间维持在99%（或100%），查看任务监控页面，发现只有少量（1个或几个）reduce子任务未完成。因为其处理的数据量和其他reduce差异过大。单一reduce的记录数与平均记录数差异过大，通常可能达到3倍甚至更多。最长时长远大于平均时长。
+
+  - 原因
+
+    - key分布不均匀
+    - 业务数据本身的特性
+    - 建表时考虑不周
+    - 某些sql语句本身就有数据倾斜
+    - [![pAkiuTA.png](https://s21.ax1x.com/2024/08/26/pAkiuTA.png)](https://imgse.com/i/pAkiuTA)
+
+  - 参数优化
+
+    ````hive
+    -- map端开启聚合
+    set hive.map.aggr=true;
+    -- 数据倾斜时生成两个MRJOB，第一个MR，先随机打散key，减少数据倾斜。第二个MR，再根据预处理的数据结果按照Group By Key分布到reduce中，最终完成
+    set hive.groupby.skewindata=true;
+    ````
+
+    

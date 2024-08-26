@@ -632,7 +632,7 @@ banner_img: https://tse1-mm.cn.bing.net/th/id/OIP-C.B6pZ8N_dG3MNAYppM-zX0AHaEo?w
     - [![5EgrrR.png](https://z3.ax1x.com/2021/10/10/5EgrrR.png)](https://imgtu.com/i/5EgrrR)
     - 优化后的HashShuffle，会将一个Excutor上所有task的文件都根据key分别写入到几个磁盘文件中。几个磁盘文件取决于下层task的数量。
     - 优化后的Hashshuffle减少了大量的磁盘文件。
-  - 不管是不是优化的hashShuffle都产生了大量的磁盘文件。所以在高版本的spark中已经被弃用。
+  - 不管是不是优化的hashShuffle都产生了大量的磁盘文件(都与下游的task的数量有关)。所以在高版本的spark中已经被弃用。
 
 * SortShuffle
 
@@ -653,9 +653,9 @@ banner_img: https://tse1-mm.cn.bing.net/th/id/OIP-C.B6pZ8N_dG3MNAYppM-zX0AHaEo?w
   - ByPassSortShuffle
   
     - [![5VFM7j.png](https://z3.ax1x.com/2021/10/11/5VFM7j.png)](https://imgtu.com/i/5VFM7j)
-    - ByPassSortShuffle运行机制的触发条件
-      - map端没有预聚合（比如GroupByKey）
-      - shuffle上一个阶段的最后一个RDD的分区数小于参数spark.shuffle.sort.bypassMergeThreshold（默认为200）
+    - ByPassSortShuffle运行机制的触发条件（同时满足两个条件触发）
+      - 不是聚合类的算子
+      - shuffle上一个阶段的最后一个RDD的分区数小于参数spark.shuffle.sort.bypassMergeThreshold（默认为200）（减少中间小文件产生）
     - 此时，每个task会为每个下游task都创建一个临时磁盘文件，并将数据按key进行hash然后根据key的hash值，将key写入对应的磁盘文件中。写入磁盘文件也都是先写到内存缓存中，缓存写满后再溢写到磁盘文件中去。最后，会将所有的临时文件进行合并，合并成一个磁盘文件，并创建一个单独的索引文件。<font color=red>该过程的磁盘写机制其实跟未经优化的HashShuffleManager是一模一样的，因此都要创建数量惊人的磁盘文件，只是在最后会做一个磁盘文件的合并而已。</font>因此，该机制比未经优化的HashShuffle来说shuffle read的性能会更好。
     - 与普通的SortShuffle比较：
       - 磁盘写机制不一样。ByPassSortShuffle每个Task会为下游都创建一个临时磁盘文件。普通的SortShuffle临时文件是溢写出来的，与下游task数量无关。
