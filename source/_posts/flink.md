@@ -194,7 +194,7 @@ banner_img: https://tse1-mm.cn.bing.net/th/id/R-C.631fcf4016085f85835625b73d904e
 * 资源管理器(ResourceManager)
   - 主要负责管理任务管理器（TaskManager）的插槽（slot），TaskManager插槽是Flink中定义的处理资源单位。Flink为不同的环境和资源管理工具提供了不同的资源管理器，比如Yarn，K8s,standalone。当JobManager申请插槽资源时，ResourceManager会将有空闲插槽的TaskManager分配给JobManager 。如果ResourceManager没有足够的插槽来满足JobManager的请求，它还可以向资源提供平台发起会话，以提供启动TaskManager进程的容器，另外，ResourceManager还负责终止空闲的TaskManager,释放计算资源。
 * 任务管理器（TaskManager）
-  - 通常一个Flink中会有多个TaskManager运行，每一个TaskManager都包含了一定数量的插槽（slots）。插槽的数量限制了TaskManager能执行的任务数量。任务管理器启动之后回向资源管理器注册它的插槽；收到资源管理器的指令后，TaskManager就会将一个或者多个插槽提供给任务管理器（JobManager）调用。任务管理器就可以向插槽分配任务（tasks）来执行。在执行过程中，一个任务管理器可以跟其它运行同一应用程序的TaskManager交换数据。
+  - 通常一个Flink中会有多个TaskManager运行，每一个TaskManager都包含了一定数量的插槽（slots）。插槽的数量限制了TaskManager能执行的任务数量。任务管理器启动之后会向资源管理器注册它的插槽；收到资源管理器的指令后，TaskManager就会将一个或者多个插槽提供给任务管理器（JobManager）调用。任务管理器就可以向插槽分配任务（tasks）来执行。在执行过程中，一个任务管理器可以跟其它运行同一应用程序的TaskManager交换数据。
 * 分发器（Dispatcher）
   - 可以跨作业运行，它为应用提交提供了REST接口。当一个应用被提交执行时，分发器就会启动并将应用移交给一个JobManager。由于是REST接口，所以Dispatcher可以作为集群的一个HTTP接入点，这样就能够不受防火墙阻挡。Dispatcher也会启动一个Web UI，用来方便的展示和监控作业执行的信息。Dispatcher 在架构中可能并不是必须的，这取决于应用提交运行的方式。
   - REST接口：REST 用来规范应用如何在 HTTP 层与 API 提供方进行数据交互 。REST 描述了 HTTP 层里客户端和服务器端的数据交互规则；客户端通过向服务器端发送 HTTP（s）请求，接收服务器的响应，完成一次 HTTP 交互。这个交互过程中，REST 架构约定两个重要方面就是 HTTP 请求所采用的方法，以及请求的链接。

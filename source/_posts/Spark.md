@@ -111,7 +111,7 @@ banner_img: https://tse2-mm.cn.bing.net/th/id/OIP-C.qT_Q9Q7uOiar_hB8I0GKjgHaEN?p
       public InputSplit[] getSplits(JobConf job, int numSplits)
         throws IOException {
         FileStatus[] files = listStatus(job);
-        
+        // 输入的文件数量
         // Save the number of input files for metrics/loadgen
         job.setLong(NUM_INPUT_FILES, files.length);
         long totalSize = 0;                           // compute total size
@@ -381,18 +381,18 @@ banner_img: https://tse2-mm.cn.bing.net/th/id/OIP-C.qT_Q9Q7uOiar_hB8I0GKjgHaEN?p
 
 * 集群(Standalone|Yarn)
   - 一个Spark集群可以同时运行多个spark应用
-* 应用
+* 应用(Application)
   - 我们所编写完成某些功能的程序
   - 一个应用可以并发的运行多个Job
 * Job
-  - Job对应着应用中的行动算子，每次执行一个行动算子，都会提交一个Job
+  - **Job对应着应用中的行动算子，每次执行一个行动算子，都会提交一个Job**
   - 一个Job由多个stage组成
 * Stage
-  - 一个宽依赖做一次阶段的划分
+  - **一个宽依赖做一次阶段的划分**
   - 阶段的个数=宽依赖的个数+1
   - 一个Stage由多个Task组成
 * Task
-  - 每一个阶段最后一个RDD的分区数，就是当前阶段的Task个数
+  - **每一个阶段最后一个RDD的分区数，就是当前阶段的Task个数**
 
 ### 数据读取与保存
 
@@ -427,7 +427,7 @@ banner_img: https://tse2-mm.cn.bing.net/th/id/OIP-C.qT_Q9Q7uOiar_hB8I0GKjgHaEN?p
   - 自定义累加器：继承AccumulatorV2，设定输入、输出泛型     重写方法
 * 广播变量
   - 在多个并行操作中（Executor）使用同一个变量，Spark默认会为每个任务(Task)分别发送，这样如果共享比较大的对象，会占用很大工作节点的内存。
-  - 广播变量用来高效分发较大的对象。向所有工作节点发送一个较大的只读值，以供一个或多个Spark操作使用。
+  - 广播变量用来高效分发较大的对象。向所有工作节点发送一个较大的只读值，以供一个或多个Task操作使用。
   - 实现Excutor端Task之间共享变量，节省内存
 
 ## Spark SQL
