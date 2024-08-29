@@ -1,7 +1,7 @@
 ---
 title: alibaba_big_data_road
 date: 2024-02-27 18:54:45
-hide: true
+hide: false
 tags:
 - 书籍
 categories: 
@@ -11,6 +11,8 @@ banner_img: https://tse3-mm.cn.bing.net/th/id/OIP-C.1NJoGdE-U58R_b66i8Sh2gHaK9?w
 ---
 
 # 《大数据之路》
+
+* 阿里巴巴出品的经典书籍，这里是一些笔记。推荐阅读原版书籍
 
 ## 数据模型篇
 

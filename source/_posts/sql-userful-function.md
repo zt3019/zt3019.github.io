@@ -1,6 +1,7 @@
 ---
 title: sql_userful_function
 date: 2022-06-13 15:39:06
+hide: true
 tags:
 - SQL
 categories:
