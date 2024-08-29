@@ -187,7 +187,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      9.5k 字
+      9.6k 字
     </span>
   
 
@@ -231,7 +231,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2023年11月16日 下午
+                  本文最后更新于：2024年8月27日 中午
                 
               </p>
             
@@ -813,7 +813,7 @@ cast(&#39;1000&#39; as int)
 <li>SPARK</li>
 </ul>
 </li>
-<li><p>union，union all会去重</p>
+<li><p>union会去重，union all 不会去重</p>
 </li>
 <li><p>hive数据倾斜</p>
 <ul>
@@ -969,7 +969,7 @@ cast(&#39;1000&#39; as int)
 <li>优化后的Hashshuffle减少了大量的磁盘文件。</li>
 </ul>
 </li>
-<li>不管是不是优化的hashShuffle都产生了大量的磁盘文件。所以在高版本的spark中已经被弃用。</li>
+<li>不管是不是优化的hashShuffle都产生了大量的磁盘文件(都与下游的task的数量有关)。所以在高版本的spark中已经被弃用。</li>
 </ul>
 </li>
 <li><p>SortShuffle</p>
@@ -991,9 +991,9 @@ cast(&#39;1000&#39; as int)
 <li><p>ByPassSortShuffle</p>
 <ul>
 <li><a target="_blank" rel="noopener" href="https://imgtu.com/i/5VFM7j"><img src="https://z3.ax1x.com/2021/10/11/5VFM7j.png" srcset="/img/loading.gif" lazyload alt="5VFM7j.png"></a></li>
-<li>ByPassSortShuffle运行机制的触发条件<ul>
-<li>map端没有预聚合（比如GroupByKey）</li>
-<li>shuffle上一个阶段的最后一个RDD的分区数小于参数spark.shuffle.sort.bypassMergeThreshold（默认为200）</li>
+<li>ByPassSortShuffle运行机制的触发条件（同时满足两个条件触发）<ul>
+<li>不是聚合类的算子</li>
+<li>shuffle上一个阶段的最后一个RDD的分区数小于参数spark.shuffle.sort.bypassMergeThreshold（默认为200）（减少中间小文件产生）</li>
 </ul>
 </li>
 <li>此时，每个task会为每个下游task都创建一个临时磁盘文件，并将数据按key进行hash然后根据key的hash值，将key写入对应的磁盘文件中。写入磁盘文件也都是先写到内存缓存中，缓存写满后再溢写到磁盘文件中去。最后，会将所有的临时文件进行合并，合并成一个磁盘文件，并创建一个单独的索引文件。<font color=red>该过程的磁盘写机制其实跟未经优化的HashShuffleManager是一模一样的，因此都要创建数量惊人的磁盘文件，只是在最后会做一个磁盘文件的合并而已。</font>因此，该机制比未经优化的HashShuffle来说shuffle read的性能会更好。</li>

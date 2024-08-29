@@ -231,7 +231,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2023年11月16日 下午
+                  本文最后更新于：2024年8月28日 上午
                 
               </p>
             
@@ -316,7 +316,7 @@
 </ul>
 </li>
 <li>任务管理器（TaskManager）<ul>
-<li>通常一个Flink中会有多个TaskManager运行，每一个TaskManager都包含了一定数量的插槽（slots）。插槽的数量限制了TaskManager能执行的任务数量。任务管理器启动之后回向资源管理器注册它的插槽；收到资源管理器的指令后，TaskManager就会将一个或者多个插槽提供给任务管理器（JobManager）调用。任务管理器就可以向插槽分配任务（tasks）来执行。在执行过程中，一个任务管理器可以跟其它运行同一应用程序的TaskManager交换数据。</li>
+<li>通常一个Flink中会有多个TaskManager运行，每一个TaskManager都包含了一定数量的插槽（slots）。插槽的数量限制了TaskManager能执行的任务数量。任务管理器启动之后会向资源管理器注册它的插槽；收到资源管理器的指令后，TaskManager就会将一个或者多个插槽提供给任务管理器（JobManager）调用。任务管理器就可以向插槽分配任务（tasks）来执行。在执行过程中，一个任务管理器可以跟其它运行同一应用程序的TaskManager交换数据。</li>
 </ul>
 </li>
 <li>分发器（Dispatcher）<ul>
