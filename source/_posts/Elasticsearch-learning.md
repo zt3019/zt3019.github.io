@@ -243,6 +243,8 @@ banner_img: https://tse1-mm.cn.bing.net/th/id/OIP-C.kGk4b5irwRgV11Ouu00AOQHaEC?w
     ````shell
     #delete语句删除索引
     delete test3
+    # 指定id删除
+    DELETE policy_project_library_index/_doc/1827261404195741698
     ````
 
 * 查询数据
@@ -269,8 +271,6 @@ banner_img: https://tse1-mm.cn.bing.net/th/id/OIP-C.kGk4b5irwRgV11Ouu00AOQHaEC?w
       }
       
       ````
-
-    - 
 
   - ````shell
     PUT /alice/user/1
@@ -314,7 +314,7 @@ banner_img: https://tse1-mm.cn.bing.net/th/id/OIP-C.kGk4b5irwRgV11Ouu00AOQHaEC?w
       "tags":["好学","勤奋刻苦"]
     }
     ````
-
+  
   - 
 
   - ````shell
@@ -344,7 +344,7 @@ banner_img: https://tse1-mm.cn.bing.net/th/id/OIP-C.kGk4b5irwRgV11Ouu00AOQHaEC?w
       "_source":["name","age"]
     }
     ````
-
+  
   - 排序查询
 
     ````shell
@@ -367,12 +367,12 @@ banner_img: https://tse1-mm.cn.bing.net/th/id/OIP-C.kGk4b5irwRgV11Ouu00AOQHaEC?w
        "size": 2
     }
     ````
-
+  
     - 排序支持的属性
       - 数字
       - 日期
       - ID
-
+  
   - 分页查询
 
     ````shell
@@ -387,7 +387,7 @@ banner_img: https://tse1-mm.cn.bing.net/th/id/OIP-C.kGk4b5irwRgV11Ouu00AOQHaEC?w
       "size":4   # 返回n条数据
       }
     ````
-
+  
   - 布尔查询
 
     ````shell
@@ -468,7 +468,7 @@ banner_img: https://tse1-mm.cn.bing.net/th/id/OIP-C.kGk4b5irwRgV11Ouu00AOQHaEC?w
     
     
     ````
-
+  
   - filter过滤
 
     ````shell
@@ -502,7 +502,7 @@ banner_img: https://tse1-mm.cn.bing.net/th/id/OIP-C.kGk4b5irwRgV11Ouu00AOQHaEC?w
     #lt表示小于
     #lte表示小于等于
     ````
-
+  
   - 短语检索
 
     ````shell
@@ -525,7 +525,7 @@ banner_img: https://tse1-mm.cn.bing.net/th/id/OIP-C.kGk4b5irwRgV11Ouu00AOQHaEC?w
       }
     }
     ````
-
+  
   - 精确查询
 
     ````shell
@@ -596,10 +596,10 @@ banner_img: https://tse1-mm.cn.bing.net/th/id/OIP-C.kGk4b5irwRgV11Ouu00AOQHaEC?w
     }
     
     ````
-
+  
     - 分词解析器
       - **keyword 字段类型不会被分析器分析**
-
+  
   - 查找多个精确值
 
     ````shell
@@ -647,7 +647,7 @@ banner_img: https://tse1-mm.cn.bing.net/th/id/OIP-C.kGk4b5irwRgV11Ouu00AOQHaEC?w
       }
     }
     ````
-
+  
 * 高亮显示
 
   - 设置highlight属性，对查询的结果的指定字段做高亮显示
@@ -1394,6 +1394,40 @@ POST policy_index_all/_delete_by_query
       }
     }
   }
+}
+
+#查询数据
+#term,不经过分词，直接查询精确的值
+#match,会使用分词器解析(先分析文档，然后再通过分析的文档进行查询)
+#includes指定字段
+GET enterprise_data_index_all_v8/_search
+{
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "term": {
+            "eid": {
+              "value": "4c8bd41b-2534-43c0-8643-5bf4dca1991e"
+            }
+          }
+        },
+        {
+          "match": {
+            "new_status_code": "1"
+          }
+        }
+      ]
+    }
+  },
+  "_source": {
+    "includes": [
+      "name",
+      "granted_invent_num",
+      "granted_appearance_num",
+      "grant_utility_model_num"
+    ]
+}
 }
 ````
 

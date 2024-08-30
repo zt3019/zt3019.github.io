@@ -581,8 +581,8 @@ banner_img: https://tse1-mm.cn.bing.net/th/id/OIP-C.B6pZ8N_dG3MNAYppM-zX0AHaEo?w
 
     - 脚本启动执行
     - 调用Client类中的main方法并执行
-    - 向RM申请资源运行ApplicationMaster
-    - 选择一台NodeManager启动AM
+    - 调度器调度到该任务后，向RM申请资源运行ApplicationMaster，
+    - 选择一台NodeManager申请资源，启动AM
     - AM启动Driver线程执行用户的作业
     - Driver向RM申请资源
     - 在NM中创建Excutor对象

@@ -638,11 +638,13 @@ public void testCopyFromLocalFile() throws IOException, InterruptedException, UR
 
   - 
 
-  - （1）Read阶段：MapTask通过用户编写的RecordReader，从输入InputSplit中解析出一个（2）Map阶段：该节点主要是将解析出的key/value交给用户编写map()函数处理，并产生一系列新的key/value。
+  - （1）Read阶段：MapTask通过用户编写的RecordReader，从输入InputSplit中解析出一个
 
-    ​	（3）Collect收集阶段：在用户编写map()函数中，当数据处理完成后，一般会调用OutputCollector.collect()输出结果。在该函数内部，它会将生成的key/value分区（调用Partitioner），并写入一个环形内存缓冲区中。
+  - （2）Map阶段：该节点主要是将解析出的key/value交给用户编写map()函数处理，并产生一系列新的key/value。
 
-    ​	（4）Spill阶段：即“溢写”，当环形缓冲区满后，MapReduce会将数据写到本地磁盘上，生成一个临时文件。需要注意的是，将数据写入本地磁盘之前，先要对数据进行一次本地排序，并在必要时对数据进行合并、压缩等操作。
+  - （3）Collect收集阶段：在用户编写map()函数中，当数据处理完成后，一般会调用OutputCollector.collect()输出结果。在该函数内部，它会将生成的key/value分区（调用Partitioner），并写入一个环形内存缓冲区中。
+
+  - （4）Spill阶段：即“溢写”，当环形缓冲区满后，MapReduce会将数据写到本地磁盘上，生成一个临时文件。需要注意的是，将数据写入本地磁盘之前，先要对数据进行一次本地排序，并在必要时对数据进行合并、压缩等操作。
 
     个key/value。
 
@@ -671,7 +673,7 @@ public void testCopyFromLocalFile() throws IOException, InterruptedException, UR
       ​	（2）Merge阶段：在远程拷贝数据的同时，ReduceTask启动了两个后台线程对内存和磁盘上的文件进行合并，以防止内存使用过多或磁盘上文件过多。
 
       ​	（3）Sort阶段：按照MapReduce语义，用户编写reduce()函数输入数据是按key进行聚集的一组数据。为了将key相同的数据聚在一起，Hadoop采用了基于排序的策略。由于各个MapTask已经实现对自己的处理结果进行了局部排序，因此，ReduceTask只需对所有数据进行一次归并排序即可。
-
+  
       ​	（4）Reduce阶段：reduce()函数将计算结果写到HDFS上。
 
 
@@ -728,9 +730,9 @@ public void testCopyFromLocalFile() throws IOException, InterruptedException, UR
   - 0. 客户端执行程序job.waitForCompletion
   - 1. 申请一个Application
   - 2. 返回Application资源提交临时路径和job_Id
-  - 3. 客户端提交job运行必要资源Job.split(分片信息)，Job.xml（配置信息），Wc.jar(所需的必要Jar包)
+  - 3. 客户端提交job运行必要资源Job.split(分片信息)，Job.xml（配置信息），Wc.jar(所需的必要Jar包)。提交到HDFS
   - 4. 资源提交完毕，申请运行AppMaster
-    5. ResourceManager将用户的请求初始化成一个Task资源申请,放入资源调度器等待调度
+    5. ResourceManager将用户的请求初始化成一个Task资源申请,**放入资源调度器等待调度**
     6.  资源调度器中的任务会分配到一个NodeManager中
     7. NodeManager会根据任务创建一个容器，在容器中运行对应的AppMaster
     8. AppMaster获取必要资源到本地
