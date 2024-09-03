@@ -84,6 +84,18 @@ banner_img: https://tse4-mm.cn.bing.net/th/id/OIP.0YDh0T1VxxssqKBcgGX7AgHaEK?w=2
   - 隐式转化   与java类似。1.所有整数类型、FLOAT和STRING类型都可以隐式地转换成DOUBLE
   - 强制转化 CAST('1' AS INT)将把字符串'1' 转换成整数1；如果强制类型转换失败，如执行CAST('X' AS INT)，表达式返回空值 NULL。
 
+### Hive 执行引擎
+
+* hive前期版本默认是mapreduce。后面有tez引擎（基于内存较多，生成dag执行图，会做一些优化，比mr快很多，但对内存的要求也更高）
+* **Spark on Hive**
+  - 就是同步Sparksql,加载hive的配置文件，获取到hive的元数据信息
+  - Spark sql获取到hive的元数据信息之后就可以拿到hive的所有表的数据
+  - 接下来就可以通过spark sql来操作hive表中的数据
+* **Hive on Spark**
+  - 就是把hive查询从MR换成spark,参考官方的版本配置，不然很容易遇到依赖冲突。
+  - 之后还是在hive上写hivesql，但是执行引擎是spark，任务会转化成spark rdd算子去执行。
+* 二者的核心区别在于，客户端的 SQL 是否提交给了服务角色 HiveServer2 (org.apache.hive.service.server.HiveServer2)，且该hs2配置了 hive.execution.engine=spark;
+
 ## SQL语言的分类
 
 **SQL语言的分类**
@@ -887,7 +899,7 @@ difftime=1;
 4. group by 分组, 分组依据的列.（可以开始使用select中的别名，从group 开始往后都可用）
 5. select 把分组依据的列放在select后, 再考虑要选择哪些列, 及进行哪些函数调用 sum(),count(1)等
 6. having 进一步把分组后的虚表行过滤
-7. ***窗口函数***，select中若包含over()开窗函数，**执行完非开窗函数后，select等待执行完开窗函数，然后执行select完**，开窗函数通过表数据进行分区和排序，跟select查询中的字段是平行关系，不依赖查询字段。
+7. ***窗口函数***，select中若包含over()开窗函数，**执行完非开窗函数后，select等待执行完开窗函数，随后select执行结束**，开窗函数通过表数据进行分区和排序，跟select查询中的字段是平行关系，不依赖查询字段。
 8. distinct
 9. order by 最终表的一个排序显示.
 10. limit
@@ -1059,6 +1071,26 @@ difftime=1;
     set hive.map.aggr=true;
     -- 数据倾斜时生成两个MRJOB，第一个MR，先随机打散key，减少数据倾斜。第二个MR，再根据预处理的数据结果按照Group By Key分布到reduce中，最终完成
     set hive.groupby.skewindata=true;
+    ````
+
+
+### 常见问题
+
+* concat()函数和concat_ws()区别
+
+  - 能否拼接INT类型
+
+    ````hive
+    select concat('',123,'xxx'); --可以拼接
+    select concat_ws('',123,'xxx');-- 不可以拼接。must be "string or array<string>"
+    
+    ````
+
+  - 拼接null值得结果
+
+    ````hive
+    select concat('',null,'xxx');--结果为null
+    select concat_ws('',null,'xxx'); -- 会忽略null值
     ````
 
     
