@@ -28,6 +28,8 @@ banner_img: https://tse4-mm.cn.bing.net/th/id/OIP.0YDh0T1VxxssqKBcgGX7AgHaEK?w=2
 
 * 大致流程：Hive通过给用户提供的一系列交互接口，接收到用户的指令(SQL)，使用自己的Driver，结合元数据(MetaStore)，将这些指令翻译成MapReduce，提交到Hadoop中执行，最后，将执行返回的结果输出到用户交互接口。
 
+* Hive Beeline 是一个命令行工具，它是 Hive 的一部分，用于与 HiveServer2 进行交互。HiveServer2 是 Hive 的一个服务端组件，它提供了 JDBC/ODBC 接口，允许外部客户端（如 Hive Beeline）连接并执行 HiveQL 查询。
+
 * hiveserver2，如果使用beeline，需要开启hiveserver2
 
 * 架构解析：
@@ -94,6 +96,7 @@ banner_img: https://tse4-mm.cn.bing.net/th/id/OIP.0YDh0T1VxxssqKBcgGX7AgHaEK?w=2
 * **Hive on Spark**
   - 就是把hive查询从MR换成spark,参考官方的版本配置，不然很容易遇到依赖冲突。
   - 之后还是在hive上写hivesql，但是执行引擎是spark，任务会转化成spark rdd算子去执行。
+  - 优化器还是hive的优化器，而没有spark sql自带的优化器的效果好
 * 二者的核心区别在于，客户端的 SQL 是否提交给了服务角色 HiveServer2 (org.apache.hive.service.server.HiveServer2)，且该hs2配置了 hive.execution.engine=spark;
 
 ## SQL语言的分类

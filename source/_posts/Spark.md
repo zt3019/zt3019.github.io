@@ -449,6 +449,22 @@ banner_img: https://tse2-mm.cn.bing.net/th/id/OIP-C.qT_Q9Q7uOiar_hB8I0GKjgHaEN?p
   - 是DataFrame的一个扩展。它提供了RDD的优势（强类型，使用强大的lambda函数的能力）以及Spark SQL优化执行引擎的优点。DataSet也可以使用功能性的转换（操作map，flatMap，filter等等）。
   - DataFrame是DataSet的特例
 
+### Hive on Spark 和Spark on Hive
+
+* hive on spark
+  - 就是把hive查询从MR换成spark,参考官方的版本配置，不然很容易遇到依赖冲突。
+  - 之后还是在hive上写hivesql，但是执行引擎是spark，任务会转化成spark rdd算子去执行。
+  - 优化器还是hive的优化器，而没有spark sql自带的优化器的效果好
+* spark on hive
+  - 就是同步Sparksql,加载hive的配置文件，获取到hive的元数据信息
+  - Spark sql获取到hive的元数据信息之后就可以拿到hive的所有表的数据
+  - 接下来就可以通过spark sql来操作hive表中的数据
+* spark beeline
+  - Spark Thrift Server 是 Spark 社区基于 HiveServer2 实现的一个 Thrift 服务。旨在无缝兼容HiveServer2。因为 **Spark Thrift Server 的接口和协议都和 HiveServer2 完全一致，**因此我们部署好Spark Thrift Server后，可以直接使用hive的beeline访问Spark Thrift Server执行相关语句。Spark Thrift Server 的目的也只是取代 HiveServer2，因此它依旧可以和 Hive Metastore进行交互，获取到 hive 的元数据。
+  - Spark Thrift Server和HiveServer2的区别
+    - [![pAZdDJg.png](https://s21.ax1x.com/2024/09/05/pAZdDJg.png)](https://imgse.com/i/pAZdDJg)
+  - 总结：Spark Thrift Server说白了就是小小的改动了下HiveServer2，代码量也不多。虽然接口和HiveServer2完全一致，但是它以**单个Application**在集群运行的方式还是比较奇葩的。可能官方也是为了实现简单而没有再去做更多的优化。
+
 ### Spark SQL编程
 
 * SparkSession是spark最新的SQL查询起始点
