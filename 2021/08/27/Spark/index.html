@@ -187,7 +187,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      6k 字
+      6.4k 字
     </span>
   
 
@@ -197,7 +197,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      70
+      74
        分钟
     </span>
   
@@ -231,7 +231,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2024年8月27日 中午
+                  本文最后更新于：2024年9月5日 晚上
                 
               </p>
             
@@ -658,6 +658,29 @@
 <li>DataSet是分布式数据集合。</li>
 <li>是DataFrame的一个扩展。它提供了RDD的优势（强类型，使用强大的lambda函数的能力）以及Spark SQL优化执行引擎的优点。DataSet也可以使用功能性的转换（操作map，flatMap，filter等等）。</li>
 <li>DataFrame是DataSet的特例</li>
+</ul>
+</li>
+</ul>
+<h3 id="Hive-on-Spark-和Spark-on-Hive"><a href="#Hive-on-Spark-和Spark-on-Hive" class="headerlink" title="Hive on Spark 和Spark on Hive"></a>Hive on Spark 和Spark on Hive</h3><ul>
+<li>hive on spark<ul>
+<li>就是把hive查询从MR换成spark,参考官方的版本配置，不然很容易遇到依赖冲突。</li>
+<li>之后还是在hive上写hivesql，但是执行引擎是spark，任务会转化成spark rdd算子去执行。</li>
+<li>优化器还是hive的优化器，而没有spark sql自带的优化器的效果好</li>
+</ul>
+</li>
+<li>spark on hive<ul>
+<li>就是同步Sparksql,加载hive的配置文件，获取到hive的元数据信息</li>
+<li>Spark sql获取到hive的元数据信息之后就可以拿到hive的所有表的数据</li>
+<li>接下来就可以通过spark sql来操作hive表中的数据</li>
+</ul>
+</li>
+<li>spark beeline<ul>
+<li>Spark Thrift Server 是 Spark 社区基于 HiveServer2 实现的一个 Thrift 服务。旨在无缝兼容HiveServer2。因为 <strong>Spark Thrift Server 的接口和协议都和 HiveServer2 完全一致，</strong>因此我们部署好Spark Thrift Server后，可以直接使用hive的beeline访问Spark Thrift Server执行相关语句。Spark Thrift Server 的目的也只是取代 HiveServer2，因此它依旧可以和 Hive Metastore进行交互，获取到 hive 的元数据。</li>
+<li>Spark Thrift Server和HiveServer2的区别<ul>
+<li><a target="_blank" rel="noopener" href="https://imgse.com/i/pAZdDJg"><img src="https://s21.ax1x.com/2024/09/05/pAZdDJg.png" srcset="/img/loading.gif" lazyload alt="pAZdDJg.png"></a></li>
+</ul>
+</li>
+<li>总结：Spark Thrift Server说白了就是小小的改动了下HiveServer2，代码量也不多。虽然接口和HiveServer2完全一致，但是它以<strong>单个Application</strong>在集群运行的方式还是比较奇葩的。可能官方也是为了实现简单而没有再去做更多的优化。</li>
 </ul>
 </li>
 </ul>

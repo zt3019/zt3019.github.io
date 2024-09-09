@@ -187,7 +187,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      8.5k 字
+      9.5k 字
     </span>
   
 
@@ -197,7 +197,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      107
+      119
        分钟
     </span>
   
@@ -231,7 +231,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2024年8月26日 中午
+                  本文最后更新于：2024年9月9日 下午
                 
               </p>
             
@@ -248,6 +248,8 @@
 <li><p>架构原理：<a target="_blank" rel="noopener" href="https://imgtu.com/i/2YmPaT"><img src="https://z3.ax1x.com/2021/06/04/2YmPaT.png" srcset="/img/loading.gif" lazyload alt="2YmPaT.png"></a></p>
 </li>
 <li><p>大致流程：Hive通过给用户提供的一系列交互接口，接收到用户的指令(SQL)，使用自己的Driver，结合元数据(MetaStore)，将这些指令翻译成MapReduce，提交到Hadoop中执行，最后，将执行返回的结果输出到用户交互接口。</p>
+</li>
+<li><p>Hive Beeline 是一个命令行工具，它是 Hive 的一部分，用于与 HiveServer2 进行交互。HiveServer2 是 Hive 的一个服务端组件，它提供了 JDBC/ODBC 接口，允许外部客户端（如 Hive Beeline）连接并执行 HiveQL 查询。</p>
 </li>
 <li><p>hiveserver2，如果使用beeline，需要开启hiveserver2</p>
 </li>
@@ -385,6 +387,22 @@
 <li>强制转化 CAST(‘1’ AS INT)将把字符串’1’ 转换成整数1；如果强制类型转换失败，如执行CAST(‘X’ AS INT)，表达式返回空值 NULL。</li>
 </ul>
 </li>
+</ul>
+<h3 id="Hive-执行引擎"><a href="#Hive-执行引擎" class="headerlink" title="Hive 执行引擎"></a>Hive 执行引擎</h3><ul>
+<li>hive前期版本默认是mapreduce。后面有tez引擎（基于内存较多，生成dag执行图，会做一些优化，比mr快很多，但对内存的要求也更高）</li>
+<li><strong>Spark on Hive</strong><ul>
+<li>就是同步Sparksql,加载hive的配置文件，获取到hive的元数据信息</li>
+<li>Spark sql获取到hive的元数据信息之后就可以拿到hive的所有表的数据</li>
+<li>接下来就可以通过spark sql来操作hive表中的数据</li>
+</ul>
+</li>
+<li><strong>Hive on Spark</strong><ul>
+<li>就是把hive查询从MR换成spark,参考官方的版本配置，不然很容易遇到依赖冲突。</li>
+<li>之后还是在hive上写hivesql，但是执行引擎是spark，任务会转化成spark rdd算子去执行。</li>
+<li>优化器还是hive的优化器，而没有spark sql自带的优化器的效果好</li>
+</ul>
+</li>
+<li>二者的核心区别在于，客户端的 SQL 是否提交给了服务角色 HiveServer2 (org.apache.hive.service.server.HiveServer2)，且该hs2配置了 hive.execution.engine=spark;</li>
 </ul>
 <h2 id="SQL语言的分类"><a href="#SQL语言的分类" class="headerlink" title="SQL语言的分类"></a>SQL语言的分类</h2><p><strong>SQL语言的分类</strong></p>
 <p>SQL语言共分为四大类：数据查询语言DQL，数据操纵语言DML，数据定义语言DDL，数据控制语言DCL。</p>
@@ -737,7 +755,7 @@
 <li>group by 分组, 分组依据的列.（可以开始使用select中的别名，从group 开始往后都可用）</li>
 <li>select 把分组依据的列放在select后, 再考虑要选择哪些列, 及进行哪些函数调用 sum(),count(1)等</li>
 <li>having 进一步把分组后的虚表行过滤</li>
-<li><em><strong>窗口函数</strong></em>，select中若包含over()开窗函数，<strong>执行完非开窗函数后，select等待执行完开窗函数，然后执行select完</strong>，开窗函数通过表数据进行分区和排序，跟select查询中的字段是平行关系，不依赖查询字段。</li>
+<li><em><strong>窗口函数</strong></em>，select中若包含over()开窗函数，<strong>执行完非开窗函数后，select等待执行完开窗函数，随后select执行结束</strong>，开窗函数通过表数据进行分区和排序，跟select查询中的字段是平行关系，不依赖查询字段。</li>
 <li>distinct</li>
 <li>order by 最终表的一个排序显示.</li>
 <li>limit</li>
@@ -780,8 +798,26 @@
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs sql"><br><span class="hljs-operator">*</span> concatenate 命令<br><br>  <span class="hljs-operator">-</span> ````hive<br>    <span class="hljs-keyword">alter</span> <span class="hljs-keyword">table</span> test [<span class="hljs-keyword">partition</span>(...)] concatenate<br>    <br>    <br>    <span class="hljs-keyword">alter</span> <span class="hljs-keyword">table</span> ods.ods_qxb_t_report_details_di <span class="hljs-keyword">partition</span>(ds<span class="hljs-operator">=</span><span class="hljs-string">&#x27;20240328&#x27;</span>) concatenate;<br>    <span class="hljs-comment">-- 这种方法仅仅适用于orc格式存储的表</span><br>    <span class="hljs-comment">-- 只能内部表使用</span><br>    <span class="hljs-comment">-- Concatenate/Merge can only be performed on managed tables</span><br></code></pre></td></tr></table></figure></li>
 </ul>
 <h3 id="常见参数调优"><a href="#常见参数调优" class="headerlink" title="常见参数调优"></a>常见参数调优</h3><ul>
-<li>````hive<br>– 修改引擎<br>set hive.execution.engine=tez;<br>– 用于避免小文件的场景或者task特别多的场景，这类场景大多数执行时间都很短，因为hive调起mapreduce任务，JVM的启动过程会造成很大的开销，尤其是job有成千上万个task任务时，JVM重用可以使得JVM实例在同一个job中重新使用N次<br>set mapred.job.reuse.jvm.num.tasks=10; –10为重用个数<figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs arcade"><br>* 数据倾斜<br><br>  - 表现：任务进度长时间维持在<span class="hljs-number">99</span>%（或<span class="hljs-number">100</span>%），查看任务监控页面，发现只有少量（<span class="hljs-number">1</span>个或几个）<span class="hljs-built_in">reduce</span>子任务未完成。因为其处理的数据量和其他<span class="hljs-built_in">reduce</span>差异过大。单一<span class="hljs-built_in">reduce</span>的记录数与平均记录数差异过大，通常可能达到<span class="hljs-number">3</span>倍甚至更多。最长时长远大于平均时长。<br><br>  - 原因<br><br>    - key分布不均匀<br>    - 业务数据本身的特性<br>    - 建表时考虑不周<br>    - 某些sql语句本身就有数据倾斜<br>    - [![pAkiuTA.png](https:<span class="hljs-comment">//s21.ax1x.com/2024/08/26/pAkiuTA.png)](https://imgse.com/i/pAkiuTA)</span><br><br>  - 参数优化<br><br>    <span class="hljs-string">``</span><span class="hljs-string">``</span>hive<br>    -- <span class="hljs-built_in">map</span>端开启聚合<br>    set hive.<span class="hljs-built_in">map</span>.aggr=<span class="hljs-literal">true</span>;<br>    -- 数据倾斜时生成两个MRJOB，第一个MR，先随机打散key，减少数据倾斜。第二个MR，再根据预处理的数据结果按照Group By Key分布到<span class="hljs-built_in">reduce</span>中，最终完成<br>    set hive.<span class="hljs-built_in">groupby</span>.skewindata=<span class="hljs-literal">true</span>;<br></code></pre></td></tr></table></figure>
-
+<li>````hive<br>– 修改引擎<br>set hive.execution.engine=tez;<br>– 用于避免小文件的场景或者task特别多的场景，这类场景大多数执行时间都很短，因为hive调起mapreduce任务，JVM的启动过程会造成很大的开销，尤其是job有成千上万个task任务时，JVM重用可以使得JVM实例在同一个job中重新使用N次<br>set mapred.job.reuse.jvm.num.tasks=10; –10为重用个数<figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs arcade"><br>* 数据倾斜<br><br>  - 表现：任务进度长时间维持在<span class="hljs-number">99</span>%（或<span class="hljs-number">100</span>%），查看任务监控页面，发现只有少量（<span class="hljs-number">1</span>个或几个）<span class="hljs-built_in">reduce</span>子任务未完成。因为其处理的数据量和其他<span class="hljs-built_in">reduce</span>差异过大。单一<span class="hljs-built_in">reduce</span>的记录数与平均记录数差异过大，通常可能达到<span class="hljs-number">3</span>倍甚至更多。最长时长远大于平均时长。<br><br>  - 原因<br><br>    - key分布不均匀<br>    - 业务数据本身的特性<br>    - 建表时考虑不周<br>    - 某些sql语句本身就有数据倾斜<br>    - [![pAkiuTA.png](https:<span class="hljs-comment">//s21.ax1x.com/2024/08/26/pAkiuTA.png)](https://imgse.com/i/pAkiuTA)</span><br><br>  - 参数优化<br><br>    <span class="hljs-string">``</span><span class="hljs-string">``</span>hive<br>    -- <span class="hljs-built_in">map</span>端开启聚合<br>    set hive.<span class="hljs-built_in">map</span>.aggr=<span class="hljs-literal">true</span>;<br>    -- 数据倾斜时生成两个MRJOB，第一个MR，先随机打散key，减少数据倾斜。第二个MR，再根据预处理的数据结果按照Group By Key分布到<span class="hljs-built_in">reduce</span>中，最终完成<br>    set hive.<span class="hljs-built_in">groupby</span>.skewindata=<span class="hljs-literal">true</span>;<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="Map-Join"><a href="#Map-Join" class="headerlink" title="Map Join"></a>Map Join</h3><ul>
+<li><p>适用于大表join小表。将小表放入内存。由于表的JOIN操作是在Map端且在内存进行的，所以其并不需要启动Reduce任务也就不需要经过shuffle阶段，从而能在一定程度上节省资源提高JOIN效率。</p>
+</li>
+<li><p>在Hive0.11前，需要指定mapjoin才能操作</p>
+</li>
+<li><p>````hive<br>SELECT /<em>+ MAPJOIN(smalltable)</em>/  .key,value<br>FROM smalltable JOIN bigtable ON smalltable.key = bigtable.key</p>
+<p>– 在高版本中：如果想用上面这种语法<br>set hive.auto.convert.join=false;– (关闭自动MAPJOIN转换操作)<br>set hive.ignore.mapjoin.hint=false;– (不忽略MAPJOIN标记)<br>– 开启无条件转Map Join<br>set hive.auto.convert.join.noconditionaltask=false;</p>
+<p>– 建议不使用显示指定，调整自动mapjoin的一些参数就行</p>
+<figure class="highlight mathematica"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs mathematica"><br><span class="hljs-operator">*</span> 后面的版本，不用显示的指定<span class="hljs-variable">mapjoin</span>。<span class="hljs-variable">hive</span>优化器根据参与<span class="hljs-variable">join</span>的表的数据量大小，<span class="hljs-operator">**</span>自动触发<span class="hljs-operator">**</span><br><br><span class="hljs-operator">*</span> <span class="hljs-variable">Hive</span>在编译<span class="hljs-variable">SQL</span>语句阶段，起初所有的<span class="hljs-variable">join</span>操作均采用<span class="hljs-variable">Common</span> <span class="hljs-built_in">Join</span>算法实现。<br><br>  之后在物理优化阶段：<br><br>  根据每个<span class="hljs-variable">Common</span> <span class="hljs-built_in">Join</span>任务所需表的大小判断该<span class="hljs-variable">Common</span> <span class="hljs-built_in">Join</span>任务是否能够转换为<span class="hljs-built_in">Map</span> <span class="hljs-built_in">Join</span>任务，若满足要求，便将<span class="hljs-variable">Common</span> <span class="hljs-built_in">Join</span>任务自动转换为<span class="hljs-built_in">Map</span> <span class="hljs-built_in">Join</span>任务。<br><br>  如果在<span class="hljs-variable">SQL</span>的编译阶段不能确定是否能够转换的，（例如对子查询进行<span class="hljs-variable">join</span>操作）。<br><br>  针对这种情况，<span class="hljs-variable">Hive</span>会在编译阶段生成一个条件任务（<span class="hljs-variable">Conditional</span> <span class="hljs-variable">Task</span>）<br><br><span class="hljs-operator">*</span> 自动触发的一些参数条件<br><br>  <span class="hljs-operator">````</span><span class="hljs-variable">hive</span><br>  <br>  <span class="hljs-operator">--</span>启动<span class="hljs-built_in">Map</span> <span class="hljs-built_in">Join</span>自动转换<br>  <span class="hljs-variable">set</span> <span class="hljs-variable">hive</span><span class="hljs-operator">.</span><span class="hljs-variable">auto</span><span class="hljs-operator">.</span><span class="hljs-variable">convert</span><span class="hljs-operator">.</span><span class="hljs-variable">join</span><span class="hljs-operator">=</span><span class="hljs-variable">true</span><span class="hljs-operator">;</span><br>   <br>  <span class="hljs-operator">--</span> 一个<span class="hljs-variable">Common</span> <span class="hljs-built_in">Join</span> <span class="hljs-variable">operator</span>转为<span class="hljs-built_in">Map</span> <span class="hljs-built_in">Join</span> <span class="hljs-variable">operator</span>的判断条件<span class="hljs-operator">,</span><br>  <span class="hljs-operator">--</span> 若该<span class="hljs-variable">Common</span> <span class="hljs-built_in">Join</span>相关的表中<span class="hljs-operator">,</span>存在<span class="hljs-variable">n</span><span class="hljs-operator">-</span><span class="hljs-number">1</span>张表的已知大小总和<span class="hljs-operator">&lt;=</span>该值<span class="hljs-operator">,</span>则生成一个<span class="hljs-built_in">Map</span> <span class="hljs-built_in">Join</span>计划<span class="hljs-operator">,</span><br>  <span class="hljs-operator">--</span> 此时可能存在多种<span class="hljs-variable">n</span><span class="hljs-operator">-</span><span class="hljs-number">1</span>张表的组合均满足该条件<span class="hljs-operator">,</span>则<span class="hljs-variable">hive</span>会为每种满足条件的组合均生成一个<span class="hljs-built_in">Map</span> <span class="hljs-built_in">Join</span>计划<span class="hljs-operator">,</span><br>  <span class="hljs-operator">--</span> 同时还会保留原有的<span class="hljs-variable">Common</span> <span class="hljs-built_in">Join</span>计划作为后备<span class="hljs-punctuation">(</span><span class="hljs-variable">back</span> <span class="hljs-variable">up</span><span class="hljs-punctuation">)</span>计划<br>  <span class="hljs-operator">--</span> 实际运行时<span class="hljs-operator">,</span>优先执行<span class="hljs-built_in">Map</span> <span class="hljs-built_in">Join</span>计划，若不能执行成功，则启动<span class="hljs-variable">Common</span> <span class="hljs-built_in">Join</span>后备计划。<br>  <span class="hljs-variable">set</span> <span class="hljs-variable">hive</span><span class="hljs-operator">.</span><span class="hljs-variable">mapjoin</span><span class="hljs-operator">.</span><span class="hljs-variable">smalltable</span><span class="hljs-operator">.</span><span class="hljs-variable">filesize</span><span class="hljs-operator">=</span><span class="hljs-number">250000</span><span class="hljs-operator">;</span><br>   <br>  <span class="hljs-operator">--</span> 开启无条件转<span class="hljs-built_in">Map</span> <span class="hljs-built_in">Join</span><br>  <span class="hljs-variable">set</span> <span class="hljs-variable">hive</span><span class="hljs-operator">.</span><span class="hljs-variable">auto</span><span class="hljs-operator">.</span><span class="hljs-variable">convert</span><span class="hljs-operator">.</span><span class="hljs-variable">join</span><span class="hljs-operator">.</span><span class="hljs-variable">noconditionaltask</span><span class="hljs-operator">=</span><span class="hljs-variable">true</span><span class="hljs-operator">;</span><br>   <br>  <span class="hljs-operator">--</span> 无条件转<span class="hljs-built_in">Map</span> <span class="hljs-built_in">Join</span>时的小表之和阈值<span class="hljs-operator">,</span>若一个<span class="hljs-variable">Common</span> <span class="hljs-built_in">Join</span> <span class="hljs-variable">operator</span>相关的表中，<br>  <span class="hljs-operator">--</span> 存在<span class="hljs-variable">n</span><span class="hljs-operator">-</span><span class="hljs-number">1</span>张表的大小总和<span class="hljs-operator">&lt;=</span>该值<span class="hljs-operator">,</span>此时<span class="hljs-variable">hive</span>便不会再为每种<span class="hljs-variable">n</span><span class="hljs-operator">-</span><span class="hljs-number">1</span>张表的组合均生成<span class="hljs-built_in">Map</span> <span class="hljs-built_in">Join</span>计划<br>  <span class="hljs-operator">--</span> 同时也不会保留<span class="hljs-variable">Common</span> <span class="hljs-built_in">Join</span>作为后备计划。而是只生成一个最优的<span class="hljs-built_in">Map</span> <span class="hljs-built_in">Join</span>计划。<br>  <span class="hljs-variable">set</span> <span class="hljs-variable">hive</span><span class="hljs-operator">.</span><span class="hljs-variable">auto</span><span class="hljs-operator">.</span><span class="hljs-variable">convert</span><span class="hljs-operator">.</span><span class="hljs-variable">join</span><span class="hljs-operator">.</span><span class="hljs-variable">noconditionaltask</span><span class="hljs-operator">.</span><span class="hljs-variable">size</span><span class="hljs-operator">=</span><span class="hljs-number">10000000</span><span class="hljs-operator">;</span><br></code></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h3><ul>
+<li><p>concat()函数和concat_ws()区别</p>
+<ul>
+<li><p>能否拼接INT类型</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs hive">select concat(&#x27;&#x27;,123,&#x27;xxx&#x27;); --可以拼接<br>select concat_ws(&#x27;&#x27;,123,&#x27;xxx&#x27;);-- 不可以拼接。must be &quot;string or array&lt;string&gt;&quot;<br><br></code></pre></td></tr></table></figure></li>
+<li><p>拼接null值得结果</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs hive">select concat(&#x27;&#x27;,null,&#x27;xxx&#x27;);--结果为null<br>select concat_ws(&#x27;&#x27;,null,&#x27;xxx&#x27;); -- 会忽略null值<br></code></pre></td></tr></table></figure></li>
+</ul>
 </li>
 </ul>
 
