@@ -1076,6 +1076,64 @@ difftime=1;
     set hive.groupby.skewindata=true;
     ````
 
+### Map Join
+
+* 适用于大表join小表。将小表放入内存。由于表的JOIN操作是在Map端且在内存进行的，所以其并不需要启动Reduce任务也就不需要经过shuffle阶段，从而能在一定程度上节省资源提高JOIN效率。
+
+* 在Hive0.11前，需要指定mapjoin才能操作
+
+* ````hive
+  SELECT /*+ MAPJOIN(smalltable)*/  .key,value
+  FROM smalltable JOIN bigtable ON smalltable.key = bigtable.key
+  
+  -- 在高版本中：如果想用上面这种语法
+  set hive.auto.convert.join=false;-- (关闭自动MAPJOIN转换操作)
+  set hive.ignore.mapjoin.hint=false;-- (不忽略MAPJOIN标记)
+  -- 开启无条件转Map Join
+  set hive.auto.convert.join.noconditionaltask=false;
+  
+  
+  -- 建议不使用显示指定，调整自动mapjoin的一些参数就行
+  ````
+
+* 后面的版本，不用显示的指定mapjoin。hive优化器根据参与join的表的数据量大小，**自动触发**
+
+* Hive在编译SQL语句阶段，起初所有的join操作均采用Common Join算法实现。
+
+  之后在物理优化阶段：
+
+  根据每个Common Join任务所需表的大小判断该Common Join任务是否能够转换为Map Join任务，若满足要求，便将Common Join任务自动转换为Map Join任务。
+
+  如果在SQL的编译阶段不能确定是否能够转换的，（例如对子查询进行join操作）。
+
+  针对这种情况，Hive会在编译阶段生成一个条件任务（Conditional Task）
+
+* 自动触发的一些参数条件
+
+  ````hive
+  
+  --启动Map Join自动转换
+  set hive.auto.convert.join=true;
+   
+  -- 一个Common Join operator转为Map Join operator的判断条件,
+  -- 若该Common Join相关的表中,存在n-1张表的已知大小总和<=该值,则生成一个Map Join计划,
+  -- 此时可能存在多种n-1张表的组合均满足该条件,则hive会为每种满足条件的组合均生成一个Map Join计划,
+  -- 同时还会保留原有的Common Join计划作为后备(back up)计划
+  -- 实际运行时,优先执行Map Join计划，若不能执行成功，则启动Common Join后备计划。
+  set hive.mapjoin.smalltable.filesize=250000;
+   
+  -- 开启无条件转Map Join
+  set hive.auto.convert.join.noconditionaltask=true;
+   
+  -- 无条件转Map Join时的小表之和阈值,若一个Common Join operator相关的表中，
+  -- 存在n-1张表的大小总和<=该值,此时hive便不会再为每种n-1张表的组合均生成Map Join计划
+  -- 同时也不会保留Common Join作为后备计划。而是只生成一个最优的Map Join计划。
+  set hive.auto.convert.join.noconditionaltask.size=10000000;
+  ````
+
+  
+
+
 
 ### 常见问题
 

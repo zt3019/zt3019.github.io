@@ -34,7 +34,7 @@ banner_img: https://tse1-mm.cn.bing.net/th/id/R-C.631fcf4016085f85835625b73d904e
 * 与Spark对比：
 
   - 在spark的世界观中，一切都是由批次组成的，离线数据是一个大批次，而实时数据是由一个个无限的小批次组成的，最本质上来说还是批处理的。
-  - 在Flink的世界观中，一切都是由流组成的，离线数据是有界限的流，实时数据是一个没有界限的流，这就是所谓的有界流和无界流。
+  - **在Flink的世界观中，一切都是由流组成的，离线数据是有界限的流，实时数据是一个没有界限的流**，这就是所谓的有界流和无界流。
 
 * 分层API
 
@@ -181,6 +181,16 @@ banner_img: https://tse1-mm.cn.bing.net/th/id/R-C.631fcf4016085f85835625b73d904e
     - [![IEGJHK.png](https://z3.ax1x.com/2021/11/03/IEGJHK.png)](https://imgtu.com/i/IEGJHK)
   - Per-Job-Cluster
     - [![IEJSDx.png](https://z3.ax1x.com/2021/11/03/IEJSDx.png)](https://imgtu.com/i/IEJSDx)
+    - Per-job模式在Flink1.15中已经被弃用
+  - application模式
+    - **flink-1.11** 引入了一种新的部署模式，即 **Application** 模式。目前，flink-1.11 已经可以支持基于 Yarn 和 Kubernetes 的 Application 模式。
+    - **Session模式**：所有作业共享集群资源，隔离性差，JM 负载瓶颈，main 方法在**客户端执行**。
+    - **Per-Job模式**：每个作业单独启动集群，隔离性好，JM [负载均衡](https://zhida.zhihu.com/search?q=负载均衡&zhida_source=entity&is_preview=1)，main 方法在**客户端执行**。
+    - 缺点：
+      - 1.main方法都在客户端执行，在客户端执行 main() 方法来获取 flink 运行时所需的依赖项，并生成 JobGraph，提交到集群的操作都会在实时平台所在的机器上执行，那么将会给服务器造成很大的压力。尤其在大量用户共享客户端时，问题更加突出。
+      - 2.提交任务时会把本地flink的所有jar包先上传到hdfs上相应的临时目录，这个也会带来大量的网络开销，如果任务特别多的情况下，平台的吞吐量将会直线下降。
+    - Application 模式下，用户程序的 main 方法将在集群中而不是客户端运行，用户将程序逻辑和依赖打包进一个可执行的 jar 包里，集群的入口程序 (ApplicationClusterEntryPoint) 负责调用其中的 main 方法来生成 JobGraph。
+    - Yarn Application 与Per-Job 模式类似，只是提交任务不需要客户端进行提交，直接由JobManager来进行任务提交，每个Flink Application对应一个Flink集群，如果该Flink Application有多个job任务，所有job任务共享该集群资源，TaskManager也是根据提交的Application所需资源情况动态进行申请。
 * Kubernetes部署
   - 容器化部署是是目前业界很流行的一项技术，基于Docker镜像运行能够让用户更加方便地对应用进行管理和运维。现在最流行地就是K8s了，flink也支持k8s部署模式
 
