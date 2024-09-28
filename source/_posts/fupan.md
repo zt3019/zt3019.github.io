@@ -368,3 +368,79 @@ banner_img: https://pic2.zhimg.com/v2-5b5bf59a17d6947d72b22b358b6805ca_r.jpg
 
 反思：自己介绍项目还是不够清晰。**项目中难点没有总结好**。注意不要语言不要太拖拉，还是得学习一下Java 后端的一些东西。
 
+
+
+## 明源云
+
+一面  55min
+
+* 自我介绍
+
+* java 常用的集合框架
+
+* 排序算法知道那些
+
+  - 快排的时间复杂度，最坏情况的时间复杂度，什么时候会出现
+  - 快排和归并排序的区别
+  - 冒泡排序的时间复杂度
+
+* hadoop的计算引擎MR，spark有什么区别
+
+* MR，Spark shuffle过程
+
+* spark什么时候会发生shuffle，这个记错了 （说反了）
+
+  - coalesce 一般用于缩减分区，默认不执行shuffle
+  - reparation 一般用于扩大分区，默认执行shuffle，底层调用的就是coalesce
+  - 窄依赖：父RDD一个分区中的数据，还是交给子RDD的一个分区处理
+  - 宽依赖：父RDD一个分区中的数据，交给子RDD的多个分区处理。分区中数据打乱了，进行了shuffle操作
+
+* 关系型数据库用过吗？mysql查询很慢怎么办
+
+  - mysql索引 说一下 （这里又说错了）
+  - mysql是b+tree索引  ，二分查找是在有序的数据结构里面查（logn ）的时间复杂度
+
+* 数仓的分层
+
+* SQL调优
+
+  - 我用我制作拉链表的过程去回答了这个问题
+  - 从缓慢维度的设计理论，到分区的选择，到编写时遇到的问题，三个层次递进的回答。（但是感觉还是没讲清楚）要再练一下
+  - 不动态分区，left semi join
+
+* 对datax的了解，其他的一些数据同步的工具
+
+* 设计工作流时尽量满足高内聚低耦合的设计思想是要怎么做的
+
+* 指标相关的概念，指标体系怎么构建
+
+  - 这里回答的也不太好，数仓理论还得再看
+
+* sql题 这题比较简单
+
+  ````sql
+  customers
+  	customer_id INT
+  	name VARCHAR(100)
+  
+  orders
+  	order_id INT
+  	customer_id INT
+  	order_date DATE
+  	amount DECIMAL(10, 2)
+  
+  问题：过去一年内没有新订单的所有客户
+  with tmp as (select customer_id from orders where order_date>=date_sub(current_date(),365))
+  select customer_id from customers left join tmp where tmp.customer_id is null
+  ````
+
+* spark比较熟悉吗
+
+* 离职还是在职，离职原因，毕业年限
+
+* 反问：
+
+  - 整个工作内容，工作工具
+  - 业务模式
+  - 整个的技术栈
+  - 对深圳的发展和计划
