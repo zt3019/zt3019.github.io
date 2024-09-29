@@ -118,8 +118,6 @@ where rn <= 3;
 -- 订单量统计
 -- 1给出 2017年每个月的订单数、用户数、总成交金额。
 -- 2给出2017年11月的新客数(指在11月才有第一笔订单)
-
-
 with t1 as (select '2017-01-01' as dt, '10029028' as order_id, '1000003251' as user_id, 33.57 as amount
             union all
             select '2017-01-01' as dt, '10029029' as order_id, '1000003251' as user_id, 33.57 as amount
@@ -208,7 +206,7 @@ with t1 as (select 1 as id, '2019-01-01' as date1
      -- 如果当天有重复登录的数据，则要先去重再进行计算
      t1_1 as (select id, date1 from t1 group by id, date1),
      -- lag,取滞后的值，从上往下看的话，就是取上面的值
-     t2 as (select id, date1, lag(date1, 1, '0000-00-00') over (partition by id order by date1) as last_date from t1_1),
+     t2 as (select id, date1, lag(date1, 1, '0000-00-00') over (partition by id order by date1) as last_date from t1_1) ,
 -- 与上次登录时间做差,如果为默认值或者与上一个值相差为1则标识为连续
      t3 as (select id,
                    date1,
@@ -272,7 +270,6 @@ from t2
 where size(rows3) = 3
   and datediff(date_format(rows3[1], 'yyyy-MM-dd'), date_format(rows3[0], 'yyyy-MM-dd')) = 1
   and datediff(date_format(rows3[2], 'yyyy-MM-dd'), date_format(rows3[1], 'yyyy-MM-dd')) = 1;
-
 
 -- 连续登录最大天数用户
 with t1 as (select 1 as id, '2019-01-01' as date1
@@ -428,7 +425,8 @@ with t1 as (select 'u01' as userid, '2017/1/21' as visit_date, 5 as visitcount
               from res1)
 select *
 from res2;
-
+select 12*0.3+12;
+select 12*0.25+12;
 
 /*
  以下是用户的加购流水和后续的支付情况，小时维度更新，下单件量等于加购件量
@@ -703,9 +701,9 @@ with fans as (select 'A' as from_user, 'B' to_user, '2022-11-28 12:12:12' as dt
                            sort_array(`array`(from_user, to_user)) as sort_arr_list,
                            1                                       AS flag
                     from fans) tmp)
-select *
-from res3
-where cnt > 1;
+-- select *
+-- from res3
+-- where cnt > 1;
 -- 结果去重
 select *
 from (select u1,
@@ -836,7 +834,7 @@ INSERT INTo test.dept(`dept_id`,`dept_parent_id`,`emp_cnt`) VALUES
 题目
 注意点:一个部门的人数是包含下级所有部门的人数，一个HR可以同时负责多个部门，包括负责上下级部门，且部门信息表中部门层级不固定
  */
-
+-- select 11500+2400-1800-1200;
 with hrd as (select 'har1' as hr_id, '2' as dept_id
              union all
              select 'har1' as hr_id, '3' as dept_id
@@ -885,6 +883,8 @@ select hr_id, sum(emp_cnt) as sum_emp_cnt
 from t3
 where if_sub_dept_id = false
 group by hr_id;
+
+
 
 
 -- 应该重点突破的技术点:SR,Flink就可以了。数仓的内容就维度建模和SQL的编写
