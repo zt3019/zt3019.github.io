@@ -597,6 +597,8 @@ banner_img: https://tse1-mm.cn.bing.net/th/id/OIP-C.B6pZ8N_dG3MNAYppM-zX0AHaEo?w
     - 关系：两者都是用来改变RDD的partition数量的，Repartition底层调用coalesce((numPartitions, shuffle = true)
     - 区别：Repartition一定会发生shuffle，coalesce根据传入的参数来判断是否发生shuffle。
     - 一般增大RDD的partition数量时使用repartition，减少partition数量时使用coalesce
+    - coalesce   一般用于缩减分区，默认不执行shuffle
+    - reparation  一般用于扩大分区，默认执行shuffle，底层调用的就是coalesce
 
   
 
