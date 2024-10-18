@@ -400,7 +400,7 @@ banner_img: https://pic2.zhimg.com/v2-5b5bf59a17d6947d72b22b358b6805ca_r.jpg
   - mysql索引 说一下 （这里又说错了）
   - mysql是b+tree索引  ，二分查找是在有序的数据结构里面查（logn ）的时间复杂度
 
-* 数仓的分层
+* 数仓的分层的设计
 
 * SQL调优
 
