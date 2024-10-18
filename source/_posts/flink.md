@@ -986,6 +986,7 @@ banner_img: https://tse1-mm.cn.bing.net/th/id/R-C.631fcf4016085f85835625b73d904e
   - 稳定（Stable）
   - 流与批的统一（Unify）
 * Flink SQL的流与批统一总结起来就一句话：One Query，One Result
+* [官方文档](!https://nightlies.apache.org/flink/flink-docs-release-1.20/zh/docs/dev/table/sql/queries/select/)
 
 ### Flink SQL核心概念
 
@@ -1268,4 +1269,551 @@ banner_img: https://tse1-mm.cn.bing.net/th/id/R-C.631fcf4016085f85835625b73d904e
     GROUP BY SESSION(rowtime, INTERVAL ‘12’ HOUR), user
     ````
 
+
+
+
+### 官方文档案例记录
+
+#### 入门
+
+* Flink SQL 使得使用标准 SQL 开发流应用程序变的简单。如果你曾经在工作中使用过兼容 ANSI-SQL 2011 的数据库或类似的 SQL 系统，那么就很容易学习 Flink。
+
+##### Source表
+
+* 与所有 SQL 引擎一样，Flink 查询操作是在表上进行。与传统数据库不同，Flink 不在本地管理静态数据；相反，它的查询在外部表上连续运行。
+
+* Flink 数据处理流水线开始于 source 表。source 表产生在查询执行期间可以被操作的行；它们是查询时 `FROM` 子句中引用的表。这些表可能是 Kafka 的 topics，数据库，文件系统，或者任何其它 Flink 知道如何消费的系统。
+
+* Flink 支持不同的[连接器](https://nightlies.apache.org/flink/flink-docs-release-1.20/zh/docs/connectors/table/overview/)和[格式](https://nightlies.apache.org/flink/flink-docs-release-1.20/zh/docs/connectors/table/formats/overview/)相结合以定义表。下面是一个示例，定义一个以 [CSV 文件](https://nightlies.apache.org/flink/flink-docs-release-1.20/zh/docs/connectors/table/formats/csv/)作为存储格式的 source 表，其中 `emp_id`，`name`，`dept_id` 作为 `CREATE` 表语句中的列。
+
+* ````sqlite
+  CREATE TABLE employee_information (
+      emp_id INT,
+      name VARCHAR,
+      dept_id INT
+  ) WITH ( 
+      'connector' = 'filesystem',
+      'path' = '/path/to/something.csv',
+      'format' = 'csv'
+  );
+  ````
+
+* 
+
+##### 连续查询（Transformation）
+
+* 一个[连续查询](https://nightlies.apache.org/flink/flink-docs-release-1.20/zh/docs/dev/table/concepts/dynamic_tables/#continuous-queries)永远不会终止，并会产生一个动态表作为结果。[动态表](https://nightlies.apache.org/flink/flink-docs-release-1.20/zh/docs/dev/table/concepts/dynamic_tables/#continuous-queries)是 Flink 中 Table API 和 SQL 对流数据支持的核心概念。
+
+* ````sqlite
+  SELECT 
+     dept_id,
+     COUNT(*) as emp_count 
+  FROM employee_information 
+  GROUP BY dept_id;
+  ````
+
+* 
+
+##### Sink表
+
+* 当运行此查询时，SQL 客户端实时但是以只读方式提供输出。存储结果，作为报表或仪表板的数据来源，需要写到另一个表。这可以使用 `INSERT INTO` 语句来实现。本节中引用的表称为 sink 表。`INSERT INTO` 语句将作为一个独立查询被提交到 Flink 集群中。
+
+* ````sqlite
+  INSERT INTO department_counts
+  SELECT 
+     dept_id,
+     COUNT(*) as emp_count 
+  FROM employee_information
+  GROUP BY dept_id;
+  ````
+
+#### 查询相关内容(DQL)
+
+##### 概览
+
+* `TableEnvironment` 的 `sqlQuery()` 方法可以执行 `SELECT` 和 `VALUES` 语句。 这个方法把 `SELECT` 语句(或 `VALUES` 语句)的结果作为一个 `Table` 返回。 `Table`可以用在[后续 SQL 和 Table API 查询](https://nightlies.apache.org/flink/flink-docs-release-1.20/zh/docs/dev/table/common/#mixing-table-api-and-sql)中，可以[转换为 DataStream](https://nightlies.apache.org/flink/flink-docs-release-1.20/zh/docs/dev/table/common/#integration-with-datastream)， 或者 [写入到TableSink](https://nightlies.apache.org/flink/flink-docs-release-1.20/zh/docs/dev/table/common/#emit-a-table)。 SQL 和 Table API 查询可以无缝混合，并进行整体优化并转换为单个程序。
+
+##### Hints
+
+* SQL 提示（SQL Hints）是和 SQL 语句一起使用来改变执行计划的
+* 主要作用就是通过一些定制化的hints，优化sql的执行效率
+* SQL 提示一般可以用于以下：
+  - 增强 planner：没有完美的 planner，所以实现 SQL 提示让用户更好地控制执行是非常有意义的；
+  - 增加元数据（或者统计信息）：如"已扫描的表索引"和"一些混洗键（shuffle keys）的倾斜信息"的一些统计数据对于查询来说是动态的，用提示来配置它们会非常方便，因为我们从 planner 获得的计划元数据通常不那么准确；
+  - 算子（Operator）资源约束：在许多情况下，我们会为执行算子提供默认的资源配置，即最小并行度或托管内存（UDF 资源消耗）或特殊资源需求（GPU 或 SSD 磁盘）等，可以使用 SQL 提示非常灵活地为每个查询（非作业）配置资源。
+
+##### with语句
+
+* sql语句的一个语法糖
+
+  ````sqlite
+  WITH orders_with_total AS (
+      SELECT order_id, price + tax AS total
+      FROM Orders
+  )
+  SELECT order_id, SUM(total)
+  FROM orders_with_total
+  GROUP BY order_id;
+  ````
+
+* 
+
+##### select where distinct
+
+* ````sqlite
+  SELECT order_id, price + tax FROM Orders;
+  
+  SELECT order_id, price FROM (VALUES (1, 2.0), (2, 3.1))  AS t (order_id, price)
+  ````
+
+* ````sqlite
+  SELECT DISTINCT id FROM Orders
+  ````
+
+* 对于流式查询, 计算查询结果所需要的状态可能会源源不断地增长,而状态大小又依赖不同行的数量.此时,可以通过配置文件为状态设置合适的存活时间(TTL),以防止过大的状态可能对查询结果的正确性的影响
+
+##### 窗口函数
+
+* Apache Flink 提供了如下 `窗口表值函数`（table-valued function, 缩写TVF）把表的数据划分到窗口中
+
+###### 滚动窗口（tumble）
+
+* `TUMBLE` 函数指定每个元素到一个指定大小的窗口中。滚动窗口的大小固定且不重复。（窗口不断往前滚动）
+
+* ``TUMBLE(TABLE data, DESCRIPTOR(timecol), size [, offset ])``
+
+  - `data` ：拥有时间属性列的表。
+  - `timecol` ：列描述符，决定数据的哪个时间属性列应该映射到窗口。
+  - `size` ：窗口的大小（时长）。
+  - `offset` ：窗口的偏移量 [非必填]。
+
+* ````sqlite
+  -- tables must have time attribute, e.g. `bidtime` in this table
+  Flink SQL> desc Bid;
+  +-------------+------------------------+------+-----+--------+---------------------------------+
+  |        name |                   type | null | key | extras |                       watermark |
+  +-------------+------------------------+------+-----+--------+---------------------------------+
+  |     bidtime | TIMESTAMP(3) *ROWTIME* | true |     |        | `bidtime` - INTERVAL '1' SECOND |
+  |       price |         DECIMAL(10, 2) | true |     |        |                                 |
+  |        item |                 STRING | true |     |        |                                 |
+  +-------------+------------------------+------+-----+--------+---------------------------------+
+  
+  Flink SQL> SELECT * FROM Bid;
+  +------------------+-------+------+
+  |          bidtime | price | item |
+  +------------------+-------+------+
+  | 2020-04-15 08:05 |  4.00 | C    |
+  | 2020-04-15 08:07 |  2.00 | A    |
+  | 2020-04-15 08:09 |  5.00 | D    |
+  | 2020-04-15 08:11 |  3.00 | B    |
+  | 2020-04-15 08:13 |  1.00 | E    |
+  | 2020-04-15 08:17 |  6.00 | F    |
+  +------------------+-------+------+
+  
+  Flink SQL> SELECT * FROM TABLE(
+     TUMBLE(TABLE Bid, DESCRIPTOR(bidtime), INTERVAL '10' MINUTES));
+  -- or with the named params
+  -- note: the DATA param must be the first
+  Flink SQL> SELECT * FROM TABLE(
+     TUMBLE(
+       DATA => TABLE Bid,
+       TIMECOL => DESCRIPTOR(bidtime),
+       SIZE => INTERVAL '10' MINUTES));
+  +------------------+-------+------+------------------+------------------+-------------------------+
+  |          bidtime | price | item |     window_start |       window_end |            window_time  |
+  +------------------+-------+------+------------------+------------------+-------------------------+
+  | 2020-04-15 08:05 |  4.00 | C    | 2020-04-15 08:00 | 2020-04-15 08:10 | 2020-04-15 08:09:59.999 |
+  | 2020-04-15 08:07 |  2.00 | A    | 2020-04-15 08:00 | 2020-04-15 08:10 | 2020-04-15 08:09:59.999 |
+  | 2020-04-15 08:09 |  5.00 | D    | 2020-04-15 08:00 | 2020-04-15 08:10 | 2020-04-15 08:09:59.999 |
+  | 2020-04-15 08:11 |  3.00 | B    | 2020-04-15 08:10 | 2020-04-15 08:20 | 2020-04-15 08:19:59.999 |
+  | 2020-04-15 08:13 |  1.00 | E    | 2020-04-15 08:10 | 2020-04-15 08:20 | 2020-04-15 08:19:59.999 |
+  | 2020-04-15 08:17 |  6.00 | F    | 2020-04-15 08:10 | 2020-04-15 08:20 | 2020-04-15 08:19:59.999 |
+  +------------------+-------+------+------------------+------------------+-------------------------+
+  
+  -- apply aggregation on the tumbling windowed table
+  Flink SQL> SELECT window_start, window_end, SUM(price) AS total_price
+    FROM TABLE(
+      TUMBLE(TABLE Bid, DESCRIPTOR(bidtime), INTERVAL '10' MINUTES))
+    GROUP BY window_start, window_end;
+  +------------------+------------------+-------------+
+  |     window_start |       window_end | total_price |
+  +------------------+------------------+-------------+
+  | 2020-04-15 08:00 | 2020-04-15 08:10 |       11.00 |
+  | 2020-04-15 08:10 | 2020-04-15 08:20 |       10.00 |
+  +------------------+------------------+-------------+
+  ````
+
+* 
+
+###### 滑动窗口 （hop）
+
+* 滑动窗口函数指定元素到一个定长的窗口中。和滚动窗口很像，有窗口大小参数，另外增加了一个窗口滑动步长参数。如果滑动步长小于窗口大小，就能产生数据重叠的效果。在这个例子里，数据可以被分配在多个窗口。(不断的往前滑动相应的步长)
+
+* `HOP(TABLE data, DESCRIPTOR(timecol), slide, size [, offset ])`
+
+  - `data`：拥有时间属性列的表。
+  - `timecol`：列描述符，决定数据的哪个时间属性列应该映射到窗口。
+  - `slide`：窗口的滑动步长。
+  - `size`：窗口的大小(时长)。
+  - `offset`：窗口的偏移量 [非必填]。
+
+* ````sqlite
+  > SELECT * FROM TABLE(
+      HOP(TABLE Bid, DESCRIPTOR(bidtime), INTERVAL '5' MINUTES, INTERVAL '10' MINUTES));
+  -- or with the named params
+  -- note: the DATA param must be the first
+  > SELECT * FROM TABLE(
+      HOP(
+        DATA => TABLE Bid,
+        TIMECOL => DESCRIPTOR(bidtime),
+        SLIDE => INTERVAL '5' MINUTES,
+        SIZE => INTERVAL '10' MINUTES));
+  +------------------+-------+------+------------------+------------------+-------------------------+
+  |          bidtime | price | item |     window_start |       window_end |           window_time   |
+  +------------------+-------+------+------------------+------------------+-------------------------+
+  | 2020-04-15 08:05 |  4.00 | C    | 2020-04-15 08:00 | 2020-04-15 08:10 | 2020-04-15 08:09:59.999 |
+  | 2020-04-15 08:05 |  4.00 | C    | 2020-04-15 08:05 | 2020-04-15 08:15 | 2020-04-15 08:14:59.999 |
+  | 2020-04-15 08:07 |  2.00 | A    | 2020-04-15 08:00 | 2020-04-15 08:10 | 2020-04-15 08:09:59.999 |
+  | 2020-04-15 08:07 |  2.00 | A    | 2020-04-15 08:05 | 2020-04-15 08:15 | 2020-04-15 08:14:59.999 |
+  | 2020-04-15 08:09 |  5.00 | D    | 2020-04-15 08:00 | 2020-04-15 08:10 | 2020-04-15 08:09:59.999 |
+  | 2020-04-15 08:09 |  5.00 | D    | 2020-04-15 08:05 | 2020-04-15 08:15 | 2020-04-15 08:14:59.999 |
+  | 2020-04-15 08:11 |  3.00 | B    | 2020-04-15 08:05 | 2020-04-15 08:15 | 2020-04-15 08:14:59.999 |
+  | 2020-04-15 08:11 |  3.00 | B    | 2020-04-15 08:10 | 2020-04-15 08:20 | 2020-04-15 08:19:59.999 |
+  | 2020-04-15 08:13 |  1.00 | E    | 2020-04-15 08:05 | 2020-04-15 08:15 | 2020-04-15 08:14:59.999 |
+  | 2020-04-15 08:13 |  1.00 | E    | 2020-04-15 08:10 | 2020-04-15 08:20 | 2020-04-15 08:19:59.999 |
+  | 2020-04-15 08:17 |  6.00 | F    | 2020-04-15 08:10 | 2020-04-15 08:20 | 2020-04-15 08:19:59.999 |
+  | 2020-04-15 08:17 |  6.00 | F    | 2020-04-15 08:15 | 2020-04-15 08:25 | 2020-04-15 08:24:59.999 |
+  +------------------+-------+------+------------------+------------------+-------------------------+
+  
+  -- apply aggregation on the hopping windowed table
+  > SELECT window_start, window_end, SUM(price) AS total_price
+    FROM TABLE(
+      HOP(TABLE Bid, DESCRIPTOR(bidtime), INTERVAL '5' MINUTES, INTERVAL '10' MINUTES))
+    GROUP BY window_start, window_end;
+  +------------------+------------------+-------------+
+  |     window_start |       window_end | total_price |
+  +------------------+------------------+-------------+
+  | 2020-04-15 08:00 | 2020-04-15 08:10 |       11.00 |
+  | 2020-04-15 08:05 | 2020-04-15 08:15 |       15.00 |
+  | 2020-04-15 08:10 | 2020-04-15 08:20 |       10.00 |
+  | 2020-04-15 08:15 | 2020-04-15 08:25 |        6.00 |
+  +------------------+------------------+-------------+
+  ````
+
+###### 累积窗口（cumulate）
+
+* 累积窗口在某些场景中非常有用，比如说提前触发的滚动窗口。例如：每日仪表盘从 00:00 开始每分钟绘制累积 UV，10:00 时 UV 就是从 00:00 到 10:00 的UV 总数。累积窗口可以简单且有效地实现它。
+* ``CUMULATE(TABLE data, DESCRIPTOR(timecol), step, size)``
+  - `data`：拥有时间属性列的表。
+  - `timecol`：列描述符，决定数据的哪个时间属性列应该映射到窗口。
+  - `step`：指定连续的累积窗口之间增加的窗口大小。
+  - `size`：指定累积窗口的最大宽度的窗口时间。`size`必须是`step`的整数倍。
+  - `offset`：窗口的偏移量 [非必填]。
+
+###### 会话窗口（session）（目前仅支持流模式，v1.20.0）
+
+##### 窗口聚合
+
+* 会话窗口函数通过会话活动对元素进行分组。与滚动窗口和滑动窗口不同，会话窗口不重叠，也没有固定的开始和结束时间。 一个会话窗口会在一定时间内没有收到元素时关闭，比如超过一定时间不处于活跃状态。 会话窗口需要配置一个固定的会话间隙，以定义不活跃间隙的时长。 当超出不活跃间隙的时候，当前的会话窗口将会关闭，随后的元素将被分配到一个新的会话窗口内。
+
+* `SESSION(TABLE data [PARTITION BY(keycols, ...)], DESCRIPTOR(timecol), gap)`
+
+  - `data`：拥有时间属性列的表。
+  - `keycols`：列描述符，决定会话窗口应该使用哪些列来分区数据。
+  - `timecol`：列描述符，决定数据的哪个时间属性列应该映射到窗口。
+  - `gap`：两个事件被认为属于同一个会话窗口的最大时间间隔。
+
+* ````sqlite
+  /*注意:
+  
+  会话窗口函数目前不支持批模式。
+  会话窗口函数目前不支持 性能调优 中的任何优化。
+  会话窗口 Join 、会话窗口 Top-N 、会话窗口聚合功能目前理论可用，但仍处于实验阶段。遇到问题可以在 JIRA 中报告。
+  */
+  -- tables must have time attribute, e.g. `bidtime` in this table
+  Flink SQL> desc Bid;
+  +-------------+------------------------+------+-----+--------+---------------------------------+
+  |        name |                   type | null | key | extras |                       watermark |
+  +-------------+------------------------+------+-----+--------+---------------------------------+
+  |     bidtime | TIMESTAMP(3) *ROWTIME* | true |     |        | `bidtime` - INTERVAL '1' SECOND |
+  |       price |         DECIMAL(10, 2) | true |     |        |                                 |
+  |        item |                 STRING | true |     |        |                                 |
+  +-------------+------------------------+------+-----+--------+---------------------------------+
+  
+  Flink SQL> SELECT * FROM Bid;
+  +------------------+-------+------+
+  |          bidtime | price | item |
+  +------------------+-------+------+
+  | 2020-04-15 08:07 |  4.00 | A    |
+  | 2020-04-15 08:06 |  2.00 | A    |
+  | 2020-04-15 08:09 |  5.00 | B    |
+  | 2020-04-15 08:08 |  3.00 | A    |
+  | 2020-04-15 08:17 |  1.00 | B    |
+  +------------------+-------+------+
+  
+  -- session window with partition keys
+  > SELECT * FROM TABLE(
+      SESSION(TABLE Bid PARTITION BY item, DESCRIPTOR(bidtime), INTERVAL '5' MINUTES));
+  -- or with the named params
+  -- note: the DATA param must be the first
+  > SELECT * FROM TABLE(
+      SESSION(
+        DATA => TABLE Bid PARTITION BY item,
+        TIMECOL => DESCRIPTOR(bidtime),
+        GAP => INTERVAL '5' MINUTES);
+  +------------------+-------+------+------------------+------------------+-------------------------+
+  |          bidtime | price | item |     window_start |       window_end |             window_time |
+  +------------------+-------+------+------------------+------------------+-------------------------+
+  | 2020-04-15 08:07 |  4.00 | A    | 2020-04-15 08:06 | 2020-04-15 08:13 | 2020-04-15 08:12:59.999 |
+  | 2020-04-15 08:06 |  2.00 | A    | 2020-04-15 08:06 | 2020-04-15 08:13 | 2020-04-15 08:12:59.999 |
+  | 2020-04-15 08:08 |  3.00 | A    | 2020-04-15 08:06 | 2020-04-15 08:13 | 2020-04-15 08:12:59.999 |
+  | 2020-04-15 08:09 |  5.00 | B    | 2020-04-15 08:09 | 2020-04-15 08:14 | 2020-04-15 08:13:59.999 |
+  | 2020-04-15 08:17 |  1.00 | B    | 2020-04-15 08:17 | 2020-04-15 08:22 | 2020-04-15 08:21:59.999 |
+  +------------------+-------+------+------------------+------------------+-------------------------+
+  
+  -- apply aggregation on the session windowed table with partition keys
+  > SELECT window_start, window_end, item, SUM(price) AS total_price
+    FROM TABLE(
+        SESSION(TABLE Bid PARTITION BY item, DESCRIPTOR(bidtime), INTERVAL '5' MINUTES))
+    GROUP BY item, window_start, window_end;
+  +------------------+------------------+------+-------------+
+  |     window_start |       window_end | item | total_price |
+  +------------------+------------------+------+-------------+
+  | 2020-04-15 08:06 | 2020-04-15 08:13 | A    |        9.00 |
+  | 2020-04-15 08:09 | 2020-04-15 08:14 | B    |        5.00 |
+  | 2020-04-15 08:17 | 2020-04-15 08:22 | B    |        1.00 |
+  +------------------+------------------+------+-------------+
+  
+  -- session window without partition keys
+  > SELECT * FROM TABLE(
+      SESSION(TABLE Bid, DESCRIPTOR(bidtime), INTERVAL '5' MINUTES));
+  -- or with the named params
+  -- note: the DATA param must be the first
+  > SELECT * FROM TABLE(
+      SESSION(
+        DATA => TABLE Bid,
+        TIMECOL => DESCRIPTOR(bidtime),
+        GAP => INTERVAL '5' MINUTES);
+  +------------------+-------+------+------------------+------------------+-------------------------+
+  |          bidtime | price | item |     window_start |       window_end |             window_time |
+  +------------------+-------+------+------------------+------------------+-------------------------+
+  | 2020-04-15 08:07 |  4.00 | A    | 2020-04-15 08:06 | 2020-04-15 08:14 | 2020-04-15 08:13:59.999 |
+  | 2020-04-15 08:06 |  2.00 | A    | 2020-04-15 08:06 | 2020-04-15 08:14 | 2020-04-15 08:13:59.999 |
+  | 2020-04-15 08:08 |  3.00 | A    | 2020-04-15 08:06 | 2020-04-15 08:14 | 2020-04-15 08:13:59.999 |
+  | 2020-04-15 08:09 |  5.00 | B    | 2020-04-15 08:06 | 2020-04-15 08:14 | 2020-04-15 08:13:59.999 |
+  | 2020-04-15 08:17 |  1.00 | B    | 2020-04-15 08:17 | 2020-04-15 08:22 | 2020-04-15 08:21:59.999 |
+  +------------------+-------+------+------------------+------------------+-------------------------+
+  
+  -- apply aggregation on the session windowed table without partition keys
+  > SELECT window_start, window_end, SUM(price) AS total_price
+    FROM TABLE(
+        SESSION(TABLE Bid, DESCRIPTOR(bidtime), INTERVAL '5' MINUTES))
+    GROUP BY window_start, window_end;
+  +------------------+------------------+-------------+
+  |     window_start |       window_end | total_price |
+  +------------------+------------------+-------------+
+  | 2020-04-15 08:06 | 2020-04-15 08:14 |       14.00 |
+  | 2020-04-15 08:17 | 2020-04-15 08:22 |        1.00 |
+  +------------------+------------------+-------------+
+  ````
+
+
+
+###### 窗口偏移
+
+* `Offset` 可选参数，可以用来改变窗口的分配。可以是正或者负的区间。默认情况下窗口的偏移是 0。不同的偏移值可以决定记录分配的窗口
+
+##### 窗口聚合
+
+* `GROUPING SETS` 窗口聚合中 `GROUP BY` 子句必须包含 `window_start` 和 `window_end` 列，但 `GROUPING SETS` 子句中不能包含这两个字段。
+
+  - 对于rollup和cube的支持也是类似的
+
+* ````sqlite
+  Flink SQL> SELECT window_start, window_end, supplier_id, SUM(price) AS total_price
+    FROM TABLE(
+      TUMBLE(TABLE Bid, DESCRIPTOR(bidtime), INTERVAL '10' MINUTES))
+    GROUP BY window_start, window_end, GROUPING SETS ((supplier_id), ());
+  +------------------+------------------+-------------+-------------+
+  |     window_start |       window_end | supplier_id | total_price |
+  +------------------+------------------+-------------+-------------+
+  | 2020-04-15 08:00 | 2020-04-15 08:10 |      (NULL) |       11.00 |
+  | 2020-04-15 08:00 | 2020-04-15 08:10 |   supplier2 |        5.00 |
+  | 2020-04-15 08:00 | 2020-04-15 08:10 |   supplier1 |        6.00 |
+  | 2020-04-15 08:10 | 2020-04-15 08:20 |      (NULL) |       10.00 |
+  | 2020-04-15 08:10 | 2020-04-15 08:20 |   supplier2 |        9.00 |
+  | 2020-04-15 08:10 | 2020-04-15 08:20 |   supplier1 |        1.00 |
+  +------------------+------------------+-------------+-------------+
+  ````
+
+* 多级窗口聚合
+
+  - `window_start` 和 `window_end` 列是普通的时间戳字段，并不是时间属性。因此它们不能在后续的操作中当做时间属性进行基于时间的操作。 为了传递时间属性，需要在 `GROUP BY` 子句中添加 `window_time` 列。`window_time` 是 [Windowing TVFs](https://nightlies.apache.org/flink/flink-docs-release-1.20/zh/docs/dev/table/sql/queries/window-tvf/#window-functions) 产生的三列之一，它是窗口的时间属性。 `window_time` 添加到 `GROUP BY` 子句后就能被选定了。
+
+  - ````sqlite
+    -- tumbling 5 minutes for each supplier_id
+    CREATE VIEW window1 AS
+    -- Note: The window start and window end fields of inner Window TVF are optional in the select clause. However, if they appear in the clause, they need to be aliased to prevent name conflicting with the window start and window end of the outer Window TVF.
+    SELECT window_start AS window_5mintumble_start, window_end AS window_5mintumble_end, window_time AS rowtime, SUM(price) AS partial_price
+      FROM TABLE(
+        TUMBLE(TABLE Bid, DESCRIPTOR(bidtime), INTERVAL '5' MINUTES))
+      GROUP BY supplier_id, window_start, window_end, window_time;
     
+    -- tumbling 10 minutes on the first window
+    SELECT window_start, window_end, SUM(partial_price) AS total_price
+      FROM TABLE(
+          TUMBLE(TABLE window1, DESCRIPTOR(rowtime), INTERVAL '10' MINUTES))
+      GROUP BY window_start, window_end;
+    ````
+
+  - 
+
+##### 分组聚合
+
+* sql常用的分组聚合操作都是支持的、group by,count(distinct ),grouping sets维度组合聚合，having过滤等
+
+* ````sqlite
+  SELECT COUNT(*)
+  FROM Orders
+  GROUP BY order_id
+  
+  SELECT COUNT(DISTINCT order_id) FROM Orders
+  
+  SELECT supplier_id, rating, COUNT(*) AS total
+  FROM (VALUES
+      ('supplier1', 'product1', 4),
+      ('supplier1', 'product2', 3),
+      ('supplier2', 'product3', 3),
+      ('supplier2', 'product4', 4))
+  AS Products(supplier_id, product_id, rating)
+  GROUP BY GROUPING SETS ((supplier_id, rating), (supplier_id), ())
+  
+  SELECT SUM(amount)
+  FROM Orders
+  GROUP BY users
+  HAVING SUM(amount) > 50
+  ````
+
+*  
+
+##### over聚合
+
+* `OVER` 聚合通过排序后的范围数据为每行输入计算出聚合值。和 `GROUP BY` 聚合不同， `OVER` 聚合不会把结果通过分组减少到一行，它会为每行输入增加一个聚合值。
+
+* ````sqlite
+  -- 下面这个查询为每个订单计算前一个小时之内接收到的同一产品所有订单的总金额。
+  SELECT order_id, order_time, amount,
+    SUM(amount) OVER (
+      PARTITION BY product
+      ORDER BY order_time
+      RANGE BETWEEN INTERVAL '1' HOUR PRECEDING AND CURRENT ROW
+    ) AS one_hour_prod_amount_sum
+  FROM Orders
+  ````
+
+* 特殊点：
+
+  - 你可以在一个 `SELECT` 子句中定义多个 `OVER` 窗口聚合。然而，对于流式查询，由于目前的限制，所有聚合的 `OVER` 窗口必须是相同的。
+
+  - Flink 目前只支持 `OVER` 窗口定义在升序（asc）的 [时间属性](https://nightlies.apache.org/flink/flink-docs-release-1.20/zh/docs/dev/table/concepts/time_attributes/) 上。其他的排序不支持。
+
+  - 范围（RANGE）定义指定了聚合中包含了多少行数据。范围通过 `BETWEEN` 子句定义上下边界，其内的所有行都会聚合。Flink 只支持 `CURRENT ROW` 作为上边界。
+
+    - RANGE间隔
+
+      - `RANGE` 间隔是定义在排序列值上的，在 Flink 里，排序列总是一个时间属性。下面的 `RANG` 间隔定义了聚合会在比当前行的时间属性小 30 分钟的所有行上进行。
+
+      - ```sql
+        RANGE BETWEEN INTERVAL '30' MINUTE PRECEDING AND CURRENT ROW
+        ```
+
+    - ROW间隔
+
+      - `ROWS` 间隔基于计数。它定义了聚合操作包含的精确行数。下面的 `ROWS` 间隔定义了当前行 + 之前的 10 行（也就是11行）都会被聚合。
+
+      - ```sqlite
+        ROWS BETWEEN 10 PRECEDING AND CURRENT ROW
+        WINDOW
+        ```
+
+    - WINDOW子句的使用
+
+    - ```sqlite
+      SELECT order_id, order_time, amount,
+        SUM(amount) OVER w AS sum_amount,
+        AVG(amount) OVER w AS avg_amount
+      FROM Orders
+      WINDOW w AS (
+        PARTITION BY product
+        ORDER BY order_time
+        RANGE BETWEEN INTERVAL '1' HOUR PRECEDING AND CURRENT ROW)
+      ```
+
+##### join
+
+* Flink SQL支持对动态表进行复杂而灵活的连接操作。 为了处理不同的场景，需要多种查询语义，因此有几种不同类型的 Join。
+* 默认情况下，joins 的顺序是没有优化的。表的 join 顺序是在 `FROM` 从句指定的。可以通过把更新频率最低的表放在第一个、频率最高的放在最后这种方式来微调 join 查询的性能。需要确保表的顺序不会产生笛卡尔积，因为不支持这样的操作并且会导致查询失败。
+
+###### Regular Joins
+
+###### Interval Joins
+
+###### Temporal Joins
+
+###### Lookup Join
+
+###### 数组展开
+
+###### Table Function
+
+
+
+
+
+##### 窗口关联
+
+* 窗口关联就是增加时间维度到关联条件中。在此过程中，窗口关联将两个流中在同一窗口且符合 join 条件的元素 join 起来。窗口关联的语义和 [DataStream window join](https://nightlies.apache.org/flink/flink-docs-release-1.20/zh/docs/dev/datastream/operators/joining/#window-join) 相同。
+
+##### 集合操作
+
+* UNION,INTERSECT,EXCEPT,IN,EXISTS
+
+* ````sqlite
+  Flink SQL> create view t1(s) as values ('c'), ('a'), ('b'), ('b'), ('c');
+  Flink SQL> create view t2(s) as values ('d'), ('e'), ('a'), ('b'), ('b');
+  
+  -- INTERSECT 和 INTERSECT ALL 返回两个表中共有的数据。 INTERSECT 会去重，INTERSECT ALL 不会去重。
+  
+  (SELECT s FROM t1) INTERSECT (SELECT s FROM t2);
+  
+  -- EXCEPT 和 EXCEPT ALL 返回在一个表中存在，但在另一个表中不存在数据。 EXCEPT 会去重，EXCEPT ALL不会去重。
+  
+  (SELECT s FROM t1) EXCEPT (SELECT s FROM t2);
+  
+  SELECT user, amount
+  FROM Orders
+  WHERE product IN (
+      SELECT product FROM NewProducts
+  )
+  
+  SELECT user, amount
+  FROM Orders
+  WHERE product EXISTS (
+      SELECT product FROM NewProducts
+  )
+  ````
+
+* 
+
+##### order by语句
+
+##### limit语句
+
+##### Top-N
+
+##### 窗口Top-N
+
+##### 窗口去重
+
+##### 去重
+
