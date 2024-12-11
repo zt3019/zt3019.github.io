@@ -62,7 +62,7 @@
   </script>
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
-<meta name="generator" content="Hexo 5.2.0"></head>
+<meta name="generator" content="Hexo 7.3.0"></head>
 
 
 <body>
@@ -187,7 +187,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      786 字
+      789 字
     </span>
   
 
@@ -254,7 +254,7 @@
 <h3 id="数据倾斜的解决"><a href="#数据倾斜的解决" class="headerlink" title="数据倾斜的解决"></a>数据倾斜的解决</h3><ul>
 <li>数据倾斜只会发生在shuffle中，在hive中，表的join,group by。在spark中常见可能会触发shuffle操作的算子：distinct，groupByKey,reduceByKey,aggregateByKey,join,cogroup,repartition等。</li>
 <li>对于hive HQL来说解决的办法：<ul>
-<li>group by 时的数据倾斜:解决办法：hive.groupby.skewindata=true<ul>
+<li>group by 时的数据倾斜:解决办法：hive.groupby.skewindata&#x3D;true<ul>
 <li>控制生成两个MRJob，第一个MR的map的输出结果随机分配到reduce中，减少某些key值条数过多，某些key 值条数过少造成的数据倾斜问题。</li>
 <li>第二个MR再根据预处理的数据结果，按照group By Key分布到reduce中，（这个过程可以保证相同的Group By Key分布到同一个reduce中），最后完成最终的聚合操作。</li>
 </ul>
@@ -263,7 +263,7 @@
 <li>过滤不正常的记录</li>
 <li>数据去重</li>
 <li>使用map join</li>
-<li>打开set Hive.optimize.skewjoin = true;  </li>
+<li>打开set Hive.optimize.skewjoin &#x3D; true;</li>
 </ul>
 </li>
 <li>无法从sql层面优化时，可以从业务算法角度提升<ul>
@@ -273,7 +273,7 @@
 </ul>
 </li>
 <li>Reduce任务数不合理<ul>
-<li>set mapred.reduce.tasks=N</li>
+<li>set mapred.reduce.tasks&#x3D;N</li>
 </ul>
 </li>
 <li>业务数据本身存在倾斜<ul>
@@ -281,7 +281,7 @@
 </ul>
 </li>
 <li>多维分析带来的低效<ul>
-<li>当含有rollup和cube语句的from子句中包含子查询或者join时，将子查询或join的结果放到临时表，然后从临时表中读取数据做多维分析  </li>
+<li>当含有rollup和cube语句的from子句中包含子查询或者join时，将子查询或join的结果放到临时表，然后从临时表中读取数据做多维分析</li>
 </ul>
 </li>
 </ul>

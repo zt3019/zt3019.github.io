@@ -62,7 +62,7 @@
   </script>
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
-<meta name="generator" content="Hexo 5.2.0"></head>
+<meta name="generator" content="Hexo 7.3.0"></head>
 
 
 <body>
@@ -293,7 +293,7 @@
 <ol>
 <li><p>Client先访问zookeeper，获取hbase:meta（）表位于哪个Region Server，client如果在MetaCache中发现有该表的信息，就不会向ZK请求获取meta的位置了。</p>
 </li>
-<li><p>访问对应的Region Server，获取hbase:meta表，根据读请求的namespace:table/rowkey，查询出目标数据位于哪个Region Server中的哪个Region中。并将该table的region信息以及meta表的位置信息缓存在客户端的meta cache，方便下次访问。</p>
+<li><p>访问对应的Region Server，获取hbase:meta表，根据读请求的namespace:table&#x2F;rowkey，查询出目标数据位于哪个Region Server中的哪个Region中。并将该table的region信息以及meta表的位置信息缓存在客户端的meta cache，方便下次访问。</p>
 </li>
 <li><p>与目标Region Server进行通讯；</p>
 </li>
@@ -315,11 +315,11 @@
 </ul>
 <h3 id="读数据流程"><a href="#读数据流程" class="headerlink" title="读数据流程"></a>读数据流程</h3><p><a target="_blank" rel="noopener" href="https://imgtu.com/i/RrMr7Q"><img src="https://z3.ax1x.com/2021/07/01/RrMr7Q.png" srcset="/img/loading.gif" lazyload alt="RrMr7Q.png"></a></p>
 <ul>
-<li>与写数据流程差不多。说一下区别，去目标RegionServer读取数据时，会向Block Cache(读缓存),MemStore,StoreFile中查询数据，并将所有数据进行合并。此处所有数据是指同一条数据的不同版本（time stamp）或者不同的类型（Put/Delete）。</li>
+<li>与写数据流程差不多。说一下区别，去目标RegionServer读取数据时，会向Block Cache(读缓存),MemStore,StoreFile中查询数据，并将所有数据进行合并。此处所有数据是指同一条数据的不同版本（time stamp）或者不同的类型（Put&#x2F;Delete）。</li>
 <li>将从文件中查询到的数据块缓存到Block Cache中。客户端从读缓存中读取相应的数据。返回ACK。</li>
 </ul>
 <h3 id="StoreFile-Compaction"><a href="#StoreFile-Compaction" class="headerlink" title="StoreFile Compaction"></a>StoreFile Compaction</h3><ul>
-<li><p>由于memstore每次刷写都会生成一个新的HFile，且同一个字段的不同版本（timestamp）和不同类型（Put/Delete）有可能会分布在不同的HFile中，因此查询时需要遍历所有的HFile。为了减少HFile的个数，以及清理掉过期和删除的数据，会进行StoreFile Compaction。</p>
+<li><p>由于memstore每次刷写都会生成一个新的HFile，且同一个字段的不同版本（timestamp）和不同类型（Put&#x2F;Delete）有可能会分布在不同的HFile中，因此查询时需要遍历所有的HFile。为了减少HFile的个数，以及清理掉过期和删除的数据，会进行StoreFile Compaction。</p>
 </li>
 <li><p>Compaction（合并）分为两种：分别是Minor Compaction和Major Compaction。</p>
 </li>

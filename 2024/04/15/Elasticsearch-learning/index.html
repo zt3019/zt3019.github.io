@@ -1,0 +1,1050 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="	#87CEFA">
+  <meta name="description" content="Just Do it!">
+  <meta name="author" content="daxiazou">
+  <meta name="keywords" content="">
+  
+    <meta name="baidu-site-verification" content="code-wxp4a58PBe" />
+  
+  <title>Elasticsearch_learning - Nevermind</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.6.0/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.10","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Nevermind</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('https://tse1-mm.cn.bing.net/th/id/OIP-C.kGk4b5irwRgV11Ouu00AOQHaEC?w=293&h=180&c=7&r=0&o=5&pid=1.7') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Elasticsearch_learning">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2024-04-15 11:54" pubdate>
+        2024年4月15日 中午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      6.8k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      99
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Elasticsearch_learning</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：2024年9月12日 晚上
+                
+              </p>
+            
+            <div class="markdown-body">
+              <h1 id="Elasticsearch"><a href="#Elasticsearch" class="headerlink" title="Elasticsearch"></a>Elasticsearch</h1><ul>
+<li><p>Elaticsearch，简称为es，<strong>es是一个开源的高扩展的分布式全文检索引擎 <strong>，它可以近乎实时的存储、检索数据；本身扩展性很好，可以扩展到上百台服务器，处理PB级别的数据。es也使用Java开发并使用 <code>Lucene</code> 作为其核心来实现所有索引和搜索的功能，但是它的目的是通过简单的 RESTful API 来隐藏 Lucene 的复杂性，从而让全文搜索变得简单。</strong>近实时搜索平台框架</strong></p>
+</li>
+<li><p>Lucene是apache软件基金会的项目，<strong>是一个开放源代码的全文检索引擎工具包</strong>，但它不是一个完整的全文检索引擎，而是一个全文检索引擎的架构</p>
+</li>
+<li><p>类似的工具有<code>Solr</code></p>
+</li>
+<li><p>ELK</p>
+<ul>
+<li>ELK是<code>Elasticsearch</code>、<code>Logstash</code>、<code>Kibana</code>三大开源框架首字母大写简称。市面上也被成为 ElasticStack 。</li>
+<li>Elasticsearch 是一个基于 Lucene、分布式、通过 Restful 方式进行交互的<strong>近实时搜索平台框架</strong>。</li>
+<li>Logstash是 ELK 的<strong>中央数据流引擎</strong>，用于从不同目标（文件&#x2F;数据存储&#x2F;MQ）收集的不同格式数据，经过过滤后支持输出到不同目的地（文件&#x2F;MQ&#x2F;redis&#x2F;elasticsearch&#x2F;kafka等）。</li>
+<li>Kibana可以将 elasticsearch 的数据<strong>通过友好的页面展示出来，提供实时分析的功能</strong>。</li>
+</ul>
+</li>
+<li><p><strong>ELK 不仅仅适用于日志分析，它还可以支持其它任何数据分析和收集的场景，日志分析和收集只是更具有代表性，并非唯一性</strong>。</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/358744225">参考链接1</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/chenhuabin/p/13800715.html">参考链接2</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://learnku.com/docs/elasticsearch73/7.3/data-in-documents-and-indices/6446">参考链接3</a></p>
+</li>
+</ul>
+<h2 id="ES核心概念"><a href="#ES核心概念" class="headerlink" title="ES核心概念"></a>ES核心概念</h2><ul>
+<li><p>ES是面向文档的<strong>非关系型数据库</strong></p>
+</li>
+<li><p>elasticsearch(集群)中可以包含多个索引(数据库)，每个索引中可以包含多个类型(表)，每个类型下又包含多个文档(行)，每个文档中又包含多个字段(列)</p>
+</li>
+<li><p><code>GET /zt_test/_doc/2</code></p>
+<ul>
+<li><p>zt_test：index的概念：<strong>索引是文档(Document)的容器，是一类文档的集合。</strong>三种意思：</p>
+<ul>
+<li>索引（名次）：相当于关系型数据库中的(database),索引由其名称(<strong>必须为全小写字符</strong>)进行标识</li>
+<li>索引（动词）：保存一个文档到索引（名词）的过程。类似于sql中的insert或update</li>
+<li>倒排索引：关系型数据库通过给某个字段增加一个b+树索引到指定的列，提升检索速度。es使用了一个叫做倒排索引的结构来达到相同的目的。</li>
+</ul>
+</li>
+<li><p>_doc：type的概念</p>
+<ul>
+<li><p>之前的版本中，索引和文档中间还有个类型的概念，每个索引下可以建立多个类型，文档存储时需要指定index和type。从6.0.0开始单个索引中只能有一个类型，</p>
+<p>7.0.0以后将将不建议使用，8.0.0 以后完全不支持。</p>
+<h5 id="弃用该概念的原因："><a href="#弃用该概念的原因：" class="headerlink" title="弃用该概念的原因："></a>弃用该概念的原因：</h5><p>我们虽然可以通俗的去理解Index比作 SQL 的 Database，Type比作SQL的Table。但这并不准确，因为如果在SQL中,Table 之前相互独立，同名的字段在两个表中毫无关系。</p>
+<p>但是在ES中，同一个Index 下不同的 Type 如果有同名的字段，他们会被 Luecence 当作同一个字段 ，并且他们的定义必须相同。所以我觉得Index现在更像一个表，</p>
+<p>而Type字段并没有多少意义。目前Type已经被Deprecated，在7.0开始，一个索引只能建一个Type为<code>_doc</code></p>
+</li>
+</ul>
+</li>
+<li><p>2:document的概念</p>
+<ul>
+<li><code>Document</code> Index 里面单条的记录称为Document（文档）。<strong>等同于关系型数据库表中的行</strong>。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>文档</p>
+<ul>
+<li>es是面向文档的，那么就意味着索引和收索数据的最小单位就是文档</li>
+</ul>
+</li>
+<li><p>类型</p>
+<ul>
+<li><p>类型是文档的逻辑容器，就像关系型数据库一样，表格是行的容器。</p>
+</li>
+<li><p>类型中对于字段的定义称为映射，比如name映射为字符串类型</p>
+</li>
+<li><p><code>Type</code> 可以理解成关系数据库中Table。</p>
+<p>之前的版本中，索引和文档中间还有个类型的概念，每个索引下可以建立多个类型，文档存储时需要指定index和type。从6.0.0开始单个索引中只能有一个类型，</p>
+<p>7.0.0以后将将不建议使用，8.0.0 以后完全不支持。</p>
+<h5 id="弃用该概念的原因：-1"><a href="#弃用该概念的原因：-1" class="headerlink" title="弃用该概念的原因："></a>弃用该概念的原因：</h5><p>我们虽然可以通俗的去理解Index比作 SQL 的 Database，Type比作SQL的Table。但这并不准确，因为如果在SQL中,Table 之前相互独立，同名的字段在两个表中毫无关系。</p>
+<p>但是在ES中，同一个Index 下不同的 Type 如果有同名的字段，他们会被 Luecence 当作同一个字段 ，并且他们的定义必须相同。所以我觉得Index现在更像一个表，</p>
+<p><strong>而Type字段并没有多少意义。目前Type已经被Deprecated，在7.0开始，一个索引只能建一个Type为<code>_doc</code></strong></p>
+</li>
+</ul>
+</li>
+<li><p>索引</p>
+<ul>
+<li>索引是映射类型的容器，es中的索引是一个非常大的文档集合。索引存储了映射类型的字段和其他设置。</li>
+</ul>
+</li>
+<li><p>物理设计</p>
+<ul>
+<li>一个es集群至少有一个节点，一个节点就是一个es进程，节点可以有多个索引。如果创建索引，那么索引将会有5个分片（primary shard，又称主分片）构成的，每一个主分片会有一个副本(replica shard，又称复制分片)</li>
+<li>一个分片是一个<code>lucene</code>索引，一个包含倒排索引的文件目录，倒排索引可以使es在不扫描全部文档的情况下，可以知道哪些文档包含特定的关键字。</li>
+</ul>
+</li>
+<li><p>倒排索引</p>
+<ul>
+<li>elasticsearch 使用的是一种称为<code>倒排索引</code>的结构，采用<code>Lucene</code>倒排索引作为底层。这种结构适用于快速的全文搜索， 一个索引由文档中所有不重复的列表构成，对于每一个词，都有一个包含它的文档列表。</li>
+</ul>
+</li>
+</ul>
+<h2 id="基础操作"><a href="#基础操作" class="headerlink" title="基础操作"></a>基础操作</h2><h3 id="分词"><a href="#分词" class="headerlink" title="分词"></a>分词</h3><ul>
+<li><p>IK分词器</p>
+<ul>
+<li><p>分词：即把一段中文或者别的内容划分成一个个的关键字，我们在搜索时候会把自己的信息进行分词，是因为数据库中或者索引库中的数据也会进行分词，然后进行一个匹配操作</p>
+</li>
+<li><p><code>ik_max_word</code> 是<strong>细粒度分词</strong>，会穷尽一个语句中所有分词可能 <code>ik_smart</code> 是<strong>粗粒度分词</strong>，优先匹配最长词，不会有重复的数据</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs shell">GET _analyze<br>&#123;<br>  &quot;analyzer&quot;:&quot;ik_smart&quot;,<br>  &quot;text&quot;: &quot;梦想家&quot;<br>&#125;<br><br>GET _analyze<br>&#123;<br>  &quot;analyzer&quot;:&quot;ik_max_word&quot;,<br>  &quot;text&quot;: &quot;梦想家&quot;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<h3 id="Rest风格"><a href="#Rest风格" class="headerlink" title="Rest风格"></a>Rest风格</h3><ul>
+<li><strong>一种软件架构风格，而不是标准，只是提供了一组设计原则和约束条件。它主要用于客户端和服务器交互类的软件。基于这个风格设计的软件可以更简洁，更有层次，更易于实现缓存等机制</strong>。</li>
+<li>RESTFUL是一种网络应用程序的设计风格和开发方式，<strong>基于HTTP</strong>，<strong>可以使用 XML 格式定义或 JSON 格式定义</strong>。最常用的数据格式是JSON。由于JSON能直接被JavaScript读取，所以，<strong>使用JSON格式的REST风格的API具有简单、易读、易用的特点</strong>。</li>
+</ul>
+<h3 id="增删改查操作"><a href="#增删改查操作" class="headerlink" title="增删改查操作"></a>增删改查操作</h3><ul>
+<li><p>创建一个索引</p>
+<ul>
+<li><p>PUT &#x2F;索引名&#x2F;类型名&#x2F;文档id {请求id}</p>
+</li>
+<li><pre><code class="shell"># 命令解释 
+# PUT 创建命令 test1 索引 type1 类型 1 id
+#type的概念已经被高版本弃用，不在使用，写成_doc即可
+PUT /test1/type1/1
+&#123;
+  &quot;name&quot;:&quot;大数据梦想家&quot;,
+  &quot;age&quot;:21
+&#125;
+# 也可以创建一个索引，_id会自动生成一个
+POST /zt_test/_doc/
+&#123;
+  &quot;name&quot;:&quot;dcx&quot;,
+  &quot;age&quot;:3208
+&#125;
+get /test1
+#查看test1 的结构，我们没有指定文档字段类型，但是es会默认配置类型
+
+get _cat/health
+#查看集群的健康情况
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><code class="hljs bash"><br>- put创建索引，并设置字段类型<br><br>  ````shell<br>  PUT /test2<br>  &#123;<br>    <span class="hljs-string">&quot;mappings&quot;</span>: &#123;<br>      <span class="hljs-string">&quot;properties&quot;</span>: &#123;<br>        <span class="hljs-string">&quot;name&quot;</span>:&#123;<br>          <span class="hljs-string">&quot;type&quot;</span>:<span class="hljs-string">&quot;text&quot;</span><br>        &#125;,<br>        <span class="hljs-string">&quot;age&quot;</span>:&#123;<br>          <span class="hljs-string">&quot;type&quot;</span>:<span class="hljs-string">&quot;long&quot;</span><br>        &#125;,<br>        <span class="hljs-string">&quot;birthday&quot;</span>:&#123;<br>          <span class="hljs-string">&quot;type&quot;</span>:<span class="hljs-string">&quot;date&quot;</span><br>        &#125;<br>      &#125;<br>    &#125;<br>  &#125;<br>  <br>  PUT /test3/_doc/1<br>  &#123;<br>    <span class="hljs-string">&quot;name&quot;</span>:<span class="hljs-string">&quot;大数据梦想家&quot;</span>,<br>    <span class="hljs-string">&quot;age&quot;</span>:21,<br>    <span class="hljs-string">&quot;birthday&quot;</span>:<span class="hljs-string">&quot;2000-02-06&quot;</span><br>  &#125;<br>  <br>  <span class="hljs-comment">#查看索引结构</span><br>  GET /索引名/_mapping?pretty<br>  GET /patent_index/_mapping?pretty<br>  <br>  <span class="hljs-comment">#根据查到的结构创建索引</span><br>  <span class="hljs-comment">#settings可以设置一些配置参数</span><br>  <span class="hljs-comment">#number_of_shards：分片数量（按机器节点数量计算，创建后不能更改）</span><br>  <span class="hljs-comment">#number_of_replicas：副本数量</span><br>  PUT comprehensive_suggest_predict_v3_zt<br>  &#123;<br>    <span class="hljs-string">&quot;settings&quot;</span>: &#123;<br>      <span class="hljs-string">&quot;number_of_shards&quot;</span>: 6,<br>      <span class="hljs-string">&quot;number_of_replicas&quot;</span>: 1<br>    &#125;, <br>      <span class="hljs-string">&quot;mappings&quot;</span> : &#123;<br>        <span class="hljs-string">&quot;properties&quot;</span> : &#123;<br>          <span class="hljs-string">&quot;title&quot;</span> : &#123;<br>            <span class="hljs-string">&quot;type&quot;</span> : <span class="hljs-string">&quot;completion&quot;</span>,<br>            <span class="hljs-string">&quot;analyzer&quot;</span> : <span class="hljs-string">&quot;standard&quot;</span>,<br>            <span class="hljs-string">&quot;preserve_separators&quot;</span> : <span class="hljs-literal">true</span>,<br>            <span class="hljs-string">&quot;preserve_position_increments&quot;</span> : <span class="hljs-literal">true</span>,<br>            <span class="hljs-string">&quot;max_input_length&quot;</span> : 50,<br>            <span class="hljs-string">&quot;contexts&quot;</span> : [<br>              &#123;<br>                <span class="hljs-string">&quot;name&quot;</span> : <span class="hljs-string">&quot;tag&quot;</span>,<br>                <span class="hljs-string">&quot;type&quot;</span> : <span class="hljs-string">&quot;CATEGORY&quot;</span><br>              &#125;<br>            ]<br>          &#125;<br>        &#125;<br>      &#125;<br>  &#125;<br>  <br>  <br></code></pre></td></tr></table></figure>
+</code></pre>
+</li>
+<li><p>更新数据</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs shell">PUT /test3/_doc/1<br>&#123;<br>  &quot;name&quot;:&quot;大数据梦想家&quot;,<br>  &quot;age&quot;:21,<br>  &quot;birthday&quot;:&quot;2000-02-06&quot;<br>&#125;<br><span class="hljs-meta prompt_"># </span><span class="language-bash">这种put方式更新数据，如果遗漏了字段，那么数据就会被新数据覆盖，一般不用这种方式更新数据</span><br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">可以用post的方式，update数据</span><br>post /test3/_doc/1/_update<br>&#123;<br>  &quot;doc&quot;:&#123;<br>    &quot;age&quot;:24<br>  &#125;<br>&#125;<br><br><br></code></pre></td></tr></table></figure>
+</li>
+<li><p>删除索引</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">#</span><span class="language-bash">delete语句删除索引</span><br>delete test3<br><span class="hljs-meta prompt_"># </span><span class="language-bash">指定<span class="hljs-built_in">id</span>删除</span><br>DELETE policy_project_library_index/_doc/1827261404195741698<br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>查询数据</p>
+<ul>
+<li><p>先创建一个索引，并添加一些样例数据</p>
+</li>
+<li><p>全匹配查询：<code>GET book/_search</code></p>
+<ul>
+<li><pre><code class="shell"># 全匹配查询
+GET book/_search
+&#123;
+  &quot;query&quot;: &#123;
+    &quot;match_all&quot;: &#123;&#125;
+  &#125;
+&#125;
+#size设置分页查询
+GET book/_search
+&#123;
+  &quot;query&quot;: &#123;
+    &quot;match_all&quot;: &#123;&#125;
+  &#125;,
+  &quot;size&quot;: 100
+&#125;
+
+<figure class="highlight nsis"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><code class="hljs nsis"><br>- <span class="hljs-string">``</span><span class="hljs-string">``</span>shell<br>  PUT /alice/<span class="hljs-literal">user</span>/<span class="hljs-number">1</span><br>  &#123;<br>    <span class="hljs-string">&quot;name&quot;</span>:<span class="hljs-string">&quot;爱丽丝&quot;</span>,<br>    <span class="hljs-string">&quot;age&quot;</span>:<span class="hljs-number">21</span>,<br>    <span class="hljs-string">&quot;desc&quot;</span>:<span class="hljs-string">&quot;在最美的年华，做最好的自己！&quot;</span>,<br>    <span class="hljs-string">&quot;tags&quot;</span>:[<span class="hljs-string">&quot;技术宅&quot;</span>,<span class="hljs-string">&quot;温暖&quot;</span>,<span class="hljs-string">&quot;思维活跃&quot;</span>]<br>  &#125;<br>  <br>  PUT /alice/<span class="hljs-literal">user</span>/<span class="hljs-number">2</span><br>  &#123;<br>    <span class="hljs-string">&quot;name&quot;</span>:<span class="hljs-string">&quot;张三&quot;</span>,<br>    <span class="hljs-string">&quot;age&quot;</span>:<span class="hljs-number">23</span>,<br>    <span class="hljs-string">&quot;desc&quot;</span>:<span class="hljs-string">&quot;法外狂徒&quot;</span>,<br>    <span class="hljs-string">&quot;tags&quot;</span>:[<span class="hljs-string">&quot;渣男&quot;</span>,<span class="hljs-string">&quot;交友&quot;</span>]<br>  &#125;<br>  <br>  PUT /alice/<span class="hljs-literal">user</span>/<span class="hljs-number">3</span><br>  &#123;<br>    <span class="hljs-string">&quot;name&quot;</span>:<span class="hljs-string">&quot;路人甲&quot;</span>,<br>    <span class="hljs-string">&quot;age&quot;</span>:<span class="hljs-number">24</span>,<br>    <span class="hljs-string">&quot;desc&quot;</span>:<span class="hljs-string">&quot;不可描述&quot;</span>,<br>    <span class="hljs-string">&quot;tags&quot;</span>:[<span class="hljs-string">&quot;靓仔&quot;</span>,<span class="hljs-string">&quot;网游&quot;</span>]<br>  &#125;<br>  <br>  <br>  PUT /alice/<span class="hljs-literal">user</span>/<span class="hljs-number">4</span><br>  &#123;<br>    <span class="hljs-string">&quot;name&quot;</span>:<span class="hljs-string">&quot;爱丽丝学Java&quot;</span>,<br>    <span class="hljs-string">&quot;age&quot;</span>:<span class="hljs-number">25</span>,<br>    <span class="hljs-string">&quot;desc&quot;</span>:<span class="hljs-string">&quot;技术成就自我！&quot;</span>,<br>    <span class="hljs-string">&quot;tags&quot;</span>:[<span class="hljs-string">&quot;思维敏捷&quot;</span>,<span class="hljs-string">&quot;喜欢学习&quot;</span>]<br>  &#125;<br>  <br>  PUT /alice/<span class="hljs-literal">user</span>/<span class="hljs-number">5</span><br>  &#123;<br>    <span class="hljs-string">&quot;name&quot;</span>:<span class="hljs-string">&quot;爱丽丝学Python&quot;</span>,<br>    <span class="hljs-string">&quot;age&quot;</span>:<span class="hljs-number">26</span>,<br>    <span class="hljs-string">&quot;desc&quot;</span>:<span class="hljs-string">&quot;人生苦短，我用Python！&quot;</span>,<br>    <span class="hljs-string">&quot;tags&quot;</span>:[<span class="hljs-string">&quot;好学&quot;</span>,<span class="hljs-string">&quot;勤奋刻苦&quot;</span>]<br>  &#125;<br></code></pre></td></tr></table></figure>
+</code></pre>
+</li>
+</ul>
+</li>
+<li></li>
+<li><pre><code class="shell"># 搜索到指定 id 的文档信息
+get alice/user/1
+# 条件查询_search?q=
+# 一般不用这种方式
+GET alice/user/_search?q=name:爱丽丝
+
+# 查询
+get alice/user/_search
+&#123;
+  &quot;query&quot;:&#123;
+    &quot;match&quot;: &#123;
+      &quot;name&quot;: &quot;张三&quot;
+    &#125;
+  &#125;
+&#125;
+#展示想要的字段，指定字段即可
+get alice/user/_search
+&#123;
+  &quot;query&quot;:&#123;
+    &quot;match&quot;: &#123;
+      &quot;name&quot;: &quot;张三&quot;
+    &#125;
+  &#125;,
+  &quot;_source&quot;:[&quot;name&quot;,&quot;age&quot;]
+&#125;
+<figure class="highlight nsis"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs nsis"><br>- 排序查询<br><br>  <span class="hljs-string">``</span><span class="hljs-string">``</span>shell<br>  <span class="hljs-comment"># 排序查询，可以指定from(开始位置)，size(几条数据)</span><br>  GET alice/<span class="hljs-literal">user</span>/_search<br>  &#123;<br>    <span class="hljs-string">&quot;query&quot;</span>:&#123;<br>      <span class="hljs-string">&quot;match&quot;</span>: &#123;<br>        <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;爱丽丝&quot;</span><br>      &#125;<br>    &#125;,<br>    <span class="hljs-string">&quot;sort&quot;</span>: [<br>      &#123; <br>        <span class="hljs-string">&quot;age&quot;</span>: &#123; <br>          <span class="hljs-string">&quot;order&quot;</span>: <span class="hljs-string">&quot;asc&quot;</span><br>        &#125;<br>       &#125;<br>     ],<br>     <span class="hljs-string">&quot;from&quot;</span>:<span class="hljs-number">0</span>,<br>     <span class="hljs-string">&quot;size&quot;</span>: <span class="hljs-number">2</span><br>  &#125;<br></code></pre></td></tr></table></figure>
+
+- 排序支持的属性
+  - 数字
+  - 日期
+  - ID
+</code></pre>
+</li>
+<li><p>分页查询</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">学到这里，我们也可以看到，我们的查询条件越来越多，开始仅是简单查询，慢慢增加条件查询，增加排序，对返回结果进行限制。所以，我们可以说，对 于 elasticsearch 来说，所有的查询条件都是可插拔的。比如说，我们在查询中，仅对返回结果进行限制:</span><br><br>GET alice/user/_search<br>&#123; <br>  &quot;query&quot;:<br>  &#123;&quot;match_all&quot;: &#123;&#125;<br>  &#125;,<br>  &quot;from&quot;:0,  # 从第n条开始<br>  &quot;size&quot;:4   # 返回n条数据<br>  &#125;<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>布尔查询</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash">多条件查询</span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">通过bool属性内使用must来作为查询条件</span><br>GET alice/user/_search<br>&#123;<br>  &quot;query&quot;:&#123;<br>    &quot;bool&quot;: &#123;<br>      &quot;must&quot;:[<br>         &#123;<br>          &quot;match&quot;:&#123;<br>          &quot;name&quot;:&quot;爱丽丝&quot;<br>         &#125;<br>      &#125;,<br>      &#123;<br>        &quot;match&quot;:&#123;<br>          &quot;age&quot;:25<br>          &#125;<br>        &#125;<br>      ]<br>    &#125;<br>  &#125;<br>&#125;<br><span class="hljs-meta prompt_">#</span><span class="language-bash">查询条件1或条件2</span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">should</span><br>GET alice/user/_search<br>&#123;<br>  &quot;query&quot;:&#123;<br>    &quot;bool&quot;: &#123;<br>      &quot;should&quot;:[<br>         &#123;<br>          &quot;match&quot;:&#123;<br>          &quot;name&quot;:&quot;爱丽丝&quot;<br>         &#125;<br>      &#125;,<br>      &#123;<br>        &quot;match&quot;:&#123;<br>          &quot;age&quot;:25<br>          &#125;<br>        &#125;<br>      ]<br>    &#125;<br>  &#125;<br>&#125;<br><span class="hljs-meta prompt_">#</span><span class="language-bash">查询不是的条件：must_not</span><br>GET alice/user/_search<br>&#123;<br>  &quot;query&quot;:&#123;<br>    &quot;bool&quot;: &#123;<br>      &quot;must_not&quot;:[<br>      &#123;<br>        &quot;match&quot;:&#123;<br>          &quot;age&quot;:25<br>          &#125;<br>        &#125;<br>      ]<br>    &#125;<br>  &#125;<br>&#125;<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">exists关键字存在</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">存在age字段的数据</span><br>GET alice/user/_search<br>&#123;<br>  &quot;query&quot;:&#123;<br>    &quot;bool&quot;: &#123;<br>      &quot;must_not&quot;:[<br>      &#123;<br>        &quot;exists&quot;:&#123;<br>          &quot;field&quot;:&quot;age&quot;<br>          &#125;<br>        &#125;<br>      ]<br>    &#125;<br>  &#125;<br>&#125;<br><br><br></code></pre></td></tr></table></figure>
+</li>
+<li><p>filter过滤</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">#</span><span class="language-bash">filter进行数据过滤</span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">查询名称为爱丽丝，年龄&gt;=10and年龄&lt;=25</span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">range查询</span><br>get alice/user/_search<br>&#123;<br>  &quot;query&quot;:&#123;<br>    &quot;bool&quot;:&#123;<br>      &quot;must&quot;:[<br>        &#123;<br>          &quot;match&quot;:&#123;<br>            &quot;name&quot;:&quot;爱丽丝&quot;<br>          &#125;<br>        &#125;<br>        ],<br>      &quot;filter&quot;: [<br>        &#123;&quot;range&quot;: &#123;<br>          &quot;age&quot;: &#123;<br>            &quot;gte&quot;: 10,<br>            &quot;lte&quot;: 25<br>          &#125;<br>        &#125;&#125;<br>      ]<br>    &#125;<br>  &#125;<br>&#125;<br><span class="hljs-meta prompt_">#</span><span class="language-bash">gt表示大于</span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">gte表示大于等于</span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">lt表示小于</span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">lte表示小于等于</span><br></code></pre></td></tr></table></figure>
+</li>
+<li><p>短语检索</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">#</span><span class="language-bash">查询tags中包含<span class="hljs-string">&quot;男&quot;</span>的数据</span><br>GET alice/user/_search<br>&#123;<br>  &quot;query&quot;:&#123;<br>    &quot;match&quot;:&#123;<br>      &quot;tags&quot;:&quot;男&quot;<br>    &#125;<br>  &#125;<br>&#125;<br><span class="hljs-meta prompt_">#</span><span class="language-bash">匹配多个标签</span><br>GET alice/user/_search<br>&#123;<br>  &quot;query&quot;:&#123;<br>    &quot;match&quot;:&#123;<br>      &quot;tags&quot;:&quot;男 女&quot;<br>    &#125;<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>精确查询</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">#</span><span class="language-bash">term查询是直接通过倒排索引指定的词条进程精确查找的</span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">term,不经过分词，直接查询精确的值</span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">match,会使用分词器解析(先分析文档，然后再通过分析的文档进行查询)</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">创建一个索引，并指定类型</span><br>PUT testdb<br>&#123;<br>  &quot;mappings&quot;: &#123;<br>    &quot;properties&quot;: &#123;<br>    <br>      &quot;name&quot;:&#123;<br>        &quot;type&quot;: &quot;text&quot;<br>      &#125;,<br>    &quot;desc&quot;:&#123;<br>      &quot;type&quot;:&quot;keyword&quot;<br>     &#125;<br>    &#125;<br>  &#125;<br>&#125;<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">插入数据</span><br>PUT testdb/_doc/1<br>&#123;<br>  &quot;name&quot;:&quot;爱丽丝学大数据name&quot;,<br>  &quot;desc&quot;:&quot;爱丽丝学大数据desc&quot;<br>&#125;<br><br>PUT testdb/_doc/2<br>&#123;<br>  &quot;name&quot;:&quot;爱丽丝学大数据name2&quot;,<br>  &quot;desc&quot;:&quot;爱丽丝学大数据desc2&quot;<br>&#125;<br><span class="hljs-meta prompt_"># </span><span class="language-bash">keyword类型不会被分析器处理</span><br>GET _analyze<br>&#123;<br>  &quot;analyzer&quot;: &quot;keyword&quot;,<br>  &quot;text&quot;: &quot;爱丽丝学大数据 name&quot;<br>&#125;<br><span class="hljs-meta prompt_"># </span><span class="language-bash">text 会被分析器分析 查询</span><br>GET _analyze<br>&#123;<br>  &quot;analyzer&quot;: &quot;standard&quot;,<br>  &quot;text&quot;: &quot;爱丽丝学大数据 name&quot;<br>&#125;<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">text 会被分析器分析 查询</span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">通过查询可以验证</span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">name是text类型，会被分析器分析，可以查出两条数据</span><br>GET testdb/_search         <br>&#123;<br>  &quot;query&quot;: &#123;<br>    &quot;term&quot;: &#123;<br>        &quot;name&quot;: &quot;爱&quot;<br>      &#125;<br>    &#125;<br>&#125;<br><span class="hljs-meta prompt_"># </span><span class="language-bash">keyword 不会被分析所以直接查询</span> <br><span class="hljs-meta prompt_">#</span><span class="language-bash">desc是keyword类型,不会被分析器分析，要完全匹配才可查出数据</span><br>GET testdb/_search          <br>&#123;<br>  &quot;query&quot;: &#123;<br>    &quot;term&quot;: &#123;<br>        &quot;desc&quot;: &quot;爱丽丝学大数据desc&quot;<br>      &#125;<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>分词解析器<ul>
+<li><strong>keyword 字段类型不会被分析器分析</strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>查找多个精确值</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">#</span><span class="language-bash">插入一些测试数据</span><br>PUT testdb/_doc/3<br>&#123;<br>  &quot;t1&quot;:&quot;22&quot;,<br>  &quot;t2&quot;:&quot;2021-03-01&quot;<br>&#125;<br><br>PUT testdb/_doc/4<br>&#123;<br>  &quot;t1&quot;:&quot;33&quot;,<br>  &quot;t2&quot;:&quot;2021-03-01&quot;<br>&#125;<br><span class="hljs-meta prompt_">#</span><span class="language-bash">查询t1=22 or t1=23的数据</span><br>GET testdb/_search<br>&#123;<br>  &quot;query&quot;: &#123;<br>    &quot;bool&quot;:&#123;<br>      &quot;should&quot;: [<br>        &#123;<br>          &quot;term&quot;: &#123;<br>            &quot;t1&quot;:&quot;22&quot;<br>          &#125;<br>        &#125;,<br>        &#123;<br>          &quot;term&quot;: &#123;<br>            &quot;t1&quot;:&quot;33&quot;<br>          &#125;<br>        &#125;<br>      ]<br>    &#125;<br>  &#125;<br>&#125;<br><span class="hljs-meta prompt_">#</span><span class="language-bash">可以证明：就算是term精确查询，也能够查询多个值。</span><br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">也可以直接用这种替代</span><br>GET testdb/_doc/_search<br>&#123;<br>  &quot;query&quot;:&#123;<br>    &quot;terms&quot;:&#123;<br>      &quot;t1&quot;:[&quot;22&quot;,&quot;33&quot;]<br>    &#125;<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>高亮显示</p>
+<ul>
+<li><p>设置highlight属性，对查询的结果的指定字段做高亮显示</p>
+</li>
+<li><pre><code class="shell">#观察返回的结果，我们可以发现搜索相关的结果，被加上了高亮标签&lt;em&gt;
+GET alice/user/_search
+&#123;
+  &quot;query&quot;:&#123;
+     &quot;match&quot;: &#123;
+       &quot;name&quot;: &quot;爱丽丝&quot;
+     &#125;
+  &#125;,
+  &quot;highlight&quot;:&#123;
+    &quot;fields&quot;: &#123;
+      &quot;name&quot;: &#123;&#125;
+    &#125;
+  &#125;
+&#125;
+
+#自定义样式
+GET alice/user/_search
+&#123;
+  &quot;query&quot;:&#123;
+     &quot;match&quot;: &#123;
+       &quot;name&quot;: &quot;爱丽丝&quot;
+     &#125;
+  &#125;,
+  &quot;highlight&quot;:&#123;
+    &quot;pre_tags&quot;: &quot;&lt;b class=&#39;key&#39; style=&#39;color:red&#39;&gt;&quot;, 
+    &quot;post_tags&quot;: &quot;&lt;/b&gt;&quot;,
+    &quot;fields&quot;: &#123;
+      &quot;name&quot;: &#123;&#125;
+    &#125;
+  &#125;
+&#125;
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><code class="hljs bash"><br><span class="hljs-comment">#### 字段类型</span><br><br>* 字符串类型<br><br>  - **text,keyword**<br><br>* 数值类型<br><br>  - **long,<span class="hljs-built_in">integer</span>,short,byte,double,<span class="hljs-built_in">float</span>,half_float,scaled_float**<br><br>* 日期类型<br><br>  - **<span class="hljs-built_in">date</span>**<br><br>  - ````shell<br>    PUT my_index<br>    &#123;<br>      <span class="hljs-string">&quot;mappings&quot;</span>: &#123;<br>        <span class="hljs-string">&quot;_doc&quot;</span>: &#123;<br>          <span class="hljs-string">&quot;properties&quot;</span>: &#123;<br>            <span class="hljs-string">&quot;date&quot;</span>: &#123;<br>              <span class="hljs-string">&quot;type&quot;</span>: <span class="hljs-string">&quot;date&quot;</span> <br>            &#125;<br>          &#125;<br>        &#125;<br>      &#125;<br>    &#125;<br>    <br>    PUT my_index/_doc/1<br>    &#123; <span class="hljs-string">&quot;date&quot;</span>: <span class="hljs-string">&quot;2015-01-01&quot;</span> &#125; <br>    <br>    PUT my_index/_doc/2<br>    &#123; <span class="hljs-string">&quot;date&quot;</span>: <span class="hljs-string">&quot;2015-01-01T12:10:30Z&quot;</span> &#125; <br>    <br>    PUT my_index/_doc/3<br>    &#123; <span class="hljs-string">&quot;date&quot;</span>: 1420070400001 &#125; <br>    <br>    GET my_index/_search<br>    &#123;<br>      <span class="hljs-string">&quot;sort&quot;</span>: &#123; <span class="hljs-string">&quot;date&quot;</span>: <span class="hljs-string">&quot;asc&quot;</span>&#125; <br>    &#125;<br>    <span class="hljs-comment">#es的date类型支持多种格式，上面的添加数据都可以</span><br>    <span class="hljs-comment">#也可以指定格式</span><br>    PUT my_index<br>    &#123;<br>      <span class="hljs-string">&quot;mappings&quot;</span>: &#123;<br>        <span class="hljs-string">&quot;_doc&quot;</span>: &#123;<br>          <span class="hljs-string">&quot;properties&quot;</span>: &#123;<br>            <span class="hljs-string">&quot;date&quot;</span>: &#123;<br>              <span class="hljs-string">&quot;type&quot;</span>:   <span class="hljs-string">&quot;date&quot;</span>,<br>              <span class="hljs-string">&quot;format&quot;</span>: <span class="hljs-string">&quot;yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis&quot;</span><br>            &#125;<br>          &#125;<br>        &#125;<br>      &#125;<br>    &#125;<br>    <span class="hljs-comment">#规定格式后，新增的数据必须符合这个格式，不然就会跑错</span><br></code></pre></td></tr></table></figure>
+</code></pre>
+</li>
+<li><p>可用的格式</p>
+<ul>
+<li>yyyy-MM-dd HH:mm:ss</li>
+<li>yyyy-MM-dd</li>
+<li>epoch_millis (毫秒值)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>布尔值类型</p>
+<ul>
+<li><strong>boolean</strong></li>
+</ul>
+</li>
+<li><p>二进制类型</p>
+<ul>
+<li><strong>binary</strong></li>
+</ul>
+</li>
+<li><p>复杂类型</p>
+<ul>
+<li><p>Array</p>
+<ul>
+<li>在Elasticsearch中，<strong>数组不需要专用的字段数据类型</strong>。默认情况下，<strong>任何字段都可以包含零个或多个值</strong>，但是，数组中的所有值都<strong>必须具有相同的数据类型。</strong></li>
+</ul>
+</li>
+<li><p>object</p>
+<ul>
+<li><p><strong>object类型的字段，也可以有多个值</strong>，形成List<object>的数据结构。</p>
+</li>
+<li><p><strong>object不允许彼此独立地索引查询</strong></p>
+</li>
+<li><pre><code class="shell"># 添加 属性为object的字段 field3
+PUT toherotest/_mapping/_doc 
+&#123;
+  &quot;properties&quot;: &#123;
+    &quot;field3&quot;: &#123;
+      &quot;type&quot;: &quot;object&quot;
+    &#125;
+  &#125;
+&#125;
+# 新增数据
+POST /toherotest/_doc/3
+&#123;
+  &quot;field3&quot;:[ &#123; &quot;name&quot;:&quot;tohero1&quot;, &quot;age&quot;:1 &#125;, &#123; &quot;name&quot;:&quot;tohero2&quot;, &quot;age&quot;:2 &#125; ]
+&#125;
+  
+POST /toherotest/_doc/4
+&#123;
+  &quot;field3&quot;: [ &#123; &quot;name&quot;:&quot;tohero1&quot;, &quot;age&quot;:2 &#125;, &#123; &quot;name&quot;:&quot;tohero2&quot;, &quot;age&quot;:1 &#125; ]
+&#125;
+
+#执行查询语句 
+GET /toherotest/_doc/_search
+&#123;
+  &quot;query&quot;: &#123;
+    &quot;bool&quot;: &#123;
+      &quot;must&quot;: [
+        &#123;
+          &quot;term&quot;: &#123;
+            &quot;field3.name&quot;: &quot;tohero1&quot;
+          &#125;
+        &#125;,
+        &#123;
+          &quot;term&quot;: &#123;
+            &quot;field3.age&quot;: 1
+          &#125;
+        &#125;
+      ]
+    &#125;
+  &#125;
+&#125;
+
+#查询结果
+&#123;
+  &quot;took&quot;: 2,
+  &quot;timed_out&quot;: false,
+  &quot;_shards&quot;: &#123;
+    &quot;total&quot;: 5,
+    &quot;successful&quot;: 5,
+    &quot;skipped&quot;: 0,
+    &quot;failed&quot;: 0
+  &#125;,
+  &quot;hits&quot;: &#123;
+    &quot;total&quot;: 2,
+    &quot;max_score&quot;: 1.287682,
+    &quot;hits&quot;: [
+      &#123;
+        &quot;_index&quot;: &quot;toherotest&quot;,
+        &quot;_type&quot;: &quot;_doc&quot;,
+        &quot;_id&quot;: &quot;4&quot;,
+        &quot;_score&quot;: 1.287682,
+        &quot;_source&quot;: &#123;
+          &quot;field3&quot;: [
+            &#123;
+              &quot;name&quot;: &quot;tohero1&quot;,
+              &quot;age&quot;: 2
+            &#125;,
+            &#123;
+              &quot;name&quot;: &quot;tohero2&quot;,
+              &quot;age&quot;: 1
+            &#125;
+          ]
+        &#125;
+      &#125;,
+      &#123;
+        &quot;_index&quot;: &quot;toherotest&quot;,
+        &quot;_type&quot;: &quot;_doc&quot;,
+        &quot;_id&quot;: &quot;3&quot;,
+        &quot;_score&quot;: 1.287682,
+        &quot;_source&quot;: &#123;
+          &quot;field3&quot;: [
+            &#123;
+              &quot;name&quot;: &quot;tohero1&quot;,
+              &quot;age&quot;: 1
+            &#125;,
+            &#123;
+              &quot;name&quot;: &quot;tohero2&quot;,
+              &quot;age&quot;: 2
+            &#125;
+          ]
+        &#125;
+      &#125;
+    ]
+  &#125;
+&#125;
+
+#可以看到，两条数据都出来了
+#得出结论：object不允许彼此独立地索引查询
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><code class="hljs awk"><br>    - 如果希望object能被独立的索引，可以考虑nested类型<br><br>  - nested<br><br>* GEO地理位置类型<br><br>  - 地图：Geo-point   （web开发常用地图类型）<br><br>  - 形状：Geo-shape<br><br>  - ````shell<br>    <span class="hljs-comment">#案例</span><br>    PUT my_index<br>    &#123;<br>      <span class="hljs-string">&quot;mappings&quot;</span>: &#123;<br>        <span class="hljs-string">&quot;_doc&quot;</span>: &#123;<br>          <span class="hljs-string">&quot;properties&quot;</span>: &#123;<br>            <span class="hljs-string">&quot;location&quot;</span>: &#123;<br>              <span class="hljs-string">&quot;type&quot;</span>: <span class="hljs-string">&quot;geo_point&quot;</span><br>            &#125;<br>          &#125;<br>        &#125;<br>      &#125;<br>    &#125;<br>    <br>    PUT my_index<span class="hljs-regexp">/_doc/</span><span class="hljs-number">1</span><br>    &#123;<br>      <span class="hljs-string">&quot;text&quot;</span>: <span class="hljs-string">&quot;Geo-point as an object&quot;</span>,<br>      <span class="hljs-string">&quot;location&quot;</span>: &#123; <br>        <span class="hljs-string">&quot;lat&quot;</span>: <span class="hljs-number">41.12</span>,<br>        <span class="hljs-string">&quot;lon&quot;</span>: -<span class="hljs-number">71.34</span><br>      &#125;<br>    &#125;<br>    <br>    PUT my_index<span class="hljs-regexp">/_doc/</span><span class="hljs-number">2</span><br>    &#123;<br>      <span class="hljs-string">&quot;text&quot;</span>: <span class="hljs-string">&quot;Geo-point as a string&quot;</span>,<br>      <span class="hljs-string">&quot;location&quot;</span>: <span class="hljs-string">&quot;41.12,-71.34&quot;</span> <br>    &#125;<br>    <br>    PUT my_index<span class="hljs-regexp">/_doc/</span><span class="hljs-number">3</span><br>    &#123;<br>      <span class="hljs-string">&quot;text&quot;</span>: <span class="hljs-string">&quot;Geo-point as a geohash&quot;</span>,<br>      <span class="hljs-string">&quot;location&quot;</span>: <span class="hljs-string">&quot;drm3btev3e86&quot;</span> <br>    &#125;<br>    <br>    PUT my_index<span class="hljs-regexp">/_doc/</span><span class="hljs-number">4</span><br>    &#123;<br>      <span class="hljs-string">&quot;text&quot;</span>: <span class="hljs-string">&quot;Geo-point as an array&quot;</span>,<br>      <span class="hljs-string">&quot;location&quot;</span>: [ -<span class="hljs-number">71.34</span>, <span class="hljs-number">41.12</span> ] <br>    &#125;<br>    <br>    <span class="hljs-comment">#查询某个点方圆200km</span><br>    GET <span class="hljs-regexp">/my_locations/</span>_search<br>    &#123;<br>        <span class="hljs-string">&quot;query&quot;</span>: &#123;<br>            <span class="hljs-string">&quot;bool&quot;</span> : &#123;<br>                <span class="hljs-string">&quot;must&quot;</span> : &#123;<br>                    <span class="hljs-string">&quot;match_all&quot;</span> : &#123;&#125;<br>                &#125;,<br>                <span class="hljs-string">&quot;filter&quot;</span> : &#123;<br>                    <span class="hljs-string">&quot;geo_distance&quot;</span> : &#123;<br>                        <span class="hljs-string">&quot;distance&quot;</span> : <span class="hljs-string">&quot;200km&quot;</span>,<br>                        <span class="hljs-string">&quot;pin.location&quot;</span> : &#123;<br>                            <span class="hljs-string">&quot;lat&quot;</span> : <span class="hljs-number">40</span>,<br>                            <span class="hljs-string">&quot;lon&quot;</span> : -<span class="hljs-number">70</span><br>                        &#125;<br>                    &#125;<br>                &#125;<br>            &#125;<br>        &#125;<br>    &#125;<br></code></pre></td></tr></table></figure>
+</code></pre>
+</li>
+</ul>
+</li>
+<li></li>
+</ul>
+</li>
+<li><p>还有一些其他的类型参考<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/136981393">链接</a></p>
+</li>
+</ul>
+<h3 id="创建别名"><a href="#创建别名" class="headerlink" title="创建别名"></a>创建别名</h3><ul>
+<li><p><strong>创建别名有很多种方法，可以创建索引同时创建别名，也可以在创建索引后创建，既可以让别名指向多个索引，也可以让别名指向一个索引的部分数据，甚至指向一个字段</strong></p>
+</li>
+<li><p>合理的使用别名可以方便进行索引的更新切换</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">#</span><span class="language-bash">创建一个索引进行测试</span><br>PUT /zt_user/_doc/1<br>&#123;<br>  &quot;birth-year&quot;:2000<br>&#125;<br><br><br>PUT /zt_user/_doc/2<br>&#123;<br>  &quot;birth-year&quot;:2001<br>&#125;<br><br>PUT /zt_user/_doc/3<br>&#123;<br>  &quot;birth-year&quot;:2004<br>&#125;<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">zt_user2</span><br>PUT /zt_user2/_doc/1<br>&#123;<br>  &quot;birth-year&quot;:2000<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+</li>
+<li><p><strong>创建索引同时创建别名</strong></p>
+<ul>
+<li><pre><code class="shell">
+#创建一个索引，并同时创建别名
+#一个名叫myusers的索引，直接指向zt_user
+#一个名叫2000的索引，过滤birth-year=2000的数据
+PUT /zt_user
+&#123;
+  &quot;mappings&quot;: &#123;
+    &quot;properties&quot;: &#123;
+      &quot;birth-year&quot;:&#123;
+        &quot;type&quot;: &quot;integer&quot;
+      &#125;
+    &#125;
+  &#125;,
+  &quot;aliases&quot;: &#123;
+    &quot;myusers&quot;: &#123;&#125;,
+    &quot;2000&quot;:&#123;
+      &quot;filter&quot;: &#123;
+        &quot;term&quot;: &#123;
+          &quot;birth-year&quot;: 2000
+        &#125;
+      &#125;
+    &#125;
+  &#125;
+&#125;
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs ruby"><br>- **创建索引后创建别名**<br><br>  - <span class="hljs-string">``</span><span class="hljs-string">``</span>shell<br>    <span class="hljs-comment"># 创建一个名为2004的别名，过滤birth-year=2004的数据</span><br>    <span class="hljs-variable constant_">PUT</span> /zt_user/_alias/<span class="hljs-number">2004</span> <br>    &#123;<br>      <span class="hljs-string">&quot;filter&quot;</span>: &#123;<br>        <span class="hljs-string">&quot;term&quot;</span>: &#123;<br>          <span class="hljs-string">&quot;birth-year&quot;</span>: <span class="hljs-number">2004</span><br>        &#125;<br>      &#125;<br>    &#125;<br></code></pre></td></tr></table></figure>
+</code></pre>
+</li>
+</ul>
+</li>
+<li><p><strong>创建字段别名</strong></p>
+<ul>
+<li><pre><code class="shell"># 字段设置别名，例如为username设置一个别名为name
+PUT /zt_user1
+&#123;
+  &quot;mappings&quot;: &#123;
+    &quot;properties&quot;: &#123;
+      &quot;username&quot;:&#123;
+        &quot;type&quot;: &quot;keyword&quot;
+      &#125;,
+      &quot;name&quot;:&#123;
+        &quot;type&quot;:&quot;alias&quot;,
+        &quot;path&quot;:&quot;username&quot;
+    &#125;
+    &#125;
+  &#125;
+&#125;
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs clean"><br>### 修改删除别名<br><br>* **为同一索引创建多个别名**<br><br>  - ````shell<br>    # 创建别名<br>    POST /_aliases<br>    &#123;<br>      <span class="hljs-string">&quot;actions&quot;</span>: [<br>        &#123;<br>          <span class="hljs-string">&quot;add&quot;</span>: &#123;<br>            <span class="hljs-string">&quot;index&quot;</span>: <span class="hljs-string">&quot;zt_user&quot;</span>,<br>            <span class="hljs-string">&quot;alias&quot;</span>: <span class="hljs-string">&quot;zt_user_copy1&quot;</span><br>          &#125;<br>        &#125;,<br>        &#123;<br>          <span class="hljs-string">&quot;add&quot;</span>: &#123;<br>            <span class="hljs-string">&quot;index&quot;</span>: <span class="hljs-string">&quot;zt_user&quot;</span>,<br>            <span class="hljs-string">&quot;alias&quot;</span>: <span class="hljs-string">&quot;zt_user_copy2&quot;</span><br>          &#125;<br>        &#125;<br>      ]<br>    &#125;<br></code></pre></td></tr></table></figure>
+</code></pre>
+</li>
+<li></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p><strong>删除一个别名</strong></p>
+<ul>
+<li><pre><code class="shell">#删除一个别名
+POST /_aliases
+&#123;
+  &quot;actions&quot;: [
+    &#123;
+      &quot;remove&quot;: &#123;
+        &quot;index&quot;: &quot;zt_user&quot;,
+        &quot;alias&quot;: &quot;zt_user_copy2&quot;
+      &#125;
+    &#125;
+  ]
+&#125;
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs dockerfile"><br>* **重命名一个别名**<br><br>  - 重命名操作，先remove再执行<span class="hljs-keyword">add</span><span class="language-bash">，而且这一操作是原子操作</span><br><br>  - ````<span class="hljs-keyword">shell</span><span class="language-bash"></span><br><span class="language-bash">    POST /_aliases</span><br>    &#123;<br>      <span class="hljs-string">&quot;actions&quot;</span>: [<br>        &#123;<br>          <span class="hljs-string">&quot;remove&quot;</span>: &#123;<br>            <span class="hljs-string">&quot;index&quot;</span>: <span class="hljs-string">&quot;zt_user&quot;</span>,<br>            <span class="hljs-string">&quot;alias&quot;</span>: <span class="hljs-string">&quot;zt_user_copy1&quot;</span><br>          &#125;<br>        &#125;,<br>        &#123;<br>          <span class="hljs-string">&quot;add&quot;</span>: &#123;<br>            <span class="hljs-string">&quot;index&quot;</span>: <span class="hljs-string">&quot;zt_user&quot;</span>,<br>            <span class="hljs-string">&quot;alias&quot;</span>: <span class="hljs-string">&quot;zt_user_copy2&quot;</span><br>          &#125;<br>        &#125;<br>      ]<br>    &#125;<br></code></pre></td></tr></table></figure>
+</code></pre>
+</li>
+</ul>
+</li>
+<li><p><strong>创建一个别名指向多个索引</strong></p>
+<ul>
+<li><p><code>indices</code>:index的复数</p>
+</li>
+<li><pre><code class="shell">POST /_aliases
+&#123;
+  &quot;actions&quot;: [
+    &#123;
+      &quot;add&quot;: &#123;
+        &quot;indices&quot;: [&quot;zt_user&quot;,&quot;zt_user2&quot;],
+        &quot;alias&quot;: &quot;zt_user_copy&quot;
+      &#125;
+    &#125;
+  ]
+&#125;
+<figure class="highlight prolog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs prolog"><br>  - <br><br>* **创建有过滤条件的别名**<br><br>  - <span class="hljs-string">``</span><span class="hljs-string">``</span>shell<br>    <span class="hljs-symbol">POST</span> /<span class="hljs-symbol">_aliases</span><br>    &#123;<br>      <span class="hljs-string">&quot;actions&quot;</span>: [<br>        &#123;<br>          <span class="hljs-string">&quot;add&quot;</span>: &#123;<br>            <span class="hljs-string">&quot;index&quot;</span>: <span class="hljs-string">&quot;zt_user&quot;</span>,<br>            <span class="hljs-string">&quot;alias&quot;</span>: <span class="hljs-string">&quot;zt_user_copy&quot;</span>,<br>            <span class="hljs-string">&quot;filter&quot;</span>: &#123;<span class="hljs-string">&quot;term&quot;</span>: &#123; <span class="hljs-string">&quot;birth-year&quot;</span>:<span class="hljs-number">2000</span> &#125;&#125;<br>          &#125;<br>        &#125;<br>      ]<br>    &#125;<br></code></pre></td></tr></table></figure>
+</code></pre>
+</li>
+</ul>
+</li>
+<li><p><strong>创建可写入别名</strong></p>
+<ul>
+<li><p>如果一个别名单独指向一个索引，那么使用别名进行写入操作是不会有问题的，但是，一个别名指向多个索引时，是不能进行写入操作的，因为es不知道将文档写入到哪一个索引。<strong>可以在创建别名时设置为可写来解决问题</strong></p>
+</li>
+<li><p>尽量不要这么弄吧，感觉很乱qaq…</p>
+</li>
+<li><pre><code class="shell">POST /_aliases
+&#123;
+  &quot;actions&quot;: [
+    &#123;
+      &quot;add&quot;: &#123;
+        &quot;index&quot;: &quot;zt_user&quot;,
+        &quot;alias&quot;: &quot;zt_user_copy&quot;,
+        &quot;is_write_index&quot;:true
+      &#125;
+    &#125;,
+    &#123;
+      &quot;add&quot;: &#123;
+        &quot;index&quot;: &quot;zt_user2&quot;,
+        &quot;alias&quot;: &quot;zt_user_copy&quot;
+      &#125;
+    &#125;
+  ]
+&#125;
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><code class="hljs ruby"><br>  - <br><br><span class="hljs-comment">### 查看别名信息</span><br><br>* **查看别名是否存在**<br>  - <span class="hljs-string">``</span><span class="hljs-variable constant_">HEAD</span> /_alias/myusers<span class="hljs-string">``</span><br>* **查看别名信息**<br>  - <span class="hljs-string">``</span><span class="hljs-variable constant_">GET</span> /_cat/aliases/myusers<span class="hljs-string">``</span> 查看指定别名<br>  - <span class="hljs-string">``</span><span class="hljs-variable constant_">GET</span> /_cat/aliases<span class="hljs-string">``</span>查看集群中所有别名<br><br><span class="hljs-comment">### 聚合（Aggregations）</span><br><br>* 聚合框架有助于基于搜索查询提供聚合数据。它基于称为聚合的简单构建块，可以进行组合以构建复杂的数据摘要。<br><br>* 列一些比较常见的聚合查询<br><br>  <span class="hljs-string">``</span><span class="hljs-string">``</span>shell<br>  <span class="hljs-comment"># 过滤数据一部分数据</span><br>  <span class="hljs-comment"># 利用聚合aggs:求project_money的平均值</span><br>  <span class="hljs-variable constant_">POST</span> /policy_enterprise_detail_all/_search<br>  &#123;<br>    <span class="hljs-string">&quot;size&quot;</span>: <span class="hljs-number">0</span>,<br>    <span class="hljs-string">&quot;query&quot;</span>: &#123;<br>      <span class="hljs-string">&quot;bool&quot;</span>: &#123;<br>        <span class="hljs-string">&quot;must&quot;</span>: [<br>          &#123;<span class="hljs-string">&quot;match&quot;</span>: &#123;<br>            <span class="hljs-string">&quot;city_id&quot;</span>: <span class="hljs-string">&quot;4401&quot;</span><br>          &#125;&#125;<br>        ]<br>      &#125;<br>    &#125;, <br>    <span class="hljs-string">&quot;aggs&quot;</span>: &#123;<br>      <span class="hljs-string">&quot;avg_money&quot;</span>: &#123;<br>        <span class="hljs-string">&quot;avg&quot;</span>: &#123;<span class="hljs-string">&quot;field&quot;</span>: <span class="hljs-string">&quot;project_money&quot;</span>&#125;<br>      &#125;<br>    &#125;<br>  &#125;<br></code></pre></td></tr></table></figure>
+</code></pre>
+</li>
+<li><p>地理边界聚合</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><code class="hljs shell">PUT /museums<br>&#123;<br>    &quot;mappings&quot;: &#123;<br>        &quot;properties&quot;: &#123;<br>            &quot;location&quot;: &#123;<br>                &quot;type&quot;: &quot;geo_point&quot;<br>            &#125;<br>        &#125;<br>    &#125;<br>&#125;<br><br>POST /museums/_bulk?refresh<br>&#123;&quot;index&quot;:&#123;&quot;_id&quot;:1&#125;&#125;<br>&#123;&quot;location&quot;: &quot;52.374081,4.912350&quot;, &quot;name&quot;: &quot;NEMO Science Museum&quot;&#125;<br>&#123;&quot;index&quot;:&#123;&quot;_id&quot;:2&#125;&#125;<br>&#123;&quot;location&quot;: &quot;52.369219,4.901618&quot;, &quot;name&quot;: &quot;Museum Het Rembrandthuis&quot;&#125;<br>&#123;&quot;index&quot;:&#123;&quot;_id&quot;:3&#125;&#125;<br>&#123;&quot;location&quot;: &quot;52.371667,4.914722&quot;, &quot;name&quot;: &quot;Nederlands Scheepvaartmuseum&quot;&#125;<br>&#123;&quot;index&quot;:&#123;&quot;_id&quot;:4&#125;&#125;<br>&#123;&quot;location&quot;: &quot;51.222900,4.405200&quot;, &quot;name&quot;: &quot;Letterenhuis&quot;&#125;<br>&#123;&quot;index&quot;:&#123;&quot;_id&quot;:5&#125;&#125;<br>&#123;&quot;location&quot;: &quot;48.861111,2.336389&quot;, &quot;name&quot;: &quot;Musée du Louvre&quot;&#125;<br>&#123;&quot;index&quot;:&#123;&quot;_id&quot;:6&#125;&#125;<br>&#123;&quot;location&quot;: &quot;48.860000,2.327000&quot;, &quot;name&quot;: &quot;Musée d&#x27;Orsay&quot;&#125;<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">地理边界聚合</span><br>POST /museums/_search?size=0<br>&#123;<br>    &quot;query&quot; : &#123;<br>        &quot;match&quot; : &#123; &quot;name&quot; : &quot;musée&quot; &#125;<br>    &#125;,<br>    &quot;aggs&quot; : &#123;<br>        &quot;viewport&quot; : &#123;<br>            &quot;geo_bounds&quot; : &#123;<br>                &quot;field&quot; : &quot;location&quot;, <br>                &quot;wrap_longitude&quot; : true <br>            &#125;<br>        &#125;<br>    &#125;<br>&#125;<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">地理重心聚合</span><br>POST /museums/_search?size=0<br>&#123;<br>    &quot;aggs&quot; : &#123;<br>        &quot;centroid&quot; : &#123;<br>            &quot;geo_centroid&quot; : &#123;<br>                &quot;field&quot; : &quot;location&quot; <br>            &#125;<br>        &#125;<br>    &#125;<br>&#125;<br><br><br></code></pre></td></tr></table></figure>
+</li>
+<li><p>最大聚合</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs shell">POST /sales/_search?size=0<br>&#123;<br>    &quot;aggs&quot; : &#123;<br>        &quot;max_price&quot; : &#123; &quot;max&quot; : &#123; &quot;field&quot; : &quot;price&quot; &#125; &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+</li>
+<li><p>最小聚合</p>
+<ul>
+<li><code>min</code></li>
+</ul>
+</li>
+<li><p>计数</p>
+<ul>
+<li><code>value_count</code></li>
+</ul>
+</li>
+<li><p>统计聚合</p>
+<ul>
+<li><p><code>多值</code>指标聚合，可根据从聚合文档中提取的数值计算统计信息。这些值可以从文档中的特定数字字段中提取，也可以由提供的脚本生成。</p>
+</li>
+<li><p>返回的信息包括<code>min</code>，<code>max</code>，<code>sum</code>，<code>count</code> 和 <code>avg</code>。</p>
+</li>
+<li><pre><code class="shell">POST /exams/_search?size=0
+&#123;
+    &quot;aggs&quot; : &#123;
+        &quot;grades_stats&quot; : &#123; &quot;stats&quot; : &#123; &quot;field&quot; : &quot;grade&quot; &#125; &#125;
+    &#125;
+&#125;
+<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs ada"><br>- 过滤器聚合<br><br>  ````shell<br>  POST /sales/_search?size=<span class="hljs-number">0</span><br>  &#123;<br>      <span class="hljs-string">&quot;aggs&quot;</span> : &#123;<br>          <span class="hljs-string">&quot;t_shirts&quot;</span> : &#123;<br>              <span class="hljs-string">&quot;filter&quot;</span> : &#123; &quot;<span class="hljs-type">term</span><span class="hljs-string">&quot;: &#123; &quot;</span><span class="hljs-keyword">type</span><span class="hljs-string">&quot;: &quot;</span>t-shirt<span class="hljs-string">&quot; &#125; &#125;,</span><br><span class="hljs-string">              &quot;</span>aggs<span class="hljs-string">&quot; : &#123;</span><br><span class="hljs-string">                  &quot;</span>avg_price<span class="hljs-string">&quot; : &#123; &quot;</span>avg<span class="hljs-string">&quot; : &#123; &quot;</span>field<span class="hljs-string">&quot; : &quot;</span>price<span class="hljs-string">&quot; &#125; &#125;</span><br><span class="hljs-string">              &#125;</span><br><span class="hljs-string">          &#125;</span><br><span class="hljs-string">      &#125;</span><br><span class="hljs-string">  &#125;</span><br></code></pre></td></tr></table></figure>
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="常用操作"><a href="#常用操作" class="headerlink" title="常用操作"></a>常用操作</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_"># </span><span class="language-bash"> 查询数据量</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">根据etl_time聚合数量</span><br>GET policy_index_all/_search<br>&#123;<br>  &quot;size&quot;: 0,<br>  &quot;aggs&quot;: &#123;<br>    &quot;by_etltime&quot;: &#123;<br>      &quot;terms&quot;: &#123;<br>        &quot;field&quot;: &quot;etl_time&quot;  <br>      &#125;,<br>      &quot;aggs&quot;: &#123;<br>        &quot;docs_count&quot;: &#123;<br>          &quot;value_count&quot;: &#123;<br>            &quot;field&quot;: &quot;_id&quot; <br>          &#125;<br>        &#125;  <br>      &#125;<br>    &#125;<br>  &#125;<br>&#125;<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">直接查询所有数量</span><br>GET policy_index_all/_search<br>&#123;<br>  &quot;size&quot;: 0, <br>  &quot;aggs&quot;: &#123;<br>    &quot;total_docs&quot;: &#123;<br>      &quot;value_count&quot;: &#123;<br>        &quot;field&quot;: &quot;_id&quot;<br>      &#125;<br>    &#125;<br>  &#125;<br>&#125;<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">删除数据</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">删除小于yyyy-MM-<span class="hljs-built_in">dd</span>的数据</span><br>POST policy_index_all/_delete_by_query<br>&#123;<br>  &quot;query&quot;: &#123;<br>    &quot;range&quot;: &#123;<br>      &quot;etl_time&quot;: &#123;<br>        &quot;lt&quot;: &quot;2023-12-04&quot;<br>      &#125;<br>    &#125;<br>  &#125;<br>&#125;<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">删除etl_time为空的</span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">删除etl_time不存在的数据</span><br>POST policy_index_all/_delete_by_query<br>&#123;<br>  &quot;query&quot;: &#123;<br>    &quot;bool&quot;: &#123;<br>      &quot;must_not&quot;: &#123;<br>        &quot;exists&quot;: &#123;<br>          &quot;field&quot;: &quot;etl_time&quot;<br>        &#125;<br>      &#125;<br>    &#125;<br>  &#125;<br>&#125;<br><span class="hljs-meta prompt_"></span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">查询数据</span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">term,不经过分词，直接查询精确的值</span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">match,会使用分词器解析(先分析文档，然后再通过分析的文档进行查询)</span><br><span class="hljs-meta prompt_">#</span><span class="language-bash">includes指定字段</span><br>GET enterprise_data_index_all_v8/_search<br>&#123;<br>  &quot;query&quot;: &#123;<br>    &quot;bool&quot;: &#123;<br>      &quot;must&quot;: [<br>        &#123;<br>          &quot;term&quot;: &#123;<br>            &quot;eid&quot;: &#123;<br>              &quot;value&quot;: &quot;4c8bd41b-2534-43c0-8643-5bf4dca1991e&quot;<br>            &#125;<br>          &#125;<br>        &#125;,<br>        &#123;<br>          &quot;match&quot;: &#123;<br>            &quot;new_status_code&quot;: &quot;1&quot;<br>          &#125;<br>        &#125;<br>      ]<br>    &#125;<br>  &#125;,<br>  &quot;_source&quot;: &#123;<br>    &quot;includes&quot;: [<br>      &quot;name&quot;,<br>      &quot;granted_invent_num&quot;,<br>      &quot;granted_appearance_num&quot;,<br>      &quot;grant_utility_model_num&quot;<br>    ]<br>&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/02/27/alibaba-big-data-road/">
+                        <span class="hidden-mobile">alibaba_big_data_road</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.2/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js" ></script>
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      $('#local-search-input').on('click', function() {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      });
+      $('#modalSearch').on('shown.bs.modal', function() {
+        $('#local-search-input').focus();
+      });
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

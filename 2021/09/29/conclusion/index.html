@@ -62,7 +62,7 @@
   </script>
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
-<meta name="generator" content="Hexo 5.2.0"></head>
+<meta name="generator" content="Hexo 7.3.0"></head>
 
 
 <body>
@@ -187,7 +187,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      9.5k 字
+      9.7k 字
     </span>
   
 
@@ -197,7 +197,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      106
+      108
        分钟
     </span>
   
@@ -231,7 +231,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2023年4月13日 下午
+                  本文最后更新于：2024年9月30日 晚上
                 
               </p>
             
@@ -292,13 +292,14 @@
 </ul>
 <h2 id="Shell"><a href="#Shell" class="headerlink" title="Shell"></a>Shell</h2><ul>
 <li><p>框架启动关闭脚本</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta">#</span><span class="bash">!/bin/bash</span><br><br>case $1 in<br>&quot;start&quot;)&#123;<br>	for i in hadoop100 hadoop101 hadoop102<br>	do<br>		ssh $i &quot;启动命令，用绝对路径&quot;<br>	done<br>&#125;;;<br>&quot;stop&quot;)&#123;<br><br>&#125;;;<br>esac<br><br></code></pre></td></tr></table></figure></li>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">#</span><span class="language-bash">!/bin/bash</span><br><br>case $1 in<br>&quot;start&quot;)&#123;<br>	for i in hadoop100 hadoop101 hadoop102<br>	do<br>		ssh $i &quot;启动命令，用绝对路径&quot;<br>	done<br>&#125;;;<br>&quot;stop&quot;)&#123;<br><br>&#125;;;<br>esac<br><br></code></pre></td></tr></table></figure>
+</li>
 <li><p>单引号和双引号的区别</p>
 <ul>
 <li>单引号：’$do_date’,在引号内部的变量不能解释里面变量对应的值</li>
 <li>双引号：”$do_date”,在引号内部，能够取出变量的值</li>
 <li>单引号，双引号嵌套：看谁在最外面</li>
-<li>``号表示，执行引号中的命令</li>
+<li>&#96;&#96;号表示，执行引号中的命令</li>
 </ul>
 </li>
 </ul>
@@ -378,7 +379,7 @@
 <li>MapJoin:在Map端缓存多张表，提前处理业务逻辑，这样增加Map端业务，减少Reduce端数据的压力，尽可能的减少数据倾斜。mapjoin适合一张表很大，一张表很小的场景。将小表缓存<ul>
 <li>在Mapper的setup阶段(重写setup方法)，将文件读取到缓存集合中</li>
 <li>在驱动函数中加载缓存，缓存普通文件到Task运行节点</li>
-<li>job.addCacheFile(new URL(“file://e:/cache/xxx.txt”))</li>
+<li>job.addCacheFile(new URL(“file:&#x2F;&#x2F;e:&#x2F;cache&#x2F;xxx.txt”))</li>
 </ul>
 </li>
 </ul>
@@ -448,7 +449,7 @@
 <h2 id="Zookeeper"><a href="#Zookeeper" class="headerlink" title="Zookeeper"></a>Zookeeper</h2><ul>
 <li><p>Zookeeper从设计模式的角度理解，是一个基于观察者模式设计的分布式服务管理框架，<font color=red>它负责存储和管理大家都关心的数据，然后接受观察者的注册，一旦这些数据的状态发生变化，Zookeeper就将负责通知已经在Zookeeper上注册的那些观察者做出相应的反应</font></p>
 </li>
-<li><p>Zookeeper=文件系统+通知机制</p>
+<li><p>Zookeeper&#x3D;文件系统+通知机制</p>
 </li>
 <li><p>选举机制</p>
 <ul>
@@ -556,7 +557,7 @@
 <h2 id="Kafka"><a href="#Kafka" class="headerlink" title="Kafka"></a>Kafka</h2><ul>
 <li><p>基本信息</p>
 <ul>
-<li><p>Kafka是一个分布式的基于发布/订阅模式的消息队列</p>
+<li><p>Kafka是一个分布式的基于发布&#x2F;订阅模式的消息队列</p>
 </li>
 <li><p>架构</p>
 <ul>
@@ -612,13 +613,13 @@
 </li>
 <li><p>重复了</p>
 <ul>
-<li>（自己解决）幂等性，事务，ack=-1</li>
+<li>（自己解决）幂等性，事务，ack&#x3D;-1</li>
 <li>（其它框架帮忙解决）数仓里面处理，</li>
 </ul>
 </li>
 <li><p>积压了</p>
 <ul>
-<li>如果是Kafka消费能力不足，则可以考虑增加Topic的分区数，并且同时提升消费者组的消费者数量，消费者数=分区数。</li>
+<li>如果是Kafka消费能力不足，则可以考虑增加Topic的分区数，并且同时提升消费者组的消费者数量，消费者数&#x3D;分区数。</li>
 <li>增加下一级的消费速度</li>
 </ul>
 </li>
@@ -635,7 +636,7 @@
 </li>
 <li><p>其它</p>
 <ul>
-<li><p>Exactly once语义：At Least Once + 幂等性 = Exactly Once。</p>
+<li><p>Exactly once语义：At Least Once + 幂等性 &#x3D; Exactly Once。</p>
 </li>
 <li><p>幂等性就是指Producer不论向Server发送多少次重复数据，Server端都只会持久化一条。</p>
 </li>
@@ -684,12 +685,13 @@
 <ul>
 <li><p>CAST： CAST ( expression AS data_type )</p>
 </li>
-<li><p>````sql<br>select</p>
-<pre><code>cast(1000 as varchar(10))
-cast(1000 as varchar)
-cast(&#39;1000&#39; as int)
+<li><pre><code class="sql">select
+    cast(1000 as varchar(10))
+    cast(1000 as varchar)
+    cast(&#39;1000&#39; as int)
+<figure class="highlight mel"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs mel"><br>- CONVERT： CONVERT (data_type[(length)], <span class="hljs-keyword">expression</span> [, style])<br><br>  <span class="hljs-string">``</span><span class="hljs-string">``</span>sqlite<br>  <span class="hljs-keyword">select</span> convert(datetime,<span class="hljs-string">&#x27;2017-01-01&#x27;</span>)<br></code></pre></td></tr></table></figure>
 </code></pre>
-<figure class="highlight mel"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs mel"><br>- CONVERT： CONVERT (data_type[(length)], <span class="hljs-keyword">expression</span> [, style])<br><br>  <span class="hljs-string">``</span><span class="hljs-string">``</span>sqlite<br>  <span class="hljs-keyword">select</span> convert(datetime,<span class="hljs-string">&#x27;2017-01-01&#x27;</span>)<br></code></pre></td></tr></table></figure></li>
+</li>
 </ul>
 </li>
 <li><p>与Mysql的区别</p>
@@ -748,18 +750,18 @@ cast(&#39;1000&#39; as int)
 </li>
 <li><p>日期格式化，把字符串或者日期转成指定格式的日期</p>
 </li>
-<li><p>date_format(“2016-06-22”,”yyyy-MM-dd”)=2016-06-22</p>
+<li><p>date_format(“2016-06-22”,”yyyy-MM-dd”)&#x3D;2016-06-22</p>
 </li>
 </ul>
 </li>
 <li><p>last_day</p>
 <ul>
 <li>返回这个月的最后一天的日期</li>
-<li>select last_day(“2021-10-04”);=2021-10-31</li>
+<li>select last_day(“2021-10-04”);&#x3D;2021-10-31</li>
 </ul>
 </li>
 <li><p>解析json(get_json_object)</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> get_json_object(<span class="hljs-string">&#x27;[&#123;&quot;name&quot;:&quot;大郎&quot;,&quot;sex&quot;:&quot;男&quot;,&quot;age&quot;:&quot;25&quot;&#125;,&#123;&quot;name&quot;:&quot;西门庆&quot;,&quot;sex&quot;:&quot;男&quot;,&quot;age&quot;:&quot;47&quot;&#125;]&#x27;</span>,<span class="hljs-string">&quot;$[0].age&quot;</span>);<br><br>- 结果：25<br><span class="hljs-keyword">select</span> get_json_object(<span class="hljs-string">&#x27;[&#123;&quot;name&quot;:&quot;大郎&quot;,&quot;sex&quot;:&quot;男&quot;,&quot;age&quot;:&quot;25&quot;&#125;,&#123;&quot;name&quot;:&quot;西门庆&quot;,&quot;sex&quot;:&quot;男&quot;,&quot;age&quot;:&quot;47&quot;&#125;]&#x27;</span>,<span class="hljs-string">&#x27;$[0]&#x27;</span>);<br><br>- 结果：&#123;&quot;name&quot;:&quot;大郎&quot;,&quot;sex&quot;:&quot;男&quot;,&quot;age&quot;:&quot;25&quot;&#125;<br><br></code></pre></td></tr></table></figure></li>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">SELECT</span> get_json_object(<span class="hljs-string">&#x27;[&#123;&quot;name&quot;:&quot;大郎&quot;,&quot;sex&quot;:&quot;男&quot;,&quot;age&quot;:&quot;25&quot;&#125;,&#123;&quot;name&quot;:&quot;西门庆&quot;,&quot;sex&quot;:&quot;男&quot;,&quot;age&quot;:&quot;47&quot;&#125;]&#x27;</span>,&quot;$[0].age&quot;);<br><br><span class="hljs-operator">-</span> 结果：<span class="hljs-number">25</span><br><span class="hljs-keyword">select</span> get_json_object(<span class="hljs-string">&#x27;[&#123;&quot;name&quot;:&quot;大郎&quot;,&quot;sex&quot;:&quot;男&quot;,&quot;age&quot;:&quot;25&quot;&#125;,&#123;&quot;name&quot;:&quot;西门庆&quot;,&quot;sex&quot;:&quot;男&quot;,&quot;age&quot;:&quot;47&quot;&#125;]&#x27;</span>,<span class="hljs-string">&#x27;$[0]&#x27;</span>);<br><br><span class="hljs-operator">-</span> 结果：&#123;&quot;name&quot;:&quot;大郎&quot;,&quot;sex&quot;:&quot;男&quot;,&quot;age&quot;:&quot;25&quot;&#125;<br><br></code></pre></td></tr></table></figure></li>
 </ul>
 </li>
 <li><p>自定义函数</p>
@@ -792,10 +794,10 @@ cast(&#39;1000&#39; as int)
 </li>
 <li><p>小文件相关处理</p>
 <ul>
-<li>CombinehiveInputformat ===&gt;减少切片个数，减少maptask个数</li>
+<li>CombinehiveInputformat &#x3D;&#x3D;&#x3D;&gt;减少切片个数，减少maptask个数</li>
 <li>JVM重用</li>
-<li>使用concatenate命令   alter table B partition(day=20201224) concatenate;</li>
-<li>ALTER TABLE A ARCHIVE PARTITION(dt=’2021-05-07’, hr=’12’);</li>
+<li>使用concatenate命令   alter table B partition(day&#x3D;20201224) concatenate;</li>
+<li>ALTER TABLE A ARCHIVE PARTITION(dt&#x3D;’2021-05-07’, hr&#x3D;’12’);</li>
 </ul>
 </li>
 <li><p>不影响业务逻辑的情况下可以开启map端combiner</p>
@@ -813,7 +815,7 @@ cast(&#39;1000&#39; as int)
 <li>SPARK</li>
 </ul>
 </li>
-<li><p>union，union all会去重</p>
+<li><p>union会去重，union all 不会去重</p>
 </li>
 <li><p>hive数据倾斜</p>
 <ul>
@@ -867,10 +869,10 @@ cast(&#39;1000&#39; as int)
 <li>finalize：Object类中定义的方法，Java中允许使用finalize()方法在垃圾收集器将对象从内存中清除出去之前做必要的清理工作。这个方法是由垃圾收集器在销毁对象时调用的，通过重写finalize()方法可以整理系统资源或者执行其它清理工作。</li>
 </ul>
 </li>
-<li>==和equals的区别<ul>
-<li>==：如果是比较基本数据类型，那么比较的是变量的值。如果比较的是引用数据类型，那么比较的是地址值（两个对象是否指向同一块内存）</li>
+<li>&#x3D;&#x3D;和equals的区别<ul>
+<li>&#x3D;&#x3D;：如果是比较基本数据类型，那么比较的是变量的值。如果比较的是引用数据类型，那么比较的是地址值（两个对象是否指向同一块内存）</li>
 <li>equals：如果类没重写equals方法比较的是两个对象的地址值，如果类重写了equals方法后我们往往比较的是对象中属性的内容。</li>
-<li>equals方法是从Object类中继承的，默认的实现就是使用==</li>
+<li>equals方法是从Object类中继承的，默认的实现就是使用&#x3D;&#x3D;</li>
 </ul>
 </li>
 <li>常见执行顺序<ul>
@@ -878,7 +880,7 @@ cast(&#39;1000&#39; as int)
 </ul>
 </li>
 <li>ArrayList,HashMap扩容机制<ul>
-<li>ArrayList初始化大小为0（第一次调用add 方法后长度变为10），当节点不够用时，就会扩容。扩容后的大小=原始大小*1.5</li>
+<li>ArrayList初始化大小为0（第一次调用add 方法后长度变为10），当节点不够用时，就会扩容。扩容后的大小&#x3D;原始大小*1.5</li>
 <li>HashMap:初始化大小是16，扩容因子默认为0.75（可以指定初始化大小，和扩容因子）<ul>
 <li>扩容机制：当前大小和当前容量的比例超过了扩容因子，就会扩容，扩容大小增大一倍。</li>
 </ul>
@@ -906,8 +908,8 @@ cast(&#39;1000&#39; as int)
 <ul>
 <li>脚本启动执行</li>
 <li>调用Client类中的main方法并执行</li>
-<li>向RM申请资源运行ApplicationMaster</li>
-<li>选择一台NodeManager启动AM</li>
+<li>调度器调度到该任务后，向RM申请资源运行ApplicationMaster，</li>
+<li>选择一台NodeManager申请资源，启动AM</li>
 <li>AM启动Driver线程执行用户的作业</li>
 <li>Driver向RM申请资源</li>
 <li>在NM中创建Excutor对象</li>
@@ -924,9 +926,11 @@ cast(&#39;1000&#39; as int)
 </ul>
 </li>
 <li>Repartition和Coalesce的关系与区别<ul>
-<li>关系：两者都是用来改变RDD的partition数量的，Repartition底层调用coalesce((numPartitions, shuffle = true)</li>
+<li>关系：两者都是用来改变RDD的partition数量的，Repartition底层调用coalesce((numPartitions, shuffle &#x3D; true)</li>
 <li>区别：Repartition一定会发生shuffle，coalesce根据传入的参数来判断是否发生shuffle。</li>
 <li>一般增大RDD的partition数量时使用repartition，减少partition数量时使用coalesce</li>
+<li>coalesce   一般用于缩减分区，默认不执行shuffle</li>
+<li>reparation  一般用于扩大分区，默认执行shuffle，底层调用的就是coalesce</li>
 </ul>
 </li>
 </ul>
@@ -969,7 +973,7 @@ cast(&#39;1000&#39; as int)
 <li>优化后的Hashshuffle减少了大量的磁盘文件。</li>
 </ul>
 </li>
-<li>不管是不是优化的hashShuffle都产生了大量的磁盘文件。所以在高版本的spark中已经被弃用。</li>
+<li>不管是不是优化的hashShuffle都产生了大量的磁盘文件(都与下游的task的数量有关)。所以在高版本的spark中已经被弃用。</li>
 </ul>
 </li>
 <li><p>SortShuffle</p>
@@ -991,9 +995,9 @@ cast(&#39;1000&#39; as int)
 <li><p>ByPassSortShuffle</p>
 <ul>
 <li><a target="_blank" rel="noopener" href="https://imgtu.com/i/5VFM7j"><img src="https://z3.ax1x.com/2021/10/11/5VFM7j.png" srcset="/img/loading.gif" lazyload alt="5VFM7j.png"></a></li>
-<li>ByPassSortShuffle运行机制的触发条件<ul>
-<li>map端没有预聚合（比如GroupByKey）</li>
-<li>shuffle上一个阶段的最后一个RDD的分区数小于参数spark.shuffle.sort.bypassMergeThreshold（默认为200）</li>
+<li>ByPassSortShuffle运行机制的触发条件（同时满足两个条件触发）<ul>
+<li>不是聚合类的算子</li>
+<li>shuffle上一个阶段的最后一个RDD的分区数小于参数spark.shuffle.sort.bypassMergeThreshold（默认为200）（减少中间小文件产生）</li>
 </ul>
 </li>
 <li>此时，每个task会为每个下游task都创建一个临时磁盘文件，并将数据按key进行hash然后根据key的hash值，将key写入对应的磁盘文件中。写入磁盘文件也都是先写到内存缓存中，缓存写满后再溢写到磁盘文件中去。最后，会将所有的临时文件进行合并，合并成一个磁盘文件，并创建一个单独的索引文件。<font color=red>该过程的磁盘写机制其实跟未经优化的HashShuffleManager是一模一样的，因此都要创建数量惊人的磁盘文件，只是在最后会做一个磁盘文件的合并而已。</font>因此，该机制比未经优化的HashShuffle来说shuffle read的性能会更好。</li>
@@ -1072,8 +1076,8 @@ cast(&#39;1000&#39; as int)
 <h2 id="数仓项目分层"><a href="#数仓项目分层" class="headerlink" title="数仓项目分层"></a>数仓项目分层</h2><ul>
 <li>ODS<ul>
 <li>保持数据原貌，（数据备份的作用）</li>
-<li>采用压缩    LZO  ==》减少磁盘空间  100g ==&gt;10g</li>
-<li>创建分区表  ：==》防止后续计算时的全表扫描</li>
+<li>采用压缩    LZO  &#x3D;&#x3D;》减少磁盘空间  100g &#x3D;&#x3D;&gt;10g</li>
+<li>创建分区表  ：&#x3D;&#x3D;》防止后续计算时的全表扫描</li>
 </ul>
 </li>
 <li>DWD<ul>
@@ -1099,10 +1103,10 @@ cast(&#39;1000&#39; as int)
 <li>确定维度<ul>
 <li>维度：时间，地区，用户，商品，活动，优惠卷</li>
 <li>维度退化（维度建模当中的星型模型，让事实表周围只有一级维度）</li>
-<li>商品表+商品SPU表+商品SKU表+三级分类+二级分类+一级分类==》商品表</li>
-<li>省份表+地区表==》地区表</li>
-<li>时间表+假期表==》时间表</li>
-<li>活动表+活动规则表==》活动表</li>
+<li>商品表+商品SPU表+商品SKU表+三级分类+二级分类+一级分类&#x3D;&#x3D;》商品表</li>
+<li>省份表+地区表&#x3D;&#x3D;》地区表</li>
+<li>时间表+假期表&#x3D;&#x3D;》时间表</li>
+<li>活动表+活动规则表&#x3D;&#x3D;》活动表</li>
 </ul>
 </li>
 <li>确定事实<ul>

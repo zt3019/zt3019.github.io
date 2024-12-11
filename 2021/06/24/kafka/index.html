@@ -62,7 +62,7 @@
   </script>
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
-<meta name="generator" content="Hexo 5.2.0"></head>
+<meta name="generator" content="Hexo 7.3.0"></head>
 
 
 <body>
@@ -237,12 +237,12 @@
             
             <div class="markdown-body">
               <h1 id="kafka"><a href="#kafka" class="headerlink" title="kafka"></a>kafka</h1><h2 id="Kafka概述"><a href="#Kafka概述" class="headerlink" title="Kafka概述"></a>Kafka概述</h2><ul>
-<li><p>kafaka是一个分布式的基于发布/订阅模式的消息队列，主要应用于大数据实时处理领域。</p>
+<li><p>kafaka是一个分布式的基于发布&#x2F;订阅模式的消息队列，主要应用于大数据实时处理领域。</p>
 </li>
 <li><p>消息队列一般分为两种模式：</p>
 <ol>
 <li>点对点模式（一对一，消费者主动拉取数据，消息收到后消息清除）</li>
-<li>发布/订阅模式（一对多，消费者消费数据之后不会清除消息）</li>
+<li>发布&#x2F;订阅模式（一对多，消费者消费数据之后不会清除消息）</li>
 </ol>
 </li>
 <li><p>基础架构</p>
@@ -323,7 +323,7 @@
 <li>这只能保证副本之间的数据一致性，并不能保证数据不丢失或者不重复</li>
 </ul>
 </li>
-<li><p>exactly once语义：At Least Once + 幂等性 = Exactly Once。</p>
+<li><p>exactly once语义：At Least Once + 幂等性 &#x3D; Exactly Once。</p>
 </li>
 <li><p>幂等性就是指Producer不论向Server发送多少次重复数据，Server端都只会持久化一条。</p>
 </li>
@@ -369,8 +369,8 @@
 <p><a target="_blank" rel="noopener" href="https://imgtu.com/i/RGBi1f"><img src="https://z3.ax1x.com/2021/06/26/RGBi1f.png" srcset="/img/loading.gif" lazyload alt="RGBi1f.png"></a></p>
 <ul>
 <li><p>相关参数：</p>
-<p><em><strong>batch.size</strong>***</em>：***只有数据积累到batch.size之后，sender才会发送数据。</p>
-<p><em><strong>linger.ms</strong>***</em>：***如果数据迟迟未达到batch.size，sender等待linger.time之后就会发送数据。</p>
+<p><em><strong>batch.size</strong></em><em><strong>：</strong></em>只有数据积累到batch.size之后，sender才会发送数据。</p>
+<p><em><strong>linger.ms</strong></em><em><strong>：</strong></em>如果数据迟迟未达到batch.size，sender等待linger.time之后就会发送数据。</p>
 </li>
 </ul>
 </li>
@@ -400,7 +400,7 @@
 </li>
 <li>消费者丢失数据<ul>
 <li>消费者丢失的情况，其实跟消费者offset处理不当有关。消费者消费的offset提交有一个参数，enable.auto.commit，默认是true，决定是否要让消费者自动提交位移。如果开启，那么consumer每次都是先提交位移，再进行消费。这样也会导致丢失数据（当消费者提交offset后，数据未消费完就挂了，但是offset的记录已经不对了，会导致重启后数据也找不到就丢失了）</li>
-<li>可以将enable.auto.commit设置为false，改为手动提交offset，消费完之后再提交offset信息。但是这样又有可能导致重复消费。毕竟exactly once处理一直是一个问题呀（/摊手）。遗憾的是kafka目前没有保证consumer幂等消费的措施，如果确实需要保证consumer的幂等，可以对每条消息维持一个全局的id，每次消费进行去重，当然耗费这么多的资源来实现exactly once的消费到底值不值，那就得看具体业务了。</li>
+<li>可以将enable.auto.commit设置为false，改为手动提交offset，消费完之后再提交offset信息。但是这样又有可能导致重复消费。毕竟exactly once处理一直是一个问题呀（&#x2F;摊手）。遗憾的是kafka目前没有保证consumer幂等消费的措施，如果确实需要保证consumer的幂等，可以对每条消息维持一个全局的id，每次消费进行去重，当然耗费这么多的资源来实现exactly once的消费到底值不值，那就得看具体业务了。</li>
 </ul>
 </li>
 </ul>

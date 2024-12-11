@@ -1,0 +1,1130 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="	#87CEFA">
+  <meta name="description" content="Just Do it!">
+  <meta name="author" content="daxiazou">
+  <meta name="keywords" content="">
+  
+    <meta name="baidu-site-verification" content="code-wxp4a58PBe" />
+  
+  <title>alibaba_big_data_road - Nevermind</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.6.0/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.10","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Nevermind</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('https://tse3-mm.cn.bing.net/th/id/OIP-C.1NJoGdE-U58R_b66i8Sh2gHaK9?w=115&h=180&c=7&r=0&o=5&pid=1.7') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="alibaba_big_data_road">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2024-02-27 18:54" pubdate>
+        2024年2月27日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      13.4k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      136
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">alibaba_big_data_road</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：2024年9月30日 晚上
+                
+              </p>
+            
+            <div class="markdown-body">
+              <h1 id="《大数据之路》"><a href="#《大数据之路》" class="headerlink" title="《大数据之路》"></a>《大数据之路》</h1><ul>
+<li>阿里巴巴出品的经典书籍，这里是一些笔记。推荐阅读原版书籍</li>
+</ul>
+<h2 id="数据模型篇"><a href="#数据模型篇" class="headerlink" title="数据模型篇"></a>数据模型篇</h2><h3 id="第8章：大数据领域建模综述"><a href="#第8章：大数据领域建模综述" class="headerlink" title="第8章：大数据领域建模综述"></a>第8章：大数据领域建模综述</h3><ul>
+<li>数据仓库是一个<strong>面向主题的、集成的、 非易失的且随时间变化的数据集合</strong>，用来支持管理人员的<strong>决策</strong>。</li>
+</ul>
+<ul>
+<li>好的数据建模会从以下几个方面带来提升：<ul>
+<li>性能：良好的数据模型可以快速查询数据，减少I&#x2F;O</li>
+<li>成本：减少非必要的数据冗余，计算结果的复用，降低大数据系统中的存储和计算成本</li>
+<li>效率：提升使用数据的体验，提高使用数据的效率</li>
+<li>质量：良好的数据模型可以改善数据口径的不一致，减少数据计算错误的可能性</li>
+</ul>
+</li>
+</ul>
+<h4 id="OLAP和OLTP系统"><a href="#OLAP和OLTP系统" class="headerlink" title="OLAP和OLTP系统"></a>OLAP和OLTP系统</h4><ul>
+<li>埃德加·弗兰克·科德是“<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E5%85%B3%E7%B3%BB%E6%A8%A1%E5%9E%8B/3189329?fromModule=lemma_inlink">关系模型</a>”的发明者，关系型数据数据的鼻祖，之后类似于oracle,mysql相关的产品喷涌而出。OLTP系统（OnLine Transaction Processsing 联机事务处理）主要操作是数据随机读写，一般采用3NF的实体关系模型存储数据，从而在事务处理中解决数据的冗余和一致性问题。</li>
+<li>OLAP（OnLine Analytical Processing联机分析处理）主要面向批量读写，关注在大数据下的复杂查询问题</li>
+</ul>
+<h4 id="维度模型"><a href="#维度模型" class="headerlink" title="维度模型"></a>维度模型</h4><ul>
+<li><p>Kimball维度建模主要探究需求分析，高层模型，详细模型，和模型审查的过程。一般构建维度模型要经历三个阶段：</p>
+<ul>
+<li>第一阶段是高层设计时期，定义业务过程维度模型的范围，提供每种星形模型的技术和功能描述。</li>
+<li>第二阶段是详细模型设计时期，对每个星形模型添加属性和度量信息</li>
+<li>第三阶段是进行模型的审查，再设计和验证等工作</li>
+<li>第四阶段是产生详细设计文档，提交ETL设计和开发</li>
+</ul>
+</li>
+<li><p>维度模型是数据仓库领域的 Ralph Kimball 大师所倡导的，是目前数仓领域最流行的</p>
+</li>
+<li><p>维度建模从<strong>分析决策的需求</strong>出发构建模型，为分析需求服务，因此它重点关注用户如何能更快速地完成需求分析。同时具有较好的大规模复杂查询的响应性能。其典型的代表是星形模型，以及在一些特殊场景下</p>
+</li>
+<li><p>基本步骤</p>
+<ul>
+<li>选择需要进行分析决策的业务过程。业务过程可以是单个业务事件，比如交易的支付、退款等；也可以是某个事件的状态，比如当前的账户余额等；还可以是一系列相关业务事件组成的业务流程，具体需要看我们分析的是某些事件发生情况，还是当前状态，或是事件流转效率。</li>
+<li>选择粒度。在事件分析中，我们要预判所有分析需要细分的程度，从而决定选择的粒度。粒度是维度的一个组合。</li>
+<li>识别维表。选择好粒度之后，就需要基于此粒度设计维表，包括维度属性，用于分析时进行分组和筛选。</li>
+<li>选择事实。确定分析需要衡量的指标</li>
+</ul>
+</li>
+</ul>
+<h3 id="第九章：数据整合及管理体系"><a href="#第九章：数据整合及管理体系" class="headerlink" title="第九章：数据整合及管理体系"></a>第九章：数据整合及管理体系</h3><ul>
+<li>OneData 即是阿里巴巴内部进行数据整合及管理的方法体系和工具。阿里巴巴的大数据工程师在这一体系下，构建统一、规范、可共用的全域数据体系，避免数据的冗余和重复建设，规避数据烟囱和不一致性，充分发挥阿里巴巴在大数据海量、多样性方面的独特优势。借助统一化数据整合及管理的方法体系，我们构建了阿里巴巴的数据公共层，并可以帮助相似的大数据项目快速落地实现。</li>
+</ul>
+<h4 id="9-1概览"><a href="#9-1概览" class="headerlink" title="9.1概览"></a>9.1概览</h4><ul>
+<li>体系架构<a target="_blank" rel="noopener" href="https://imgse.com/i/pkIxq74"><img src="https://s21.ax1x.com/2024/07/17/pkIxq74.png" srcset="/img/loading.gif" lazyload alt="pkIxq74.png"></a><ul>
+<li>业务板块：根据公司的业务属性，分出几个相对独立的业务板块，业务板块之间重叠性较小</li>
+<li>规范定义：设计一套数据规范命名体系，规范定义会在模型设计中体现出来</li>
+<li>模型设计：以维度建模理论为基础，基于维度建模总线架构，构建一致性的维度和事实</li>
+</ul>
+</li>
+</ul>
+<h4 id="9-2-规范定义"><a href="#9-2-规范定义" class="headerlink" title="9.2 规范定义"></a>9.2 规范定义</h4><ul>
+<li>规范定义指以维度建模作为理论基础 构建总线矩阵，划分和定义数据域、业务过程、维度、度量 原子指标、修饰类型、修饰词、时间周期、派生指标。<ul>
+<li><a target="_blank" rel="noopener" href="https://imgse.com/i/pkIziHe"><img src="https://s21.ax1x.com/2024/07/17/pkIziHe.png" srcset="/img/loading.gif" lazyload alt="pkIziHe.png"></a></li>
+<li>名词解释<a target="_blank" rel="noopener" href="https://imgse.com/i/pkIztg0"><img src="https://s21.ax1x.com/2024/07/17/pkIztg0.png" srcset="/img/loading.gif" lazyload alt="pkIztg0.png"></a></li>
+</ul>
+</li>
+<li>指标体系<ul>
+<li><a target="_blank" rel="noopener" href="https://imgse.com/i/pkopPFH"><img src="https://s21.ax1x.com/2024/07/17/pkopPFH.png" srcset="/img/loading.gif" lazyload alt="pkopPFH.png"></a></li>
+<li>原子指标，修饰类型及修饰词，直接归属在业务过程下，其中修饰词继承修饰类型的数据域</li>
+<li>派生指标可以选择多个修饰词，修饰词之间的关系为“或”或者“且”，由具体的派生指标语决定。</li>
+<li>派生指标唯一归属一个原子指标 ，继承原子指标的数据域， 与修饰词的数据域无关。</li>
+<li>指标命名要清晰。可以参考书本第九章143页的内容<ul>
+<li><a target="_blank" rel="noopener" href="https://imgse.com/i/pkopV6P"><img src="https://s21.ax1x.com/2024/07/17/pkopV6P.png" srcset="/img/loading.gif" lazyload alt="pkopV6P.png"></a></li>
+</ul>
+</li>
+<li>派生指标分为三类：事务型指标，存量型指标和复合型指标。<ul>
+<li>事务型指标 是指对业务活动进行衡量的指标。例如新发商品数、重发商品数、新增注册会员数、订单支付金额，这类指标需维护原子指标及修饰词，在此基础上创建派生指标。</li>
+<li>存量型指标：是指对实体对象（如商品、会员）某些状态的统计。例如商品总数、注册会员总数，这类指标需维护原子指标及修饰词，在此基础上创建派生指标，对应的时间周期 般为“历史截至当前某个时间”。</li>
+<li>复合型指标：是在事务型指标和存量型指标的基础上复合而成的。例如浏览 UV－下单买家数转化率 有些需要 建新原子指标，有些则可以在事务型或存量型原子指标的基础上增加修饰词得到派生指标。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="9-3模型设计"><a href="#9-3模型设计" class="headerlink" title="9.3模型设计"></a>9.3模型设计</h4><ul>
+<li>模型层次关系图<a target="_blank" rel="noopener" href="https://imgse.com/i/pkoplfs"><img src="https://s21.ax1x.com/2024/07/17/pkoplfs.png" srcset="/img/loading.gif" lazyload alt="pkoplfs.png"></a><ul>
+<li>操作数据层（ ODS ）：把操作系统数据几乎无处理地存放在数据仓库系统中。</li>
+<li>公共维度模型层（ CDM ）：存放明细事实数据、维表数据及公共指标汇总数据。 其中明细事实数据、维表数据一般根据 ODS 层数据加工生成 ：公共指标汇总数据一般根据维表数据和明细事实数据加工生成。<ul>
+<li>CDM层又细分为DWD层和DWS层，分别是明细数据层和汇总数据层，<strong>采用维度模型方法作为理论基础，更多的采用一些维度退化手法，将维度退化至事实表中，减少事实表和维表的关联，提高明细数据表的易用性。（DWD）同时在汇总数据层，加强指标的维度退化，采用更多的宽表化手段构建公共指标数据层，提升公共指标的复用性，减少重复加工。(DWS)</strong><ul>
+<li>组合相关和相似数据：采用明细宽表，复用关联计算，减少数据扫描。</li>
+<li>公共指标统一加工：基于 OneData 体系构建命名规范、口径一致和算法统一的统计指标，为上层数据产品、应用和服务提供公共指标；建立逻辑汇总宽表。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>应用数据层（ADS）：存放数据产品个性化的统计指标数据。根据CDM层和ODS层加工生成<ul>
+<li>个性化指标加工：不公用性，复杂性</li>
+<li>基于应用的数据组装，大宽表集市，趋势指标串</li>
+</ul>
+</li>
+<li>数据模型架构<a target="_blank" rel="noopener" href="https://imgse.com/i/pkopbB8"><img src="https://s21.ax1x.com/2024/07/17/pkopbB8.png" srcset="/img/loading.gif" lazyload alt="pkopbB8.png"></a></li>
+</ul>
+</li>
+<li>CDM层的一些简单的规范：1.高内聚，低耦合。2.数据可回滚（多次运行，结果一致）。3.命名清晰，可理解，一致性（表和字段命名清晰，相同含义字段在不同表命名要相同）</li>
+</ul>
+<h4 id="9-4-模型实施"><a href="#9-4-模型实施" class="headerlink" title="9.4 模型实施"></a>9.4 模型实施</h4><ul>
+<li><p>Kimball维度建模实施过程：第一个阶段是高层设计时期定义业务过程维度模型的范围，提供每种星型模式的技术和功能描述；第二个阶段是详细模型设计时期，对每个星形模型添加属性和度量信息；第三个阶段是进行模型的审查、再设计和验证等工作；第四个阶段是产生详细设计文档，提交 ETL 设计和开发。</p>
+<ul>
+<li>高层模型<ul>
+<li>高层模型设计阶段的直接产出目标是创建高层维度模型图，它是对业务过程中的维表和事实表的图形描述。确定维表创建初始属性列表，为每个事实表创建提议度量。</li>
+</ul>
+</li>
+<li>详细模型<ul>
+<li>详细的维度建模过程是为高层模型填补缺失的信息，解决设计问题，并不断测试模型能否满足业务需求，确保模型的完备性。确定每个维表的属性和每个事实表的度量，并确定信息来源的位置、定义，确定属性和度量如何填人模型的初步业务规则。</li>
+</ul>
+</li>
+<li>模型审查，再设计和验证<ul>
+<li>本阶段主要召集相关人员进行模型的审查和验证，根据审查结果对详细维度进行再设计。</li>
+</ul>
+</li>
+<li>提交ETL设计和开发<ul>
+<li>最后，完成模型详细设计文档，提交ETL 开发人员，进入ETL设计和开发阶段，由 ETL 人员完成物理模型的设计和开发。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>阿里OneData体系下的数仓实施过程</p>
+<ul>
+<li><p><a target="_blank" rel="noopener" href="https://imgse.com/i/pko9MDK"><img src="https://s21.ax1x.com/2024/07/17/pko9MDK.png" srcset="/img/loading.gif" lazyload alt="数仓实施流程"></a></p>
+</li>
+<li><p>数据调研</p>
+<ul>
+<li><p>业务调研，业务系统要充分了解，有条件可以多使用，多感受，看数据是怎么流动的。得出业务板块，业务系统的一些信息，可以抽象整理成具体的表</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://imgse.com/i/pko93Ue"><img src="https://s21.ax1x.com/2024/07/17/pko93Ue.png" srcset="/img/loading.gif" lazyload alt="业务调研流程"></a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://imgse.com/i/pko9WrV"><img src="https://s21.ax1x.com/2024/07/17/pko9WrV.png" srcset="/img/loading.gif" lazyload alt="业务动作"></a></p>
+</li>
+<li><p>需求调研：与分析师，业务运营人员沟通数据需求</p>
+</li>
+</ul>
+</li>
+<li><p>数据域划分：根据业务过程进行归纳，抽象出数据域</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://imgse.com/i/pkoCniQ"><img src="https://s21.ax1x.com/2024/07/17/pkoCniQ.png" srcset="/img/loading.gif" lazyload alt="数据域划分"></a></li>
+</ul>
+</li>
+<li><p>构建总线矩阵：在充分的业务调研和需求调研后，就可以构建总线矩阵了。主要是两件事：明确每个数据域下有哪些业务过程；业务过程与哪些维度相关，并定义每个数据域下的业务过程和维度。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://imgse.com/i/pkoCKRs"><img src="https://s21.ax1x.com/2024/07/17/pkoCKRs.png" srcset="/img/loading.gif" lazyload alt="总线矩阵"></a></li>
+</ul>
+</li>
+<li><p>规范定义：规范定义主要定义指标体系，包括原子指标，修饰词，时间周期和派生指标</p>
+</li>
+<li><p>模型设计：主要就是CDM层的设计，维度和属性的规范定义。是核心内容</p>
+</li>
+</ul>
+</li>
+<li><p>OneData实施过程是一个高度迭代和动态的过程,一般采用螺旋式实施方法。在总体架构设计完成之后，开始根据数据域进行迭代式模型设计和评审。在架构设计、规范定义和模型设计等模型实施过程中，都会引入评审机制，以确保模型实施过程的正确性。</p>
+</li>
+</ul>
+<h3 id="第十章：维度设计"><a href="#第十章：维度设计" class="headerlink" title="第十章：维度设计"></a>第十章：维度设计</h3><ul>
+<li>维度是维度建模的基础和灵魂。在维度建模中，将度量称为<strong>事实</strong>，将环境描述为<strong>维度</strong>。维度是用于分析事实所需要的多种环境。</li>
+<li>维度所包含的列表示维度的列，称为维度属性。维度属性是查询约束条件，分组和报表标签生成的基本来源。</li>
+</ul>
+<h4 id="10-1：维度的基本设计方法"><a href="#10-1：维度的基本设计方法" class="headerlink" title="10.1：维度的基本设计方法"></a>10.1：维度的基本设计方法</h4><ul>
+<li>第一步：<strong>选择维度或新建维度。</strong>作为维度建模的核心，在企业级数据仓库中必须保证维度的唯一性。作为维度建模的核心，在企业级数据仓库中必须保证维度的唯一性。以淘宝商品维度为例，有且只允许有一个维度定义。</li>
+<li>第二步：<strong>确定主维表。</strong>此处的主维表一般是 ODS 表，直接与业务系统同步。以淘宝商品维度为例， <em>auction</em> auctions 是与前台商品中心系统同步的商品表，此表即是主维表。</li>
+<li>第三步：<strong>确定相关维表。</strong>数据仓库是业务源系统的数据整合，不同业务系统或者同一业务系统中的表之间存在关联性。根据对业务的梳理，确定哪些表和主维表存在关联关系，并选择其中的某些表用于生成维度属性。以淘宝商品维度为例，根据对业务逻辑的梳理，可以得到商品与类目、 SPU 卖家、店铺等维度存在关联关系。</li>
+<li>第四步：<strong>确定维度属性。</strong>包括两步<ul>
+<li>从主维表中选择维度属性或生成新的维度属性</li>
+<li>从相关维表中选择维度属性或生成新的维度属性。<ul>
+<li>以淘宝商品维度为例，从<strong>主维表</strong>（ s_auction_auctions ）<strong>和类目、 SPU 、卖家、店铺等相关维表</strong>中选择维度属性或生成新的维度属性。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>确定维度的几个要点：<ul>
+<li>尽可能生成丰富的维度属性</li>
+<li>尽可能多地给出包括一些富有意义的文字性描述</li>
+<li>区分数值型属性和事实</li>
+<li>尽量沉淀出通用的维度属性</li>
+</ul>
+</li>
+</ul>
+<h5 id="10-1-3维度的层次结构"><a href="#10-1-3维度的层次结构" class="headerlink" title="10.1.3维度的层次结构"></a>10.1.3维度的层次结构</h5><ul>
+<li>维度中的一些描述属性以层次方式或一对多的方式相互关联，可以理解为包含连续主从关系的属性层次。比如企业维度，有行业，产业等，但是行业，产业也是有细分的级别的，一级行业下的某产业。</li>
+</ul>
+<h5 id="10-1-4-规范化与反规范化"><a href="#10-1-4-规范化与反规范化" class="headerlink" title="10.1.4 规范化与反规范化"></a>10.1.4 规范化与反规范化</h5><ul>
+<li>规范化就是传统OLTP系统中的类似的范式模型（和雪花模型类似）。如果进行反规范化处理，将一些相关维度冗余到主维度表来，可以更加方便查询，对于OLAP系统来说，这是很重要的<ul>
+<li>规范化处理<a target="_blank" rel="noopener" href="https://imgse.com/i/pkTwFYV"><img src="https://s21.ax1x.com/2024/07/20/pkTwFYV.png" srcset="/img/loading.gif" lazyload alt="pkTwFYV.png"></a></li>
+<li>反规范化处理<a target="_blank" rel="noopener" href="https://imgse.com/i/pkTwkWT"><img src="https://s21.ax1x.com/2024/07/20/pkTwkWT.png" srcset="/img/loading.gif" lazyload alt="pkTwkWT.png"></a></li>
+</ul>
+</li>
+</ul>
+<h5 id="10-1-5一致性维度和交叉探查"><a href="#10-1-5一致性维度和交叉探查" class="headerlink" title="10.1.5一致性维度和交叉探查"></a>10.1.5一致性维度和交叉探查</h5><ul>
+<li>迭代式的构建数仓容易导致形成独立的数据集市，导致严重的不一致性。</li>
+<li>构建一致性维度要根据总线架构合理划分。下面总结维度一致性的几种表现形式<ul>
+<li>共享维表。比如在阿里的数仓中，商品，卖家，买家等维度有且只有一个，对这些公共维度进行交叉探查不会有问题。</li>
+<li>一致性上卷，其中一个维度的维度属性是另一个维度的维度属性的子集，且两个维度的公共维度属性结构和内容相同。比如阿里的商品体系中，有商品维度和类目维度，其中类目维度的维度属性是商品维度的维度属性的子集，且具有相同维度属性和维度属性值。这样基于类目维度进行不同业务过程的交叉探查也不会存在任何问题</li>
+<li>交叉属性，两个维度具有部分相同的维度属性，比如在商品维度中具有类目属性，在卖家维度中具有主营类目属性，两个维度具有相同的类目属性，则可以在相同的类目属性上进行不同业务过程的交叉探查。</li>
+</ul>
+</li>
+</ul>
+<h4 id="10-2维度设计高级主题"><a href="#10-2维度设计高级主题" class="headerlink" title="10.2维度设计高级主题"></a>10.2维度设计高级主题</h4><h5 id="10-2-1维度整合"><a href="#10-2-1维度整合" class="headerlink" title="10.2.1维度整合"></a>10.2.1维度整合</h5><ul>
+<li>数据仓库是一个<strong>面向主题的，集成的，非易失的且随时间变化的数据集合</strong>，用来支持管理人员的<strong>决策</strong>。</li>
+<li><strong>集成</strong>是数仓四个特性中最重要的，所以数据由面向应用的操作型环境进入数据仓库后，需要进行数据集成。<strong>将面向应用的数据转换为面向主题的数据仓库数据，本身就是一种集成</strong>。体现在以下几个方面：<ul>
+<li>命名的规范统一。表名，字段名统一</li>
+<li>字段类型的统一。相同和相似字段的字段类型统一</li>
+<li>公共代码和代码值的统一。公共代码及标志性字段的数据类型，命名方式的统一</li>
+<li>业务含义相同的表的统一。<strong>主要依据高内聚低耦合的理念，在物理实现中，将业务关系大，源系统影响差异小的表进行整合</strong>；<strong>将业务关系小，源系统影响差异大的表进行分而置之。</strong></li>
+</ul>
+</li>
+</ul>
+<h5 id="10-2-2-水平拆分"><a href="#10-2-2-水平拆分" class="headerlink" title="10.2.2 水平拆分"></a>10.2.2 水平拆分</h5><ul>
+<li>维度属性通常可以按照类别或者类型进行细分。比如淘系商品表，根据业务线或行业等可以对商品进行细分，如淘宝的商品，天猫的商品，1688的商品。不同分类的商品，维度属性有相同的也有不同的；比如航旅的商品和普通的淘系商品，都有商品价格，标题，类型等维度属性，但是航旅的商品除了有这些公共属性外，还有酒店，景点，门票等自己独特的维度属性。</li>
+<li>那么怎样设计维度才好呢？主要有两种解决方案<ul>
+<li>方案1：将维度的不同分类实例化为不同的维度，同时在主维表中保存公共属性；</li>
+<li>方案2：维护单一维度，包含所有可能的属性</li>
+</ul>
+</li>
+<li>如何选择方案主要考虑以下三个原则：<ul>
+<li>扩展性：当源系统业务逻辑变化时，能通过较少的成本快速扩展模型，保持核心模型的相对稳定性。高内聚，低耦合的思想就是其核心</li>
+<li>效能：在性能和成本方面取得平衡。通过牺牲一定的存储成本，达到性能和逻辑的优化</li>
+<li>易用性：模型可理解性高，访问复杂度低。用户能方便地从模型中找到对应地数据表，并能够方便地查询和分析。</li>
+</ul>
+</li>
+</ul>
+<h5 id="10-2-3-垂直拆分"><a href="#10-2-3-垂直拆分" class="headerlink" title="10.2.3 垂直拆分"></a>10.2.3 垂直拆分</h5><ul>
+<li>处于扩展性，产出时间，易用性等方面地考虑，设计主从维表。主维表存放稳定，产出时间早，热度高的属性；从维表存放变化较快，产出时间晚，热度低的属性。比如阿里数仓中，设计了商品主维表和商品扩展维度，主维表1：30产出，商品扩展维表由于有冗余的产出时间较晚的商品品牌和标签信息，在每日的3：00产出。主维表先产出，对于数仓的稳定和下游应用的产出都有较大的意义。</li>
+</ul>
+<h5 id="10-2-4-历史归档"><a href="#10-2-4-历史归档" class="headerlink" title="10.2.4 历史归档"></a>10.2.4 历史归档</h5><ul>
+<li>对于每天庞大的数据量，可以对历史数据进行归档</li>
+</ul>
+<h4 id="10-3-维度变化"><a href="#10-3-维度变化" class="headerlink" title="10.3 维度变化"></a>10.3 维度变化</h4><h5 id="10-3-1缓慢变化维"><a href="#10-3-1缓慢变化维" class="headerlink" title="10.3.1缓慢变化维"></a>10.3.1缓慢变化维</h5><ul>
+<li>数仓的重要特点之一就是反应历史变化，所以如何处理维度的变化是维度设计的重要工作之一。维度一般会随时间发生变化。几种处理方式：<ul>
+<li>重写维度值。采用此方式，不保留历史数据，始终取最新的数据</li>
+<li>插入新的维度行。采用此种方式，保留历史数据</li>
+<li>添加维度列。</li>
+</ul>
+</li>
+</ul>
+<h5 id="10-3-2-快照维表"><a href="#10-3-2-快照维表" class="headerlink" title="10.3.2 快照维表"></a>10.3.2 快照维表</h5><ul>
+<li>在阿里数仓实践中，处理缓慢变化维的方式是采用快照方式。数仓的计算周期一般是每天一次。即每天保存一份全量快照数据。任意一天的事实均可以获取到当天的商品信息 ，也可以获取到最新的商品信息，通过限定日期，<strong>采用自然键进行关联</strong>即可。<ul>
+<li>优点:简单，开发维护成本低。使用方便，易于理解</li>
+<li>缺点:存储浪费太多。如果每天的变化很少，其实会浪费很多存储空间</li>
+</ul>
+</li>
+</ul>
+<h5 id="10-3-3-极限存储"><a href="#10-3-3-极限存储" class="headerlink" title="10.3.3 极限存储"></a>10.3.3 极限存储</h5><ul>
+<li>其实就是采用拉链表的方式构建维度表，既有历史数据，又不会太浪费存储空间。还可以每月做历史数据的清理。缺点是可能对非数仓人员来说，模型理解上有一定门槛。</li>
+<li>在实际生产中可以做一些额外处理<ul>
+<li>在做极限存储前有一个全量存储表 ，<strong>全量存储表仅保留最近一段时间的全量分区数据</strong>，历史数据通过映射的方式关联到极限存储表。即用户只访问全量存储表，所以对用户来说极限存储是不可见的。</li>
+<li><strong>对于部分变化频率频繁的宇段需要过滤</strong>。例如，用 户表中存在用户积分宇段，这种字段的值每天都在发生变化，如果不过滤的话，极限存储就相当于每个分区存储一份全量数据，起不到节约存储成本的效果。</li>
+<li>其实就是可以做一张</li>
+</ul>
+</li>
+</ul>
+<h5 id="10-3-4-微型维度"><a href="#10-3-4-微型维度" class="headerlink" title="10.3.4 微型维度"></a>10.3.4 微型维度</h5><ul>
+<li>如果维度表中的一些属性变化太频繁，可以把这些维度属性放置到新的维表中。</li>
+<li>微型维度的创建是通过将一部分不稳定的属性从主维度中移出，并将它们放置到拥有自己代理键的新表中来实现的。</li>
+</ul>
+<h4 id="10-4-特殊维度"><a href="#10-4-特殊维度" class="headerlink" title="10.4 特殊维度"></a>10.4 特殊维度</h4><h5 id="10-4-1-递归层次"><a href="#10-4-1-递归层次" class="headerlink" title="10.4.1 递归层次"></a>10.4.1 递归层次</h5><ul>
+<li>对于一些递归结构的维度，比如父子类目，省市区街道等，经常会进行上钻下钻的分析，使用递归sql成本较高。在维度模型中，可以对层次结构进行处理</li>
+<li>1.层次结构扁平化。把层次打平<ul>
+<li><a target="_blank" rel="noopener" href="https://imgse.com/i/pkOP3Zj"><img src="https://s21.ax1x.com/2024/07/30/pkOP3Zj.png" srcset="/img/loading.gif" lazyload alt="pkOP3Zj.png"></a></li>
+<li>优先使用层次机构扁平化的方式吧，扩展性查但是易用性更好。</li>
+</ul>
+</li>
+<li>2.层次桥接表<ul>
+<li><a target="_blank" rel="noopener" href="https://imgse.com/i/pkOPwyF"><img src="https://s21.ax1x.com/2024/07/30/pkOPwyF.png" srcset="/img/loading.gif" lazyload alt="pkOPwyF.png"></a></li>
+</ul>
+</li>
+</ul>
+<h5 id="10-4-2-行为维度"><a href="#10-4-2-行为维度" class="headerlink" title="10.4.2 行为维度"></a>10.4.2 行为维度</h5><ul>
+<li>对一些事实进行一些统计得到的一些维度，称为行为维度，或者事实衍生维度，按照加工方式可分为以下几种：<ul>
+<li>另一个维度 的过去行为，如买家最近一次访问淘宝的时间、 买家最近 次发生淘宝交易的时间等。</li>
+<li>快照事实行为维度，如买家从年初截至当前的淘宝交易金额、买家信用分值 、卖家信用分值等。</li>
+<li>分组事实行为维度 ，将数值型事实转换为枚举值。如买家从年初截至当前的淘宝交易金额按照金额划分的等级 买家信用分值按照分数划分得到的信用等级等。</li>
+<li>复杂逻辑事实行为维度，通过复杂算法加工或多个事实综合加工得到。如前面提到的卖家主营类目，商品热度根据访问、收藏、加入购物车、交易等情况综合计算得到。</li>
+</ul>
+</li>
+<li>对于行为维度的处理一般有两种：1.冗余进现有的维表中。2.加工成单独的行为维表。主要参考两个原则：<ul>
+<li>1.避免维度过快的增长。</li>
+<li>比如对商品表进行了极限存储，如果将商品热度加入现有的商品维表中，则可能会使每日商品变更占比过高，从而导致极限存储效果较差。</li>
+<li>2.避免耦合度过高。比如卖家主营类目，加工逻辑异常复杂，如果融合进现有的卖家维表中，那么过多的业务稠合会导致卖家维表刷新逻辑复杂、维护性差、产出延迟等。</li>
+</ul>
+</li>
+</ul>
+<h5 id="10-4-3-多值维度"><a href="#10-4-3-多值维度" class="headerlink" title="10.4.3 多值维度"></a>10.4.3 多值维度</h5><ul>
+<li>一种情况是事实表的一条记录在某维表中有多条记录与之对应。</li>
+<li>比如对于淘宝交易订单，买家一次购买了多种商品，如一件毛衣和两双袜子，称为交易父订单 对于每种商品的交易，称为交易子订单：此交易父订单有两个子订单与之对应。假设设计交易父订单事实表，则对于此事实表的每一条记录，在商品表中都有 一到多条记录与之对应。</li>
+<li>处理方式<ul>
+<li>第一种是降低事实表的粒度。比如将交易订单设计为子订单粒度</li>
+<li>第二种是采用多字段。比如地产销售中，每次合同签订可能存在多个买受方的情况。对于合同签订事实表，每条记录可能对应多个买受方，由于合同已经是事实表中的最细粒度，无法通过降低粒度的方式来解决。但由于合同签订的买受人一般不会太多，所以一般采用多字段方式。<ul>
+<li><a target="_blank" rel="noopener" href="https://imgse.com/i/pkOcv7t"><img src="https://s21.ax1x.com/2024/07/31/pkOcv7t.png" srcset="/img/loading.gif" lazyload alt="pkOcv7t.png"></a></li>
+</ul>
+</li>
+<li>第三种是桥接表<ul>
+<li><a target="_blank" rel="noopener" href="https://imgse.com/i/pkOgnhT"><img src="https://s21.ax1x.com/2024/07/31/pkOgnhT.png" srcset="/img/loading.gif" lazyload alt="桥接表的方式"></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="10-4-4-多值属性"><a href="#10-4-4-多值属性" class="headerlink" title="10.4.4 多值属性"></a>10.4.4 多值属性</h5><ul>
+<li>维表中某个属性字段同时有多个值，称为多值属性。一般有三种处理方式<ul>
+<li>第一种：保持维度主键不变，将多值属性放在维度的一个属性字段中。比如商品属性，统一通过k-v对的形式存放在property字段中。这种方式扩展性好，但是使用数据做统计会比较麻烦。</li>
+<li>第二种：保持维度主键不变，但是将多值属性拆开，将多值属性放在维度的多个属性字段中。</li>
+<li>第三种：就是将多值属性炸开。维度的id和属性id做为联合主键，这种方式使用方便，但是数据会出现很多倍的膨胀。淘宝的商品属性表采用此种方式，数据量达到了几百亿的级别</li>
+</ul>
+</li>
+</ul>
+<h5 id="10-4-5-杂项维度"><a href="#10-4-5-杂项维度" class="headerlink" title="10.4.5 杂项维度"></a>10.4.5 杂项维度</h5><ul>
+<li><p>杂项维度是由操作型系统中的指示符或者标志字段组合而成的，一般不在一致性维度之列。比如淘宝交易订单的交易类型字段，包括话费充值，司法拍卖，航旅等类型；支付状态，物流状态等，它们在源系统中直接保存在交易表中。</p>
+</li>
+<li><p>这时，通常的解决方案就是建立杂项维度 ，将这些字段建立到一个维表中，在事实表中只需保存一个外键 即可。多个字段的不同取值组成一条记录，生成代理键，存入维表中，并将该代理键保存到相应的事实表字段下。建议不要直接使用所有的组合生成完整 的杂项维表，在抽取</p>
+<p>遇到新的组合时生成相应的记录即可。杂项维度 ETL 过程比一般维度略微复杂些。</p>
+</li>
+</ul>
+<h3 id="第十一章事实表设计"><a href="#第十一章事实表设计" class="headerlink" title="第十一章事实表设计"></a>第十一章事实表设计</h3><h4 id="11-1-事实表基础"><a href="#11-1-事实表基础" class="headerlink" title="11.1 事实表基础"></a>11.1 事实表基础</h4><h5 id="11-1-1-事实表特性"><a href="#11-1-1-事实表特性" class="headerlink" title="11.1.1 事实表特性"></a>11.1.1 事实表特性</h5><ul>
+<li>事实表作为维度建模的核心，紧紧<strong>围绕着业务过程</strong>来设计，通过获取描述业务过程的度量来表达业务过程，包含了<strong>引用的维度</strong>和业务过程有关的<strong>度量</strong>。</li>
+<li>事实表中<strong>一条记录</strong>所表达的业务细节程度被称为<strong>粒度</strong>。通常粒度有两种表述方式：一种是<strong>维度属性组合</strong>所表示的细节程度；一种是所表示的具体<strong>业务含义</strong>。</li>
+<li>作为度量业务过程的事实，一般为整型或浮点型。具有可加性，半可加性和不可加性。</li>
+<li>事实表分为三种类型：事务型事实表，周期型快照事实表，累积快照事实表</li>
+</ul>
+<h5 id="11-1-2事实表设计原则"><a href="#11-1-2事实表设计原则" class="headerlink" title="11.1.2事实表设计原则"></a>11.1.2事实表设计原则</h5><ul>
+<li>尽可能包含所有与业务过程相关的事实</li>
+<li>只选择与业务过程相关的事实</li>
+<li>分解不可加性事实为可加的组件</li>
+<li>在选择维度和事实之前必须先声明粒度</li>
+<li>在同一个事实表中不能有多种不同粒度的事实</li>
+<li>事实的单位要保持一致</li>
+<li>对事实的null值要处理</li>
+<li>使用维度退化提高事实表的易用性</li>
+</ul>
+<h5 id="11-1-3-事实表设计方法"><a href="#11-1-3-事实表设计方法" class="headerlink" title="11.1.3 事实表设计方法"></a>11.1.3 事实表设计方法</h5><ul>
+<li>Kimball的维度建模理论，对于维度模型设计采用四步设计方法：1.选择业务过程；2.声明粒度；3.确定维度；4.确定事实</li>
+<li>OneData理论改进版：<ul>
+<li>第一步：选择业务过程及确定事实表类型。<ul>
+<li>明确业务需求之后，对业务过程进行划分，选择我们需要的业务过程，并确定事实表的类型</li>
+</ul>
+</li>
+<li>第二步：声明粒度<ul>
+<li>即确定事实表中一行数据所表示的业务含义</li>
+</ul>
+</li>
+<li>第三步：确定维度<ul>
+<li>完成声明粒度之后，也意味着确定了主键，对应的维度组合以及相关的维度字段就可以确定了。</li>
+</ul>
+</li>
+<li>第四步：确定事实<ul>
+<li>事实可以通过回到“过程的度量是什么‘来确定。应该选择与业务过程有关的所有事实，且事实的粒度要与所声明的事实表的粒度一致。</li>
+</ul>
+</li>
+<li>第五步：冗余维度<ul>
+<li>即维度退化，在事实表中冗余常用的维度字段，方便下游的查询</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="11-2-事务事实表"><a href="#11-2-事务事实表" class="headerlink" title="11.2 事务事实表"></a>11.2 事务事实表</h4><h5 id="11-2-1-设计过程"><a href="#11-2-1-设计过程" class="headerlink" title="11.2.1 设计过程"></a>11.2.1 设计过程</h5><ul>
+<li>任何类型的事件都可以理解为一种事务。比如交易过程中的创建订单，买家付款，物流过程中的揽货，发货，签收，退款中的申请退款，申请小二介入等。都可以被理解成一种事务。事务事实表就是针对这些过程构建的一类事实表，用以跟踪定义业务过程的个体行为，提供丰富的分析能力，作为数据仓库原子的明细数据。</li>
+<li>1.选择业务过程<ul>
+<li>选择要分析的业务流程</li>
+<li>Kimball维度建模理论任务，为了方便进行独立的分析研究，应该为每个业务过程建立一个事实表。但是将不同的业务过程放到同一个事实表也是一个可以考虑的实现方式。</li>
+</ul>
+</li>
+<li>2.声明粒度<ul>
+<li>业务过程选定之后，就要针对每个业务过程确定一个粒度，即确定事务事实表每一行所表达的细节层次。</li>
+</ul>
+</li>
+<li>3.确定维度<ul>
+<li>选定好业务过程且确定粒度后，就可以确定维度信息了。在淘宝交易事务事实表设计过程中，按照经常用于统计分析的场景，确定维度包含：买家，卖家，商品，商品类目，发货地区，收货地区，父订单维度以及杂项维度。由于订单的属性较多，比如订单的业务类型，是否无线交易，订单的attributes属性等。对于这些使用较多却又无法归属到上述买卖家或商品维度中的属性，则新建一个杂项维度进行存放。</li>
+</ul>
+</li>
+<li>4.确定事实<ul>
+<li>作为过程度量的核心，事实表应该包含与其描述过程有关的所有事实。以淘宝交易事务事实表为例，选定三个业务过程一一下单、支付和成功完结。不同的业务过程有不同的事实（度量值）。比如下单业务中的：下单金额，下单数量，下单分摊金额，在支付业务过程中，包含支付金额，分摊油费，折扣金额，红包金额，积分金额；在完结业务过程中包含确认收货金额等。由于粒度是子订单，所以对于一些父订单上的金额需要分摊到子订单上，比如父订单邮费，父订单折扣等。</li>
+<li>按照kimball的维度建模理论，经过已上步骤，淘宝交易事务事实表已经成型<ul>
+<li><a target="_blank" rel="noopener" href="https://imgse.com/i/pA9ZTP0"><img src="https://s21.ax1x.com/2024/08/14/pA9ZTP0.png" srcset="/img/loading.gif" lazyload alt="pA9ZTP0.png"></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>5.冗余维度(维度退化)<ul>
+<li>OneData理论在已上四步的基础上增加了<strong>维度退化</strong>的一步。这个过程在kimball的维度建模理论中也有所提及；但是阿里数仓出于效率和资源的考虑，将常用维度全部退化到事实表中，使下游分析使用更加方便。</li>
+<li>在确定维度时，包含了买卖家维度，商品维度，类目维度，收发货维度等。Kimball维度建模理论建议在事实表中只保存这些维表的外键。而淘宝交易事务事实表在kimball维度建模基础上做了进一步的优化，将买卖星级，标签，店铺名称，商品类型，商品特性，商品属性，类目层级等常用的维度属性冗余进事实表中，提高对事实表过滤查询，统计的效率。</li>
+<li><a target="_blank" rel="noopener" href="https://imgse.com/i/pA9epPx"><img src="https://s21.ax1x.com/2024/08/14/pA9epPx.png" srcset="/img/loading.gif" lazyload alt="pA9epPx.png"></a></li>
+</ul>
+</li>
+</ul>
+<h5 id="11-2-2-单事务事实表"><a href="#11-2-2-单事务事实表" class="headerlink" title="11.2.2 单事务事实表"></a>11.2.2 单事务事实表</h5><ul>
+<li><p>单事务事实表，就是针对每一个业务过程设计一个事实表。可以方便的对每个业务过程进行独立的分析。1688交易流程和淘宝类似，也是下单，支付，发货和完结。在这个四个关键流程中1688选择<strong>下单</strong>和<strong>支付</strong>两个业务过程分别设计事务事实表</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://imgse.com/i/pA9l39A"><img src="https://s21.ax1x.com/2024/08/14/pA9l39A.png" srcset="/img/loading.gif" lazyload alt="pA9l39A.png"></a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://imgse.com/i/pA9lGct"><img src="https://s21.ax1x.com/2024/08/14/pA9lGct.png" srcset="/img/loading.gif" lazyload alt="pA9lGct.png"></a></p>
+</li>
+</ul>
+<h5 id="11-2-3-多事务事实表"><a href="#11-2-3-多事务事实表" class="headerlink" title="11.2.3 多事务事实表"></a>11.2.3 多事务事实表</h5><ul>
+<li><p>多事务事实表，将不同的事实放到同一个事实表中，即<strong>同一个事实表包含不同的业务过程。</strong></p>
+</li>
+<li><p>多事务事实表有两种设计方式：</p>
+<ul>
+<li>1.不同的业务过程的事实使用<strong>不同的事实字段存放</strong></li>
+<li>2.不同的业务过程的事实使用<strong>同一个事实字段进行存放</strong>，但需要增加一个业务过程标签用于区分不同的业务过程。</li>
+</ul>
+</li>
+<li><p>淘宝交易事务事实表（不同事实字段存放）</p>
+<ul>
+<li>淘宝交易事务事实表中包含了下单，支付，完结三个业务过程，三个业务过程的粒度都是子订单粒度。没有把发货放到此事务事实表中，是因为发货的粒度比子订单更细（比如拆分发货，聚合发货等多种情况），属于不同粒度上的业务过程。</li>
+<li>确定好业务过程和粒度后，下一步就是确定维度和事实。一般来说，对于不同的业务过程和粒度，维度也不完全一致。但在设计淘宝交易事务事实表时，根据分析统计，常用维度比较一致，因此在维度层面可以保证这三个业务过程放到同一个事务事实表中。这里的维度也是在交易过程中比较常见的，如包括买家、卖家、商品、类目、店铺、收发货地区等，无论在哪一个业务过程中，都需要按照这些维度进行统计分析。</li>
+<li>将多个业务过程放到同一个事实表中，需要面对如何处理多个事实的问题。交易事务事实表需要包含<strong>下单度量</strong>，<strong>支付度量</strong>，<strong>成功完结度量</strong>。这里的解决方案是针对每一个度量都使用一个字段进行保存,即不同的事实使用不同的字段进行存放。如果不是当前业务过程的度量，则采取<strong>零值处理方式</strong>。</li>
+<li>同一个事实表中包含了多个业务过程，如何在表中进行区分标记呢？这里的解决方案是对每一个业务过程打一个标签，标记当天是否是这个业务过程。比如，针对下单打一个是否当天下单的标签；针对支付，打一个是否当天支付的标签；针对成功完结打一个是否当天成功完结的标签，标签之间互不相干。</li>
+<li><a target="_blank" rel="noopener" href="https://imgse.com/i/pA98XUU"><img src="https://s21.ax1x.com/2024/08/14/pA98XUU.png" srcset="/img/loading.gif" lazyload alt="pA98XUU.png"></a></li>
+</ul>
+</li>
+<li><p>收藏商品事务事实表</p>
+<ul>
+<li><p>收藏业务一般包含两个业务过程：收藏商品和删除商品。接下来是确定粒度，无论收藏还是删除收藏的商品都是用户对商品的一个操作。</p>
+</li>
+<li><p>确定好业务过程和粒度后，接下来是确定维度和事实，由于粒度是用户加上商品，所以维度主要是用户维度和商品维度。为了使事实表更加丰富，冗余了商品类目维度和商品所属卖家维度，收藏商品和删除商品业务过程所属的维度是一致的。</p>
+</li>
+<li><p>收藏和删除商品是两个不同的业务过程，但是确定了相同的粒度和维度，所以考虑设计多事务事实表，将这两个业务过程放到同一个事实表中，只是在不同业务过程的事实上进行区分。</p>
+</li>
+<li><p>这里的解决方案是<strong>使用同一个字段存放不同业务过程的事实</strong>，使用标签字段区分不同的业务过程。收藏商品和删除商品的事实主要是商品价格，不过收藏事务事实表更多的是无事实的事实表，一般用于统计收</p>
+<p>藏或者删除的次数。</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://imgse.com/i/pA9GYGQ"><img src="https://s21.ax1x.com/2024/08/14/pA9GYGQ.png" srcset="/img/loading.gif" lazyload alt="pA9GYGQ.png"></a></p>
+</li>
+</ul>
+</li>
+<li><p>多事务事实表的选择</p>
+<ul>
+<li>当不同业务过程的度量比较相似，差异不大时，可以采用第二种多事务事实表的设计方式，使用同一个字段来表示度量数据。但这种方式存在 一个问题一一在同一个周期内会存在多条记录。</li>
+<li>当不同业务过程的度量差异较大时，可以选择第一事务事实表的设计方式，将不同业务过程的度量使用不同字段冗余到表中，非当前业务过程则置零表示。这种方式所存在的问题是度量字段零值较多。</li>
+</ul>
+</li>
+</ul>
+<h5 id="11-2-4-两种事实表的对比"><a href="#11-2-4-两种事实表的对比" class="headerlink" title="11.2.4 两种事实表的对比"></a>11.2.4 两种事实表的对比</h5><ul>
+<li>哪张设计方式更好，可以从下面这些方面考量。</li>
+<li>1.业务过程</li>
+<li>2.粒度和维度</li>
+<li>3.事实</li>
+<li>4.下游业务使用</li>
+<li>5.计算存储成本</li>
+</ul>
+<h5 id="11-2-5-父子事实的处理方式"><a href="#11-2-5-父子事实的处理方式" class="headerlink" title="11.2.5 父子事实的处理方式"></a>11.2.5 父子事实的处理方式</h5><ul>
+<li>以淘宝交易事务事实表来说，选择子订单粒度表示一行数据的含义。一次对于父子订单的情况来说，需要把父订单的下单总额或者支付总额分摊到每个子订单上。通过分摊父订单的金额，将所有业务过程的度量全部带进淘宝交易事务事实表中。</li>
+</ul>
+<h5 id="11-2-6-事实的设计准则"><a href="#11-2-6-事实的设计准则" class="headerlink" title="11.2.6 事实的设计准则"></a>11.2.6 事实的设计准则</h5><ul>
+<li>1.事实完整性</li>
+<li>2.事实一致性</li>
+<li>3.事实可加性</li>
+</ul>
+<h4 id="11-3周期快照事实表"><a href="#11-3周期快照事实表" class="headerlink" title="11.3周期快照事实表"></a>11.3周期快照事实表</h4><ul>
+<li>事务事实表可以很好地跟踪一个事件，并对其进行度量。但是，当需要一些状态度量时，比如账户余额，买卖家星级，商品库存，卖家累积交易额等。则需要聚集与之相关的事务才能进行识别计算。对于这些状态度量，事务事实表是无效率的，而这些度量也和事务度量一样是有用的。因此维度建模理论给出了第二种常见的事实表——周期快照事实表。</li>
+<li>快照事实表在确定的时间间隔内对实体的度量进行抽样，这样可以很容易的研究实体的度量值，而不需要聚集长期的事务历史。</li>
+<li>特性：快照事实表的粒度通常以维度形式声明；快照事实表是稠密的；快照模型将至少包含一个用来展示半可加性质的事实。</li>
+<li>快照事实表的设计步骤可以归纳为：<ul>
+<li>1.确定快照事实表的快照粒度</li>
+<li>2.确定快照事实表采样的状态度量。</li>
+</ul>
+</li>
+</ul>
+<h5 id="11-3-2-案例"><a href="#11-3-2-案例" class="headerlink" title="11.3.2 案例"></a>11.3.2 案例</h5><ul>
+<li>1.单维度的每天快照事实表<ul>
+<li><a target="_blank" rel="noopener" href="https://imgse.com/i/pAPariq"><img src="https://s21.ax1x.com/2024/08/19/pAPariq.png" srcset="/img/loading.gif" lazyload alt="pAPariq.png"></a></li>
+</ul>
+</li>
+<li>2.混合维度的每天快照事实表<ul>
+<li><a target="_blank" rel="noopener" href="https://imgse.com/i/pAPagQU"><img src="https://s21.ax1x.com/2024/08/19/pAPagQU.png" srcset="/img/loading.gif" lazyload alt="pAPagQU.png"></a></li>
+<li>已上的两类快照事实表都有一个特点——都可以从事务事实表进行汇总产出，这是周期快照事实表的一种常见产出模式。除此之外，还有一种直接使用ods的数据作为周期快照事实表的数据源进行加工。比如淘宝卖家星级，卖家DSR事实表等。</li>
+<li><a target="_blank" rel="noopener" href="https://imgse.com/i/pAPdekn"><img src="https://s21.ax1x.com/2024/08/19/pAPdekn.png" srcset="/img/loading.gif" lazyload alt="pAPdekn.png"></a></li>
+</ul>
+</li>
+<li>3.全量快照事实表<ul>
+<li>还有一种特殊的快照事实表，即全量快照事实表。</li>
+<li><a target="_blank" rel="noopener" href="https://imgse.com/i/pAPdW1f"><img src="https://s21.ax1x.com/2024/08/19/pAPdW1f.png" srcset="/img/loading.gif" lazyload alt="pAPdW1f.png"></a></li>
+</ul>
+</li>
+</ul>
+<h5 id="11-3-3-注意事项"><a href="#11-3-3-注意事项" class="headerlink" title="11.3.3 注意事项"></a>11.3.3 注意事项</h5><ul>
+<li>1.事务与快照成对设计<ul>
+<li>数仓维度建模中，对于事务事实表和快照事实表往往是成对设计的，相互补充，以满足更多的下游统计分析需求。特别是在事务事实表的基础上可以加工快照事实表，如淘宝卖家历史至今快照事实表，就是在事务事实表的基础上加工得到的，既丰富了星形模型又降低了下游分析的成本。</li>
+</ul>
+</li>
+<li>2.附加事实<ul>
+<li>可以附加一些上一个采样周期的状态度量</li>
+</ul>
+</li>
+<li>3.周期到日期度量<ul>
+<li>针对多种周期到日期的度量设计了不同的快照事实表，比如淘宝卖家财年至今的下单金额，淘宝商品自然年至今的收藏次数等。</li>
+</ul>
+</li>
+</ul>
+<h4 id="11-4累积快照事实表"><a href="#11-4累积快照事实表" class="headerlink" title="11.4累积快照事实表"></a>11.4累积快照事实表</h4><ul>
+<li>对于研究事件时间间隔的需求，采用累积快照事实表可以很好的实现。</li>
+<li>比如统计买家下单到支付的时长、买家支付到卖家发货的时长、买家从下单到确认收货的时长等。</li>
+</ul>
+<h5 id="11-4-1-设计过程"><a href="#11-4-1-设计过程" class="headerlink" title="11.4.1 设计过程"></a>11.4.1 设计过程</h5><ul>
+<li>设计过程与事务事实表的设计是一样的。</li>
+<li>1.选择业务过程<ul>
+<li>在前面我们学习到，淘宝交易订单的流转过程有四个事件：买家下单，买家支付，卖家发货，买家确认收货的的四个业务过程。在事务事实表中，我们只关注了下单，支付和确认收货三个业务过程，而在统计事件时间间隔的需求中，卖家发货也是关键环节。所以针对淘宝交易累积快照事实表，我们选择四个业务过程</li>
+</ul>
+</li>
+<li>2.声明粒度<ul>
+<li>和前面类似，我们依旧是选择子订单粒度，但是对于累积快照事实表来说，一个子订单在此表中只有一条记录</li>
+</ul>
+</li>
+<li>3.确定维度<ul>
+<li>维度和上面类似，基本都是买家，卖家，店铺，商品，类目，发货地区，收货地区等。四个业务过程的时间字段要进行标明</li>
+</ul>
+</li>
+<li>4.确定事实<ul>
+<li>包含四个业务过程中对于的事实，即度量值</li>
+</ul>
+</li>
+<li>5.维度退化</li>
+</ul>
+<ul>
+<li>为方便分析，冗余一些常用的维度到事实表中</li>
+</ul>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://imgse.com/i/pAPweDe"><img src="https://s21.ax1x.com/2024/08/19/pAPweDe.png" srcset="/img/loading.gif" lazyload alt="pAPweDe.png"></a></li>
+<li></li>
+</ul>
+<h5 id="11-4-2-特点"><a href="#11-4-2-特点" class="headerlink" title="11.4.2 特点"></a>11.4.2 特点</h5><ul>
+<li>1.数据不断更新<ul>
+<li>会随着业务过程的递进，数据会不断发生变化</li>
+</ul>
+</li>
+<li>2.多业务过程日期<ul>
+<li>会分别记录多个业务过程发生的时间</li>
+</ul>
+</li>
+</ul>
+<h5 id="11-4-3-特殊处理"><a href="#11-4-3-特殊处理" class="headerlink" title="11.4.3 特殊处理"></a>11.4.3 特殊处理</h5><ul>
+<li>非线性过程<ul>
+<li>对于发生的一些流转，循环过程。需要进行一些统一处理<ul>
+<li>确定好业务过程要统一</li>
+<li>针对关键业务过程构建全面流程。全流程是下单–&gt;支付–&gt;发货–&gt;确认收货。对于缺失的过程，时间字段和事实置为空</li>
+<li>循环流程的处理。选择第一次时间还是最后一次时间要和业务方确定</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>多源过程<ul>
+<li>对于淘宝交易累积快照事实表，除了上述提到的下单→支付→发货→确认收货流程，假设需要关注交易子订单退款业务或者物流业务，此时会涉及交易、售后、物流 多个业务源系统。</li>
+<li>针对多源业务建模，主要考虑事实表的粒度问题。对于淘宝交易累积快照事实表，其粒度是交易子订单。对于退款，由于每个子订单可能存在多次退款，此时如果要将退款相关业务过程加入模型中，则需要和商业用户确定存在多次退款时如何取舍，确保模型粒度不变。</li>
+</ul>
+</li>
+</ul>
+<h5 id="11-4-4-物理实现"><a href="#11-4-4-物理实现" class="headerlink" title="11.4.4 物理实现"></a>11.4.4 物理实现</h5><ul>
+<li><p>第一种是全量表的形式。此全量表一般为日期分区表，每天的分区存储昨天的全量数据和当天的增量数据合并的结果，保障每条记录的状态最新。此种方式适用于全量数据较少的情况。如果数据量很大，</p>
+<p>此全量表数据量不断膨胀，存储了大量永远不再更新的历史数据，对ETL 和分析统计性能影响较大。</p>
+</li>
+<li><p>第二种是全量表的变化形式。此方式针对数据量大的情况。业务实体一般从生产到消亡都有一个相对较大的时间间隔。</p>
+</li>
+<li><p>比如针对交易订单，我们以 200 天作为订单从产生到消亡的最大间隔。设计最近 200 天的交易订单累积快照事实 ，每天 的分区存储最近 200 天的交易订单 200 天之前的订单则按照 gmt_create建分区存储在归档表中。</p>
+</li>
+<li><p>第三种方式是以业务实体的结束时间分区。每天的分区存放当天结束的数据，设计一个时间非常大的分区，比如 3000-12-31 ，存放截至当前未结束的数据。由于每天将当天结束的数据归档至当天分区中，时间非常大的分区数据量不会很大， ETL 性能较好；并且无存储的浪费，对于业务实体的某具体实例，在该表的全量数据中唯一。 比如对于交易订单，在交易累积快照事实表中唯一。</p>
+</li>
+<li><p>第三种方式，存在一些特殊情况，即业务系统无法标识业务实体的结束时间。</p>
+</li>
+</ul>
+<h4 id="11-5三种事实表的比较"><a href="#11-5三种事实表的比较" class="headerlink" title="11.5三种事实表的比较"></a>11.5三种事实表的比较</h4><ul>
+<li><a target="_blank" rel="noopener" href="https://imgse.com/i/pAPfEFK"><img src="https://s21.ax1x.com/2024/08/20/pAPfEFK.png" srcset="/img/loading.gif" lazyload alt="pAPfEFK.png"></a></li>
+<li>由于事实表种许多日期是在首次加载时不知道的，而且这类事实表在数据加载完成后，可以对其数据进行更新，来补充业务状态变更时的日期信息和事实。</li>
+</ul>
+<h4 id="11-6-无事实的事实表"><a href="#11-6-无事实的事实表" class="headerlink" title="11.6 无事实的事实表"></a>11.6 无事实的事实表</h4><ul>
+<li>不包含事实或度量的事实表称为无事实的事实表。主要有两类：<ul>
+<li>第一种是事件类的，记录事件的发生。如用户浏览的日志</li>
+<li>第二种是条件，范围或资格类的，记录维度与维度多对多之间的关系。如客户和销售人员的分配情况，产品的促销范围等。</li>
+</ul>
+</li>
+</ul>
+<h4 id="11-7-聚集型事实表"><a href="#11-7-聚集型事实表" class="headerlink" title="11.7 聚集型事实表"></a>11.7 聚集型事实表</h4><ul>
+<li>数仓的性能是数仓建设是否成功的重要标准之一。聚集主要是通过汇总明细粒度数据来获得改进查询性能的效果。通过访问聚集数据，可以减少查询的复杂度，快速响应，同时也有利于减少不同用户访问明细数据带来的结果不一致问题。聚集带来良好的效益，但是对于ETL来说是更多工作内容和挑战。</li>
+<li>阿里将使用频繁的公用数据，通过聚集进行沉淀，比如卖家最近一天的交易汇总表，卖家最近N天的交易汇总表等</li>
+</ul>
+<h5 id="11-7-1-聚集的基本原则"><a href="#11-7-1-聚集的基本原则" class="headerlink" title="11.7.1 聚集的基本原则"></a>11.7.1 聚集的基本原则</h5><ul>
+<li>一致性<ul>
+<li>聚集后的结果要和明细粒度的统计结果是一致的</li>
+</ul>
+</li>
+<li>避免单一表设计<ul>
+<li>不要在同一个表中存储不同层次的聚集数据，否则很可能导致重复计算的问题。</li>
+<li>在聚集表中有些行按天汇总，有些按月汇总，会导致重复计算，可以对每一行数据加上标识，但是这样不易使用。最好的方式是使用不同的字段，即通过两列存放</li>
+</ul>
+</li>
+<li>聚集粒度可不同<ul>
+<li>聚集只关心需要查询的维度，可以根据需求随意聚合。</li>
+<li>订单涉及的维度有商品、买家、卖家、地域等，比如可以按照商品汇总 天的交易额，可以按照卖家汇总一天的营业额（交易额） 可以按照商品与地域汇总一月的交易额。</li>
+</ul>
+</li>
+</ul>
+<h5 id="11-7-2-聚集的基本步骤"><a href="#11-7-2-聚集的基本步骤" class="headerlink" title="11.7.2 聚集的基本步骤"></a>11.7.2 聚集的基本步骤</h5><ul>
+<li>第一步：确定聚集维度<ul>
+<li>在原始明细模型中会存在多个描述事实的维度 ，如 日期、商品类卖家等，这时候需要确定根据什么维度聚集 ，如果只关心商品的交易额情况，那么就可以根据商品维度聚集数据。</li>
+</ul>
+</li>
+<li>第二步：确定一致性上钻<ul>
+<li>这时候要关心是按月汇总还是按天汇总，是按照商品汇总还是按照类目汇总，如果按照类目汇总，还需要关心是按照大类汇总还是小类汇总。当然，我们要做的只是了解用户需要什么，然后按照他们想要的进行聚集。</li>
+</ul>
+</li>
+<li>第三步：确定聚集事实<ul>
+<li>在原始明细模型中可能会有多个事实的度量，比如在交易中有交易额、交易数量等，这时候要明确是按照交易额汇总还是按照成交数量汇总。</li>
+</ul>
+</li>
+</ul>
+<h5 id="11-7-3-公共汇总层"><a href="#11-7-3-公共汇总层" class="headerlink" title="11.7.3 公共汇总层"></a>11.7.3 公共汇总层</h5><ul>
+<li>1.基本原则：<ul>
+<li>数据公用性。汇总的聚集会有第三者使用吗？基于某个维度的聚集是不是经常用于数据分析中？如果答案是肯定的，那么就有必要把明细数据经过汇总沉淀到聚集表中。</li>
+<li>不跨数据域。数据域是在较高层次上对数据进行分类聚集的抽象。阿里巴巴以业务过程进行分类，如交易统一划到交易域下，商品的新增、修改放到商品域下。</li>
+<li>区分统计周期。在表的命名上要能说明数据的统计周期，如 1d表示最近 天， td 表示截至当天， nd 表示最近 天。</li>
+</ul>
+</li>
+<li>2.交易汇总表的设计<ul>
+<li><a target="_blank" rel="noopener" href="https://imgse.com/i/pAPX5Kx"><img src="https://s21.ax1x.com/2024/08/20/pAPX5Kx.png" srcset="/img/loading.gif" lazyload alt="pAPX5Kx.png"></a></li>
+<li>可以看到一个交易事务事实表就有如此多潜在聚集的方式。下面是一些案例</li>
+<li><a target="_blank" rel="noopener" href="https://imgse.com/i/pAPXoqK"><img src="https://s21.ax1x.com/2024/08/20/pAPXoqK.png" srcset="/img/loading.gif" lazyload alt="pAPXoqK.png"></a></li>
+</ul>
+</li>
+</ul>
+<h5 id="11-7-4-聚集一些说明"><a href="#11-7-4-聚集一些说明" class="headerlink" title="11.7.4 聚集一些说明"></a>11.7.4 聚集一些说明</h5><ul>
+<li>聚集是不跨越事实的<ul>
+<li>聚集是针对原始星形模型进行的汇总，为了获取和查询与原始模型一致的结果，<strong>聚集的维度和度量必须与原始模型保持一致，因此聚集是不跨越事实的</strong>。横向钻取是针对多个事实基于一致性维度进行的分析，很多时候采用融合事实表，预先存放横向钻取的结果，从而提高查询性能。因此，融合事实表是 种导出模式而不是聚集。</li>
+</ul>
+</li>
+<li>聚集带来的问题<ul>
+<li>聚集会带来查询性能的提升，但聚集也会增加 ETL 维护的难度。当子类目对应的一级类目发生变更时，先前存在的、已经被汇总到聚集表中的数据需要被重新调整。这一额外工作随着业务复杂性的增加，会导致多数 ETL 人员选择简单强力的方法，删除并重新聚集数据。</li>
+</ul>
+</li>
+</ul>
+<h2 id="数据管理篇"><a href="#数据管理篇" class="headerlink" title="数据管理篇"></a>数据管理篇</h2><h3 id="第12章：元数据"><a href="#第12章：元数据" class="headerlink" title="第12章：元数据"></a>第12章：元数据</h3><h4 id="技术元数据"><a href="#技术元数据" class="headerlink" title="技术元数据"></a>技术元数据</h4><ul>
+<li>技术元数据市存储关于数据仓库系统技术细节的数据，<strong>是用于开发和管理数据仓库使用的数据</strong>。常见的技术元数据有：<ul>
+<li><strong>分布式计算系统存储元数据，如表，列，分区等信息。</strong>分区信息、责任人信息、文件大小、表类型，生命周期，以及列的字段名、字段类型、字段备注、是否是分区字段等信息。</li>
+<li><strong>分布式计算系统运行元数据。</strong>如hive的Job日志，包括作业类型，实例名称，输入输出，sql，运行参数，执行时间，运行日志等信息</li>
+<li><strong>数据开发平台中的同步任务，计算任务，任务调度信息。</strong>包括数据同步的输入输出表和字段，以及同步任务本身的节点信息：计算任务主要有输入输出、任务本身的节点信息 任务调度主要有任务的依赖类型、依赖关系等，以及不同类型调度任务的运行日志等。</li>
+<li><strong>数据质量和运维相关元数据。</strong>如任务监控、运维报警、数据质量、故障等信息，包括任务监控运行日志、告警配置及运行日志、故障信息等。</li>
+</ul>
+</li>
+</ul>
+<h4 id="业务元数据"><a href="#业务元数据" class="headerlink" title="业务元数据"></a>业务元数据</h4><ul>
+<li>业务元数据从业务角度描述了数据仓库中的数据。常见的元数据有：<ul>
+<li><strong>维度建模元数据，如维度及属性，业务过程，指标等规范化定义，用于更好地管理和使用数据</strong></li>
+<li><strong>数据应用元数据</strong>，如数据报表，数据产品等的配置和运行元数据。</li>
+</ul>
+</li>
+</ul>
+<h4 id="元数据体系建设"><a href="#元数据体系建设" class="headerlink" title="元数据体系建设"></a>元数据体系建设</h4><ul>
+<li>元数据的质量直接影响到数据管理的准确性。元数据建设的目标是打通数据接入到加工，再到数据消费整个链路，规范元数据体系与模型，提供统一的元数据出口，保障元数据产出的稳定性和质量</li>
+</ul>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E4%B9%A6%E7%B1%8D/">书籍</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/04/15/Elasticsearch-learning/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Elasticsearch_learning</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/01/03/StarRocks/">
+                        <span class="hidden-mobile">StarRocks</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.2/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.8/dist/clipboard.min.js" ></script>
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      $('#local-search-input').on('click', function() {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      });
+      $('#modalSearch').on('shown.bs.modal', function() {
+        $('#local-search-input').focus();
+      });
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>

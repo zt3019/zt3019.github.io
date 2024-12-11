@@ -62,7 +62,7 @@
   </script>
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
-<meta name="generator" content="Hexo 5.2.0"></head>
+<meta name="generator" content="Hexo 7.3.0"></head>
 
 
 <body>
@@ -187,7 +187,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      6k 字
+      6.4k 字
     </span>
   
 
@@ -197,7 +197,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      70
+      74
        分钟
     </span>
   
@@ -231,7 +231,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2023年1月4日 下午
+                  本文最后更新于：2024年9月12日 晚上
                 
               </p>
             
@@ -252,24 +252,27 @@
 </li>
 </ul>
 <h3 id="Spark运行模式"><a href="#Spark运行模式" class="headerlink" title="Spark运行模式"></a>Spark运行模式</h3><ul>
-<li>运行模式:单机模式，集群模式<ul>
+<li><p>运行模式:单机模式，集群模式</p>
+<ul>
 <li>Local模式：本地部署单个spark模式</li>
 <li>Standalone：spark自带的任务调度模式</li>
 <li>YARN模式：spark使用Hadoop的YARN组件进行资源与任务调度。（重点）<ul>
-<li>修改/opt/module/spark/conf/spark-env.sh，添加YARN_CONF_DIR配置:YARN_CONF_DIR=/opt/module/hadoop-3.1.3/etc/hadoop，保证后续运行任务的路径都变成集群路径</li>
+<li>修改&#x2F;opt&#x2F;module&#x2F;spark&#x2F;conf&#x2F;spark-env.sh，添加YARN_CONF_DIR配置:YARN_CONF_DIR&#x3D;&#x2F;opt&#x2F;module&#x2F;hadoop-3.1.3&#x2F;etc&#x2F;hadoop，保证后续运行任务的路径都变成集群路径</li>
 </ul>
 </li>
 <li>Mesos模式：saprk使用Mesos平台进行资源与任务的调度。</li>
 </ul>
 </li>
-<li>运行流程<ul>
+<li><p>运行流程</p>
+<ul>
 <li>Spark有yarn-client和yarn-cluster两种模式，主要区别在于：Driver程序的运行节点。</li>
 <li>yarn-client:Driver程序运行在客户端，适用于交互，调试，希望立即看到app的输出。</li>
 <li>yarn-cluster：Driver程序运行在由ResourceManager启动的APPMaster，适用于生产环境。</li>
 </ul>
 </li>
-<li>端口号总结<ul>
-<li>spark历史服务器端口号：18080                         hadoop历史服务器端口号：19888</li>
+<li><p>端口号总结</p>
+<ul>
+<li>spark历史服务器端口号：18080 						hadoop历史服务器端口号：19888</li>
 <li>spark Master web服务器端口号：8080             Hadoop的namenode web端口号：9870</li>
 <li>spark Master内部通信服务端口号：7077           Hadoop的namenode内部通信服务端口号：8020</li>
 <li>Spark查看当前Spark-shell运行任务情况端口号：4040</li>
@@ -290,7 +293,7 @@
 <ul>
 <li><a target="_blank" rel="noopener" href="https://imgtu.com/i/hdg2U1"><img src="https://z3.ax1x.com/2021/08/31/hdg2U1.png" srcset="/img/loading.gif" lazyload alt="hdg2U1.png"></a></li>
 <li><a target="_blank" rel="noopener" href="https://imgtu.com/i/hwccGV"><img src="https://z3.ax1x.com/2021/09/01/hwccGV.png" srcset="/img/loading.gif" lazyload alt="hwccGV.png"></a></li>
-<li>任务从客户端发送到ReourceManager，RM指定一个NM创建一个AppMster进程，创建spark的一个Driver线程，Driver线程将任务分配到其它的NM，其它的NodeManager申请container，container会创建spark的一个excutor线程，RDD根据会根据分区进行一系列transformations转换定义，也会在一些情况下有shuffer过程，程序不会立刻执行，而是直到调用action触发调用RDD的计算。</li>
+<li>任务从客户端发送到ReourceManager，RM指定一个NM创建一个AppMster进程，创建spark的一个Driver线程，Driver线程将任务分配到其它的NM，其它的NodeManager申请container，container会创建spark的一个excutor线程，RDD会根据分区进行一系列transformations转换定义，也会在一些情况下有shuffer过程，程序不会立刻执行，而是直到调用action触发调用RDD的计算。</li>
 </ul>
 </li>
 </ul>
@@ -324,9 +327,9 @@
 <li>指定分区：在TextFile方法中，第二个参数minPartitions，表示最小分区数（是最小，不代表实际的分区数）</li>
 <li>在实际计算分区个数时，会根据文件的总大小和最小分区数进行相除运算，如果余数为0，那最小分区数就是实际分区数，否则需要进一步计算得到分区数。</li>
 <li>切片规划：调用FileInputFormat中的getSplits方法</li>
-<li>注意：getSplits文件返回的是切片规划，真正读取是在compute方法中创建LineRecordReader读取的，有两个关键变量start=split.getStart()      end = start + split.getLength</li>
+<li>注意：getSplits文件返回的是切片规划，真正读取是在compute方法中创建LineRecordReader读取的，有两个关键变量start&#x3D;split.getStart()	  end &#x3D; start + split.getLength</li>
 </ul>
-<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><code class="hljs scala">public <span class="hljs-type">InputSplit</span>[] getSplits(<span class="hljs-type">JobConf</span> job, int numSplits)<br>  <span class="hljs-keyword">throws</span> <span class="hljs-type">IOException</span> &#123;<br>  <span class="hljs-type">FileStatus</span>[] files = listStatus(job);<br>  <br>  <span class="hljs-comment">// Save the number of input files for metrics/loadgen</span><br>  job.setLong(<span class="hljs-type">NUM_INPUT_FILES</span>, files.length);<br>  long totalSize = <span class="hljs-number">0</span>;                           <span class="hljs-comment">// compute total size</span><br>  <span class="hljs-keyword">for</span> (<span class="hljs-type">FileStatus</span> file: files) &#123;                <span class="hljs-comment">// check we have valid files</span><br>    <span class="hljs-keyword">if</span> (file.isDirectory()) &#123;<br>      <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-type">IOException</span>(<span class="hljs-string">&quot;Not a file: &quot;</span>+ file.getPath());<br>    &#125;<br>    totalSize += file.getLen();<br>  &#125;<br>    <br>  long goalSize = totalSize / (numSplits == <span class="hljs-number">0</span> ? <span class="hljs-number">1</span> : numSplits);<br>  long minSize = <span class="hljs-type">Math</span>.max(job.getLong(org.apache.hadoop.mapreduce.lib.input.<br>    <span class="hljs-type">FileInputFormat</span>.<span class="hljs-type">SPLIT_MINSIZE</span>, <span class="hljs-number">1</span>), minSplitSize);<br>    <br>  <span class="hljs-comment">// generate splits</span><br>  <span class="hljs-type">ArrayList</span>&lt;<span class="hljs-type">FileSplit</span>&gt; splits = <span class="hljs-keyword">new</span> <span class="hljs-type">ArrayList</span>&lt;<span class="hljs-type">FileSplit</span>&gt;(numSplits);<br>  <span class="hljs-type">NetworkTopology</span> clusterMap = <span class="hljs-keyword">new</span> <span class="hljs-type">NetworkTopology</span>();<br>  <span class="hljs-keyword">for</span> (<span class="hljs-type">FileStatus</span> file: files) &#123;<br>    <span class="hljs-type">Path</span> path = file.getPath();<br>    long length = file.getLen();<br>    <span class="hljs-keyword">if</span> (length != <span class="hljs-number">0</span>) &#123;<br>      <span class="hljs-type">FileSystem</span> fs = path.getFileSystem(job);<br>      <span class="hljs-type">BlockLocation</span>[] blkLocations;<br>      <span class="hljs-keyword">if</span> (file instanceof <span class="hljs-type">LocatedFileStatus</span>) &#123;<br>        blkLocations = ((<span class="hljs-type">LocatedFileStatus</span>) file).getBlockLocations();<br>      &#125; <span class="hljs-keyword">else</span> &#123;<br>        blkLocations = fs.getFileBlockLocations(file, <span class="hljs-number">0</span>, length);<br>      &#125;<br>      <span class="hljs-keyword">if</span> (isSplitable(fs, path)) &#123;<br>        long blockSize = file.getBlockSize();<br>        long splitSize = computeSplitSize(goalSize, minSize, blockSize);<br>    <br>        long bytesRemaining = length;<br>        <span class="hljs-keyword">while</span> (((double) bytesRemaining)/splitSize &gt; <span class="hljs-type">SPLIT_SLOP</span>) &#123;<br>          <span class="hljs-type">String</span>[] splitHosts = getSplitHosts(blkLocations,<br>              length-bytesRemaining, splitSize, clusterMap);<br>          splits.add(makeSplit(path, length-bytesRemaining, splitSize,<br>              splitHosts));<br>          bytesRemaining -= splitSize;<br>        &#125;<br>    <br>        <span class="hljs-keyword">if</span> (bytesRemaining != <span class="hljs-number">0</span>) &#123;<br>          <span class="hljs-type">String</span>[] splitHosts = getSplitHosts(blkLocations, length<br>              - bytesRemaining, bytesRemaining, clusterMap);<br>          splits.add(makeSplit(path, length - bytesRemaining, bytesRemaining,<br>              splitHosts));<br>        &#125;<br>      &#125; <span class="hljs-keyword">else</span> &#123;<br>        <span class="hljs-type">String</span>[] splitHosts = getSplitHosts(blkLocations,<span class="hljs-number">0</span>,length,clusterMap);<br>        splits.add(makeSplit(path, <span class="hljs-number">0</span>, length, splitHosts));<br>      &#125;<br>    &#125; <span class="hljs-keyword">else</span> &#123; <br>      <span class="hljs-comment">//Create empty hosts array for zero length files</span><br>      splits.add(makeSplit(path, <span class="hljs-number">0</span>, length, <span class="hljs-keyword">new</span> <span class="hljs-type">String</span>[<span class="hljs-number">0</span>]));<br>    &#125;<br>  &#125;<br>  <span class="hljs-type">LOG</span>.debug(<span class="hljs-string">&quot;Total # of splits: &quot;</span> + splits.size());<br>  <span class="hljs-keyword">return</span> splits.toArray(<span class="hljs-keyword">new</span> <span class="hljs-type">FileSplit</span>[splits.size()]);<br>&#125;<br></code></pre></td></tr></table></figure></li>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><code class="hljs scala">public <span class="hljs-type">InputSplit</span>[] getSplits(<span class="hljs-type">JobConf</span> job, int numSplits)<br>  <span class="hljs-keyword">throws</span> <span class="hljs-type">IOException</span> &#123;<br>  <span class="hljs-type">FileStatus</span>[] files = listStatus(job);<br>  <span class="hljs-comment">// 输入的文件数量</span><br>  <span class="hljs-comment">// Save the number of input files for metrics/loadgen</span><br>  job.setLong(<span class="hljs-type">NUM_INPUT_FILES</span>, files.length);<br>  long totalSize = <span class="hljs-number">0</span>;                           <span class="hljs-comment">// compute total size</span><br>  <span class="hljs-keyword">for</span> (<span class="hljs-type">FileStatus</span> file: files) &#123;                <span class="hljs-comment">// check we have valid files</span><br>    <span class="hljs-keyword">if</span> (file.isDirectory()) &#123;<br>      <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-type">IOException</span>(<span class="hljs-string">&quot;Not a file: &quot;</span>+ file.getPath());<br>    &#125;<br>    totalSize += file.getLen();<br>  &#125;<br>    <br>  long goalSize = totalSize / (numSplits == <span class="hljs-number">0</span> ? <span class="hljs-number">1</span> : numSplits);<br>  long minSize = <span class="hljs-type">Math</span>.max(job.getLong(org.apache.hadoop.mapreduce.lib.input.<br>    <span class="hljs-type">FileInputFormat</span>.<span class="hljs-type">SPLIT_MINSIZE</span>, <span class="hljs-number">1</span>), minSplitSize);<br>    <br>  <span class="hljs-comment">// generate splits</span><br>  <span class="hljs-type">ArrayList</span>&lt;<span class="hljs-type">FileSplit</span>&gt; splits = <span class="hljs-keyword">new</span> <span class="hljs-type">ArrayList</span>&lt;<span class="hljs-type">FileSplit</span>&gt;(numSplits);<br>  <span class="hljs-type">NetworkTopology</span> clusterMap = <span class="hljs-keyword">new</span> <span class="hljs-type">NetworkTopology</span>();<br>  <span class="hljs-keyword">for</span> (<span class="hljs-type">FileStatus</span> file: files) &#123;<br>    <span class="hljs-type">Path</span> path = file.getPath();<br>    long length = file.getLen();<br>    <span class="hljs-keyword">if</span> (length != <span class="hljs-number">0</span>) &#123;<br>      <span class="hljs-type">FileSystem</span> fs = path.getFileSystem(job);<br>      <span class="hljs-type">BlockLocation</span>[] blkLocations;<br>      <span class="hljs-keyword">if</span> (file instanceof <span class="hljs-type">LocatedFileStatus</span>) &#123;<br>        blkLocations = ((<span class="hljs-type">LocatedFileStatus</span>) file).getBlockLocations();<br>      &#125; <span class="hljs-keyword">else</span> &#123;<br>        blkLocations = fs.getFileBlockLocations(file, <span class="hljs-number">0</span>, length);<br>      &#125;<br>      <span class="hljs-keyword">if</span> (isSplitable(fs, path)) &#123;<br>        long blockSize = file.getBlockSize();<br>        long splitSize = computeSplitSize(goalSize, minSize, blockSize);<br>    <br>        long bytesRemaining = length;<br>        <span class="hljs-keyword">while</span> (((double) bytesRemaining)/splitSize &gt; <span class="hljs-type">SPLIT_SLOP</span>) &#123;<br>          <span class="hljs-type">String</span>[] splitHosts = getSplitHosts(blkLocations,<br>              length-bytesRemaining, splitSize, clusterMap);<br>          splits.add(makeSplit(path, length-bytesRemaining, splitSize,<br>              splitHosts));<br>          bytesRemaining -= splitSize;<br>        &#125;<br>    <br>        <span class="hljs-keyword">if</span> (bytesRemaining != <span class="hljs-number">0</span>) &#123;<br>          <span class="hljs-type">String</span>[] splitHosts = getSplitHosts(blkLocations, length<br>              - bytesRemaining, bytesRemaining, clusterMap);<br>          splits.add(makeSplit(path, length - bytesRemaining, bytesRemaining,<br>              splitHosts));<br>        &#125;<br>      &#125; <span class="hljs-keyword">else</span> &#123;<br>        <span class="hljs-type">String</span>[] splitHosts = getSplitHosts(blkLocations,<span class="hljs-number">0</span>,length,clusterMap);<br>        splits.add(makeSplit(path, <span class="hljs-number">0</span>, length, splitHosts));<br>      &#125;<br>    &#125; <span class="hljs-keyword">else</span> &#123; <br>      <span class="hljs-comment">//Create empty hosts array for zero length files</span><br>      splits.add(makeSplit(path, <span class="hljs-number">0</span>, length, <span class="hljs-keyword">new</span> <span class="hljs-type">String</span>[<span class="hljs-number">0</span>]));<br>    &#125;<br>  &#125;<br>  <span class="hljs-type">LOG</span>.debug(<span class="hljs-string">&quot;Total # of splits: &quot;</span> + splits.size());<br>  <span class="hljs-keyword">return</span> splits.toArray(<span class="hljs-keyword">new</span> <span class="hljs-type">FileSplit</span>[splits.size()]);<br>&#125;<br></code></pre></td></tr></table></figure></li>
 </ul>
 </li>
 </ul>
@@ -398,10 +401,7 @@
 </li>
 <li><p>改变分区</p>
 <ul>
-<li><p>def coalesce(numPartitions: Int, shuffle: Boolean = false,</p>
-<pre><code>           partitionCoalescer: Option[PartitionCoalescer] = Option.empty)
-          (implicit ord: Ordering[T] = null) : RDD[T]
-</code></pre>
+<li><p>def coalesce(numPartitions: Int, shuffle: Boolean &#x3D; false,<br>           partitionCoalescer: Option[PartitionCoalescer] &#x3D; Option.empty)<br>          (implicit ord: Ordering[T] &#x3D; null) : RDD[T]</p>
 </li>
 <li><p>coalesce   一般用于缩减分区，默认不执行shuffle</p>
 </li>
@@ -556,7 +556,7 @@
 </ul>
 <h3 id="RDD序列化"><a href="#RDD序列化" class="headerlink" title="RDD序列化"></a>RDD序列化</h3><ul>
 <li>为什么要序列化：因为在spark程序中，算子相关的操作在Excutor上执行，算子之外的代码在Driver端执行，在执行有些算子时，需要使用Driver里面定义的数据，这就涉及到了跨进程或者跨节点之间的通讯，所以这就涉及到了跨进程或者跨节点之间的通讯。所以要求传递给Excutor中的数组所属的类型必须实现Serializable接口。</li>
-<li>如何判断是否实现了序列化接口：在作业job提交之前，其中有一行代码 val cleanF = sc.clean(f)，用于进行闭包检查之所以叫闭包检查，是因为在当前函数的内部访问了外部函数的变量，属于闭包的形式。如果算子的参数是函数的形式，都会存在这种情况。</li>
+<li>如何判断是否实现了序列化接口：在作业job提交之前，其中有一行代码 val cleanF &#x3D; sc.clean(f)，用于进行闭包检查之所以叫闭包检查，是因为在当前函数的内部访问了外部函数的变量，属于闭包的形式。如果算子的参数是函数的形式，都会存在这种情况。</li>
 </ul>
 <h3 id="RDD的血缘关系以及依赖关系"><a href="#RDD的血缘关系以及依赖关系" class="headerlink" title="RDD的血缘关系以及依赖关系"></a>RDD的血缘关系以及依赖关系</h3><ul>
 <li>血缘关系<ul>
@@ -575,24 +575,24 @@
 <li>一个Spark集群可以同时运行多个spark应用</li>
 </ul>
 </li>
-<li>应用<ul>
+<li>应用(Application)<ul>
 <li>我们所编写完成某些功能的程序</li>
 <li>一个应用可以并发的运行多个Job</li>
 </ul>
 </li>
 <li>Job<ul>
-<li>Job对应着应用中的行动算子，每次执行一个行动算子，都会提交一个Job</li>
+<li><strong>Job对应着应用中的行动算子，每次执行一个行动算子，都会提交一个Job</strong></li>
 <li>一个Job由多个stage组成</li>
 </ul>
 </li>
 <li>Stage<ul>
-<li>一个宽依赖做一次阶段的划分</li>
-<li>阶段的个数=宽依赖的个数+1</li>
+<li><strong>一个宽依赖做一次阶段的划分</strong></li>
+<li>阶段的个数&#x3D;宽依赖的个数+1</li>
 <li>一个Stage由多个Task组成</li>
 </ul>
 </li>
 <li>Task<ul>
-<li>每一个阶段最后一个RDD的分区数，就是当前阶段的Task个数</li>
+<li><strong>每一个阶段最后一个RDD的分区数，就是当前阶段的Task个数</strong></li>
 </ul>
 </li>
 </ul>
@@ -630,7 +630,7 @@
 </li>
 <li>广播变量<ul>
 <li>在多个并行操作中（Executor）使用同一个变量，Spark默认会为每个任务(Task)分别发送，这样如果共享比较大的对象，会占用很大工作节点的内存。</li>
-<li>广播变量用来高效分发较大的对象。向所有工作节点发送一个较大的只读值，以供一个或多个Spark操作使用。</li>
+<li>广播变量用来高效分发较大的对象。向所有工作节点发送一个较大的只读值，以供一个或多个Task操作使用。</li>
 <li>实现Excutor端Task之间共享变量，节省内存</li>
 </ul>
 </li>
@@ -658,6 +658,29 @@
 <li>DataSet是分布式数据集合。</li>
 <li>是DataFrame的一个扩展。它提供了RDD的优势（强类型，使用强大的lambda函数的能力）以及Spark SQL优化执行引擎的优点。DataSet也可以使用功能性的转换（操作map，flatMap，filter等等）。</li>
 <li>DataFrame是DataSet的特例</li>
+</ul>
+</li>
+</ul>
+<h3 id="Hive-on-Spark-和Spark-on-Hive"><a href="#Hive-on-Spark-和Spark-on-Hive" class="headerlink" title="Hive on Spark 和Spark on Hive"></a>Hive on Spark 和Spark on Hive</h3><ul>
+<li>hive on spark<ul>
+<li>就是把hive查询从MR换成spark,参考官方的版本配置，不然很容易遇到依赖冲突。</li>
+<li>之后还是在hive上写hivesql，但是执行引擎是spark，任务会转化成spark rdd算子去执行。</li>
+<li>优化器还是hive的优化器，而没有spark sql自带的优化器的效果好</li>
+</ul>
+</li>
+<li>spark on hive<ul>
+<li>就是同步Sparksql,加载hive的配置文件，获取到hive的元数据信息</li>
+<li>Spark sql获取到hive的元数据信息之后就可以拿到hive的所有表的数据</li>
+<li>接下来就可以通过spark sql来操作hive表中的数据</li>
+</ul>
+</li>
+<li>spark beeline<ul>
+<li>Spark Thrift Server 是 Spark 社区基于 HiveServer2 实现的一个 Thrift 服务。旨在无缝兼容HiveServer2。因为 <strong>Spark Thrift Server 的接口和协议都和 HiveServer2 完全一致，</strong>因此我们部署好Spark Thrift Server后，可以直接使用hive的beeline访问Spark Thrift Server执行相关语句。Spark Thrift Server 的目的也只是取代 HiveServer2，因此它依旧可以和 Hive Metastore进行交互，获取到 hive 的元数据。</li>
+<li>Spark Thrift Server和HiveServer2的区别<ul>
+<li><a target="_blank" rel="noopener" href="https://imgse.com/i/pAZdDJg"><img src="https://s21.ax1x.com/2024/09/05/pAZdDJg.png" srcset="/img/loading.gif" lazyload alt="pAZdDJg.png"></a></li>
+</ul>
+</li>
+<li>总结：Spark Thrift Server说白了就是小小的改动了下HiveServer2，代码量也不多。虽然接口和HiveServer2完全一致，但是它以<strong>单个Application</strong>在集群运行的方式还是比较奇葩的。可能官方也是为了实现简单而没有再去做更多的优化。</li>
 </ul>
 </li>
 </ul>
@@ -695,7 +718,7 @@
 <li>三者的区别<ul>
 <li>RDD不支持SparkSQL操作</li>
 <li>DataFrame每一行的类型固定为Row,每一列的值没法直接访问，只有通过解析才能获取各个字段的值。</li>
-<li>DataFrame是DataSet的一个特例  type DataFrame=Dataset[Row]</li>
+<li>DataFrame是DataSet的一个特例  type DataFrame&#x3D;Dataset[Row]</li>
 <li>DataFrame也可以叫DataSet[Row],每一行的类型Row，不解析，每一行究竟有哪些字段，各个字段又是什么类型都无法得知，只能用getAS方法或者共性中的第七条提到的模式匹配拿出特定字段。而DataSet中，每一行是什么类型是不一定的，在自定义了case  class之后可以很方便的获取每一行的信息。</li>
 </ul>
 </li>
@@ -712,14 +735,14 @@
 </li>
 </ul>
 <h3 id="Spark-sql-任务优化"><a href="#Spark-sql-任务优化" class="headerlink" title="Spark sql 任务优化"></a>Spark sql 任务优化</h3><h4 id="spark-sql-任务中小文件的优化"><a href="#spark-sql-任务中小文件的优化" class="headerlink" title="spark sql 任务中小文件的优化"></a>spark sql 任务中小文件的优化</h4><ul>
-<li><p>描述：在数栈开发过程中如果任务选择的是spark sql引擎，一定要注意减少小文件的输出。spark sql中  spark.spl.shuffle.partitions=200 ,即会在shuffle结果中产生200个文件，设置的是RDD1做shuffle处理后生成的结果RDD2的分区数。这样产生的影响有：<strong>大部分时间都花费在调度</strong>，任务执行本身花费时间较小；最终产生的小文件数过多，会对后续任务的使用造成资源浪费，<strong>且严重影响namenode的性能</strong>。如果结果数据不多且预计增量不会太大（例如缓慢变化维表，码值表等），可以将此参数数值设低。</p>
+<li><p>描述：在数栈开发过程中如果任务选择的是spark sql引擎，一定要注意减少小文件的输出。spark sql中  spark.spl.shuffle.partitions&#x3D;200 ,即会在shuffle结果中产生200个文件，设置的是RDD1做shuffle处理后生成的结果RDD2的分区数。这样产生的影响有：<strong>大部分时间都花费在调度</strong>，任务执行本身花费时间较小；最终产生的小文件数过多，会对后续任务的使用造成资源浪费，<strong>且严重影响namenode的性能</strong>。如果结果数据不多且预计增量不会太大（例如缓慢变化维表，码值表等），可以将此参数数值设低。</p>
 </li>
 <li><p>解决：针对数据量变化较大的任务，可以通过以下参数动态调节shuffle.partition 的个数产生及小文件个数的产生。</p>
 </li>
 <li><p>针对数据量变化较大的任务，可以通过以下参数动态调节shuffle.partition的个数产生及小文件个数的产生。spark sql 小文件合并参数。</p>
 <ul>
-<li>spark.sql.adaptive.enabled=true</li>
-<li>spark.sql.adaptive.shuffle.targetPostShuffleInputSize=256000000  #hdfs中block大小的倍数。</li>
+<li>spark.sql.adaptive.enabled&#x3D;true</li>
+<li>spark.sql.adaptive.shuffle.targetPostShuffleInputSize&#x3D;256000000  #hdfs中block大小的倍数。</li>
 </ul>
 </li>
 <li><p>以上参数只对宽依赖产生作用（join,groupby ,distribute by,order by 等），如果没有用到宽依赖的关键字，比如只用了union all,可以在sql代码最后添加distribute by 关键字，如：distribute by 1</p>
@@ -729,7 +752,7 @@
 <li><p>通过hdfs_namenode的web页面进行查看，默认端口为50070</p>
 </li>
 <li><p>登录namenode节点，通过类似命令查看：</p>
-<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs awk">hdfs dfs -du -h <span class="hljs-regexp">/dtInsight/</span>hive<span class="hljs-regexp">/warehouse/</span><span class="hljs-variable">$&#123;项目名称.db&#125;</span><span class="hljs-regexp">/$&#123;表名&#125;/</span>pt=<span class="hljs-variable">$&#123;分区&#125;</span>/<br></code></pre></td></tr></table></figure></li>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">hdfs dfs -<span class="hljs-built_in">du</span> -h /dtInsight/hive/warehouse/<span class="hljs-variable">$&#123;项目名称.db&#125;</span>/<span class="hljs-variable">$&#123;表名&#125;</span>/pt=<span class="hljs-variable">$&#123;分区&#125;</span>/<br></code></pre></td></tr></table></figure></li>
 </ul>
 </li>
 </ul>

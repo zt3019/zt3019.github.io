@@ -62,7 +62,7 @@
   </script>
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
-<meta name="generator" content="Hexo 5.2.0"></head>
+<meta name="generator" content="Hexo 7.3.0"></head>
 
 
 <body>
@@ -187,7 +187,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      3.2k 字
+      5k 字
     </span>
   
 
@@ -197,7 +197,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      36
+      55
        分钟
     </span>
   
@@ -231,7 +231,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2023年4月3日 晚上
+                  本文最后更新于：2024年10月9日 晚上
                 
               </p>
             
@@ -241,7 +241,7 @@
 <ul>
 <li>hive支持转换后的数据直接写入不同的表，还能写入分区，HDFS和本地目录</li>
 <li>SQL中null代表空值, 值得警惕的是, 在HiveQL中String类型的字段若是空(empty)字符串, 即长度为0, 那么对它进行IS NULL的判断结果是False.Hive中的Null在底层是以“\N”来存储，而MySQL中的Null在底层就是Null</li>
-<li>SQL中对两表内联可以写成：select * from dual a,dual b where a.key = b.key;<br>  Hive中应为：select * from dual a join dual b on a.key = b.key; </li>
+<li>SQL中对两表内联可以写成：select * from dual a,dual b where a.key &#x3D; b.key;<br>Hive中应为：select * from dual a join dual b on a.key &#x3D; b.key;</li>
 </ul>
 </li>
 <li><p>存储过程和函数定义的区别</p>
@@ -258,7 +258,8 @@
 </ul>
 </li>
 <li><p>sql中的with,怎么修改表结构</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs sql">1.添加字段<br><br>　　<span class="hljs-keyword">alter</span>  <span class="hljs-keyword">table</span>  &lt;基本表名&gt;  <span class="hljs-keyword">add</span>  &lt;列名&gt;  &lt;类型&gt;<br><br>　　<span class="hljs-keyword">alter</span>  <span class="hljs-keyword">table</span>  s  <span class="hljs-keyword">add</span>  age  <span class="hljs-built_in">varchar</span>(<span class="hljs-number">30</span>)<br><br><span class="hljs-number">2.</span>删除字段<br><br>　　<span class="hljs-keyword">alter</span>  <span class="hljs-keyword">table</span>  &lt;基本表名&gt;  <span class="hljs-keyword">drop</span>  &lt;列名&gt;  [<span class="hljs-keyword">cascade</span>|restrict]<br><br>　　<span class="hljs-keyword">alter</span>  <span class="hljs-keyword">table</span>  s  <span class="hljs-keyword">drop</span>  age  <span class="hljs-keyword">cascade</span><br><br><span class="hljs-number">3.</span>修改字段<br><br>　　<span class="hljs-keyword">alter</span>  <span class="hljs-keyword">table</span>  &lt;基本表名&gt;  <span class="hljs-keyword">modify</span>  &lt;列名&gt;  &lt;类型&gt;、<br><br>　　<span class="hljs-keyword">alter</span>  <span class="hljs-keyword">table</span>  s  <span class="hljs-keyword">modify</span>  age  <span class="hljs-built_in">char</span>(<span class="hljs-number">6</span>)<br><br><span class="hljs-number">4.</span>索引的创建<br><br>　　<span class="hljs-number">4</span><span class="hljs-number">-1</span>&gt;唯一索引（<span class="hljs-keyword">asc</span>或<span class="hljs-keyword">desc</span>指定升序或降序的索引值存储）<br><br>　　　　<span class="hljs-keyword">create</span>  [<span class="hljs-keyword">unique</span>]  <span class="hljs-keyword">index</span>  &lt;索引名&gt;  <span class="hljs-keyword">on</span>  &lt;基本表名&gt;  (&lt;列名序列&gt;)                //<span class="hljs-keyword">unique</span>  唯一的<br><br>　　　　carate  <span class="hljs-keyword">unique</span>  <span class="hljs-keyword">index</span>  s_index  <span class="hljs-keyword">on</span>  s  (<span class="hljs-keyword">sid</span>  <span class="hljs-keyword">asc</span>,cid  <span class="hljs-keyword">desc</span>);<br><br>　　4-2&gt;  普通索引<br><br>　　　　<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">INDEX</span> &lt;索引的名字&gt; <span class="hljs-keyword">ON</span> tablename (列的列表)；　<br><br> <br><br><span class="hljs-number">5.</span>索引的撤消<br><br>　　<span class="hljs-keyword">drop</span>  <span class="hljs-keyword">index</span>  &lt;索引名&gt;<br><br>　　<span class="hljs-keyword">drop</span>  <span class="hljs-keyword">index</span>  s_index,sc_index           <br>　　<br><span class="hljs-keyword">with</span> 语句<br><span class="hljs-number">1.</span>使用<span class="hljs-keyword">with</span>子句可以让子查询重用相同的<span class="hljs-keyword">with</span>查询块,通过<span class="hljs-keyword">select</span>调用（<span class="hljs-keyword">with</span>子句只能被<span class="hljs-keyword">select</span>查询块引用），一般在<span class="hljs-keyword">with</span>查询用到多次情况下。在引用的<span class="hljs-keyword">select</span>语句之前定义,同级只能定义<span class="hljs-keyword">with</span>关键字只能使用一次,多个用逗号分割。<br><span class="hljs-number">2.</span> <span class="hljs-keyword">with</span>子句的返回结果存到用户的临时表空间中，只做一次查询，反复使用,提高效率<br>例子<br><span class="hljs-keyword">with</span> test_with <span class="hljs-keyword">as</span>(<span class="hljs-keyword">select</span> * <span class="hljs-keyword">from</span> A) <span class="hljs-keyword">select</span> * <span class="hljs-keyword">from</span> B <span class="hljs-keyword">where</span> B.id <span class="hljs-keyword">in</span>(<span class="hljs-keyword">select</span> <span class="hljs-keyword">id</span> <span class="hljs-keyword">from</span> test_with)<br></code></pre></td></tr></table></figure></li>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-number">1.</span>添加字段<br><br>　　<span class="hljs-keyword">alter</span>  <span class="hljs-keyword">table</span>  <span class="hljs-operator">&lt;</span>基本表名<span class="hljs-operator">&gt;</span>  <span class="hljs-keyword">add</span>  <span class="hljs-operator">&lt;</span>列名<span class="hljs-operator">&gt;</span>  <span class="hljs-operator">&lt;</span>类型<span class="hljs-operator">&gt;</span><br><br>　　<span class="hljs-keyword">alter</span>  <span class="hljs-keyword">table</span>  s  <span class="hljs-keyword">add</span>  age  <span class="hljs-type">varchar</span>(<span class="hljs-number">30</span>)<br><br><span class="hljs-number">2.</span>删除字段<br><br>　　<span class="hljs-keyword">alter</span>  <span class="hljs-keyword">table</span>  <span class="hljs-operator">&lt;</span>基本表名<span class="hljs-operator">&gt;</span>  <span class="hljs-keyword">drop</span>  <span class="hljs-operator">&lt;</span>列名<span class="hljs-operator">&gt;</span>  [cascade<span class="hljs-operator">|</span>restrict]<br><br>　　<span class="hljs-keyword">alter</span>  <span class="hljs-keyword">table</span>  s  <span class="hljs-keyword">drop</span>  age  cascade<br><br><span class="hljs-number">3.</span>修改字段<br><br>　　<span class="hljs-keyword">alter</span>  <span class="hljs-keyword">table</span>  <span class="hljs-operator">&lt;</span>基本表名<span class="hljs-operator">&gt;</span>  modify  <span class="hljs-operator">&lt;</span>列名<span class="hljs-operator">&gt;</span>  <span class="hljs-operator">&lt;</span>类型<span class="hljs-operator">&gt;</span>、<br><br>　　<span class="hljs-keyword">alter</span>  <span class="hljs-keyword">table</span>  s  modify  age  <span class="hljs-type">char</span>(<span class="hljs-number">6</span>)<br><br><span class="hljs-number">4.</span>索引的创建<br><br>　　<span class="hljs-number">4</span><span class="hljs-number">-1</span><span class="hljs-operator">&gt;</span>唯一索引（<span class="hljs-keyword">asc</span>或<span class="hljs-keyword">desc</span>指定升序或降序的索引值存储）<br><br>　　　　<span class="hljs-keyword">create</span>  [<span class="hljs-keyword">unique</span>]  index  <span class="hljs-operator">&lt;</span>索引名<span class="hljs-operator">&gt;</span>  <span class="hljs-keyword">on</span>  <span class="hljs-operator">&lt;</span>基本表名<span class="hljs-operator">&gt;</span>  (<span class="hljs-operator">&lt;</span>列名序列<span class="hljs-operator">&gt;</span>)                <span class="hljs-operator">/</span><span class="hljs-operator">/</span><span class="hljs-keyword">unique</span>  唯一的<br><br>　　　　carate  <span class="hljs-keyword">unique</span>  index  s_index  <span class="hljs-keyword">on</span>  s  (sid  <span class="hljs-keyword">asc</span>,cid  <span class="hljs-keyword">desc</span>);<br><br>　　<span class="hljs-number">4</span><span class="hljs-number">-2</span><span class="hljs-operator">&gt;</span>  普通索引<br><br>　　　　<span class="hljs-keyword">CREATE</span> INDEX <span class="hljs-operator">&lt;</span>索引的名字<span class="hljs-operator">&gt;</span> <span class="hljs-keyword">ON</span> tablename (列的列表)；　<br><br> <br><br><span class="hljs-number">5.</span>索引的撤消<br><br>　　<span class="hljs-keyword">drop</span>  index  <span class="hljs-operator">&lt;</span>索引名<span class="hljs-operator">&gt;</span><br><br>　　<span class="hljs-keyword">drop</span>  index  s_index,sc_index           <br>　　<br><span class="hljs-keyword">with</span> 语句<br><span class="hljs-number">1.</span>使用<span class="hljs-keyword">with</span>子句可以让子查询重用相同的<span class="hljs-keyword">with</span>查询块,通过<span class="hljs-keyword">select</span>调用（<span class="hljs-keyword">with</span>子句只能被<span class="hljs-keyword">select</span>查询块引用），一般在<span class="hljs-keyword">with</span>查询用到多次情况下。在引用的<span class="hljs-keyword">select</span>语句之前定义,同级只能定义<span class="hljs-keyword">with</span>关键字只能使用一次,多个用逗号分割。<br><span class="hljs-number">2.</span> <span class="hljs-keyword">with</span>子句的返回结果存到用户的临时表空间中，只做一次查询，反复使用,提高效率<br>例子<br><span class="hljs-keyword">with</span> test_with <span class="hljs-keyword">as</span>(<span class="hljs-keyword">select</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">from</span> A) <span class="hljs-keyword">select</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">from</span> B <span class="hljs-keyword">where</span> B.id <span class="hljs-keyword">in</span>(<span class="hljs-keyword">select</span> id <span class="hljs-keyword">from</span> test_with)<br></code></pre></td></tr></table></figure>
+</li>
 <li><p>off-heap堆外内存，on-heap堆内存</p>
 </li>
 <li><p>抽象类和接口的区别：</p>
@@ -292,7 +293,7 @@
 <li>解析器：将SQL字符串转换成抽象语法树AST，对AST进行语法分析，比如表是否存在，字段是否存在，SQL语义是否有误。（解析器会查询去元数据库查看表是否存在）</li>
 <li>编译器：将AST编译生成逻辑执行计划。生成MapReduce程序</li>
 <li>优化器：对逻辑执行计划进行优。即对生成的MapReduce程序进行优化</li>
-<li>执行器：把逻辑计划转化成可运行的物理计划，对于hive来说就是MR/Spark。将任务提交给Yarn，执行过程中还会访问元数据信息。</li>
+<li>执行器：把逻辑计划转化成可运行的物理计划，对于hive来说就是MR&#x2F;Spark。将任务提交给Yarn，执行过程中还会访问元数据信息。</li>
 </ul>
 </li>
 <li><p>Kafka的架构</p>
@@ -300,27 +301,35 @@
 <li><p>Yarn工作机制</p>
 </li>
 <li><p>算法题</p>
-<figure class="highlight sml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs sml">构建一颗布尔二叉树<br><span class="hljs-number">1</span>当一个节点为叶子节点时，它仅可能存储一个布尔表达式(<span class="hljs-symbol">&#x27;a</span> == b&#x27;,<span class="hljs-symbol">&#x27;a</span> != b&#x27;,<span class="hljs-symbol">&#x27;a</span> &gt; b&#x27;,<span class="hljs-symbol">&#x27;a</span> &gt;= b&#x27;,<span class="hljs-symbol">&#x27;a</span> &lt; b&#x27;,<span class="hljs-symbol">&#x27;a</span> &lt;= b&#x27;)<br><span class="hljs-number">2</span>当一个节点不为叶子节点时，它仅可能存储<span class="hljs-symbol">&#x27;or&#x27;</span>或者<span class="hljs-symbol">&#x27;and&#x27;</span>其中一个数值，表示逻辑表达式中的或与<br><span class="hljs-number">3</span>节点遍历方式选择前序遍历<br><span class="hljs-number">4</span>输入(<span class="hljs-number">5</span> == <span class="hljs-number">5</span> &amp;&amp; <span class="hljs-number">3</span> != <span class="hljs-number">4</span>),输出<span class="hljs-literal">true</span>￼<br><br>&#123;<br>	<span class="hljs-string">&quot;bool&quot;</span>:&#123;<br>		<span class="hljs-string">&quot;and&quot;</span>:&#123;<br>			<span class="hljs-string">&quot;left&quot;</span>:&#123;<br>				<span class="hljs-string">&quot;bool&quot;</span>:&#123;<br>					<span class="hljs-string">&quot;or&quot;</span>:&#123;<br>						<span class="hljs-string">&quot;left&quot;</span>:<span class="hljs-string">&quot;1 != 1&quot;</span>,<br>						<span class="hljs-string">&quot;right&quot;</span>:<span class="hljs-string">&quot;2 == 2&quot;</span><br>					&#125;<br>				&#125;<br>			&#125;,<br>			<span class="hljs-string">&quot;right&quot;</span>:<span class="hljs-string">&quot;3 = 4&quot;</span><br>		&#125;<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure></li>
+<figure class="highlight sml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs sml">构建一颗布尔二叉树<br><span class="hljs-number">1</span>当一个节点为叶子节点时，它仅可能存储一个布尔表达式(<span class="hljs-symbol">&#x27;a</span> == b&#x27;,<span class="hljs-symbol">&#x27;a</span> != b&#x27;,<span class="hljs-symbol">&#x27;a</span> &gt; b&#x27;,<span class="hljs-symbol">&#x27;a</span> &gt;= b&#x27;,<span class="hljs-symbol">&#x27;a</span> &lt; b&#x27;,<span class="hljs-symbol">&#x27;a</span> &lt;= b&#x27;)<br><span class="hljs-number">2</span>当一个节点不为叶子节点时，它仅可能存储<span class="hljs-symbol">&#x27;or&#x27;</span>或者<span class="hljs-symbol">&#x27;and&#x27;</span>其中一个数值，表示逻辑表达式中的或与<br><span class="hljs-number">3</span>节点遍历方式选择前序遍历<br><span class="hljs-number">4</span>输入(<span class="hljs-number">5</span> == <span class="hljs-number">5</span> &amp;&amp; <span class="hljs-number">3</span> != <span class="hljs-number">4</span>),输出<span class="hljs-literal">true</span>￼<br><br>&#123;<br>	<span class="hljs-string">&quot;bool&quot;</span>:&#123;<br>		<span class="hljs-string">&quot;and&quot;</span>:&#123;<br>			<span class="hljs-string">&quot;left&quot;</span>:&#123;<br>				<span class="hljs-string">&quot;bool&quot;</span>:&#123;<br>					<span class="hljs-string">&quot;or&quot;</span>:&#123;<br>						<span class="hljs-string">&quot;left&quot;</span>:<span class="hljs-string">&quot;1 != 1&quot;</span>,<br>						<span class="hljs-string">&quot;right&quot;</span>:<span class="hljs-string">&quot;2 == 2&quot;</span><br>					&#125;<br>				&#125;<br>			&#125;,<br>			<span class="hljs-string">&quot;right&quot;</span>:<span class="hljs-string">&quot;3 = 4&quot;</span><br>		&#125;<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+</li>
 <li><p>反问</p>
 </li>
 <li><p>总结：会的东西已经有很多了，要注重更多的细节，不要只是死记硬背。要有自己的理解，在面对一些更灵活的没见过的问题才能提炼出自己的方法。项目答的不好，思路还是不清晰，重点加强对项目的理解。</p>
 </li>
 </ul>
 <h3 id="袋鼠云（大数据开发）"><a href="#袋鼠云（大数据开发）" class="headerlink" title="袋鼠云（大数据开发）"></a>袋鼠云（大数据开发）</h3><ul>
-<li>一面25min   10.19</li>
-<li>自我介绍</li>
-<li>项目介绍（具体的技术点）</li>
-<li>写的shell脚本</li>
-<li>数据仓库某张表的每一层的操作具体流程</li>
-<li>数据更新的HQL怎么写，具体实现</li>
-<li>数据错误怎么重新导入。<ul>
-<li>外部表数据不指定的话存储在/user/hive/warehouse</li>
+<li><p>一面25min   10.19</p>
+</li>
+<li><p>自我介绍</p>
+</li>
+<li><p>项目介绍（具体的技术点）</p>
+</li>
+<li><p>写的shell脚本</p>
+</li>
+<li><p>数据仓库某张表的每一层的操作具体流程</p>
+</li>
+<li><p>数据更新的HQL怎么写，具体实现</p>
+</li>
+<li><p>数据错误怎么重新导入。</p>
+<ul>
+<li>外部表数据不指定的话存储在&#x2F;user&#x2F;hive&#x2F;warehouse</li>
 </ul>
 </li>
-<li>说一说拉链表</li>
-<li>印象最深的课程，未来的规划</li>
-</ul>
-<ul>
+<li><p>说一说拉链表</p>
+</li>
+<li><p>印象最深的课程，未来的规划</p>
+</li>
 <li><p>二面（20min）   10.29</p>
 </li>
 <li><p>自我介绍</p>
@@ -335,7 +344,7 @@
 </li>
 <li><p>联邦机制 Federation (元数据切片)    多NN，分别管理不同的元数据</p>
 <ul>
-<li><p>为了水平扩展名称服务，Federation使用多组独立的Namenodes/Namespaces。所有的Namenodes是联邦的，也就是说，他们之间相互独立且不需要互相协调，各自分工，管理自己的区域。Datanode被用作通用的数据块存储设备，每个DataNode要向集群中所有的Namenode注册，且周期性的向所有Namenode发送心跳和块报告，并执行来自所有Namenode的命令。</p>
+<li><p>为了水平扩展名称服务，Federation使用多组独立的Namenodes&#x2F;Namespaces。所有的Namenodes是联邦的，也就是说，他们之间相互独立且不需要互相协调，各自分工，管理自己的区域。Datanode被用作通用的数据块存储设备，每个DataNode要向集群中所有的Namenode注册，且周期性的向所有Namenode发送心跳和块报告，并执行来自所有Namenode的命令。</p>
 </li>
 <li><p>1、由于单组Namenode在大规模集群中存在较大的局限性，Hadoop开源社区提供了Federation的方案，由多组Namenode在一个集群中共同提供服务，每个Namenode拥有一部分Namespace，工作互相独立，互不影响。</p>
 <p>2、在Federation中，Datanode被用作通用的数据块存储设备，每个DataNode要向集群中所有的Namenode注册，且周期性的向所有Namenode发送心跳和块报告，并执行来自所有Namenode的命令。</p>
@@ -384,15 +393,16 @@
 </li>
 <li><p>反问</p>
 </li>
-</ul>
+<li><p>二面(25min)   10.28  16：30 </p>
+</li>
+<li><p>自我介绍</p>
+</li>
+<li><p>计算机基础</p>
 <ul>
-<li>二面(25min)   10.28  16：30 </li>
-<li>自我介绍</li>
-<li>计算机基础<ul>
 <li>网络的五层模型，都干了什么</li>
 <li>网关，路由器，网桥<ul>
 <li>路由器：连接不同IP子网的设备，负责寻径和转发，工作在OSI的网络层。</li>
-<li>网桥：工作在数据链路层，网桥也叫桥接器，是连接两个局域网的一种存储/转发设备，它能将一个大的LAN分割成多个网段，或将两个以上的LAN互联为一个逻辑LAN，使LAN上所有用户都可以访问路由器。</li>
+<li>网桥：工作在数据链路层，网桥也叫桥接器，是连接两个局域网的一种存储&#x2F;转发设备，它能将一个大的LAN分割成多个网段，或将两个以上的LAN互联为一个逻辑LAN，使LAN上所有用户都可以访问路由器。</li>
 <li>网关：工作在应用层，不同子网间的翻译器，对收到的信息进行重新打包。</li>
 </ul>
 </li>
@@ -403,25 +413,32 @@
 <li>Java 锁</li>
 </ul>
 </li>
-<li>JVM<ul>
+<li><p>JVM</p>
+<ul>
 <li>双亲委派机制 </li>
 <li>自定义类加载器</li>
 </ul>
 </li>
-<li>Scala  伴生对象<ul>
+<li><p>Scala  伴生对象</p>
+<ul>
 <li>object Test ,从语法的角度来讲，上面的语法表示声明了一个伴生对象，但是还是会生成一个伴生类。Scala是纯面向对象的，去除了Java中的static关键字，通过伴生对象模拟static效果。伴生对象是伴随类产生的一个对象。</li>
 <li>对Scala源文件进行编译后，默认产生两个字节码文件，一个是伴生类另一个是伴生对象所属类。真正的伴生对象是伴生对象所属类中创建的单例对象。</li>
 </ul>
 </li>
-<li>HadoopHA</li>
-<li>yarn调度机制</li>
-<li>建模理论<ul>
+<li><p>HadoopHA</p>
+</li>
+<li><p>yarn调度机制</p>
+</li>
+<li><p>建模理论</p>
+<ul>
 <li>维度建模，星型模型，雪花模型区别，优劣。</li>
 <li>范式建模</li>
 </ul>
 </li>
-<li>拉链表</li>
-<li>反问</li>
+<li><p>拉链表</p>
+</li>
+<li><p>反问</p>
+</li>
 </ul>
 <h1 id="社招复盘"><a href="#社招复盘" class="headerlink" title="社招复盘"></a>社招复盘</h1><h2 id="杭州星辰闪烁"><a href="#杭州星辰闪烁" class="headerlink" title="杭州星辰闪烁"></a>杭州星辰闪烁</h2><p>一面（2022-12-19）35min</p>
 <ul>
@@ -516,6 +533,252 @@
 <li>Java怎么样</li>
 <li>离职原因</li>
 <li>反问：岗位的职责，出差情况，二面看情况，要求是现场面，但是可以和HR谈</li>
+</ul>
+<h2 id="禅游科技"><a href="#禅游科技" class="headerlink" title="禅游科技"></a>禅游科技</h2><p>一面35 min</p>
+<ul>
+<li>自我介绍</li>
+<li>介绍你最有挑战的项目</li>
+<li>项目中的挑战点，难点</li>
+<li>数据去向，介绍一下业务，数据量多大</li>
+<li>工作的开发流程</li>
+<li>新技术怎么学的，saprk最新版本的了解过吗？</li>
+<li>最大优势是什么</li>
+<li>离职原因</li>
+<li>反问。团队的技术栈主要是哪些</li>
+</ul>
+<p>感觉技术栈不是很匹配。</p>
+<p>反思：自己介绍项目还是不够清晰。<strong>项目中难点没有总结好</strong>。注意不要语言不要太拖拉，还是得学习一下Java 后端的一些东西。</p>
+<h2 id="明源云"><a href="#明源云" class="headerlink" title="明源云"></a>明源云</h2><p>一面  55min</p>
+<ul>
+<li><p>自我介绍</p>
+</li>
+<li><p>java 常用的集合框架</p>
+</li>
+<li><p>排序算法知道那些</p>
+<ul>
+<li>快排的时间复杂度，最坏情况的时间复杂度，什么时候会出现</li>
+<li>快排和归并排序的区别</li>
+<li>冒泡排序的时间复杂度</li>
+</ul>
+</li>
+<li><p>hadoop的计算引擎MR，spark有什么区别</p>
+</li>
+<li><p>MR，Spark shuffle过程</p>
+</li>
+<li><p>spark什么时候会发生shuffle，这个记错了 （说反了）</p>
+<ul>
+<li>coalesce 一般用于缩减分区，默认不执行shuffle</li>
+<li>reparation 一般用于扩大分区，默认执行shuffle，底层调用的就是coalesce</li>
+<li>窄依赖：父RDD一个分区中的数据，还是交给子RDD的一个分区处理</li>
+<li>宽依赖：父RDD一个分区中的数据，交给子RDD的多个分区处理。分区中数据打乱了，进行了shuffle操作</li>
+</ul>
+</li>
+<li><p>关系型数据库用过吗？mysql查询很慢怎么办</p>
+<ul>
+<li>mysql索引 说一下 （这里又说错了）</li>
+<li>mysql是b+tree索引  ，二分查找是在有序的数据结构里面查（logn ）的时间复杂度</li>
+</ul>
+</li>
+<li><p>数仓的分层的设计</p>
+</li>
+<li><p>SQL调优</p>
+<ul>
+<li>我用我制作拉链表的过程去回答了这个问题</li>
+<li>从缓慢维度的设计理论，到分区的选择，到编写时遇到的问题，三个层次递进的回答。（但是感觉还是没讲清楚）要再练一下</li>
+<li>不动态分区，left semi join</li>
+</ul>
+</li>
+<li><p>对datax的了解，其他的一些数据同步的工具</p>
+</li>
+<li><p>设计工作流时尽量满足高内聚低耦合的设计思想是要怎么做的</p>
+</li>
+<li><p>指标相关的概念，指标体系怎么构建</p>
+<ul>
+<li>这里回答的也不太好，数仓理论还得再看</li>
+</ul>
+</li>
+<li><p>sql题 这题比较简单</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs sql">customers<br>	customer_id <span class="hljs-type">INT</span><br>	name <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">100</span>)<br><br>orders<br>	order_id <span class="hljs-type">INT</span><br>	customer_id <span class="hljs-type">INT</span><br>	order_date <span class="hljs-type">DATE</span><br>	amount <span class="hljs-type">DECIMAL</span>(<span class="hljs-number">10</span>, <span class="hljs-number">2</span>)<br><br>问题：过去一年内没有新订单的所有客户<br><span class="hljs-keyword">with</span> tmp <span class="hljs-keyword">as</span> (<span class="hljs-keyword">select</span> customer_id <span class="hljs-keyword">from</span> orders <span class="hljs-keyword">where</span> order_date<span class="hljs-operator">&gt;=</span>date_sub(<span class="hljs-built_in">current_date</span>(),<span class="hljs-number">365</span>))<br><span class="hljs-keyword">select</span> customer_id <span class="hljs-keyword">from</span> customers <span class="hljs-keyword">left</span> <span class="hljs-keyword">join</span> tmp <span class="hljs-keyword">where</span> tmp.customer_id <span class="hljs-keyword">is</span> <span class="hljs-keyword">null</span><br></code></pre></td></tr></table></figure>
+</li>
+<li><p>spark比较熟悉吗</p>
+</li>
+<li><p>离职还是在职，离职原因，毕业年限</p>
+</li>
+<li><p>反问：</p>
+<ul>
+<li>整个工作内容，工作工具</li>
+<li>业务模式</li>
+<li>整个的技术栈</li>
+<li>对深圳的发展和计划</li>
+</ul>
+</li>
+</ul>
+<p>二面</p>
+<ul>
+<li><p>自我介绍</p>
+</li>
+<li><p>袋鼠云主要做的工作</p>
+</li>
+<li><p>DTstack和dataworks的区别</p>
+</li>
+<li><p>为什么离开袋鼠云</p>
+<ul>
+<li>离职原因我要考虑考虑看看怎么说合适**&amp;&amp;&amp;&amp;**</li>
+</ul>
+</li>
+<li><p>最近的一份工作所担任的角色，主要负责的内容是哪些</p>
+</li>
+<li><p>最熟悉的政策域，说一下它主要的一个业务过程</p>
+</li>
+<li><p>数仓用的是什么，计算引擎是什么。数据量的</p>
+</li>
+<li><p>数仓中事实表分为哪几种 <strong>&amp;&amp;&amp;&amp;</strong></p>
+<ul>
+<li>这个答的还是不够好，对事物事实表的理解，周期快照事实表，累积快照事实表的理解不够深入</li>
+</ul>
+</li>
+<li><p>事务事实表有没有用过，理解的业务过程是什么？跟事实表是什么关系</p>
+<ul>
+<li>这里对问题理解有误，回答的不好。理解成了“事务事实是什么”。这个问题还是值得深入思考的 <strong>&amp;&amp;&amp;&amp;</strong></li>
+</ul>
+</li>
+<li><p>根据数据情况选择增量更新，全量更新，是怎么选择的 <strong>&amp;&amp;&amp;&amp;</strong></p>
+<ul>
+<li>这里答的不好，没怎么准备过。还是要把自己简历上写的东西去理解透彻。</li>
+<li>如果是只保留最新的一个数据，具体是怎么做的</li>
+</ul>
+</li>
+<li><p>政策域做了几个宽表，怎么做的 </p>
+</li>
+<li><p>聊一下维度表这一块的内容，维度属性是多值的这种情况怎么做的</p>
+</li>
+<li><p>有没有了解其他公司是怎么用来处理这种递归维度结构的数据的</p>
+<ul>
+<li>桥接表的方式 <strong>&amp;&amp;&amp;&amp;</strong></li>
+<li>桥接表的方式，多了解一下。那本书真是数仓建设的圣经啊，多读 ，多看，多理解。最好用于实战</li>
+</ul>
+</li>
+<li><p>介绍Starrocks怎么引入的，怎么用的</p>
+</li>
+<li><p>SR的数据模型有几个，是怎么用的 <strong>&amp;&amp;&amp;&amp;</strong></p>
+<ul>
+<li>主键表和更新表的差异，怎么用的</li>
+<li>主键表和明细表的区别</li>
+<li>平时怎么用的，业务场景有什么区别</li>
+<li>这里也要多看一下</li>
+</ul>
+</li>
+<li><p>数据治理主要做了哪些事情</p>
+</li>
+<li><p>你觉得数据治理包括哪些东西  <strong>&amp;&amp;&amp;&amp;</strong></p>
+</li>
+<li><p>交付的时候都是去面客，有没有一些困难</p>
+</li>
+<li><p>你觉得你在工作中遇到的最大的困难是什么  </p>
+<ul>
+<li>可以准备一下这种问题</li>
+</ul>
+</li>
+<li><p>最近有学什么新技术吗？怎么学的</p>
+</li>
+<li><p>优点和缺点各说三个</p>
+<ul>
+<li><p>优点：</p>
+<ul>
+<li>细心</li>
+<li>比较能吃苦</li>
+<li>能坚持</li>
+</ul>
+</li>
+<li><p>缺点</p>
+<ul>
+<li>不太自信</li>
+<li>容易紧张</li>
+<li>沟通习惯不太好</li>
+</ul>
+</li>
+<li><p>可以准备一下这种问题</p>
+</li>
+</ul>
+</li>
+<li><p>怎么更好的沟通</p>
+</li>
+<li><p>反问</p>
+<ul>
+<li>我这个组，我这个岗位做的业务主要是什么</li>
+<li>大数据部门<ul>
+<li>架构组<ul>
+<li>大数据平台的维护，大数据组件类的维护</li>
+</ul>
+</li>
+<li>资产组<ul>
+<li>是资产组的岗位</li>
+<li>负责pass平台的维护<ul>
+<li>也负责部分架构组的内容</li>
+<li>界面的维护</li>
+<li><strong>所有业务线的数据资产的数仓开发，指标梳理开发</strong></li>
+<li>维护pass平台上层的应用（涉及到一些后台开发，会涉及到一些后端的知识）</li>
+<li>数据采集，清洗都是在pass平台做，最后输出给客户</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>应用组</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>三面HR</p>
+<ul>
+<li>自我介绍</li>
+<li>哪一年毕业的</li>
+<li>未来的规划</li>
+<li>两份工作经历的离职原因<ul>
+<li>袋鼠的离职原因要怎么讲合适</li>
+</ul>
+</li>
+<li>toG项目技术为什么提升不快</li>
+<li>对下一份工作经历的期待</li>
+<li>学习思路是怎么样的</li>
+<li>对这个岗位的理解<ul>
+<li>主要做对数据资产的建设</li>
+</ul>
+</li>
+<li>你想通过我们这个岗位收获什么</li>
+<li>你第一份工作经历的业务经历，它的主要业务</li>
+<li>怎么快速深入业务</li>
+<li>在袋鼠有遇到什么困难和挑战</li>
+<li>这个岗位的数据资产组一般对接三个团队<ul>
+<li>其他业务团队数据调用的需求</li>
+<li>数据产品经理的需求</li>
+<li>和一线同事的一些沟通<ul>
+<li>对一些伪问题要进行分辨</li>
+</ul>
+</li>
+<li>怎么和这些同事处理好沟通的问题</li>
+</ul>
+</li>
+<li>挑一个你主要负责的项目讲一下 <strong>&amp;&amp;&amp;</strong></li>
+<li>这个项目遇到的典型的难题怎么处理**&amp;&amp;**<ul>
+<li>旧的业务系统的沟通</li>
+</ul>
+</li>
+<li>优势和待提升点是什么**&amp;&amp;**<ul>
+<li>细心，努力，坚持</li>
+<li>沟通有待提升</li>
+</ul>
+</li>
+<li>前两份工作的薪资和五险一金基数</li>
+<li>反问：hc空缺的原因<ul>
+<li>人员离职</li>
+</ul>
+</li>
+<li>资产组六个人<ul>
+<li>数据开发3~4个</li>
+<li>2个测试</li>
+</ul>
+</li>
 </ul>
 
             </div>

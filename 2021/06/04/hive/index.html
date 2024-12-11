@@ -62,7 +62,7 @@
   </script>
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
-<meta name="generator" content="Hexo 5.2.0"></head>
+<meta name="generator" content="Hexo 7.3.0"></head>
 
 
 <body>
@@ -187,7 +187,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      6.4k 字
+      9.6k 字
     </span>
   
 
@@ -197,7 +197,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      83
+      120
        分钟
     </span>
   
@@ -231,7 +231,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：2022年6月6日 下午
+                  本文最后更新于：2024年9月12日 晚上
                 
               </p>
             
@@ -249,13 +249,15 @@
 </li>
 <li><p>大致流程：Hive通过给用户提供的一系列交互接口，接收到用户的指令(SQL)，使用自己的Driver，结合元数据(MetaStore)，将这些指令翻译成MapReduce，提交到Hadoop中执行，最后，将执行返回的结果输出到用户交互接口。</p>
 </li>
+<li><p>Hive Beeline 是一个命令行工具，它是 Hive 的一部分，用于与 HiveServer2 进行交互。HiveServer2 是 Hive 的一个服务端组件，它提供了 JDBC&#x2F;ODBC 接口，允许外部客户端（如 Hive Beeline）连接并执行 HiveQL 查询。</p>
+</li>
 <li><p>hiveserver2，如果使用beeline，需要开启hiveserver2</p>
 </li>
 <li><p>架构解析：</p>
 <ol>
-<li><p>用户接口：Client.CLI（command-line interface）、JDBC/ODBC(jdbc访问hive)、WEBUI（浏览器访问hive）</p>
+<li><p>用户接口：Client.CLI（command-line interface）、JDBC&#x2F;ODBC(jdbc访问hive)、WEBUI（浏览器访问hive）</p>
 </li>
-<li><p>元数据：Meta store .元数据包括：表名、表所属的数据库（默认是default）、表的拥有者、列/分区字段、表的类型（是否是外部表）、表的数据所在目录等；</p>
+<li><p>元数据：Meta store .元数据包括：表名、表所属的数据库（默认是default）、表的拥有者、列&#x2F;分区字段、表的类型（是否是外部表）、表的数据所在目录等；</p>
 <p>默认存储在自带的derby数据库中（只支持但客户端访问），推荐使用MySQL存储Metastore（支持多客户端访问）</p>
 <p>Metastore的作用是：客户端连接metastore服务，metastore再去连接MySQL数据库来存取元数据。有了metastore服务，就可以有多个客户端同时连接，而且这些客户端不需要知道MySQL数据库的用户名和密码，只需要连接metastore 服务即可。</p>
 <ul>
@@ -271,7 +273,7 @@
 <li>包括解析器（SQL Parser）:将SQL字符串转换成抽象语法树AST</li>
 <li>编译器（Physical Plan）：将AST编译生成逻辑执行计划。</li>
 <li>优化器（Query Optimizer）：对逻辑执行计划进行优化。</li>
-<li>执行器（Execution）：把逻辑执行计划转换成可以运行的物理计划。对于Hive来说，就是MR/Spark。</li>
+<li>执行器（Execution）：把逻辑执行计划转换成可以运行的物理计划。对于Hive来说，就是MR&#x2F;Spark&#x2F;Tez。</li>
 </ol>
 </li>
 </ol>
@@ -386,6 +388,22 @@
 </ul>
 </li>
 </ul>
+<h3 id="Hive-执行引擎"><a href="#Hive-执行引擎" class="headerlink" title="Hive 执行引擎"></a>Hive 执行引擎</h3><ul>
+<li>hive前期版本默认是mapreduce。后面有tez引擎（基于内存较多，生成dag执行图，会做一些优化，比mr快很多，但对内存的要求也更高）</li>
+<li><strong>Spark on Hive</strong><ul>
+<li>就是同步Sparksql,加载hive的配置文件，获取到hive的元数据信息</li>
+<li>Spark sql获取到hive的元数据信息之后就可以拿到hive的所有表的数据</li>
+<li>接下来就可以通过spark sql来操作hive表中的数据</li>
+</ul>
+</li>
+<li><strong>Hive on Spark</strong><ul>
+<li>就是把hive查询从MR换成spark,参考官方的版本配置，不然很容易遇到依赖冲突。</li>
+<li>之后还是在hive上写hivesql，但是执行引擎是spark，任务会转化成spark rdd算子去执行。</li>
+<li>优化器还是hive的优化器，而没有spark sql自带的优化器的效果好</li>
+</ul>
+</li>
+<li>二者的核心区别在于，客户端的 SQL 是否提交给了服务角色 HiveServer2 (org.apache.hive.service.server.HiveServer2)，且该hs2配置了 hive.execution.engine&#x3D;spark;</li>
+</ul>
 <h2 id="SQL语言的分类"><a href="#SQL语言的分类" class="headerlink" title="SQL语言的分类"></a>SQL语言的分类</h2><p><strong>SQL语言的分类</strong></p>
 <p>SQL语言共分为四大类：数据查询语言DQL，数据操纵语言DML，数据定义语言DDL，数据控制语言DCL。</p>
 <p><strong>1. 数据查询语言DQL</strong><br>数据查询语言DQL基本结构是由SELECT子句，FROM子句，WHERE<br>子句组成的查询块：<br>SELECT &lt;字段名表&gt;<br>FROM &lt;表或视图名&gt;<br>WHERE &lt;查询条件&gt;</p>
@@ -395,17 +413,16 @@
 <li>更新：UPDATE</li>
 <li>删除：DELETE</li>
 </ol>
-<p><strong>3. 数据定义语言DDL</strong><br>数据定义语言DDL用来创建数据库中的各种对象—–表、视图、<br>索引、同义词、聚簇等如：<br>CREATE TABLE/VIEW/INDEX/SYN/CLUSTER<br>| | | | |<br>表 视图 索引 同义词 簇</p>
+<p><strong>3. 数据定义语言DDL</strong><br>数据定义语言DDL用来创建数据库中的各种对象—–表、视图、<br>索引、同义词、聚簇等如：<br>CREATE TABLE&#x2F;VIEW&#x2F;INDEX&#x2F;SYN&#x2F;CLUSTER<br>| | | | |<br>表 视图 索引 同义词 簇</p>
 <p>DDL操作是隐性提交的！不能rollback </p>
 <p><strong>4. 数据控制语言DCL</strong><br>数据控制语言DCL用来授予或回收访问数据库的某种特权，并控制<br>数据库操纵事务发生的时间及效果，对数据库实行监视等。如：</p>
 <ol>
-<li>GRANT：授权。</li>
-</ol>
-<ol start="2">
-<li>ROLLBACK [WORK] TO [SAVEPOINT]：回退到某一点。<br>回滚—ROLLBACK<br>回滚命令使数据库状态回到上次最后提交的状态。其格式为：<br>SQL&gt;ROLLBACK;</li>
-</ol>
-<ol start="3">
-<li>COMMIT [WORK]：提交。</li>
+<li><p>GRANT：授权。</p>
+</li>
+<li><p>ROLLBACK [WORK] TO [SAVEPOINT]：回退到某一点。<br>回滚—ROLLBACK<br>回滚命令使数据库状态回到上次最后提交的状态。其格式为：<br>SQL&gt;ROLLBACK;</p>
+</li>
+<li><p>COMMIT [WORK]：提交。</p>
+</li>
 </ol>
 <p>  在数据库的插入、删除和修改操作时，只有当事务在提交到数据<br>库时才算完成。在事务提交前，只有操作数据库的这个人才能有权看<br>到所做的事情，别人只有在最后提交完成后才可以看到。<br>提交数据有三种类型：显式提交、隐式提交及自动提交。下面分<br>别说明这三种类型。</p>
 <p>(1) 显式提交<br>用COMMIT命令直接完成的提交为显式提交。其格式为：<br>SQL&gt;COMMIT；</p>
@@ -415,11 +432,15 @@
 <li><p>库的DDL</p>
 </li>
 <li><p>创建语句，location就相当于数据库，他们之间是有映射关系的</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs mysql">CREATE DATABASE [IF NOT EXISTS] database_name<br>[COMMENT database_comment]<br>[LOCATION hdfs_path]<br>[WITH DBPROPERTIES (property_name&#x3D;property_value, ...)];<br><br>--显示数据库<br>show databases;<br>hive&gt; show databases like &#39;db_hive*&#39;;<br>OK<br>db_hive<br>db_hive_1<br><br>--显示数据库详细信息<br>desc database extended db_hive;<br><br>--删除数据库<br>drop database db_hive2;<br><br>--如果数据库不为空，可以采用cascade命令，强制删除<br>drop database db_hive cascade;<br></code></pre></td></tr></table></figure></li>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs hive">CREATE DATABASE [IF NOT EXISTS] database_name<br>[COMMENT database_comment]<br>[LOCATION hdfs_path]<br>[WITH DBPROPERTIES (property_name=property_value, ...)];<br><br>--显示数据库<br>show databases;<br>hive&gt; show databases like &#x27;db_hive*&#x27;;<br>OK<br>db_hive<br>db_hive_1<br><br>--显示数据库详细信息<br>desc database extended db_hive;<br><br>--删除数据库<br>drop database db_hive2;<br><br>--如果数据库不为空，可以采用cascade命令，强制删除<br>drop database db_hive cascade;<br></code></pre></td></tr></table></figure>
+
+
+</li>
 <li><p>表的DDL</p>
 </li>
 <li><p>创建表</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs mysql">CREATE [EXTERNAL] TABLE [IF NOT EXISTS] table_name <br>[(col_name data_type [COMMENT col_comment], ...)] <br>[COMMENT table_comment] <br>[PARTITIONED BY (col_name data_type [COMMENT col_comment], ...)] <br>[CLUSTERED BY (col_name, col_name, ...) <br>[SORTED BY (col_name [ASC|DESC], ...)] INTO num_buckets BUCKETS] <br>[ROW FORMAT row_format] <br>[STORED AS file_format] <br>[LOCATION hdfs_path]<br>[TBLPROPERTIES (property_name&#x3D;property_value, ...)]<br>[AS select_statement]<br><br>--（7）ROW FORMAT <br>DELIMITED [FIELDS TERMINATED BY char] [COLLECTION ITEMS TERMINATED BY char]<br>        [MAP KEYS TERMINATED BY char] [LINES TERMINATED BY char] <br>   | SERDE serde_name [WITH SERDEPROPERTIES (property_name&#x3D;property_value, property_name&#x3D;property_value, ...)]<br>用户在建表的时候可以自定义SerDe或者使用自带的SerDe。如果没有指定ROW FORMAT 或者ROW FORMAT DELIMITED，将会使用自带的SerDe。在建表的时候，用户还需要为表指定列，用户在指定表的列的同时也会指定自定义的SerDe，Hive通过SerDe确定表的具体的列的数据。<br><br></code></pre></td></tr></table></figure></li>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs hive">CREATE [EXTERNAL] TABLE [IF NOT EXISTS] table_name <br>[(col_name data_type [COMMENT col_comment], ...)] <br>[COMMENT table_comment] <br>[PARTITIONED BY (col_name data_type [COMMENT col_comment], ...)] <br>[CLUSTERED BY (col_name, col_name, ...) <br>[SORTED BY (col_name [ASC|DESC], ...)] INTO num_buckets BUCKETS] <br>[ROW FORMAT row_format] <br>[STORED AS file_format] <br>[LOCATION hdfs_path]<br>[TBLPROPERTIES (property_name=property_value, ...)]<br>[AS select_statement]<br><br>--（7）ROW FORMAT <br>DELIMITED [FIELDS TERMINATED BY char] [COLLECTION ITEMS TERMINATED BY char]<br>        [MAP KEYS TERMINATED BY char] [LINES TERMINATED BY char] <br>   | SERDE serde_name [WITH SERDEPROPERTIES (property_name=property_value, property_name=property_value, ...)]<br>用户在建表的时候可以自定义SerDe或者使用自带的SerDe。如果没有指定ROW FORMAT 或者ROW FORMAT DELIMITED，将会使用自带的SerDe。在建表的时候，用户还需要为表指定列，用户在指定表的列的同时也会指定自定义的SerDe，Hive通过SerDe确定表的具体的列的数据。<br><br></code></pre></td></tr></table></figure>
+</li>
 <li><p>内部表</p>
 <ul>
 <li>默认创建的是内部表，也叫管理表。当我们删除一个管理表时，Hive也会删除这个表中数据。管理表不适合和其他工具共享数据。</li>
@@ -429,37 +450,64 @@
 <ul>
 <li>创建时加上 external</li>
 <li>以Hive并非认为其完全拥有这份数据。删除该表并不会删除掉这份数据，不过描述表的元数据信息会被删除掉。</li>
-<li><strong>结论: 外部表的数据不由hive自身负责管理，虽然数据会被加载到/user/hive/warehouse/，但是不由hive管理。</strong></li>
-<li><strong>指定location：指定加载数据的位置，不再是默认加载到/user/hive/warehouse/目录下了。</strong></li>
+<li><strong>结论: 外部表的数据不由hive自身负责管理，虽然数据会被加载到&#x2F;user&#x2F;hive&#x2F;warehouse&#x2F;，但是不由hive管理。</strong></li>
+<li><strong>指定location：指定加载数据的位置，不再是默认加载到&#x2F;user&#x2F;hive&#x2F;warehouse&#x2F;目录下了。</strong></li>
 </ul>
 </li>
 <li><p>内部表外部表转化</p>
 <ul>
 <li><p>修改内部表student2为外部表</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs mysql">修改内部表student2为外部表<br>alter table student2 set tblproperties(&#39;EXTERNAL&#39;&#x3D;&#39;TRUE&#39;);<br><br>--查询表的类型<br>desc formatted student2;<br>--转换为内部表<br>alter table student2 set tblproperties(&#39;EXTERNAL&#39;&#x3D;&#39;FALSE&#39;);<br></code></pre></td></tr></table></figure></li>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs hive">修改内部表student2为外部表<br>alter table student2 set tblproperties(&#x27;EXTERNAL&#x27;=&#x27;TRUE&#x27;);<br><br>--查询表的类型<br>desc formatted student2;<br>--转换为内部表<br>alter table student2 set tblproperties(&#x27;EXTERNAL&#x27;=&#x27;FALSE&#x27;);<br></code></pre></td></tr></table></figure></li>
 </ul>
 </li>
 <li><p>分区表</p>
 </li>
 <li><p><font color=red>Hive中的分区就是分目录</font>，把一个大的数据集根据业务需要分割成小的数据集。</p>
 <ul>
-<li>````mysql<br>create table dept_partition(deptno int, dname string, loc string<br>)<br>partitioned by (month string)<br>row format delimited fields terminated by ‘\t’;<br>–分区字段不能是表中已经存在的数据，可以将分区字段看作表的伪列。<br>– 查询分区表的分区<br>show partitions dept_partition<br>–如果提前准备数据，但是没有元数据<br>–把数据直接上传到分区目录上，让分区表和数据产生关联的三种方式<br>–1.添加分区<br>alter table dept_partition add partition(class=”03”)<br>–2.直接修复<br>msck repair table stu_par;<br>–3.上传带分区–同时创建分区<br>alter table dept_partition add partition(month=’201705’), partition(month=’201704’);<br>–删除多个分区<br> alter table dept_partition drop partition (month=’201705’), partition (month=’201706’);<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs sql">  <br>- 分区表不能转换，只能在建表时就建好<br><br>- 支持二级分区<br><br>  ````mysql<br>  <span class="hljs-keyword">create</span> <span class="hljs-keyword">table</span> dept_partition2(<br>                 deptno <span class="hljs-built_in">int</span>, dname <span class="hljs-keyword">string</span>, loc <span class="hljs-keyword">string</span><br>                 )<br>                 partitioned <span class="hljs-keyword">by</span> (<span class="hljs-keyword">month</span> <span class="hljs-keyword">string</span>, <span class="hljs-keyword">day</span> <span class="hljs-keyword">string</span>)<br>                 <span class="hljs-keyword">row</span> <span class="hljs-keyword">format</span> <span class="hljs-keyword">delimited</span> <span class="hljs-keyword">fields</span> <span class="hljs-keyword">terminated</span> <span class="hljs-keyword">by</span> <span class="hljs-string">&#x27;\t&#x27;</span>;<br></code></pre></td></tr></table></figure></li>
+<li><pre><code class="hive">create table dept_partition(deptno int, dname string, loc string
+)
+partitioned by (month string)
+row format delimited fields terminated by &#39;\t&#39;;
+--分区字段不能是表中已经存在的数据，可以将分区字段看作表的伪列。
+-- 查询分区表的分区
+show partitions dept_partition
+--如果提前准备数据，但是没有元数据
+--把数据直接上传到分区目录上，让分区表和数据产生关联的三种方式
+--1.添加分区
+alter table dept_partition add partition(class=&quot;03&quot;)
+--2.直接修复
+msck repair table stu_par;
+--3.上传带分区
+
+--同时创建分区
+alter table dept_partition add partition(month=&#39;201705&#39;), partition(month=&#39;201704&#39;);
+--删除多个分区
+ alter table dept_partition drop partition (month=&#39;201705&#39;), partition (month=&#39;201706&#39;);
+<figure class="highlight lasso"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs lasso">  <br>- 分区表不能转换，只能在建表时就建好<br><br>- 支持二级分区<br><br>  <span class="hljs-string">``</span><span class="hljs-string">``</span>hive<br>  create table dept_partition2(<br>                 deptno int, dname <span class="hljs-built_in">string</span>, loc <span class="hljs-built_in">string</span><br>                 )<br>                 partitioned <span class="hljs-keyword">by</span> (month <span class="hljs-built_in">string</span>, day <span class="hljs-built_in">string</span>)<br>                 row format delimited fields terminated <span class="hljs-keyword">by</span> <span class="hljs-string">&#x27;\t&#x27;</span>;<br></code></pre></td></tr></table></figure>
+</code></pre>
+</li>
 </ul>
 </li>
 <li><p>修改表</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs mysql">ALTER TABLE table_name RENAME TO new_table_name<br>--更新列<br>ALTER TABLE table_name CHANGE [COLUMN] col_old_name col_new_name column_type [COMMENT col_comment] [FIRST|AFTER column_name]<br>--增加和替换列<br>ALTER TABLE table_name ADD|REPLACE COLUMNS (col_name data_type [COMMENT col_comment], ...) <br>--删除表<br>drop table dept_partition;<br></code></pre></td></tr></table></figure></li>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs hive">-- 修改表注释<br>ALTER TABLE 表名 SET TBLPROPERTIES(&#x27;comment&#x27; = &#x27;表注释内容&#x27;);<br>-- 修改表名<br>ALTER TABLE table_name RENAME TO new_table_name<br>-- 更新列<br>ALTER TABLE table_name CHANGE [COLUMN] col_old_name col_new_name column_type [COMMENT col_comment] [FIRST|AFTER column_name]<br>-- 增加和替换列<br>ALTER TABLE table_name ADD|REPLACE COLUMNS (col_name data_type [COMMENT col_comment], ...) <br>-- REPLACE 则是表示替换表中所有字段（修改不修改的列都需要写上）。<br>-- 删除表<br>drop table dept_partition;<br></code></pre></td></tr></table></figure></li>
 </ul>
 <h2 id="DML"><a href="#DML" class="headerlink" title="DML"></a>DML</h2><ul>
 <li><p>数据导入</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs mysql">--创建语句<br>create table student(id string, name string) row format delimited fields terminated by &#39;\t&#39;;<br>--1.load导入数据<br>load data [local] inpath &#39;&#x2F;opt&#x2F;module&#x2F;datas&#x2F;student.txt&#39; [overwrite] into table student [partition (partcol1&#x3D;val1,…)];<br>--本地数据导入<br>load data local inpath &#39;&#x2F;opt&#x2F;module&#x2F;datas&#x2F;student.txt&#39; into table default.student;<br>--hdfs数据导入<br>load data inpath &#39;&#x2F;user&#x2F;zt&#x2F;hive&#x2F;student.txt&#39; into table default.student;<br>--加载数据覆盖表中已有的数据<br>load data inpath &#39;&#x2F;user&#x2F;zt&#x2F;hive&#x2F;student.txt&#39; overwrite into table default.student;<br>--hdfs的导入是移动，本地导入是复制<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs hive">--创建语句<br>create table student(id string, name string) row format delimited fields terminated by &#x27;\t&#x27;;<br>--1.load导入数据<br>load data [local] inpath &#x27;/opt/module/datas/student.txt&#x27; [overwrite] into table student [partition (partcol1=val1,…)];<br>--本地数据导入<br>load data local inpath &#x27;/opt/module/datas/student.txt&#x27; into table default.student;<br>--hdfs数据导入<br>load data inpath &#x27;/user/zt/hive/student.txt&#x27; into table default.student;<br>--加载数据覆盖表中已有的数据<br>load data inpath &#x27;/user/zt/hive/student.txt&#x27; overwrite into table default.student;<br>--hdfs的导入是移动，本地导入是复制<br></code></pre></td></tr></table></figure>
 
 
 
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs mysql">--2.通过查询语句向表中插入数据（Insert）<br> create table student_par(id int, name string) partitioned by (month string) row format delimited fields terminated by &#39;\t&#39;;<br> <br>insert overwrite table student partition(month&#x3D;&#39;201708&#39;)<br>             select id, name from student where month&#x3D;&#39;201709&#39;;<br>             <br>--insert into：以追加数据的方式插入到表或分区，原有数据不会删除<br>--insert overwrite：会覆盖表或分区中已存在的数据<br><br>--3.建表时用as select<br>create table if not exists student3<br>as select id, name from student;<br><br>--4.创建表时通过Location指定加载数据路径<br>create external table if not exists student5(<br>              id int, name string<br>              )<br>              row format delimited fields terminated by &#39;\t&#39;<br>              location &#39;&#x2F;student;&#39;<br><br><br>-- 5.Import数据到指定Hive表中<br>import table student2 partition(month&#x3D;&#39;201709&#39;) from<br> &#39;&#x2F;user&#x2F;hive&#x2F;warehouse&#x2F;export&#x2F;student&#39;;<br></code></pre></td></tr></table></figure></li>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs hive">--2.通过查询语句向表中插入数据（Insert）<br> create table student_par(id int, name string) partitioned by (month string) row format delimited fields terminated by &#x27;\t&#x27;;<br> <br>insert overwrite table student partition(month=&#x27;201708&#x27;)<br>             select id, name from student where month=&#x27;201709&#x27;;<br>             <br>--insert into：以追加数据的方式插入到表或分区，原有数据不会删除<br>--insert overwrite：会覆盖表或分区中已存在的数据<br><br>--3.建表时用as select<br>create table if not exists student3<br>as select id, name from student;<br><br>--4.创建表时通过Location指定加载数据路径<br>create external table if not exists student5(<br>              id int, name string<br>              )<br>              row format delimited fields terminated by &#x27;\t&#x27;<br>              location &#x27;/student;&#x27;<br><br><br>-- 5.Import数据到指定Hive表中<br>import table student2 partition(month=&#x27;201709&#x27;) from<br> &#x27;/user/hive/warehouse/export/student&#x27;;<br></code></pre></td></tr></table></figure>
+
+
+</li>
 <li><p>数据导出(不重要)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs mysql">--1. Insert导出<br>--将查询结果导出到本地<br>insert overwrite local directory &#39;&#x2F;opt&#x2F;module&#x2F;datas&#x2F;export&#x2F;student&#39;<br>            select * from student;<br>            <br>--将查询的结果格式化导出到本地<br>insert overwrite local directory &#39;&#x2F;opt&#x2F;module&#x2F;datas&#x2F;export&#x2F;student1&#39;<br>           ROW FORMAT DELIMITED FIELDS TERMINATED BY &#39;\t&#39;             select * from student;<br>           <br>--将查询的结果导出到HDFS上(没有local)<br>insert overwrite directory &#39;&#x2F;user&#x2F;zt&#x2F;student2&#39;<br>ROW FORMAT DELIMITED FIELDS TERMINATED BY &#39;\t&#39; <br>select * from student;<br>--整张表export 到处到HDFS<br>export table default.student to<br> &#39;&#x2F;user&#x2F;hive&#x2F;warehouse&#x2F;export&#x2F;student&#39;;<br></code></pre></td></tr></table></figure></li>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs hive">--1. Insert导出<br>--将查询结果导出到本地<br>insert overwrite local directory &#x27;/opt/module/datas/export/student&#x27;<br>            select * from student;<br>            <br>--将查询的结果格式化导出到本地<br>insert overwrite local directory &#x27;/opt/module/datas/export/student1&#x27;<br>           ROW FORMAT DELIMITED FIELDS TERMINATED BY &#x27;\t&#x27;             select * from student;<br>           <br>--将查询的结果导出到HDFS上(没有local)<br>insert overwrite directory &#x27;/user/zt/student2&#x27;<br>ROW FORMAT DELIMITED FIELDS TERMINATED BY &#x27;\t&#x27; <br>select * from student;<br>--整张表export 到处到HDFS<br>export table default.student to<br> &#x27;/user/hive/warehouse/export/student&#x27;;<br></code></pre></td></tr></table></figure>
+
+
+</li>
 <li><p>清除数据</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs mysql">--Truncate只能删除管理表（内部表），不能删除外部表中数据<br>--只删除数据，不删除本身<br>truncate table student;<br></code></pre></td></tr></table></figure></li>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs hive">--Truncate只能删除管理表（内部表），不能删除外部表中数据<br>--只删除数据，不删除本身<br>truncate table student;<br></code></pre></td></tr></table></figure></li>
 </ul>
 <h2 id="DQL"><a href="#DQL" class="headerlink" title="DQL"></a>DQL</h2><h3 id="数据查询语言"><a href="#数据查询语言" class="headerlink" title="数据查询语言"></a>数据查询语言</h3><h4 id="1-基本查询（select…-from…-）"><a href="#1-基本查询（select…-from…-）" class="headerlink" title="1. 基本查询（select…..from…..）"></a>1. 基本查询（select…..from…..）</h4><p>（1）SQL 语言大小写不敏感。 </p>
 <p>（2）SQL 可以写在一行或者多行</p>
@@ -499,7 +547,7 @@
 <td>A和B 相乘</td>
 </tr>
 <tr>
-<td>A/B</td>
+<td>A&#x2F;B</td>
 <td>A除以B</td>
 </tr>
 <tr>
@@ -528,9 +576,10 @@
 <ul>
 <li>UDF函数：一个输入一个输出 select substring(ename,1,1) from emp;（从ｅname的1开始，取一个字符）用户定义（普通）函数，只对单行数值产生作用。实现：继承UDF，实现evaluate()方法</li>
 <li>UDAF函数：多个输入，一个输出 select count(*) cnt from emp;用户定义聚合函数，可对多行数据产生作用；等同与SQL中常用的SUM()，AVG()，也是聚合函数；</li>
-<li>UDTF函数：一个输入，多个输出。用户定义表生成函数。用来解决输入一行输出多行；实现：继承GenericUDTF，实现close(),initialize(),process()方法</li>
+<li>UDTF函数：一个输入，多个输出。用户定义表生成函数。用来解决输入一行输出多行；实现：继承GenericUDTF，实现initialize(),process(),close()方法</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs mysql">--1．求总行数（count）<br>select count(*) cnt from emp;<br>--2．求工资的最大值（max）<br>select max(sal) max_sal from emp;<br>--3．求工资的最小值（min）<br>select min(sal) min_sal from emp;<br>--4．求工资的总和（sum）<br>select sum(sal) sum_sal from emp; <br>--5．求工资的平均值（avg）<br>select avg(sal) avg_sal from emp;<br></code></pre></td></tr></table></figure></li>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs hive">--1．求总行数（count）<br>select count(*) cnt from emp;<br>--2．求工资的最大值（max）<br>select max(sal) max_sal from emp;<br>--3．求工资的最小值（min）<br>select min(sal) min_sal from emp;<br>--4．求工资的总和（sum）<br>select sum(sal) sum_sal from emp; <br>--5．求工资的平均值（avg）<br>select avg(sal) avg_sal from emp;<br></code></pre></td></tr></table></figure>
+</li>
 <li><p>LIMIT子句用于限制返回的行数</p>
 <ul>
 <li>select * from emp limit 5;</li>
@@ -539,7 +588,7 @@
 </ul>
 <h4 id="2-条件过滤"><a href="#2-条件过滤" class="headerlink" title="2.条件过滤"></a>2.条件过滤</h4><ol>
 <li><p>使用where子句，将不满足条件的行过滤掉</p>
-<p>select * from emp where sal =5000;</p>
+<p>select * from emp where sal &#x3D;5000;</p>
 </li>
 <li><p>比较运算符：下面表中描述了谓词操作符，这些操作符同样可以用于JOIN…ON和HAVING语句中</p>
 <table>
@@ -551,17 +600,17 @@
 </tr>
 </thead>
 <tbody><tr>
-<td>A=B</td>
+<td>A&#x3D;B</td>
 <td>基本数据类型</td>
 <td>如果A等于B则返回TRUE，反之返回FALSE</td>
 </tr>
 <tr>
-<td>A&lt;=&gt;B</td>
+<td>A&lt;&#x3D;&gt;B</td>
 <td>基本数据类型</td>
-<td>如果A和B都为NULL，则返回TRUE，其他的和等号（=）操作符的结果一致，如果任一为NULL则结果为NULL</td>
+<td>如果A和B都为NULL，则返回TRUE，其他的和等号（&#x3D;）操作符的结果一致，如果任一为NULL则结果为NULL</td>
 </tr>
 <tr>
-<td>A&lt;&gt;B, A!=B</td>
+<td>A&lt;&gt;B, A!&#x3D;B</td>
 <td>基本数据类型</td>
 <td>A或者B为NULL则返回NULL；如果A不等于B，则返回TRUE，反之返回FALSE</td>
 </tr>
@@ -571,7 +620,7 @@
 <td>A或者B为NULL，则返回NULL；如果A小于B，则返回TRUE，反之返回FALSE</td>
 </tr>
 <tr>
-<td>A&lt;=B</td>
+<td>A&lt;&#x3D;B</td>
 <td>基本数据类型</td>
 <td>A或者B为NULL，则返回NULL；如果A小于等于B，则返回TRUE，反之返回FALSE</td>
 </tr>
@@ -581,7 +630,7 @@
 <td>A或者B为NULL，则返回NULL；如果A大于B，则返回TRUE，反之返回FALSE</td>
 </tr>
 <tr>
-<td>A&gt;=B</td>
+<td>A&gt;&#x3D;B</td>
 <td>基本数据类型</td>
 <td>A或者B为NULL，则返回NULL；如果A大于等于B，则返回TRUE，反之返回FALSE</td>
 </tr>
@@ -618,7 +667,7 @@
 </tbody></table>
 </li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs mysql">--通配符字符串匹配　% _<br>--%匹配任意串，_匹配任意字符<br>--查询以A开头的员工<br>select * from emp where ename like &quot;A%&quot;;<br><br>--正则匹配<br>--查询以A开头的员工<br>select * from emp where ename rlike &quot;^A&quot;; <br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs hive">--通配符字符串匹配　% _<br>--%匹配任意串，_匹配任意字符<br>--查询以A开头的员工<br>select * from emp where ename like &quot;A%&quot;;<br><br>--正则匹配<br>--查询以A开头的员工<br>select * from emp where ename rlike &quot;^A&quot;; <br></code></pre></td></tr></table></figure>
 
 <ul>
 <li><p>rlike匹配正则表达式</p>
@@ -628,7 +677,7 @@
 </ul>
 <ol start="3">
 <li><p>逻辑运算符（AND，OR，NOT）</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs mysql">select * from emp where sal&gt;1000 and deptno&#x3D;30;<br>select * from emp where sal&gt;1000 or deptno&#x3D;30;<br>select * from emp where deptno not IN(30, 20);<br></code></pre></td></tr></table></figure></li>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs hive">select * from emp where sal&gt;1000 and deptno=30;<br>select * from emp where sal&gt;1000 or deptno=30;<br>select * from emp where deptno not IN(30, 20);<br></code></pre></td></tr></table></figure></li>
 </ol>
 <h4 id="3-分组"><a href="#3-分组" class="headerlink" title="3. 分组"></a>3. 分组</h4><ul>
 <li><p>GROUP BY语句通常会和聚合函数一起使用，按照一个或者多个列队结果进行分组，然后对每个组执行聚合操作。</p>
@@ -636,17 +685,24 @@
 <li><p>（1）where后面不能写分组函数，而having后面可以使用分组函数。</p>
 <p>（2）having只用于group by分组统计语句。</p>
 </li>
-<li><p>````mysql<br>–计算emp表每个部门的平均工资<br>select t.deptno, avg(t.sal) avg_sal from emp t group by t.deptno<br>–求每个部门的平均薪水大于2000的部门<br>select deptno, avg(sal) avg_sal from emp group by deptno having<br> avg_sal &gt; 2000;</p>
-<figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs n1ql"><br>#### 4.连接<br><br>* Hive支持通常的SQL JOIN语句，但是只支持等值连接，不支持非等值连接。<br><br>  - 内连接<br>  - 左外连接<br>  - 右外连接<br>  - 满外连接<br><br>  ````mysql<br>  <span class="hljs-keyword">select</span><br>      <span class="hljs-built_in">e</span>.empno,<br>      <span class="hljs-built_in">e</span>.ename,<br>      d.deptno, <br>      d.dname <br>  <span class="hljs-keyword">from</span> <br>      emp <span class="hljs-built_in">e</span> <br>  <span class="hljs-keyword">join</span><br>      dept d <br>  <span class="hljs-keyword">on</span><br>      <span class="hljs-built_in">e</span>.deptno = d.deptno;<br>      <br></code></pre></td></tr></table></figure></li>
+<li><pre><code class="hive">--计算emp表每个部门的平均工资
+select t.deptno, avg(t.sal) avg_sal from emp t group by t.deptno
+--求每个部门的平均薪水大于2000的部门
+select deptno, avg(sal) avg_sal from emp group by deptno having
+ avg_sal &gt; 2000;
+<figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs n1ql"><br>#### 4.连接<br><br>* Hive支持通常的SQL JOIN语句，但是只支持等值连接，不支持非等值连接。<br><br>  - 内连接<br>  - 左外连接<br>  - 右外连接<br>  - 满外连接<br><br>  ````hive<br>  <span class="hljs-keyword">select</span><br>      <span class="hljs-built_in">e</span>.empno,<br>      <span class="hljs-built_in">e</span>.ename,<br>      d.deptno, <br>      d.dname <br>  <span class="hljs-keyword">from</span> <br>      emp <span class="hljs-built_in">e</span> <br>  <span class="hljs-keyword">join</span><br>      dept d <br>  <span class="hljs-keyword">on</span><br>      <span class="hljs-built_in">e</span>.deptno = d.deptno;<br>      <br></code></pre></td></tr></table></figure>
+</code></pre>
+</li>
 <li><p>表的别名：好处：1.简化查询，使用表名前缀可以提高执行效率</p>
 </li>
 <li><p>多表连接</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT <br>    e.ename,<br>    d.dname, <br>    l.loc_name<br>FROM<br>	emp e <br>JOIN<br>	dept d<br>ON<br>	d.deptno &#x3D; e.deptno <br>JOIN<br>	location l<br>ON<br>	d.loc &#x3D; l.loc;<br></code></pre></td></tr></table></figure></li>
-</ul>
-<ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs hive">SELECT <br>    e.ename,<br>    d.dname, <br>    l.loc_name<br>FROM<br>	emp e <br>JOIN<br>	dept d<br>ON<br>	d.deptno = e.deptno <br>JOIN<br>	location l<br>ON<br>	d.loc = l.loc;<br></code></pre></td></tr></table></figure>
+
+
+</li>
 <li><p><strong>hive join目前不支持在on子句中使用谓词or(hive1 不支持)</strong></p>
 <p>select e.empno, e.ename, d.deptno from emp e join dept d on e.deptno</p>
-<p>= d.deptno or e.ename=d.deptno;  在hive1错误的,hive3支持</p>
+<p>&#x3D; d.deptno or e.ename&#x3D;d.deptno;  在hive1错误的,hive3支持</p>
 </li>
 </ul>
 <h4 id="5-排序"><a href="#5-排序" class="headerlink" title="5.排序"></a>5.排序</h4><ul>
@@ -655,13 +711,14 @@
 <li>DESC（descend）: 降序</li>
 <li>sort by:局部排序（sort by 为每个reduce产生一个排序文件。每个Reduce内部进行排序，对全局结果来说不是排序）</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs mysql">--一般需求不会要求给所有的数据排序，而要求知道前几<br>--求工资前10的人，Map会先求局部前10<br>select *<br>from emp<br>order by sal desc<br>limit 10;<br><br>--还有一种可能，我们只需要看大概的数据趋势，不需要全排序<br>--Hive的局部排序 sort by<br>select *<br>from emp<br>sort by empno desc;<br><br>--多条件排序，先按部门排序，再按工资排序<br>select *<br>from emp<br>order by<br>deptno asc,<br>sal desc;<br><br>--limit,offset<br>limit X,Y 跳过X条数据，取Y条数据<br>offset X 跳过X条数据<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs hive">--一般需求不会要求给所有的数据排序，而要求知道前几<br>--求工资前10的人，Map会先求局部前10<br>select *<br>from emp<br>order by sal desc<br>limit 10;<br><br>--还有一种可能，我们只需要看大概的数据趋势，不需要全排序<br>--Hive的局部排序 sort by<br>select *<br>from emp<br>sort by empno desc;<br><br>--多条件排序，先按部门排序，再按工资排序<br>select *<br>from emp<br>order by<br>deptno asc,<br>sal desc;<br><br>--limit,offset<br>limit X,Y 跳过X条数据，取Y条数据<br>offset X 跳过X条数据<br></code></pre></td></tr></table></figure>
 
 <ul>
 <li><p>分区排序 （Distribute By）</p>
 </li>
 <li><p><em><strong>distribute by</strong></em>类似MR中partition（自定义分区），进行分区，结合sort by使用。 </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs mysql">--指定局部排序的分区字段<br>select * from emp<br>distribute by empno<br>sort by sal desc;<br><br>--如果分区和排序的字段一样，我们可以用cluster by代替<br>select * from emp distribute by empno sort by empno;<br>select * from emp cluster by empno;<br></code></pre></td></tr></table></figure></li>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs hive">--指定局部排序的分区字段<br>select * from emp<br>distribute by empno<br>sort by sal desc;<br><br>--如果分区和排序的字段一样，我们可以用cluster by代替<br>select * from emp distribute by empno sort by empno;<br>select * from emp cluster by empno;<br></code></pre></td></tr></table></figure>
+</li>
 <li><p>当distribute by和sorts by字段相同时，可以使用cluster by方式。</p>
 </li>
 </ul>
@@ -673,25 +730,26 @@
 <li><p>分桶：针对某一个区的数据，把它的数据进一步组织成多个文件</p>
 </li>
 <li><p>分区：把多个数据，分成文件夹管理</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs mysql">create table stu_buck(id int, name string)<br>clustered by(id) <br>into 4 buckets<br>row format delimited fields terminated by &#39;\t&#39;;<br><br><br></code></pre></td></tr></table></figure></li>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs hive">create table stu_buck(id int, name string)<br>clustered by(id) <br>into 4 buckets<br>row format delimited fields terminated by &#x27;\t&#x27;;<br><br><br></code></pre></td></tr></table></figure>
+</li>
 <li><p>分桶抽样查询</p>
 </li>
 <li><p>对于非常大的数据集，有时用户需要使用的是一个具有代表性的查询结果而不是全部结果。Hive可以通过对表进行抽样来满足这个需求。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs mysql">select * from stu_buck tablesample(bucket 1 out of 4 on id);<br>--tablesample是抽样语句，语法：TABLESAMPLE(BUCKET x OUT OF y) <br>--y必须是table总bucket数的倍数或者因子。hive根据y的大小，决定抽样的比例<br>把数据按照bucket分成y份，取其中的第x份<br></code></pre></td></tr></table></figure></li>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs hive">select * from stu_buck tablesample(bucket 1 out of 4 on id);<br>--tablesample是抽样语句，语法：TABLESAMPLE(BUCKET x OUT OF y) <br>--y必须是table总bucket数的倍数或者因子(因子就是所有可以整除这个数的数,不包括这个数自身)。hive根据y的大小，决定抽样的比例<br>把数据按照bucket分成y份，取其中的第x份<br></code></pre></td></tr></table></figure></li>
 </ul>
-<h3 id="常用查询函数"><a href="#常用查询函数" class="headerlink" title="常用查询函数"></a>常用查询函数</h3><h4 id="常用函数"><a href="#常用函数" class="headerlink" title="常用函数"></a>常用函数</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs mysql">hive中查询函数<br>show functions<br>show functions like &quot;collect*&quot;<br>查看函数的描述<br>desc function 函数名<br>--nvl空字段赋值<br>select comm, nvl(comm, -1) from emp;<br></code></pre></td></tr></table></figure>
+<h3 id="常用查询函数"><a href="#常用查询函数" class="headerlink" title="常用查询函数"></a>常用查询函数</h3><h4 id="常用函数"><a href="#常用函数" class="headerlink" title="常用函数"></a>常用函数</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs hive">hive中查询函数<br>show functions<br>show functions like &quot;collect*&quot;<br>查看函数的描述<br>desc function 函数名<br>--nvl空字段赋值<br>select comm, nvl(comm, -1) from emp;<br></code></pre></td></tr></table></figure>
 
 
 
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs mysql">--case when<br>--统计不同部门男女各有多少人<br>select<br>    dept_id,<br>    count(*) total,<br>    sum(case sex when &#39;男&#39; then 1 else 0 end) male,<br>    sum(case sex when &#39;女&#39; then 1 else 0 end) female<br>from<br>    emp_sex<br>group by<br>    dept_id;<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs hive">--case when<br>--统计不同部门男女各有多少人<br>select<br>    dept_id,<br>    count(*) total,<br>    sum(case sex when &#x27;男&#x27; then 1 else 0 end) male,<br>    sum(case sex when &#x27;女&#x27; then 1 else 0 end) female<br>from<br>    emp_sex<br>group by<br>    dept_id;<br></code></pre></td></tr></table></figure>
 
 
 
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs mysql">在 Group by 子句中，Select 查询的列，要么需要是 Group by 中的列，要么得是用聚合函数（比如 sum、count 等）加工过的列。不支持直接引用非 Group by 的列。这一点和 MySQL 有所区别。Hive 错误 Expression not in GROUP BY key的原因。<br>--行转列<br>collect_list(x),聚合成一个数组，聚合函数<br>concat_ws(&quot;分隔符&quot;，数组)，把数组按分割符拼成一个字符串<br>contact(str1,str2......,strn)拼接几列在一起<br><br>select<br>    concat(constellation,&quot;,&quot;,blood_type) xzxx,<br>    concat_ws(&quot;|&quot;, collect_list(name)) rentou<br>from<br>    person_info<br>group by<br>    constellation,blood_type;<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs hive">在 Group by 子句中，Select 查询的列，要么需要是 Group by 中的列，要么得是用聚合函数（比如 sum、count 等）加工过的列。不支持直接引用非 Group by 的列。这一点和 MySQL 有所区别。Hive 错误 Expression not in GROUP BY key的原因。<br>--行转列<br>collect_list(x),聚合成一个数组，聚合函数<br>concat_ws(&quot;分隔符&quot;，数组)，把数组按分割符拼成一个字符串<br>contact(str1,str2......,strn)拼接几列在一起<br><br>select<br>    concat(constellation,&quot;,&quot;,blood_type) xzxx,<br>    concat_ws(&quot;|&quot;, collect_list(name)) rentou<br>from<br>    person_info<br>group by<br>    constellation,blood_type;<br></code></pre></td></tr></table></figure>
 
 
 
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs mysql">--列转行<br>--explode(a)函数<br>--如果传入的是一个数组，则将其分成多行<br>--如果传入一个map,按照key,value分成两列<br>--split(str,regrex)函数<br>--将一个字符串按照正则表达式规则划分成一个数组<br>lateral view 后面接一个表名，起一个列名，列名取决于explode()炸开后的效果。<br>select<br>    m.movie,<br>    tbl.cate<br>from<br>    movie_info m<br>lateral view<br>    explode(split(category, &quot;,&quot;)) tbl as cate;<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs hive">--列转行<br>--explode(a)函数<br>--如果传入的是一个数组，则将其分成多行<br>--如果传入一个map,按照key,value分成两列<br>--split(str,regrex)函数<br>--将一个字符串按照正则表达式规则划分成一个数组<br>lateral view 后面接一个表名，起一个列名，列名取决于explode()炸开后的效果。<br>select<br>    m.movie,<br>    tbl.cate<br>from<br>    movie_info m<br>lateral view<br>    explode(split(category, &quot;,&quot;)) tbl as cate;<br></code></pre></td></tr></table></figure>
 
 <h4 id="窗口函数"><a href="#窗口函数" class="headerlink" title="窗口函数"></a>窗口函数</h4><ul>
 <li><p>相关函数说明</p>
@@ -699,49 +757,192 @@
 <p>CURRENT ROW：当前行</p>
 <p>n PRECEDING：往前n行数据</p>
 <p>n FOLLOWING：往后n行数据</p>
-<p>UNBOUNDED：起点，UNBOUNDED PRECEDING 表示从前面的起点， UNBOUNDED FOLLOWING表示到后面的终点</p>
+<p>UNBOUNDED：UNBOUNDED PRECEDING 表示从前面的起点， UNBOUNDED FOLLOWING表示到后面的终点</p>
 <p>LAG(col,n,default_val)：往前第n行数据</p>
 <p>LEAD(col,n, default_val)：往后第n行数据</p>
 <p>NTILE(n)：把有序窗口的行分发到指定数据的组中，各个组有编号，编号从1开始，对于每一行，NTILE返回此行所属的组的编号。注意：n必须为int类型。</p>
 <p>percent_rank()将数据按百分比分</p>
 </li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs mysql">--聚合<br>select name,count(*) over () <br>from business <br>where substring(orderdate,1,7) &#x3D; &#39;2017-04&#39; <br>group by name;<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs hive">--聚合<br>select name,count(*) over () <br>from business <br>where substring(orderdate,1,7) = &#x27;2017-04&#x27; <br>group by name;<br></code></pre></td></tr></table></figure>
 
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs mysql">--各种聚合<br>select name,orderdate,cost, <br>sum(cost) over() as sample1,--所有行相加 <br>sum(cost) over(partition by name) as sample2,--按name分组，组内数据相加 <br>sum(cost) over(partition by name order by orderdate) as sample3,--按name分组，组内数据累加 <br>sum(cost) over(partition by name order by orderdate rows between UNBOUNDED PRECEDING and current row ) as sample4 ,--和sample3一样,由起点到当前行的聚合 <br>sum(cost) over(partition by name order by orderdate rows between 1 PRECEDING and current row) as sample5, --当前行和前面一行做聚合 <br>sum(cost) over(partition by name order by orderdate rows between 1 PRECEDING AND 1 FOLLOWING ) as sample6,--当前行和前边一行及后面一行 <br>sum(cost) over(partition by name order by orderdate rows between current row and UNBOUNDED FOLLOWING ) as sample7 --当前行及后面所有行 <br>from business;<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs hive">--各种聚合<br>select name,orderdate,cost, <br>sum(cost) over() as sample1,--所有行相加 <br>sum(cost) over(partition by name) as sample2,--按name分组，组内数据相加 <br>sum(cost) over(partition by name order by orderdate) as sample3,--按name分组，组内数据累加 <br>sum(cost) over(partition by name order by orderdate rows between UNBOUNDED PRECEDING and current row ) as sample4 ,--和sample3一样,由起点到当前行的聚合 <br>sum(cost) over(partition by name order by orderdate rows between 1 PRECEDING and current row) as sample5, --当前行和前面一行做聚合 <br>sum(cost) over(partition by name order by orderdate rows between 1 PRECEDING AND 1 FOLLOWING ) as sample6,--当前行和前边一行及后面一行 <br>sum(cost) over(partition by name order by orderdate rows between current row and UNBOUNDED FOLLOWING ) as sample7 --当前行及后面所有行 <br>from business;<br></code></pre></td></tr></table></figure>
 
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs mysql">--结合其他函数使用<br>select<br>    name, orderdate, cost, <br>    lag(orderdate, 1) <br>    over(partition by name order by orderdate) last_order,<br>    lead(orderdate, 1) <br>    over(partition by name order by orderdate) next_order<br>from<br>    business;<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs hive">--结合其他函数使用<br>select<br>    name, orderdate, cost, <br>    lag(orderdate, 1) <br>    over(partition by name order by orderdate) last_order,<br>    lead(orderdate, 1) <br>    over(partition by name order by orderdate) next_order<br>from<br>    business;<br></code></pre></td></tr></table></figure>
 
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs mysql">--ntile<br>Ntile(group_num) 将所有记录分成group_num个组，每组序号一样<br>SELECT<br>	*<br>FROM<br>	(<br>		select name,<br>		orderdate,<br>		cost,<br>		ntile(5) over(<br>		order by orderdate) n<br>	from<br>		business) t1<br>WHERE<br>	n &#x3D; 1;<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs hive">--ntile<br>Ntile(group_num) 将所有记录分成group_num个组，每组序号一样<br>SELECT<br>	*<br>FROM<br>	(<br>		select name,<br>		orderdate,<br>		cost,<br>		ntile(5) over(<br>		order by orderdate) n<br>	from<br>		business) t1<br>WHERE<br>	n = 1;<br></code></pre></td></tr></table></figure>
 
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs mysql">--percent_rank<br>select<br>	name,<br>	orderdate,<br>	cost,<br>	PERCENT_RANK() over(<br>	order by orderdate) pr<br>from<br>	business;<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs hive">-- percent_rank<br>-- percent_rank() 含义就是 当前行-1 / 当前组总行数-1<br>select<br>	name,<br>	orderdate,<br>	cost,<br>	PERCENT_RANK() over(<br>	order by orderdate) pr<br>from<br>	business;<br></code></pre></td></tr></table></figure>
 
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs mysql">--rank<br>rank()排序，相同的一样排名，数字按照实际的来，类似于高考排名<br>dense_rank() 相同的一样排名，数字按照排名的数字来<br>row_number() 直接排名，相同的排名也不一样<br>SELECT<br>	*,<br>	rank() OVER(partition by subject<br>order by<br>	score desc) r,<br>	DENSE_RANK() OVER(partition by subject<br>order by<br>	score desc) dr,<br>	ROW_NUMBER() OVER(partition by subject<br>order by<br>	score desc) rn<br>from<br>	score;<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs hive">--rank<br>rank()排序，相同的一样排名，数字按照实际的来，类似于高考排名<br>dense_rank() 相同的一样排名，数字按照排名的数字来<br>row_number() 直接排名，相同的排名也不一样<br>SELECT<br>	*,<br>	rank() OVER(partition by subject<br>order by<br>	score desc) r,<br>	DENSE_RANK() OVER(partition by subject<br>order by<br>	score desc) dr,<br>	ROW_NUMBER() OVER(partition by subject<br>order by<br>	score desc) rn<br>from<br>	score;<br></code></pre></td></tr></table></figure>
 
-<h4 id="日期函数"><a href="#日期函数" class="headerlink" title="日期函数"></a>日期函数</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mysql">--current_date 返回当前日期<br>select current_date();<br></code></pre></td></tr></table></figure>
+<h4 id="日期函数"><a href="#日期函数" class="headerlink" title="日期函数"></a>日期函数</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs hive">--current_date 返回当前日期<br>select current_date();<br></code></pre></td></tr></table></figure>
 
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs mysql">--日期的加减<br>--今天开始90天以后的日期<br>select date_add(current_date(), 90);<br>--今天开始90天以前的日期<br>select date_sub(current_date(), 90);<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs hive">-- 日期的加减<br>-- 今天开始90天以后的日期<br>select date_add(current_date(), 90);<br>-- 今天开始90天以前的日期<br>select date_sub(current_date(), 90);<br></code></pre></td></tr></table></figure>
 
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mysql">--日期差<br>SELECT datediff(CURRENT_DATE(), &quot;1990-06-04&quot;);<br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs hive">--日期差<br>SELECT datediff(CURRENT_DATE(), &quot;1990-06-04&quot;);<br></code></pre></td></tr></table></figure>
 
 <p>习题：有哪些顾客连续两天来过我的店，数据是business表</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs mysql">--习题<br>selec<br><br>--time1下一次购买商品的时间<br>select<br>name,cost,orderdate,<br>lead(orderdate,1,&quot;2021-09-01&quot;) over(partition by name order by orderdate) time1<br>from<br>business<br><br>--时间差<br>select<br>name,cost,orderdate,time1,<br>datediff(time1,orderdate) difftime<br>from<br>    (select<br>name,cost,orderdate,<br>lead(orderdate,1,&quot;2021-09-01&quot;) over(partition by name order by orderdate) time1<br>from<br>business) tab;<br><br>--找到时间差为1的人<br>select<br>name,corderdate,time1,difftime<br>from<br>(select<br>name,cost,orderdate,time1,<br>datediff(time1,orderdate) difftime<br>from<br>    (select<br>name,cost,orderdate,<br>lead(orderdate,1,&quot;2021-09-01&quot;) over(partition by name order by orderdate) time1<br>from<br>business) tab) tab1<br>where<br>difftime&#x3D;1;<br><br></code></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs hive">--习题:连续登录<br>-- 有哪些顾客连续两天来过我的店，数据是business表<br><br>--time1下一次购买商品的时间<br>select<br>name,cost,orderdate,<br>lead(orderdate,1,&quot;2021-09-01&quot;) over(partition by name order by orderdate) time1<br>from<br>business<br><br>--时间差<br>select<br>name,cost,orderdate,time1,<br>datediff(time1,orderdate) difftime<br>from<br>    (select<br>name,cost,orderdate,<br>lead(orderdate,1,&quot;2021-09-01&quot;) over(partition by name order by orderdate) time1<br>from<br>business) tab;<br><br>--找到时间差为1的人<br>select<br>name,corderdate,time1,difftime<br>from<br>(select<br>name,cost,orderdate,time1,<br>datediff(time1,orderdate) difftime<br>from<br>    (select<br>name,cost,orderdate,<br>lead(orderdate,1,&quot;2021-09-01&quot;) over(partition by name order by orderdate) time1<br>from<br>business) tab) tab1<br>where<br>difftime=1;<br><br></code></pre></td></tr></table></figure>
 
 <ul>
 <li>hive重点：写sql,熟练使用函数，尤其是开窗函数</li>
 </ul>
 <h3 id="SQL一般执行顺序"><a href="#SQL一般执行顺序" class="headerlink" title="SQL一般执行顺序"></a>SQL一般执行顺序</h3><ol>
 <li>from 确定基表</li>
-<li>join 如果一张基表不够, 再联接其他表</li>
-<li>on 如果有联接表 必须要有on</li>
+<li>join on 如果一张基表不够, 再联接其他表,或者lateral view explode(需炸裂的列) table_name as 炸裂后的列名 </li>
 <li>where 过滤总基表中的行</li>
-<li>group by 分组, 分组依据的列.</li>
-<li>select 把分组依据的列放在select后, 再考虑要选择哪些列, 及进行哪些函数调用….</li>
+<li>group by 分组, 分组依据的列.（可以开始使用select中的别名，从group 开始往后都可用）</li>
+<li>select 把分组依据的列放在select后, 再考虑要选择哪些列, 及进行哪些函数调用 sum(),count(1)等</li>
 <li>having 进一步把分组后的虚表行过滤</li>
-<li><em><strong>窗口函数</strong></em></li>
+<li><em><strong>窗口函数</strong></em>，select中若包含over()开窗函数，<strong>执行完非开窗函数后，select等待执行完开窗函数，随后select执行结束</strong>，开窗函数通过表数据进行分区和排序，跟select查询中的字段是平行关系，不依赖查询字段。</li>
+<li>distinct</li>
 <li>order by 最终表的一个排序显示.</li>
 <li>limit</li>
 </ol>
+<h2 id="调优"><a href="#调优" class="headerlink" title="调优"></a>调优</h2><h3 id="小文件优化"><a href="#小文件优化" class="headerlink" title="小文件优化"></a>小文件优化</h3><ul>
+<li><p>小文件的产生：</p>
+<ul>
+<li>动态分区插入数据，产生大量小文件，导致map数量剧增</li>
+<li>reduce个数等于输出的文件个数，如果reduce个数多同时文件大小小的话就会产业很多小文件</li>
+<li><strong>用datax同步数据时，设则多线程，如果数据量不大的情况下，生成了小文件</strong></li>
+</ul>
+</li>
+<li><p>带来的问题：</p>
+<ul>
+<li>小文件会导致开启很多很多map，一个map开一个JVM执行，所以这些任务的初始化，启动，执行会浪费大量的资源，严重影响性能。</li>
+<li>小文件也会占用NameNode元数据的内存，如果太多小文件的话，会占用很多的NameNode的内存</li>
+</ul>
+</li>
+<li><p>常用的一些hive参数设置，可以做为一些通用的优化手段。但是对于没有效果的的sql代码还是需要具体情况具体分析</p>
+</li>
+<li><pre><code class="hive">-- 执行Map前进行小文件合并
+set hive.input.format=org.apache.hadoop.hive.ql.io.CombineHiveInputFormat;
+-- 填的数都为byte数
+-- 每个Map最大输入大小(这个值决定了合并后文件的数量)
+set mapred.max.split.size=128000000;
+-- 每个map最小输入大小
+set mapred.min.split.size=10000000;
+
+-- 上面的参数配置同时也要考虑到：1.文件的格式是否可以切分；2.是否开启了压缩等因素
+
+-- 一个节点上split的至少的大小(这个值决定了多个DataNode上的文件是否需要合并)
+set mapred.min.split.size.per.node=100000000;
+
+-- 一个机架下split的至少的大小(这个值决定了多个机架上的文件是否需要合并)
+set mapred.min.split.size.per.rack=100000000;
+
+-- 这四个参数是有优先级的，一般来说优先级如下：
+-- max.split.size &lt;= min.split.size &lt;= min.size.per.node &lt;= min.size.per.rack
+
+-- 要想达到控制map任务个数的效果，要按照优先级合理配置参数的值
+-- 一般来说按照上面配置参数后可以到达map数约等于文件大小/128 个（但是要注意文件是否压缩，是否可切分等情况）
+/**
+-- map数量由三个方面决定
+1.文件个数
+2.文件大小
+3.blocksize
+-- 因为map端一般都会默认开启聚合小文件的参数，所以文件个数我们先不考虑
+-- 一般情况下，粗略计算任务map个数=文件大小/blocksize
+*/
+
+
+-- 设置map端输出进行合并，默认为true
+set hive.merge.mapfiles = true;
+
+-- 设置reduce端输出进行合并，默认为false
+set hive.merge.mapredfiles = true;
+
+-- 设置合并文件的大小
+set hive.merge.size.per.task = 128000000;
+
+-- 当输出文件的平均大小小于该值时，启动一个独立的MapReduce任务进行文件merge。
+set hive.merge.smallfiles.avgsize=16000000;
+
+-- 每个reducer任务处理的数据量
+set hive.exec.reducers.bytes.per.reducer=128000000;
+-- 4999 每个任务的最大reducer数量
+hive.exec.reducers.max=4999;
+
+-- reduce任务个数一般等于map输出的文件大小/hive.exec.reducers.bytes.per.reduce 的值。（也要考虑文件是否压缩的情况）
+
+-- 或者指定设置reduce个数。-1表示不指定
+set mapreduce.job.reduces=-1;
+/**
+一些情况指定设置reduce个数，是无效的
+1.order by 最终只会生成一个reduce
+2.笛卡尔积，笛卡尔积也是全局聚合，只能一个reduce处理
+2.map端输出的数据量很小
+*/
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs routeros">  <br>* 预防小文件的一个基础通用配置，可以默认放在sql前面<br><br>  ````hive<br>  -- 设置Hive输入,执行map前进行小文件合并<br>  <span class="hljs-built_in">set</span> hive.input.<span class="hljs-attribute">format</span>=org.apache.hadoop.hive.ql.io.CombineHiveInputFormat;<br>  -- 每个map最大输入大小<br>  <span class="hljs-built_in">set</span> mapred.max.split.<span class="hljs-attribute">size</span>=256000000;<br>  -- 每个map最小输入大小<br>  <span class="hljs-built_in">set</span> mapred.min.split.<span class="hljs-attribute">size</span>=128000000;<br>  --节点上最小分片大小,每个节点处理的最小split<br>  <span class="hljs-built_in">set</span> mapred.min.split.size.per.<span class="hljs-attribute">node</span>=128000000;<br>  -- 机架上最小分片大小,决定不同机架的DataNode上文件是都进行合并。每个机架处理的最小split<br>  <span class="hljs-built_in">set</span> mapred.min.split.size.per.<span class="hljs-attribute">rack</span>=128000000;<br>  <br>  --输出合并<br>  -- 设置map端输出进行合并，默认为<span class="hljs-literal">true</span><br>  <span class="hljs-built_in">set</span> hive.merge.mapfiles = <span class="hljs-literal">true</span>;<br>  -- 设置reduce端输出进行合并，默认为<span class="hljs-literal">false</span><br>  <span class="hljs-built_in">set</span> hive.merge.mapredfiles = <span class="hljs-literal">true</span>;<br>  -- 小于这个值会开启一个独立的mapreduce任务进行小文件合并,默认16m<br>  <span class="hljs-built_in">set</span> hive.merge.smallfiles.<span class="hljs-attribute">avgsize</span>=16000000;<br>  -- 合并后的文件大小,默认256m,推荐128m,一个hdfs分块的大小<br>  <span class="hljs-built_in">set</span> hive.merge.size.per.<span class="hljs-attribute">task</span>=128000000;<br></code></pre></td></tr></table></figure>
+
+</code></pre>
+</li>
+<li><p>distribute by处理已有的小文件</p>
+</li>
+<li><pre><code class="hive">insert overwrite table 目标表 [partition(hour=...)] select * from 目标表 
+distribute by floor( rand() * 具体最后落地生成多少个文件数);
+distribute by `floor`(rand() * 5)
+/**
+rand()函数生成一个介于0（包含）和1（不包含）之间的随机浮点数。
+这个随机数乘以5，得到一个介于0（包含）和5（不包含）之间的随机浮点数。
+floor()函数取这个浮点数的整数部分，结果将是0、1、2、3或4中的一个。
+因此，floor(rand() * 5)将生成一个随机整数，这个整数用作分发的键，将数据随机分配到5个reducer中的一个。
+*/
+
+/**
+作用
+数据随机化：如果你想要随机地将数据分发到reducer上，这可能是有用的。例如，如果你正在进行随机采样或者想要确保数据在reducer之间均匀分布。
+测试：在测试Hive查询或MapReduce作业时，随机分配数据可以帮助你检查代码是否能够正确处理不同的reducer分配情况。
+负载均衡：如果某个键的值非常倾斜（即大部分数据都属于同一个键），使用随机分配可以帮助平衡reducer之间的负载。
+
+注意：
+需要注意的是，使用rand()可能会导致性能问题，因为每个输入行都会调用rand()函数，这可能会增加计算的开销。此外，这种方法可能会导致数据分布不均匀，因为随机性意味着无法保证每个reducer获得相同数量的数据。在使用这种方法时，应该考虑到这些潜在的问题。
+*/
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs sql"><br><span class="hljs-operator">*</span> concatenate 命令<br><br>  <span class="hljs-operator">-</span> ````hive<br>    <span class="hljs-keyword">alter</span> <span class="hljs-keyword">table</span> test [<span class="hljs-keyword">partition</span>(...)] concatenate<br>    <br>    <br>    <span class="hljs-keyword">alter</span> <span class="hljs-keyword">table</span> ods.ods_qxb_t_report_details_di <span class="hljs-keyword">partition</span>(ds<span class="hljs-operator">=</span><span class="hljs-string">&#x27;20240328&#x27;</span>) concatenate;<br>    <span class="hljs-comment">-- 这种方法仅仅适用于orc格式存储的表</span><br>    <span class="hljs-comment">-- 只能内部表使用</span><br>    <span class="hljs-comment">-- Concatenate/Merge can only be performed on managed tables</span><br></code></pre></td></tr></table></figure>
+</code></pre>
+</li>
+</ul>
+<h3 id="常见参数调优"><a href="#常见参数调优" class="headerlink" title="常见参数调优"></a>常见参数调优</h3><ul>
+<li><pre><code class="hive">-- 修改引擎
+set hive.execution.engine=tez;
+-- 用于避免小文件的场景或者task特别多的场景，这类场景大多数执行时间都很短，因为hive调起mapreduce任务，JVM的启动过程会造成很大的开销，尤其是job有成千上万个task任务时，JVM重用可以使得JVM实例在同一个job中重新使用N次
+set mapred.job.reuse.jvm.num.tasks=10; --10为重用个数
+<figure class="highlight arcade"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs arcade"><br>* 数据倾斜<br><br>  - 表现：任务进度长时间维持在<span class="hljs-number">99</span>%（或<span class="hljs-number">100</span>%），查看任务监控页面，发现只有少量（<span class="hljs-number">1</span>个或几个）<span class="hljs-built_in">reduce</span>子任务未完成。因为其处理的数据量和其他<span class="hljs-built_in">reduce</span>差异过大。单一<span class="hljs-built_in">reduce</span>的记录数与平均记录数差异过大，通常可能达到<span class="hljs-number">3</span>倍甚至更多。最长时长远大于平均时长。<br><br>  - 原因<br><br>    - key分布不均匀<br>    - 业务数据本身的特性<br>    - 建表时考虑不周<br>    - 某些sql语句本身就有数据倾斜<br>    - [![pAkiuTA.png](https:<span class="hljs-comment">//s21.ax1x.com/2024/08/26/pAkiuTA.png)](https://imgse.com/i/pAkiuTA)</span><br><br>  - 参数优化<br><br>    <span class="hljs-string">``</span><span class="hljs-string">``</span>hive<br>    -- <span class="hljs-built_in">map</span>端开启聚合<br>    set hive.<span class="hljs-built_in">map</span>.aggr=<span class="hljs-literal">true</span>;<br>    -- 数据倾斜时生成两个MRJOB，第一个MR，先随机打散key，减少数据倾斜。第二个MR，再根据预处理的数据结果按照Group By Key分布到<span class="hljs-built_in">reduce</span>中，最终完成<br>    set hive.<span class="hljs-built_in">groupby</span>.skewindata=<span class="hljs-literal">true</span>;<br></code></pre></td></tr></table></figure>
+</code></pre>
+</li>
+</ul>
+<h3 id="Map-Join"><a href="#Map-Join" class="headerlink" title="Map Join"></a>Map Join</h3><ul>
+<li><p>适用于大表join小表。将小表放入内存。由于表的JOIN操作是在Map端且在内存进行的，所以其并不需要启动Reduce任务也就不需要经过shuffle阶段，从而能在一定程度上节省资源提高JOIN效率。</p>
+</li>
+<li><p>在Hive0.11前，需要指定mapjoin才能操作</p>
+</li>
+<li><pre><code class="hive">SELECT /*+ MAPJOIN(smalltable)*/  .key,value
+FROM smalltable JOIN bigtable ON smalltable.key = bigtable.key
+
+-- 在高版本中：如果想用上面这种语法
+set hive.auto.convert.join=false;-- (关闭自动MAPJOIN转换操作)
+set hive.ignore.mapjoin.hint=false;-- (不忽略MAPJOIN标记)
+-- 开启无条件转Map Join
+set hive.auto.convert.join.noconditionaltask=false;
+
+
+-- 建议不使用显示指定，调整自动mapjoin的一些参数就行
+<figure class="highlight mathematica"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs mathematica"><br><span class="hljs-operator">*</span> 后面的版本，不用显示的指定<span class="hljs-variable">mapjoin</span>。<span class="hljs-variable">hive</span>优化器根据参与<span class="hljs-variable">join</span>的表的数据量大小，<span class="hljs-operator">**</span>自动触发<span class="hljs-operator">**</span><br><br><span class="hljs-operator">*</span> <span class="hljs-variable">Hive</span>在编译<span class="hljs-variable">SQL</span>语句阶段，起初所有的<span class="hljs-variable">join</span>操作均采用<span class="hljs-variable">Common</span> <span class="hljs-built_in">Join</span>算法实现。<br><br>  之后在物理优化阶段：<br><br>  根据每个<span class="hljs-variable">Common</span> <span class="hljs-built_in">Join</span>任务所需表的大小判断该<span class="hljs-variable">Common</span> <span class="hljs-built_in">Join</span>任务是否能够转换为<span class="hljs-built_in">Map</span> <span class="hljs-built_in">Join</span>任务，若满足要求，便将<span class="hljs-variable">Common</span> <span class="hljs-built_in">Join</span>任务自动转换为<span class="hljs-built_in">Map</span> <span class="hljs-built_in">Join</span>任务。<br><br>  如果在<span class="hljs-variable">SQL</span>的编译阶段不能确定是否能够转换的，（例如对子查询进行<span class="hljs-variable">join</span>操作）。<br><br>  针对这种情况，<span class="hljs-variable">Hive</span>会在编译阶段生成一个条件任务（<span class="hljs-variable">Conditional</span> <span class="hljs-variable">Task</span>）<br><br><span class="hljs-operator">*</span> 自动触发的一些参数条件<br><br>  <span class="hljs-operator">````</span><span class="hljs-variable">hive</span><br>  <br>  <span class="hljs-operator">--</span>启动<span class="hljs-built_in">Map</span> <span class="hljs-built_in">Join</span>自动转换<br>  <span class="hljs-variable">set</span> <span class="hljs-variable">hive</span><span class="hljs-operator">.</span><span class="hljs-variable">auto</span><span class="hljs-operator">.</span><span class="hljs-variable">convert</span><span class="hljs-operator">.</span><span class="hljs-variable">join</span><span class="hljs-operator">=</span><span class="hljs-variable">true</span><span class="hljs-operator">;</span><br>   <br>  <span class="hljs-operator">--</span> 一个<span class="hljs-variable">Common</span> <span class="hljs-built_in">Join</span> <span class="hljs-variable">operator</span>转为<span class="hljs-built_in">Map</span> <span class="hljs-built_in">Join</span> <span class="hljs-variable">operator</span>的判断条件<span class="hljs-operator">,</span><br>  <span class="hljs-operator">--</span> 若该<span class="hljs-variable">Common</span> <span class="hljs-built_in">Join</span>相关的表中<span class="hljs-operator">,</span>存在<span class="hljs-variable">n</span><span class="hljs-operator">-</span><span class="hljs-number">1</span>张表的已知大小总和<span class="hljs-operator">&lt;=</span>该值<span class="hljs-operator">,</span>则生成一个<span class="hljs-built_in">Map</span> <span class="hljs-built_in">Join</span>计划<span class="hljs-operator">,</span><br>  <span class="hljs-operator">--</span> 此时可能存在多种<span class="hljs-variable">n</span><span class="hljs-operator">-</span><span class="hljs-number">1</span>张表的组合均满足该条件<span class="hljs-operator">,</span>则<span class="hljs-variable">hive</span>会为每种满足条件的组合均生成一个<span class="hljs-built_in">Map</span> <span class="hljs-built_in">Join</span>计划<span class="hljs-operator">,</span><br>  <span class="hljs-operator">--</span> 同时还会保留原有的<span class="hljs-variable">Common</span> <span class="hljs-built_in">Join</span>计划作为后备<span class="hljs-punctuation">(</span><span class="hljs-variable">back</span> <span class="hljs-variable">up</span><span class="hljs-punctuation">)</span>计划<br>  <span class="hljs-operator">--</span> 实际运行时<span class="hljs-operator">,</span>优先执行<span class="hljs-built_in">Map</span> <span class="hljs-built_in">Join</span>计划，若不能执行成功，则启动<span class="hljs-variable">Common</span> <span class="hljs-built_in">Join</span>后备计划。<br>  <span class="hljs-variable">set</span> <span class="hljs-variable">hive</span><span class="hljs-operator">.</span><span class="hljs-variable">mapjoin</span><span class="hljs-operator">.</span><span class="hljs-variable">smalltable</span><span class="hljs-operator">.</span><span class="hljs-variable">filesize</span><span class="hljs-operator">=</span><span class="hljs-number">250000</span><span class="hljs-operator">;</span><br>   <br>  <span class="hljs-operator">--</span> 开启无条件转<span class="hljs-built_in">Map</span> <span class="hljs-built_in">Join</span><br>  <span class="hljs-variable">set</span> <span class="hljs-variable">hive</span><span class="hljs-operator">.</span><span class="hljs-variable">auto</span><span class="hljs-operator">.</span><span class="hljs-variable">convert</span><span class="hljs-operator">.</span><span class="hljs-variable">join</span><span class="hljs-operator">.</span><span class="hljs-variable">noconditionaltask</span><span class="hljs-operator">=</span><span class="hljs-variable">true</span><span class="hljs-operator">;</span><br>   <br>  <span class="hljs-operator">--</span> 无条件转<span class="hljs-built_in">Map</span> <span class="hljs-built_in">Join</span>时的小表之和阈值<span class="hljs-operator">,</span>若一个<span class="hljs-variable">Common</span> <span class="hljs-built_in">Join</span> <span class="hljs-variable">operator</span>相关的表中，<br>  <span class="hljs-operator">--</span> 存在<span class="hljs-variable">n</span><span class="hljs-operator">-</span><span class="hljs-number">1</span>张表的大小总和<span class="hljs-operator">&lt;=</span>该值<span class="hljs-operator">,</span>此时<span class="hljs-variable">hive</span>便不会再为每种<span class="hljs-variable">n</span><span class="hljs-operator">-</span><span class="hljs-number">1</span>张表的组合均生成<span class="hljs-built_in">Map</span> <span class="hljs-built_in">Join</span>计划<br>  <span class="hljs-operator">--</span> 同时也不会保留<span class="hljs-variable">Common</span> <span class="hljs-built_in">Join</span>作为后备计划。而是只生成一个最优的<span class="hljs-built_in">Map</span> <span class="hljs-built_in">Join</span>计划。<br>  <span class="hljs-variable">set</span> <span class="hljs-variable">hive</span><span class="hljs-operator">.</span><span class="hljs-variable">auto</span><span class="hljs-operator">.</span><span class="hljs-variable">convert</span><span class="hljs-operator">.</span><span class="hljs-variable">join</span><span class="hljs-operator">.</span><span class="hljs-variable">noconditionaltask</span><span class="hljs-operator">.</span><span class="hljs-variable">size</span><span class="hljs-operator">=</span><span class="hljs-number">10000000</span><span class="hljs-operator">;</span><br></code></pre></td></tr></table></figure>
+</code></pre>
+</li>
+</ul>
+<h3 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h3><ul>
+<li><p>concat()函数和concat_ws()区别</p>
+<ul>
+<li><p>能否拼接INT类型</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs hive">select concat(&#x27;&#x27;,123,&#x27;xxx&#x27;); --可以拼接<br>select concat_ws(&#x27;&#x27;,123,&#x27;xxx&#x27;);-- 不可以拼接。must be &quot;string or array&lt;string&gt;&quot;<br><br></code></pre></td></tr></table></figure>
+</li>
+<li><p>拼接null值得结果</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs hive">select concat(&#x27;&#x27;,null,&#x27;xxx&#x27;);--结果为null<br>select concat_ws(&#x27;&#x27;,null,&#x27;xxx&#x27;); -- 会忽略null值<br></code></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
 
             </div>
             <hr>

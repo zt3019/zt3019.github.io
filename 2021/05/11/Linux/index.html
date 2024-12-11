@@ -62,7 +62,7 @@
   </script>
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
-<meta name="generator" content="Hexo 5.2.0"></head>
+<meta name="generator" content="Hexo 7.3.0"></head>
 
 
 <body>
@@ -197,7 +197,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      21
+      22
        分钟
     </span>
   
@@ -237,7 +237,7 @@
             
             <div class="markdown-body">
               <h1 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h1><h2 id="vim的三种模式"><a href="#vim的三种模式" class="headerlink" title="vim的三种模式"></a>vim的三种模式</h2><h3 id="一般模式"><a href="#一般模式" class="headerlink" title="一般模式"></a>一般模式</h3><ul>
-<li>以vi/vim编辑器打开一个文件就进入了一般默认，是默认的默认</li>
+<li>以vi&#x2F;vim编辑器打开一个文件就进入了一般默认，是默认的默认</li>
 <li>在一般模式中可以对文件进行复制、粘贴、删除、撤销</li>
 <li>常用的命令<ul>
 <li>yy<ul>
@@ -281,11 +281,13 @@
 </ul>
 </li>
 <li>数字+G<ul>
-<li>回到某一行<h3 id="编辑模式"><a href="#编辑模式" class="headerlink" title="编辑模式"></a>编辑模式</h3></li>
+<li>回到某一行</li>
 </ul>
 </li>
 </ul>
 </li>
+</ul>
+<h3 id="编辑模式"><a href="#编辑模式" class="headerlink" title="编辑模式"></a>编辑模式</h3><ul>
 <li>在一般模式中输入i、o、a或I、O、A时就进入了编辑模式</li>
 <li>在编辑模式中按Esc又回到一般模式</li>
 <li>常用的命令<ul>
@@ -294,12 +296,14 @@
 </ul>
 </li>
 <li>o<ul>
-<li>在下一行插入<h3 id="命令模式"><a href="#命令模式" class="headerlink" title="命令模式"></a>命令模式</h3></li>
+<li>在下一行插入</li>
 </ul>
 </li>
 </ul>
 </li>
-<li>在一般模式中输入:、/或？时就进入了命令模式</li>
+</ul>
+<h3 id="命令模式"><a href="#命令模式" class="headerlink" title="命令模式"></a>命令模式</h3><ul>
+<li>在一般模式中输入:、&#x2F;或？时就进入了命令模式</li>
 <li>在命令模式中按Esc又回到一般模式</li>
 <li>常用的命令<ul>
 <li>:w<ul>
@@ -322,7 +326,7 @@
 <li>如果没有修改直接退出，修改了保存后退出</li>
 </ul>
 </li>
-<li>:%s/old 字符/new 字符<ul>
+<li>:%s&#x2F;old 字符&#x2F;new 字符<ul>
 <li>批量替换字符</li>
 </ul>
 </li>
@@ -330,7 +334,7 @@
 <li>取消高亮显示</li>
 </ul>
 </li>
-<li>/要查找的词或?要查找的词<ul>
+<li>&#x2F;要查找的词或?要查找的词<ul>
 <li>通过n或N进行向上或向下的查找</li>
 </ul>
 </li>
@@ -353,11 +357,11 @@
 <li>hostname<ul>
 <li>查看主机名</li>
 <li>修改主机名<ul>
-<li>vim /etc/sysconfig/network</li>
+<li>vim &#x2F;etc&#x2F;sysconfig&#x2F;network</li>
 </ul>
 </li>
 <li>配置ip地址与主机名的映射关系<ul>
-<li>vim /etc/hosts</li>
+<li>vim &#x2F;etc&#x2F;hosts</li>
 </ul>
 </li>
 </ul>
@@ -508,8 +512,8 @@
 </li>
 <li>grep<ul>
 <li>通常结合管道符 | 进行过滤查找</li>
-<li>ll /root | grep -n atguigu.txt<ul>
-<li>查找/root目录下是否包含atguigu.txt文件，并且会显示出行号</li>
+<li>ll &#x2F;root | grep -n atguigu.txt<ul>
+<li>查找&#x2F;root目录下是否包含atguigu.txt文件，并且会显示出行号</li>
 </ul>
 </li>
 </ul>
@@ -613,20 +617,20 @@
 </li>
 <li>第1-3位确定属主（该文件的所有者）拥有该文件的权限。—User </li>
 <li>第4-6位确定属组（所有者的同组用户）拥有该文件的权限，—Group </li>
-<li>第7-9位确定其他用户拥有该文件的权限 —Other </li>
+<li>第7-9位确定其他用户拥有该文件的权限 —Other</li>
 </ul>
 </li>
 <li>chmod修改权限<ul>
 <li>方式一：<ul>
-<li>chmod  [{ugoa}{+-=}{rwx}] 文件或目录 </li>
+<li>chmod  [{ugoa}{+-&#x3D;}{rwx}] 文件或目录 </li>
 <li>chmod g+x houge.txt</li>
 <li>chmod u-x,o+x houge.txt</li>
 </ul>
 </li>
 <li>方式二：<ul>
-<li>chmod  [mode=421 ]  [文件或目录]</li>
+<li>chmod  [mode&#x3D;421 ]  [文件或目录]</li>
 <li>u:所有者  g:所有组  o:其他人  a:所有人(u、g、o的总和)</li>
-<li>r=4 w=2 x=1        rwx=4+2+1=7 </li>
+<li>r&#x3D;4 w&#x3D;2 x&#x3D;1        rwx&#x3D;4+2+1&#x3D;7 </li>
 <li>chmod 777 houge.txt</li>
 </ul>
 </li>
@@ -643,7 +647,8 @@
 </ul>
 </li>
 <li><p>脚本加执行权限</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo chmod +x my.sh<br></code></pre></td></tr></table></figure></li>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo chmod +x my.sh<br></code></pre></td></tr></table></figure>
+</li>
 <li><p>时间显示</p>
 </li>
 <li><pre><code>例子：
@@ -772,9 +777,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2021/05/11/shell_introduction/">
+                      <a href="/2021/05/26/JavaWeb/">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">shell介绍</span>
+                        <span class="hidden-mobile">JavaWeb</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
